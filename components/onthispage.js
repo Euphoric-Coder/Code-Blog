@@ -18,12 +18,20 @@ const OnThisPage = ({ htmlContent }) => {
   }, [htmlContent]);
 
   return (
-    <div className="on-this-page absolute top-24 md:right-48 lg:right-1/4 hidden lg:block">
-      <h2 className="text-md font-bold my-2">On This Page</h2>
-      <ul className="text-sm space-y-1">
+    <div className="on-this-page fixed top-24 left-4 w-64 p-4 bg-white dark:bg-gray-900 shadow-lg rounded-lg overflow-y-auto max-h-screen border-l-4 border-purple-500">
+      {/* Sidebar Heading */}
+      <h2 className="text-lg font-bold mb-4 text-purple-700">INTRODUCTION</h2>
+
+      {/* Sidebar Links */}
+      <ul className="text-sm space-y-2">
         {headings.map((heading, index) => (
-          <li key={index}>
-            <a href={`#${heading.id}`}>{heading.text}</a>
+          <li key={index} className="hover:underline">
+            <a
+              href={`#${heading.id}`}
+              className="text-gray-700 dark:text-gray-300"
+            >
+              {heading.text}
+            </a>
           </li>
         ))}
       </ul>
