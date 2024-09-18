@@ -14,7 +14,6 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import OnThisPage from "@/components/onthispage";
 
 export default async function Page({ params }) {
-
   const filepath = `content/${params.slug}.md`;
 
   if (!fs.existsSync(filepath)) {
@@ -46,20 +45,32 @@ export default async function Page({ params }) {
   const htmlContent = (await processor.process(content)).toString();
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
-      <h1 className="text-4xl font-bold mb-4">{data.title}</h1>
-      <p className="text-base mb-2 border-l-4 border-gray-500 pl-4 italic">
-        &quot;{data.description}&quot;
-      </p>
-      <div className="flex gap-2">
-        <p className="text-sm text-gray-500 mb-4 italic">By {data.author}</p>
-        <p className="text-sm text-gray-500 mb-4">{data.date}</p>
+    <div className="max-w-[95%] mx-auto p-4">
+      {/* Main container for flex layout */}
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Sidebar - takes up the left part of the screen on large screens */}
+        <div className="lg:w-1/5 hidden lg:block">
+          <OnThisPage htmlContent={htmlContent} />
+        </div>
+
+        {/* Main content - takes up the remaining space */}
+        <div className="lg:w-4/5 w-full">
+          <h1 className="text-4xl font-bold mb-4">{data.title}</h1>
+          <p className="text-base mb-2 border-l-4 border-gray-500 pl-4 italic">
+            &quot;{data.description}&quot;
+          </p>
+          <div className="flex gap-2 mb-10">
+            <p className="text-sm text-gray-500 mb-4 italic">
+              By {data.author}
+            </p>
+            <p className="text-sm text-gray-500 mb-4">{data.date}</p>
+          </div>
+          <div
+            dangerouslySetInnerHTML={{ __html: htmlContent }}
+            className="prose prose-lg dark:prose-invert max-w-none"
+          ></div>
+        </div>
       </div>
-      <div
-        dangerouslySetInnerHTML={{ __html: htmlContent }}
-        className="prose dark:prose-invert"
-      ></div>
-      <OnThisPage htmlContent={htmlContent}/>
     </div>
   );
 }

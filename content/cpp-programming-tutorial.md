@@ -7,7 +7,7 @@ author: Sagnik
 image: https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1
 ---
 
-# C++ Programming Tutorial: A Comprehensive Guide
+# C++ Overview
 
 Welcome to this comprehensive C++ programming tutorial! Whether you're a complete beginner or seeking to advance your C++ skills, this guide will walk you through the basics and help you dive into more advanced concepts as you progress.
 
