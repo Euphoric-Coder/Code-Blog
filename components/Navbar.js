@@ -39,13 +39,13 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="p-4 bg-background/50 sticky top-0 backdrop-blur border-b z-10">
+    <nav className="p-4 bg-background/50 sticky top-0 backdrop-blur border-b border-purple-500 z-10">
       <LoadingBar
         color="#933ce6"
         progress={progress}
         onLoaderFinished={() => setProgress(0)}
       />
-      <div className="container mx-auto flex justify-between items-center">
+      <div className="container mx-auto flex justify-between items-center text-purple-600">
         <Link href={"/"}>
           <div className="text-lg font-bold">
             Code Blog
@@ -55,16 +55,10 @@ const Navbar = () => {
         <div className="hidden md:flex space-x-4 items-center">
           <Link
             href="/"
-            className="hover:scale-105 hover:font-semibold transition-transform duration-300"
+            className="hover:scale-105 hover:font-semibold transition-transform duration-500"
           >
             {" "}
             Home
-          </Link>
-          <Link
-            href="/about"
-            className="hover:scale-105 hover:font-semibold transition-transform duration-300"
-          >
-            About
           </Link>
           <Link
             href="/blog"
@@ -73,18 +67,24 @@ const Navbar = () => {
             Blog
           </Link>
           <Link
+            href="/about"
+            className="hover:scale-105 hover:font-semibold transition-transform duration-300"
+          >
+            About
+          </Link>
+          <Link
             href="/contact"
             className="hover:scale-105 hover:font-semibold transition-transform duration-300"
           >
             Contact
           </Link>
           <div className="flex items-center">
-            <Button className="mx-1" variant="outline">
+            {/* <Button className="mx-1" variant="outline">
               Login
             </Button>
             <Button className="mx-1" variant="outline">
               Signup
-            </Button>
+            </Button> */}
             <ModeToggle />
           </div>
         </div>
@@ -116,8 +116,8 @@ const Navbar = () => {
                 <SheetDescription>
                   <div className="flex flex-col gap-6">
                     <Link href="/"> Home</Link>
-                    <Link href="/about">About</Link>
                     <Link href="/blog">Blog</Link>
+                    <Link href="/about">About</Link>
                     <Link href="/contact">Contact</Link>
                     <div>
                       <Button className="mx-1 text-xs" variant="outline">

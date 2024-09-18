@@ -1,59 +1,159 @@
-import Navbar from "@/components/Navbar";
-import Image from "next/image";
+"use client";
+import { Button } from "@/components/ui/button";
+// import Typed from "typed.js";
+import React, { useRef, useEffect } from "react";
+import { buttonVariants } from "@/components/ui/button";
+import Link from "next/link";
+import { FaFacebook, FaTwitter, FaLinkedin, FaGithub } from "react-icons/fa";
+
 
 export default function Home() {
+  // Create reference to store the DOM element containing the animation
+  const el = useRef(null);
+
+  // useEffect(() => {
+  //   const typed = new Typed(el.current, {
+  //     strings: [
+  //       "Coding",
+  //       "Web Development",
+  //       "Software Engineering",
+  //       "Data Science",
+  //       "Machine Learning",
+  //     ],
+  //     typeSpeed: 50,
+  //   });
+
+  //   return () => {
+  //     // Destroy Typed instance during cleanup to stop animation
+  //     typed.destroy();
+  //   };
+  // }, []);
+
   return (
-    <main className=" mx-auto">
-      Sunt culpa commodo id excepteur consequat adipisicing aliquip qui duis cillum officia ipsum laboris nisi. Voluptate consequat qui est deserunt. Lorem consequat ullamco esse ex deserunt id aliquip exercitation dolor sint veniam.
-      Nisi velit dolor eiusmod amet veniam sit nostrud laboris magna sint sunt ad amet mollit. Nulla fugiat occaecat in esse velit amet nostrud velit tempor. Sunt dolore officia exercitation duis anim magna laboris ex veniam minim. Dolor nulla proident cupidatat aute proident ut qui consectetur laboris aliqua. Laborum sunt do tempor eiusmod ex adipisicing sunt reprehenderit nulla mollit sit nulla dolore laboris. Eu consequat ipsum ea id nulla cillum in excepteur fugiat commodo. 
-      Nulla sit ullamco qui consectetur in. Sint consectetur officia deserunt ipsum sint quis elit nostrud velit labore qui anim tempor ut. Ad cillum esse nisi cillum dolore ad consectetur adipisicing. In commodo quis qui anim proident adipisicing reprehenderit dolore consectetur. Magna magna sunt fugiat qui aliquip do officia. Amet pariatur ut laborum proident laboris mollit occaecat culpa aliqua. Adipisicing officia exercitation sunt duis anim et officia sit aute amet.
-      Eiusmod veniam dolor dolor ex enim esse pariatur cupidatat duis aute amet minim ex. Quis ex minim ad id veniam. Ex veniam officia consequat commodo sunt non. Velit ut consectetur pariatur elit qui nisi deserunt ea cupidatat amet dolore cupidatat sunt. Aliquip id anim aute fugiat consectetur qui nulla Lorem deserunt mollit ullamco ad.
-      Ea deserunt irure proident eu labore nisi. Lorem excepteur sunt veniam quis dolore quis minim exercitation aliquip. Lorem ea do quis adipisicing excepteur anim cupidatat commodo est ullamco. Ea nisi ipsum esse voluptate magna tempor mollit commodo consectetur. Nulla nostrud nostrud aute proident ex tempor enim irure aliqua elit ex cupidatat commodo.
-      Ea sint deserunt laboris eu non nostrud consectetur duis non. Nulla anim Lorem elit fugiat aute Lorem. Laboris ad do consequat irure. Ad proident dolore ex esse irure consequat id nostrud. Id sunt non commodo dolore.
-      Nostrud ex occaecat aliquip pariatur cupidatat exercitation ea sunt cillum. Adipisicing sint ut laborum consequat velit do esse in Lorem voluptate occaecat. Laboris officia dolor dolore laborum nostrud minim voluptate occaecat nostrud velit ipsum cillum ea laboris. Lorem laborum proident quis laborum adipisicing eiusmod aliqua dolore deserunt incididunt incididunt dolor aliquip ipsum. Aliquip deserunt aliquip amet tempor excepteur et. Sit id veniam pariatur in excepteur. Dolor consequat ex minim aliquip consequat nisi officia deserunt ea duis minim quis.
-      Id voluptate occaecat esse amet cillum in. Minim nostrud est non aute quis. Ad et labore voluptate reprehenderit in cillum incididunt magna.
-      Incididunt reprehenderit laborum occaecat deserunt consequat. Eiusmod velit laborum eu quis adipisicing ea nulla aliqua. Ipsum sint enim occaecat commodo fugiat laborum tempor aliquip nostrud cupidatat. Occaecat ex adipisicing enim mollit aliqua adipisicing enim incididunt deserunt consectetur velit in. Eiusmod eiusmod officia tempor sit excepteur deserunt ea mollit. In irure minim aute voluptate eu mollit voluptate anim dolore veniam culpa. Minim deserunt eiusmod culpa culpa ad voluptate aliqua magna anim pariatur est.
-      Ea minim proident culpa culpa consequat occaecat cillum consequat ea. Exercitation minim dolor ullamco aliquip aute nisi esse laborum commodo deserunt veniam enim. Velit mollit irure duis voluptate.
-      Sunt culpa commodo id excepteur consequat adipisicing aliquip qui duis cillum officia ipsum laboris nisi. Voluptate consequat qui est deserunt. Lorem consequat ullamco esse ex deserunt id aliquip exercitation dolor sint veniam.
-      Nisi velit dolor eiusmod amet veniam sit nostrud laboris magna sint sunt ad amet mollit. Nulla fugiat occaecat in esse velit amet nostrud velit tempor. Sunt dolore officia exercitation duis anim magna laboris ex veniam minim. Dolor nulla proident cupidatat aute proident ut qui consectetur laboris aliqua. Laborum sunt do tempor eiusmod ex adipisicing sunt reprehenderit nulla mollit sit nulla dolore laboris. Eu consequat ipsum ea id nulla cillum in excepteur fugiat commodo. 
-      Nulla sit ullamco qui consectetur in. Sint consectetur officia deserunt ipsum sint quis elit nostrud velit labore qui anim tempor ut. Ad cillum esse nisi cillum dolore ad consectetur adipisicing. In commodo quis qui anim proident adipisicing reprehenderit dolore consectetur. Magna magna sunt fugiat qui aliquip do officia. Amet pariatur ut laborum proident laboris mollit occaecat culpa aliqua. Adipisicing officia exercitation sunt duis anim et officia sit aute amet.
-      Eiusmod veniam dolor dolor ex enim esse pariatur cupidatat duis aute amet minim ex. Quis ex minim ad id veniam. Ex veniam officia consequat commodo sunt non. Velit ut consectetur pariatur elit qui nisi deserunt ea cupidatat amet dolore cupidatat sunt. Aliquip id anim aute fugiat consectetur qui nulla Lorem deserunt mollit ullamco ad.
-      Ea deserunt irure proident eu labore nisi. Lorem excepteur sunt veniam quis dolore quis minim exercitation aliquip. Lorem ea do quis adipisicing excepteur anim cupidatat commodo est ullamco. Ea nisi ipsum esse voluptate magna tempor mollit commodo consectetur. Nulla nostrud nostrud aute proident ex tempor enim irure aliqua elit ex cupidatat commodo.
-      Ea sint deserunt laboris eu non nostrud consectetur duis non. Nulla anim Lorem elit fugiat aute Lorem. Laboris ad do consequat irure. Ad proident dolore ex esse irure consequat id nostrud. Id sunt non commodo dolore.
-      Nostrud ex occaecat aliquip pariatur cupidatat exercitation ea sunt cillum. Adipisicing sint ut laborum consequat velit do esse in Lorem voluptate occaecat. Laboris officia dolor dolore laborum nostrud minim voluptate occaecat nostrud velit ipsum cillum ea laboris. Lorem laborum proident quis laborum adipisicing eiusmod aliqua dolore deserunt incididunt incididunt dolor aliquip ipsum. Aliquip deserunt aliquip amet tempor excepteur et. Sit id veniam pariatur in excepteur. Dolor consequat ex minim aliquip consequat nisi officia deserunt ea duis minim quis.
-      Id voluptate occaecat esse amet cillum in. Minim nostrud est non aute quis. Ad et labore voluptate reprehenderit in cillum incididunt magna.
-      Incididunt reprehenderit laborum occaecat deserunt consequat. Eiusmod velit laborum eu quis adipisicing ea nulla aliqua. Ipsum sint enim occaecat commodo fugiat laborum tempor aliquip nostrud cupidatat. Occaecat ex adipisicing enim mollit aliqua adipisicing enim incididunt deserunt consectetur velit in. Eiusmod eiusmod officia tempor sit excepteur deserunt ea mollit. In irure minim aute voluptate eu mollit voluptate anim dolore veniam culpa. Minim deserunt eiusmod culpa culpa ad voluptate aliqua magna anim pariatur est.
-      Ea minim proident culpa culpa consequat occaecat cillum consequat ea. Exercitation minim dolor ullamco aliquip aute nisi esse laborum commodo deserunt veniam enim. Velit mollit irure duis voluptate.
-      Sunt culpa commodo id excepteur consequat adipisicing aliquip qui duis cillum officia ipsum laboris nisi. Voluptate consequat qui est deserunt. Lorem consequat ullamco esse ex deserunt id aliquip exercitation dolor sint veniam.
-      Nisi velit dolor eiusmod amet veniam sit nostrud laboris magna sint sunt ad amet mollit. Nulla fugiat occaecat in esse velit amet nostrud velit tempor. Sunt dolore officia exercitation duis anim magna laboris ex veniam minim. Dolor nulla proident cupidatat aute proident ut qui consectetur laboris aliqua. Laborum sunt do tempor eiusmod ex adipisicing sunt reprehenderit nulla mollit sit nulla dolore laboris. Eu consequat ipsum ea id nulla cillum in excepteur fugiat commodo. 
-      Nulla sit ullamco qui consectetur in. Sint consectetur officia deserunt ipsum sint quis elit nostrud velit labore qui anim tempor ut. Ad cillum esse nisi cillum dolore ad consectetur adipisicing. In commodo quis qui anim proident adipisicing reprehenderit dolore consectetur. Magna magna sunt fugiat qui aliquip do officia. Amet pariatur ut laborum proident laboris mollit occaecat culpa aliqua. Adipisicing officia exercitation sunt duis anim et officia sit aute amet.
-      Eiusmod veniam dolor dolor ex enim esse pariatur cupidatat duis aute amet minim ex. Quis ex minim ad id veniam. Ex veniam officia consequat commodo sunt non. Velit ut consectetur pariatur elit qui nisi deserunt ea cupidatat amet dolore cupidatat sunt. Aliquip id anim aute fugiat consectetur qui nulla Lorem deserunt mollit ullamco ad.
-      Ea deserunt irure proident eu labore nisi. Lorem excepteur sunt veniam quis dolore quis minim exercitation aliquip. Lorem ea do quis adipisicing excepteur anim cupidatat commodo est ullamco. Ea nisi ipsum esse voluptate magna tempor mollit commodo consectetur. Nulla nostrud nostrud aute proident ex tempor enim irure aliqua elit ex cupidatat commodo.
-      Ea sint deserunt laboris eu non nostrud consectetur duis non. Nulla anim Lorem elit fugiat aute Lorem. Laboris ad do consequat irure. Ad proident dolore ex esse irure consequat id nostrud. Id sunt non commodo dolore.
-      Nostrud ex occaecat aliquip pariatur cupidatat exercitation ea sunt cillum. Adipisicing sint ut laborum consequat velit do esse in Lorem voluptate occaecat. Laboris officia dolor dolore laborum nostrud minim voluptate occaecat nostrud velit ipsum cillum ea laboris. Lorem laborum proident quis laborum adipisicing eiusmod aliqua dolore deserunt incididunt incididunt dolor aliquip ipsum. Aliquip deserunt aliquip amet tempor excepteur et. Sit id veniam pariatur in excepteur. Dolor consequat ex minim aliquip consequat nisi officia deserunt ea duis minim quis.
-      Id voluptate occaecat esse amet cillum in. Minim nostrud est non aute quis. Ad et labore voluptate reprehenderit in cillum incididunt magna.
-      Incididunt reprehenderit laborum occaecat deserunt consequat. Eiusmod velit laborum eu quis adipisicing ea nulla aliqua. Ipsum sint enim occaecat commodo fugiat laborum tempor aliquip nostrud cupidatat. Occaecat ex adipisicing enim mollit aliqua adipisicing enim incididunt deserunt consectetur velit in. Eiusmod eiusmod officia tempor sit excepteur deserunt ea mollit. In irure minim aute voluptate eu mollit voluptate anim dolore veniam culpa. Minim deserunt eiusmod culpa culpa ad voluptate aliqua magna anim pariatur est.
-      Ea minim proident culpa culpa consequat occaecat cillum consequat ea. Exercitation minim dolor ullamco aliquip aute nisi esse laborum commodo deserunt veniam enim. Velit mollit irure duis voluptate.
-      Sunt culpa commodo id excepteur consequat adipisicing aliquip qui duis cillum officia ipsum laboris nisi. Voluptate consequat qui est deserunt. Lorem consequat ullamco esse ex deserunt id aliquip exercitation dolor sint veniam.
-      Nisi velit dolor eiusmod amet veniam sit nostrud laboris magna sint sunt ad amet mollit. Nulla fugiat occaecat in esse velit amet nostrud velit tempor. Sunt dolore officia exercitation duis anim magna laboris ex veniam minim. Dolor nulla proident cupidatat aute proident ut qui consectetur laboris aliqua. Laborum sunt do tempor eiusmod ex adipisicing sunt reprehenderit nulla mollit sit nulla dolore laboris. Eu consequat ipsum ea id nulla cillum in excepteur fugiat commodo. 
-      Nulla sit ullamco qui consectetur in. Sint consectetur officia deserunt ipsum sint quis elit nostrud velit labore qui anim tempor ut. Ad cillum esse nisi cillum dolore ad consectetur adipisicing. In commodo quis qui anim proident adipisicing reprehenderit dolore consectetur. Magna magna sunt fugiat qui aliquip do officia. Amet pariatur ut laborum proident laboris mollit occaecat culpa aliqua. Adipisicing officia exercitation sunt duis anim et officia sit aute amet.
-      Eiusmod veniam dolor dolor ex enim esse pariatur cupidatat duis aute amet minim ex. Quis ex minim ad id veniam. Ex veniam officia consequat commodo sunt non. Velit ut consectetur pariatur elit qui nisi deserunt ea cupidatat amet dolore cupidatat sunt. Aliquip id anim aute fugiat consectetur qui nulla Lorem deserunt mollit ullamco ad.
-      Ea deserunt irure proident eu labore nisi. Lorem excepteur sunt veniam quis dolore quis minim exercitation aliquip. Lorem ea do quis adipisicing excepteur anim cupidatat commodo est ullamco. Ea nisi ipsum esse voluptate magna tempor mollit commodo consectetur. Nulla nostrud nostrud aute proident ex tempor enim irure aliqua elit ex cupidatat commodo.
-      Ea sint deserunt laboris eu non nostrud consectetur duis non. Nulla anim Lorem elit fugiat aute Lorem. Laboris ad do consequat irure. Ad proident dolore ex esse irure consequat id nostrud. Id sunt non commodo dolore.
-      Nostrud ex occaecat aliquip pariatur cupidatat exercitation ea sunt cillum. Adipisicing sint ut laborum consequat velit do esse in Lorem voluptate occaecat. Laboris officia dolor dolore laborum nostrud minim voluptate occaecat nostrud velit ipsum cillum ea laboris. Lorem laborum proident quis laborum adipisicing eiusmod aliqua dolore deserunt incididunt incididunt dolor aliquip ipsum. Aliquip deserunt aliquip amet tempor excepteur et. Sit id veniam pariatur in excepteur. Dolor consequat ex minim aliquip consequat nisi officia deserunt ea duis minim quis.
-      Id voluptate occaecat esse amet cillum in. Minim nostrud est non aute quis. Ad et labore voluptate reprehenderit in cillum incididunt magna.
-      Incididunt reprehenderit laborum occaecat deserunt consequat. Eiusmod velit laborum eu quis adipisicing ea nulla aliqua. Ipsum sint enim occaecat commodo fugiat laborum tempor aliquip nostrud cupidatat. Occaecat ex adipisicing enim mollit aliqua adipisicing enim incididunt deserunt consectetur velit in. Eiusmod eiusmod officia tempor sit excepteur deserunt ea mollit. In irure minim aute voluptate eu mollit voluptate anim dolore veniam culpa. Minim deserunt eiusmod culpa culpa ad voluptate aliqua magna anim pariatur est.
-      Ea minim proident culpa culpa consequat occaecat cillum consequat ea. Exercitation minim dolor ullamco aliquip aute nisi esse laborum commodo deserunt veniam enim. Velit mollit irure duis voluptate.
-      Sunt culpa commodo id excepteur consequat adipisicing aliquip qui duis cillum officia ipsum laboris nisi. Voluptate consequat qui est deserunt. Lorem consequat ullamco esse ex deserunt id aliquip exercitation dolor sint veniam.
-      Nisi velit dolor eiusmod amet veniam sit nostrud laboris magna sint sunt ad amet mollit. Nulla fugiat occaecat in esse velit amet nostrud velit tempor. Sunt dolore officia exercitation duis anim magna laboris ex veniam minim. Dolor nulla proident cupidatat aute proident ut qui consectetur laboris aliqua. Laborum sunt do tempor eiusmod ex adipisicing sunt reprehenderit nulla mollit sit nulla dolore laboris. Eu consequat ipsum ea id nulla cillum in excepteur fugiat commodo. 
-      Nulla sit ullamco qui consectetur in. Sint consectetur officia deserunt ipsum sint quis elit nostrud velit labore qui anim tempor ut. Ad cillum esse nisi cillum dolore ad consectetur adipisicing. In commodo quis qui anim proident adipisicing reprehenderit dolore consectetur. Magna magna sunt fugiat qui aliquip do officia. Amet pariatur ut laborum proident laboris mollit occaecat culpa aliqua. Adipisicing officia exercitation sunt duis anim et officia sit aute amet.
-      Eiusmod veniam dolor dolor ex enim esse pariatur cupidatat duis aute amet minim ex. Quis ex minim ad id veniam. Ex veniam officia consequat commodo sunt non. Velit ut consectetur pariatur elit qui nisi deserunt ea cupidatat amet dolore cupidatat sunt. Aliquip id anim aute fugiat consectetur qui nulla Lorem deserunt mollit ullamco ad.
-      Ea deserunt irure proident eu labore nisi. Lorem excepteur sunt veniam quis dolore quis minim exercitation aliquip. Lorem ea do quis adipisicing excepteur anim cupidatat commodo est ullamco. Ea nisi ipsum esse voluptate magna tempor mollit commodo consectetur. Nulla nostrud nostrud aute proident ex tempor enim irure aliqua elit ex cupidatat commodo.
-      Ea sint deserunt laboris eu non nostrud consectetur duis non. Nulla anim Lorem elit fugiat aute Lorem. Laboris ad do consequat irure. Ad proident dolore ex esse irure consequat id nostrud. Id sunt non commodo dolore.
-      Nostrud ex occaecat aliquip pariatur cupidatat exercitation ea sunt cillum. Adipisicing sint ut laborum consequat velit do esse in Lorem voluptate occaecat. Laboris officia dolor dolore laborum nostrud minim voluptate occaecat nostrud velit ipsum cillum ea laboris. Lorem laborum proident quis laborum adipisicing eiusmod aliqua dolore deserunt incididunt incididunt dolor aliquip ipsum. Aliquip deserunt aliquip amet tempor excepteur et. Sit id veniam pariatur in excepteur. Dolor consequat ex minim aliquip consequat nisi officia deserunt ea duis minim quis.
-      Id voluptate occaecat esse amet cillum in. Minim nostrud est non aute quis. Ad et labore voluptate reprehenderit in cillum incididunt magna.
-      Incididunt reprehenderit laborum occaecat deserunt consequat. Eiusmod velit laborum eu quis adipisicing ea nulla aliqua. Ipsum sint enim occaecat commodo fugiat laborum tempor aliquip nostrud cupidatat. Occaecat ex adipisicing enim mollit aliqua adipisicing enim incididunt deserunt consectetur velit in. Eiusmod eiusmod officia tempor sit excepteur deserunt ea mollit. In irure minim aute voluptate eu mollit voluptate anim dolore veniam culpa. Minim deserunt eiusmod culpa culpa ad voluptate aliqua magna anim pariatur est.
-      Ea minim proident culpa culpa consequat occaecat cillum consequat ea. Exercitation minim dolor ullamco aliquip aute nisi esse laborum commodo deserunt veniam enim. Velit mollit irure duis voluptate.
+    <main>
+      <section className="container px-4 py-10 mx-auto lg:h-128 lg:space-x-8 lg:flex lg:items-center">
+        <div className="w-full text-center lg:text-left lg:w-1/2 lg:-mt-8">
+          <h1 className="text-3xl leading-snug text-gray-800 dark:text-gray-200 md:text-4xl">
+            A <span className="font-semibold">free repository</span> for
+            community <br className="hidden lg:block" /> components using{" "}
+            <span className="font-semibold underline decoration-primary">
+              <span ref={el} />
+            </span>
+          </h1>
+          <p className="mt-4 text-lg text-gray-500 dark:text-gray-300">
+            Open source Tailwind UI components and templates to{" "}
+            <br className="hidden lg:block" /> bootstrap your new apps, projects
+            or landing sites!
+          </p>
+          <div className="mt-6 bg-transparent border rounded-lg dark:border-gray-700 lg:w-2/3 focus-within:border-primary focus-within:ring focus-within:ring-primary dark:focus-within:border-primary focus-within:ring-opacity-20">
+            <form
+              action="https://www.creative-tim.com/twcomponents/search"
+              className="flex flex-wrap justify-between md:flex-row"
+            ></form>
+          </div>
+        </div>
+        <div className="w-full mt-4 lg:mt-0 lg:w-1/2">
+          <img
+            src="https://www.creative-tim.com/twcomponents/svg/website-designer-bro-purple.svg"
+            alt="tailwind css components"
+            className="w-full h-full max-w-md mx-auto"
+          />
+        </div>
+      </section>
+      <section className="py-12 bg-gray-100 dark:bg-gray-900">
+        <div className="container px-4 mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-800 dark:text-gray-200">
+              Top Blogs
+            </h2>
+            <p className="mt-4 text-lg text-gray-500 dark:text-gray-300">
+              Check out our most popular blog posts
+            </p>
+          </div>
+          <div className="flex flex-wrap justify-center">
+            {/* Blog 1 */}
+            <div className="w-full sm:w-1/2 lg:w-1/3 p-4">
+              <div className="p-6 bg-white rounded-lg shadow-lg dark:bg-gray-800 transform transition duration-500 hover:scale-105">
+                <img
+                  src="/typescript.webp"
+                  className="w-full h-64 object-cover rounded-t-lg"
+                />
+                <div className="mt-4">
+                  <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                    Blog Post Title 1
+                  </h3>
+                  <p className="mt-2 text-gray-600 dark:text-gray-400">
+                    A brief description of the blog post goes here. It should be
+                    engaging and informative.
+                  </p>
+                  <Button
+                    className="m-2"
+                    variant="outline"
+                    href="/blogpost/cpp-programming-tutorial"
+                  >
+                    Read More
+                  </Button>
+                </div>
+              </div>
+            </div>
+            {/* Blog 2 */}
+            <div className="w-full sm:w-1/2 lg:w-1/3 p-4">
+              <div className="p-6 bg-white rounded-lg shadow-lg dark:bg-gray-800 transform transition duration-500 hover:scale-105">
+                <img
+                  src="https://images.pexels.com/photos/1181472/pexels-photo-1181472.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                  alt="Blog 2"
+                  className="w-full h-64 object-cover rounded-t-lg"
+                />
+                <div className="mt-4">
+                  <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                    Blog Post Title 2
+                  </h3>
+                  <p className="mt-2 text-gray-600 dark:text-gray-400">
+                    A brief description of the blog post goes here. It should be
+                    engaging and informative.
+                  </p>
+                  <Button className="m-2" variant="outline" href="/blog-post-2">
+                    Read More
+                  </Button>
+                </div>
+              </div>
+            </div>
+            {/* Blog 3 */}
+            <div className="w-full sm:w-1/2 lg:w-1/3 p-4">
+              <div className="p-6 bg-white rounded-lg shadow-lg dark:bg-gray-800 transform transition duration-500 hover:scale-105">
+                <img
+                  src="https://images.pexels.com/photos/3861972/pexels-photo-3861972.jpeg"
+                  alt="Blog 3"
+                  className="w-full h-64 object-cover rounded-t-lg"
+                />
+                <div className="mt-4">
+                  <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                    Blog Post Title 3
+                  </h3>
+                  <p className="mt-2 text-gray-600 dark:text-gray-400">
+                    A brief description of the blog post goes here. It should be
+                    engaging and informative.
+                  </p>
+                  {/* <Button className="m-2" variant="outline" href="/blog-post-3">
+                    Read More
+                  </Button> */}
+                  <div className="m-2 rounded-full">
+                    <Link
+                      href={`/blogpost/cpp-programming-tutorial`}
+                      className={`${buttonVariants({ variant: "default" })} 
+             rounded-lg bg-purple-500 text-white border-purple-500 
+             hover:bg-purple-600 hover:border-purple-600 
+             transition-colors duration-200`}
+                    >
+                      Read More
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
