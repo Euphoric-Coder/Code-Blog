@@ -19,7 +19,7 @@
     "gray-matter": "^4.0.3",
     "html-react-parser": "^5.1.16",
     "lucide-react": "^0.441.0",
-    "next": "14.2.11",
+    "next": "^14.2.12",
     "next-themes": "^0.3.0",
     "react": "^18",
     "react-dom": "^18",
@@ -37,7 +37,8 @@
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
     "typed-js": "^0.2.3",
-    "unified": "^11.0.5"
+    "unified": "^11.0.5",
+    "webpack": "^5.94.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.15",
