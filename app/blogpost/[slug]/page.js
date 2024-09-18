@@ -9,9 +9,9 @@ import remarkRehype from "remark-rehype";
 import { unified } from "unified";
 import rehypePrettyCode from "rehype-pretty-code";
 import { transformerCopyButton } from "@rehype-pretty/transformers";
-import OnThisPage from "@/components/onthispage";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import OnThisPage from "@/components/onthispage";
 
 export default async function Page({ params }) {
   // const blog = {
