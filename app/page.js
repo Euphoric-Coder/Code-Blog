@@ -56,7 +56,7 @@ export default function Home() {
           <img
             src="https://www.creative-tim.com/twcomponents/svg/website-designer-bro-purple.svg"
             alt="tailwind css components"
-            className="w-full h-full max-w-md mx-auto"
+            className="w-full h-full max-w-md mx-auto animate-pulse"
           />
         </div>
       </section>

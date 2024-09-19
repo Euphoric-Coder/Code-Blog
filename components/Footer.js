@@ -8,9 +8,9 @@ const Footer = () => {
     <footer className="py-6 bg-gray-100 dark:bg-gray-900">
       <div className="container mx-auto flex flex-col items-center justify-between px-4 lg:flex-row">
         {/* Logo and Brand */}
-        <div className="flex items-center mb-4 lg:mb-0">
+        <div className="flex items-center mb-4 lg:mb-0 gap-4">
           {/* Logo Icon */}
-          <img src="test.png" alt="Logo" />
+          <img src="/codeblog.png" alt="Logo" className="h-10" />
           <span className="text-2xl font-bold text-purple-500">Code Blog</span>
         </div>
 
