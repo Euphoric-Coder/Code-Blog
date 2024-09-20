@@ -1,34 +1,15 @@
 "use client";
 import { Button } from "@/components/ui/button";
-// import Typed from "typed.js";
 import React, { useRef, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { FaFacebook, FaTwitter, FaLinkedin, FaGithub } from "react-icons/fa";
 
+// Dynamically import Typewriter so it's only rendered on the client-side
+const Typewriter = dynamic(() => import('typewriter-effect'), { ssr: false });
 
 export default function Home() {
-  // Create reference to store the DOM element containing the animation
-  const el = useRef(null);
-
-  // useEffect(() => {
-  //   const typed = new Typed(el.current, {
-  //     strings: [
-  //       "Coding",
-  //       "Web Development",
-  //       "Software Engineering",
-  //       "Data Science",
-  //       "Machine Learning",
-  //     ],
-  //     typeSpeed: 50,
-  //   });
-
-  //   return () => {
-  //     // Destroy Typed instance during cleanup to stop animation
-  //     typed.destroy();
-  //   };
-  // }, []);
-
   return (
     <main>
       <section className="container px-4 py-10 mx-auto lg:h-128 lg:space-x-8 lg:flex lg:items-center">
@@ -36,8 +17,15 @@ export default function Home() {
           <h1 className="text-3xl leading-snug text-gray-800 dark:text-gray-200 md:text-4xl">
             A <span className="font-semibold">free repository</span> for
             community <br className="hidden lg:block" /> components using{" "}
-            <span className="font-semibold underline decoration-primary">
-              <span ref={el} />
+            <span className="font-semibold underline decoration-primary inline-block">
+              <Typewriter
+                options={{
+                  strings: ["Machine Learning"],
+                  autoStart: true,
+                  loop: true,
+                }}
+                className=""
+              />
             </span>
           </h1>
           <p className="mt-4 text-lg text-gray-500 dark:text-gray-300">

@@ -37,6 +37,7 @@
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
     "typed-js": "^0.2.3",
+    "typewriter-effect": "^2.21.0",
     "unified": "^11.0.5",
     "webpack": "^5.94.0"
   },
