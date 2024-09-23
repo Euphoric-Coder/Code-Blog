@@ -6,12 +6,15 @@ import Link from "next/link";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuPortal,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"; // Import shadcn dropdown components
-import { FaChevronDown, FaChevronUp } from "react-icons/fa"; // Icons for dropdown
+} from "@/components/ui/dropdown-menu";
+import { FaChevronDown } from "react-icons/fa"; // Icons for dropdown
+import { IoClose } from "react-icons/io5"; // Close icon for pills
 
 // Hardcoded initial 8 categories
 const initialCategories = [
@@ -28,25 +31,36 @@ const initialCategories = [
 // Client-side blog component that includes search, filter, and display
 export default function BlogClient({ blogs }) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [showMoreCategories, setShowMoreCategories] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState(new Set()); // Allow multiple categories
 
-  // Filter blogs based on search term and selected category
-  const filteredBlogs = blogs.filter((blog) => {
-    const matchesSearch =
-      blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      blog.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      blog.category.some((cat) =>
-        cat.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+  // Function to handle selecting a category
+  const handleCategorySelect = (category) => {
+    setSelectedCategories((prevCategories) => {
+      const updatedCategories = new Set(prevCategories);
+      if (updatedCategories.has(category)) {
+        updatedCategories.delete(category); // Deselect category if already selected
+      } else {
+        updatedCategories.add(category); // Add category if not selected
+      }
+      return updatedCategories;
+    });
+  };
 
-    const matchesCategory =
-      selectedCategory === "" || blog.category.includes(selectedCategory);
+  // Function to handle removing a category
+  const handleCategoryRemove = (category) => {
+    setSelectedCategories((prevCategories) => {
+      const updatedCategories = new Set(prevCategories);
+      updatedCategories.delete(category); // Remove the category
+      return updatedCategories;
+    });
+  };
 
-    return matchesSearch && matchesCategory;
-  });
+  // Function to clear all categories (All button)
+  const clearCategories = () => {
+    setSelectedCategories(new Set()); // Clear all selected categories
+  };
 
-  // Extract unique categories for filter buttons
+  // Extract unique categories for the dropdown
   const otherCategories = [
     ...new Set(
       blogs
@@ -54,6 +68,19 @@ export default function BlogClient({ blogs }) {
         .filter((category) => !initialCategories.includes(category))
     ),
   ];
+
+  // Filter blogs based on search term and selected categories
+  const filteredBlogs = blogs.filter((blog) => {
+    const matchesSearch =
+      blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      blog.description.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesCategory =
+      selectedCategories.size === 0 ||
+      blog.category.some((cat) => selectedCategories.has(cat));
+
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <div className="container mx-auto p-4">
@@ -77,12 +104,39 @@ export default function BlogClient({ blogs }) {
         </button>
       </div>
 
+      {/* Selected categories pills */}
+      <div className="mb-4 flex gap-2 flex-wrap">
+        {Array.from(selectedCategories).map((category) => (
+          <span
+            key={category}
+            className="inline-flex items-center px-3 py-1 bg-blue-200 text-blue-800 rounded-full text-sm cursor-pointer"
+          >
+            {category}
+            <IoClose
+              className="ml-2 cursor-pointer hover:text-blue-900"
+              onClick={() => handleCategoryRemove(category)}
+            />
+          </span>
+        ))}
+
+        {/* Clear Filter button */}
+        {selectedCategories.size > 0 && (
+          <button
+            onClick={clearCategories}
+            className="px-4 py-2 bg-red-500 text-white rounded-lg transition hover:bg-red-600"
+          >
+            Clear Filter
+          </button>
+        )}
+      </div>
+
       {/* Filter buttons */}
       <div className="mb-6 flex gap-4 flex-wrap">
+        {/* All button to clear category selection */}
         <button
-          onClick={() => setSelectedCategory("")}
+          onClick={clearCategories}
           className={`px-4 py-2 rounded-lg transition ${
-            selectedCategory === ""
+            selectedCategories.size === 0
               ? "bg-blue-500 text-white"
               : "bg-gray-300 text-black hover:bg-blue-200"
           }`}
@@ -90,13 +144,12 @@ export default function BlogClient({ blogs }) {
           All
         </button>
 
-        {/* Render only hardcoded initial categories */}
         {initialCategories.map((category) => (
           <button
             key={category}
-            onClick={() => setSelectedCategory(category)}
+            onClick={() => handleCategorySelect(category)}
             className={`px-4 py-2 rounded-lg transition ${
-              selectedCategory === category
+              selectedCategories.has(category)
                 ? "bg-blue-500 text-white"
                 : "bg-gray-300 text-black hover:bg-blue-200"
             }`}
@@ -109,35 +162,32 @@ export default function BlogClient({ blogs }) {
         {otherCategories.length > 0 && (
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center px-4 py-2 bg-gray-300 text-black rounded-lg transition hover:bg-gray-400 shadow-sm">
-              {showMoreCategories ? "Show Less" : "Show More"}
-              {showMoreCategories ? (
-                <FaChevronUp className="ml-2" />
-              ) : (
-                <FaChevronDown className="ml-2" />
-              )}
+              More Categories
+              <FaChevronDown className="ml-2" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="shadow-lg border border-gray-200 rounded-md bg-white">
-              <DropdownMenuLabel className="text-gray-700 font-semibold">
-                Other Categories
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {otherCategories.map((category) => (
-                <DropdownMenuItem
-                  key={category}
-                  onClick={() => {
-                    setSelectedCategory(category);
-                    setShowMoreCategories(false); // Close dropdown on selection
-                  }}
-                  className={`block w-full text-left px-4 py-2 transition hover:bg-blue-500 hover:text-white ${
-                    selectedCategory === category
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-gray-900"
-                  }`}
-                >
-                  {category}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
+            <DropdownMenuPortal>
+              <DropdownMenuContent className="w-56 shadow-lg border border-gray-200 rounded-md bg-white">
+                <DropdownMenuLabel className="text-gray-700 font-semibold">
+                  Other Categories
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  {otherCategories.map((category) => (
+                    <DropdownMenuItem
+                      key={category}
+                      onClick={() => handleCategorySelect(category)}
+                      className={`block w-full text-left px-4 py-2 transition ${
+                        selectedCategories.has(category)
+                          ? "bg-blue-500 text-white"
+                          : "hover:bg-blue-100"
+                      }`}
+                    >
+                      {category}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenuPortal>
           </DropdownMenu>
         )}
       </div>
@@ -179,7 +229,8 @@ export default function BlogClient({ blogs }) {
                   {blog.category.map((cat, i) => (
                     <span
                       key={i}
-                      className="inline-block px-3 py-1 bg-blue-200 text-blue-800 rounded-full text-sm transition hover:bg-blue-300"
+                      className="inline-flex items-center px-3 py-1 bg-blue-200 text-blue-800 rounded-full text-sm cursor-pointer"
+                      onClick={() => handleCategorySelect(cat)} // Clicking pill filters by category
                     >
                       {cat}
                     </span>
