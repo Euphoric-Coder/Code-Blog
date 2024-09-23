@@ -2,7 +2,7 @@
 title: "C++ Programming Tutorial"
 description: "This is JavaScript tutorial and this is for learning JavaScript"
 slug: "cpp-programming-tutorial"
-date: "20/09/2024"
+date: "2024-09-20"
 author: "Sagnik"
 image: "/cpp-programming.jpg"
 category: ["Technology", "C++", "Programming Concept"]

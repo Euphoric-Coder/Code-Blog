@@ -3,6 +3,15 @@
 import React, { useState } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"; // Import shadcn dropdown components
+import { FaChevronDown, FaChevronUp } from "react-icons/fa"; // Icons for dropdown
 
 // Hardcoded initial 8 categories
 const initialCategories = [
@@ -46,11 +55,6 @@ export default function BlogClient({ blogs }) {
     ),
   ];
 
-  // Function to toggle "Show More" state
-  const toggleShowMoreCategories = () => {
-    setShowMoreCategories((prevState) => !prevState);
-  };
-
   return (
     <div className="container mx-auto p-4">
       {/* Main heading for the blog section */}
@@ -63,11 +67,11 @@ export default function BlogClient({ blogs }) {
           placeholder="Search by title, description, or category..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="border border-gray-300 rounded-lg w-full p-2"
+          className="border border-gray-300 rounded-lg w-full p-2 transition focus:border-blue-500 focus:outline-none"
         />
         <button
           onClick={() => setSearchTerm("")}
-          className="px-4 py-2 bg-gray-500 text-white rounded-lg"
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg transition hover:bg-blue-600"
         >
           Clear
         </button>
@@ -77,10 +81,10 @@ export default function BlogClient({ blogs }) {
       <div className="mb-6 flex gap-4 flex-wrap">
         <button
           onClick={() => setSelectedCategory("")}
-          className={`px-4 py-2 rounded-lg ${
+          className={`px-4 py-2 rounded-lg transition ${
             selectedCategory === ""
               ? "bg-blue-500 text-white"
-              : "bg-gray-300 text-black"
+              : "bg-gray-300 text-black hover:bg-blue-200"
           }`}
         >
           All
@@ -91,58 +95,50 @@ export default function BlogClient({ blogs }) {
           <button
             key={category}
             onClick={() => setSelectedCategory(category)}
-            className={`px-4 py-2 rounded-lg ${
+            className={`px-4 py-2 rounded-lg transition ${
               selectedCategory === category
                 ? "bg-blue-500 text-white"
-                : "bg-gray-300 text-black"
+                : "bg-gray-300 text-black hover:bg-blue-200"
             }`}
           >
             {category}
           </button>
         ))}
 
-        {/* Show More button */}
+        {/* Show More button with shadcn DropdownMenu */}
         {otherCategories.length > 0 && (
-          <>
-            {!showMoreCategories && (
-              <button
-                onClick={toggleShowMoreCategories}
-                className="px-4 py-2 bg-gray-300 text-black rounded-lg"
-              >
-                Show More
-              </button>
-            )}
-
-            {showMoreCategories && (
-              <div className="relative">
-                <button
-                  onClick={toggleShowMoreCategories}
-                  className="px-4 py-2 bg-gray-300 text-black rounded-lg"
+          <DropdownMenu>
+            <DropdownMenuTrigger className="flex items-center px-4 py-2 bg-gray-300 text-black rounded-lg transition hover:bg-gray-400 shadow-sm">
+              {showMoreCategories ? "Show Less" : "Show More"}
+              {showMoreCategories ? (
+                <FaChevronUp className="ml-2" />
+              ) : (
+                <FaChevronDown className="ml-2" />
+              )}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="shadow-lg border border-gray-200 rounded-md bg-white">
+              <DropdownMenuLabel className="text-gray-700 font-semibold">
+                Other Categories
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {otherCategories.map((category) => (
+                <DropdownMenuItem
+                  key={category}
+                  onClick={() => {
+                    setSelectedCategory(category);
+                    setShowMoreCategories(false); // Close dropdown on selection
+                  }}
+                  className={`block w-full text-left px-4 py-2 transition hover:bg-blue-500 hover:text-white ${
+                    selectedCategory === category
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-gray-900"
+                  }`}
                 >
-                  Show Less
-                </button>
-                {/* Dropdown container */}
-                <div className="absolute z-10 bg-white border border-gray-300 mt-2 rounded-lg shadow-lg p-4">
-                  {otherCategories.map((category) => (
-                    <button
-                      key={category}
-                      onClick={() => {
-                        setSelectedCategory(category);
-                        setShowMoreCategories(false); // Close dropdown on selection
-                      }}
-                      className={`block w-full text-left px-4 py-2 rounded-lg ${
-                        selectedCategory === category
-                          ? "bg-blue-500 text-white"
-                          : "bg-gray-100 text-black"
-                      }`}
-                    >
-                      {category}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </>
+                  {category}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         )}
       </div>
 
@@ -152,7 +148,7 @@ export default function BlogClient({ blogs }) {
           <img
             src="/empty.png"
             alt="No blogs available"
-            className="mb-4 rounded-xl"
+            className="mb-4 rounded-xl shadow-lg"
           />
           <p className="text-xl font-semibold">No blogs available</p>
         </div>
@@ -161,13 +157,13 @@ export default function BlogClient({ blogs }) {
           {filteredBlogs.map((blog, index) => (
             <div
               key={index}
-              className="rounded-lg shadow-md overflow-hidden dark:border-2"
+              className="rounded-lg shadow-md overflow-hidden dark:border-2 transition hover:shadow-xl"
             >
               {/* Blog post image */}
               <img
                 src={blog.image}
                 alt={blog.title}
-                className="w-full h-64 object-cover"
+                className="w-full h-64 object-cover transition hover:scale-105"
               />
 
               {/* Blog post content */}
@@ -183,7 +179,7 @@ export default function BlogClient({ blogs }) {
                   {blog.category.map((cat, i) => (
                     <span
                       key={i}
-                      className="inline-block px-3 py-1 bg-blue-200 text-blue-800 rounded-full text-sm"
+                      className="inline-block px-3 py-1 bg-blue-200 text-blue-800 rounded-full text-sm transition hover:bg-blue-300"
                     >
                       {cat}
                     </span>
