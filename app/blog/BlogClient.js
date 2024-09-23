@@ -118,20 +118,10 @@ export default function BlogClient({ blogs }) {
             />
           </span>
         ))}
-
-        {/* Clear Filter button */}
-        {selectedCategories.size > 0 && (
-          <button
-            onClick={clearCategories}
-            className="px-4 py-2 bg-red-500 text-white rounded-lg transition hover:bg-red-600"
-          >
-            Clear Filter
-          </button>
-        )}
       </div>
 
-      {/* Filter buttons */}
-      <div className="mb-6 flex gap-4 flex-wrap">
+      {/* Filter buttons and Clear Filter */}
+      <div className="mb-6 flex gap-4 flex-wrap items-center">
         {/* All button to clear category selection */}
         <button
           onClick={clearCategories}
@@ -148,11 +138,7 @@ export default function BlogClient({ blogs }) {
           <button
             key={category}
             onClick={() => handleCategorySelect(category)}
-            className={`px-4 py-2 rounded-lg transition ${
-              selectedCategories.has(category)
-                ? "bg-blue-500 text-white"
-                : "bg-gray-300 text-black hover:bg-blue-200"
-            }`}
+            className={`px-4 py-2 rounded-lg transition bg-gray-300 text-black hover:bg-blue-200`}
           >
             {category}
           </button>
@@ -189,6 +175,16 @@ export default function BlogClient({ blogs }) {
               </DropdownMenuContent>
             </DropdownMenuPortal>
           </DropdownMenu>
+        )}
+
+        {/* Clear Filter button */}
+        {selectedCategories.size > 0 && (
+          <button
+            onClick={clearCategories}
+            className="px-4 py-2 bg-red-500 text-white rounded-lg transition hover:bg-red-600"
+          >
+            Clear Filter
+          </button>
         )}
       </div>
 
