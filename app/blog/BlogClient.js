@@ -4,10 +4,23 @@ import React, { useState } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 
+// Hardcoded initial 8 categories
+const initialCategories = [
+  "Web Development",
+  "JavaScript",
+  "React",
+  "Node.js",
+  "Python",
+  "CSS",
+  "Data Science",
+  "Machine Learning",
+];
+
 // Client-side blog component that includes search, filter, and display
 export default function BlogClient({ blogs }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [showMoreCategories, setShowMoreCategories] = useState(false);
 
   // Filter blogs based on search term and selected category
   const filteredBlogs = blogs.filter((blog) => {
@@ -25,9 +38,18 @@ export default function BlogClient({ blogs }) {
   });
 
   // Extract unique categories for filter buttons
-  const categories = [
-    ...new Set(blogs.flatMap((blog) => blog.category)), // Flatten and deduplicate categories
+  const otherCategories = [
+    ...new Set(
+      blogs
+        .flatMap((blog) => blog.category)
+        .filter((category) => !initialCategories.includes(category))
+    ),
   ];
+
+  // Function to toggle "Show More" state
+  const toggleShowMoreCategories = () => {
+    setShowMoreCategories((prevState) => !prevState);
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -52,7 +74,7 @@ export default function BlogClient({ blogs }) {
       </div>
 
       {/* Filter buttons */}
-      <div className="mb-6 flex gap-4">
+      <div className="mb-6 flex gap-4 flex-wrap">
         <button
           onClick={() => setSelectedCategory("")}
           className={`px-4 py-2 rounded-lg ${
@@ -63,7 +85,9 @@ export default function BlogClient({ blogs }) {
         >
           All
         </button>
-        {categories.map((category) => (
+
+        {/* Render only hardcoded initial categories */}
+        {initialCategories.map((category) => (
           <button
             key={category}
             onClick={() => setSelectedCategory(category)}
@@ -76,6 +100,50 @@ export default function BlogClient({ blogs }) {
             {category}
           </button>
         ))}
+
+        {/* Show More button */}
+        {otherCategories.length > 0 && (
+          <>
+            {!showMoreCategories && (
+              <button
+                onClick={toggleShowMoreCategories}
+                className="px-4 py-2 bg-gray-300 text-black rounded-lg"
+              >
+                Show More
+              </button>
+            )}
+
+            {showMoreCategories && (
+              <div className="relative">
+                <button
+                  onClick={toggleShowMoreCategories}
+                  className="px-4 py-2 bg-gray-300 text-black rounded-lg"
+                >
+                  Show Less
+                </button>
+                {/* Dropdown container */}
+                <div className="absolute z-10 bg-white border border-gray-300 mt-2 rounded-lg shadow-lg p-4">
+                  {otherCategories.map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => {
+                        setSelectedCategory(category);
+                        setShowMoreCategories(false); // Close dropdown on selection
+                      }}
+                      className={`block w-full text-left px-4 py-2 rounded-lg ${
+                        selectedCategory === category
+                          ? "bg-blue-500 text-white"
+                          : "bg-gray-100 text-black"
+                      }`}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </div>
 
       {/* Show empty state if no blogs are available */}
