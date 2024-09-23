@@ -4,7 +4,8 @@ description: This is JavaScript tutorial and this is for learning JavaScript
 slug: c-programming-tutorial
 date: 20/09/2025
 author: Sagnik
-image: /typescript.webp
+image: /c-programming.jpg
+category: ["Technology", "C Language", "Programming Concept"]
 ---
 
 Welcome to this comprehensive C programming tutorial! Whether you're a complete beginner or looking to deepen your understanding of C, this guide will take you through the fundamentals and introduce advanced concepts as you progress.

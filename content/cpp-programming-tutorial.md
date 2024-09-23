@@ -1,10 +1,11 @@
 ---
-title: C++ Programming Tutorial
-description: This is JavaScript tutorial and this is for learning JavaScript
-slug: cpp-programming-tutorial
-date: 20/09/2024
-author: Sagnik
-image: https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1
+title: "C++ Programming Tutorial"
+description: "This is JavaScript tutorial and this is for learning JavaScript"
+slug: "cpp-programming-tutorial"
+date: "20/09/2024"
+author: "Sagnik"
+image: "/cpp-programming.jpg"
+category: ["Technology", "C++", "Programming Concept"]
 ---
 
 # C++ Overview
