@@ -4,7 +4,6 @@ import React, { useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
-import { FaFacebook, FaTwitter, FaLinkedin, FaGithub } from "react-icons/fa";
 
 // Dynamically import Typewriter so it's only rendered on the client-side
 const Typewriter = dynamic(() => import('typewriter-effect'), { ssr: false });

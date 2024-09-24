@@ -4,7 +4,6 @@ description: "This is tutorial and this is for learning"
 slug: "cpp-programming-tutorial"
 date: "2024-09-20"
 author: "Sagnik"
-feature: true
 image: "/cpp-programming.jpg"
 category: ["Technology", "C++", "Programming Concept"]
 ---
