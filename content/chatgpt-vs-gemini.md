@@ -2,7 +2,7 @@
 title: "ChatGPT vs Gemini"
 description: "Comparison between ChatGPT and Gemini"
 slug: "chatgpt-vs-gemini"
-date: "2024-09-20"
+date: "2024-09-21"
 author: "Sagnik"
 image: "/chatgpt-gemini.jpg"
 category: ["AI", "Technology", "Comparison"]

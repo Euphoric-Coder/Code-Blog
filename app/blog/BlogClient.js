@@ -105,7 +105,6 @@ export default function BlogClient({ blogs }) {
     const pages = [];
 
     if (totalPages <= 5) {
-      // Show all pages if total pages are 5 or fewer
       for (let i = 1; i <= totalPages; i++) {
         pages.push(
           <button
@@ -122,9 +121,6 @@ export default function BlogClient({ blogs }) {
         );
       }
     } else {
-      // If more than 5 pages, implement the ellipsis pagination logic
-
-      // Always show the first page
       pages.push(
         <button
           key={1}
@@ -139,7 +135,6 @@ export default function BlogClient({ blogs }) {
         </button>
       );
 
-      // Show the current page, two before, and two after
       if (currentPage > 3) {
         pages.push(
           <span key="ellipsis1" className="px-2">
@@ -176,7 +171,6 @@ export default function BlogClient({ blogs }) {
         );
       }
 
-      // Always show the last page
       pages.push(
         <button
           key={totalPages}
@@ -195,14 +189,14 @@ export default function BlogClient({ blogs }) {
     return pages;
   };
 
-  //Filter featured blogs where blog.feature is true
+  // Filter featured blogs where blog.feature is true
   const featuredBlogs = blogs.filter((blog) => blog.feature);
 
-  // Filter recent posts based on the latest dates (sort by date)
-  const recentPosts = [...blogs]
-    .sort((a, b) => new Date(b.date) - new Date(a.date))
+  // Filter recent posts where date and image exist
+  const recentPosts = blogs
+    .filter((post) => post.date && post.image) // Only include posts with date and image
+    .sort((a, b) => new Date(b.date) - new Date(a.date)) // Sort by date
     .slice(0, 4); // Get the 4 most recent posts
-
 
   return (
     <div className="container mx-auto p-6">
@@ -218,37 +212,39 @@ export default function BlogClient({ blogs }) {
           <h2 className="text-2xl font-bold text-violet-700 mb-4">
             Featured Blogs
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {featuredBlogs.length > 0 ? (
-              featuredBlogs.slice(0, 3).map((blog) => (
-                <div
-                  key={blog.slug}
-                  className="p-4 bg-white rounded-lg shadow-lg"
-                >
-                  <img
-                    src={blog.image || "/default-image.png"} // Fallback to a default image if blog.image is undefined
-                    alt={blog.title || "Blog image"}
-                    className="h-48 w-full object-cover rounded-lg mb-4"
-                  />
-                  {blog.title && (
-                    <h3 className="text-xl font-bold mb-2">{blog.title}</h3>
-                  )}
-                  {blog.description && (
-                    <p className="text-gray-600 mb-4">
-                      {blog.description.slice(0, 120)}...
-                    </p>
-                  )}
-                  <Link
-                    href={`/blogpost/${blog.slug}`}
-                    className="text-violet-600 hover:text-violet-800"
+          <div className="relative">
+            <div className="flex overflow-x-hidden hover:overflow-x-auto space-x-4 scrollbar-hide hover:scrollbar-visible">
+              {featuredBlogs.length > 0 ? (
+                featuredBlogs.map((blog) => (
+                  <div
+                    key={blog.slug}
+                    className="flex-shrink-0 w-80 p-4 bg-white rounded-lg shadow-lg"
                   >
-                    Read More →
-                  </Link>
-                </div>
-              ))
-            ) : (
-              <p>No featured blogs available.</p>
-            )}
+                    <img
+                      src={blog.image || "/default-image.png"} // Fallback to a default image if blog.image is undefined
+                      alt={blog.title || "Blog image"}
+                      className="h-48 w-full object-cover rounded-lg mb-4"
+                    />
+                    {blog.title && (
+                      <h3 className="text-xl font-bold mb-2">{blog.title}</h3>
+                    )}
+                    {blog.description && (
+                      <p className="text-gray-600 mb-4">
+                        {blog.description.slice(0, 120)}...
+                      </p>
+                    )}
+                    <Link
+                      href={`/blogpost/${blog.slug}`}
+                      className="text-violet-600 hover:text-violet-800"
+                    >
+                      Read More →
+                    </Link>
+                  </div>
+                ))
+              ) : (
+                <p>No featured blogs available.</p>
+              )}
+            </div>
           </div>
         </div>
 
@@ -261,7 +257,7 @@ export default function BlogClient({ blogs }) {
             {recentPosts.map((post) => (
               <li key={post.slug} className="flex items-center space-x-4">
                 <img
-                  src={post.image || "/default-image.png"} // Fallback to a default image if blog.image is undefined
+                  src={post.image} // Only display posts with an image
                   alt={post.title || "Blog image"}
                   className="w-16 h-16 object-cover rounded-lg"
                 />
@@ -284,7 +280,7 @@ export default function BlogClient({ blogs }) {
                             year: "numeric",
                           }
                         )}`
-                      : "Unknown date"}
+                      : ""}
                   </p>
                 </div>
               </li>
