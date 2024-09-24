@@ -2,8 +2,9 @@
 title: C Programming Tutorial
 description: This is JavaScript tutorial and this is for learning JavaScript
 slug: c-programming-tutorial
-date: 20/09/2025
+date: "2024-09-20"
 author: Sagnik
+feature: true
 image: /c-programming.jpg
 category: ["Technology", "C Language", "Programming Concept"]
 ---

@@ -1,5 +1,5 @@
 ---
-title: C Programming Tutorial
+title: Python Programming Tutorial
 description: This is JavaScript tutorial and this is for learning JavaScript
 slug: c-programming-tutorial
 date: 20/09/2025

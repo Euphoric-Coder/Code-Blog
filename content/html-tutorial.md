@@ -1,11 +1,11 @@
 ---
-title: CSS Tutorial
+title: HTML Tutorial
 description: This is JavaScript tutorial and this is for learning JavaScript
 slug: css-tutorial
 date: 20/09/2024
 author: Sagnik
 image: "/CSS.webp"
-category: ["Technology", "C Language", "Programming Concept", "OPPS", "Core CS", "Cascading Style Sheet"]
+category: ["Web Technology", "Markup Language"]
 ---
 
 # CSS Tutorial: A Comprehensive Guide

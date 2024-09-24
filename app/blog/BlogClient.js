@@ -13,9 +13,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { FaChevronDown, FaHeart, FaShareAlt } from "react-icons/fa"; // Icons for dropdown, like, share
+import { FaChevronDown } from "react-icons/fa"; // Icons for dropdown
 import { IoClose } from "react-icons/io5"; // Close icon for pills
-import { BsMoon, BsSun } from "react-icons/bs"; // Icons for dark mode
 
 // Hardcoded initial 8 categories
 const initialCategories = [
@@ -33,24 +32,8 @@ const initialCategories = [
 export default function BlogClient({ blogs }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategories, setSelectedCategories] = useState(new Set()); // Allow multiple categories
-  const [currentPage, setCurrentPage] = useState(1);
-  const [darkMode, setDarkMode] = useState(false); // For dark mode
-  const blogsPerPage = 6; // Limit the number of blogs shown per page
-
-  // Pagination logic
-  const indexOfLastBlog = currentPage * blogsPerPage;
-  const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
-  const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);
-
-  // Extract unique categories from blogs
-  const allCategories = Array.from(
-    new Set(blogs.flatMap((blog) => blog.category || []))
-  );
-
-  // Filter out the initial 8 categories from all categories to get the other categories
-  const otherCategories = allCategories.filter(
-    (category) => !initialCategories.includes(category)
-  );
+  const [currentPage, setCurrentPage] = useState(1); // Track current page for pagination
+  const itemsPerPage = 6; // Define how many items you want to display per page
 
   // Function to handle selecting a category
   const handleCategorySelect = (category) => {
@@ -79,23 +62,140 @@ export default function BlogClient({ blogs }) {
     setSelectedCategories(new Set()); // Clear all selected categories
   };
 
-  // Pagination next and previous buttons
-  const nextPage = () => {
-    setCurrentPage((prev) =>
-      prev < Math.ceil(blogs.length / blogsPerPage) ? prev + 1 : prev
-    );
+  // Extract unique categories for the dropdown
+  const otherCategories = [
+    ...new Set(
+      blogs
+        .flatMap((blog) => blog.category)
+        .filter((category) => !initialCategories.includes(category))
+    ),
+  ];
+
+  // Filter blogs based on search term and selected categories
+  const filteredBlogs = blogs.filter((blog) => {
+    const matchesSearch =
+      (blog.title &&
+        blog.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (blog.description &&
+        blog.description.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    const matchesCategory =
+      selectedCategories.size === 0 ||
+      (Array.isArray(blog.category) &&
+        blog.category.some((cat) => selectedCategories.has(cat)));
+
+    return matchesSearch && matchesCategory;
+  });
+
+  // Handle pagination: calculate total pages and slice the filtered blogs array
+  const totalPages = Math.ceil(filteredBlogs.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedBlogs = filteredBlogs.slice(startIndex, endIndex);
+
+  // Function to handle changing pages
+  const goToPage = (pageNumber) => {
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+    }
   };
 
-  const prevPage = () => {
-    setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev));
+  // Generate pagination items
+  const getPaginationItems = () => {
+    const pages = [];
+
+    if (totalPages <= 5) {
+      // Show all pages if total pages are 5 or fewer
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(
+          <button
+            key={i}
+            onClick={() => goToPage(i)}
+            className={`px-4 py-2 mx-1 rounded-lg ${
+              currentPage === i
+                ? "bg-violet-600 text-white"
+                : "bg-gray-300 hover:bg-violet-100"
+            }`}
+          >
+            {i}
+          </button>
+        );
+      }
+    } else {
+      // If more than 5 pages, implement the ellipsis pagination logic
+
+      // Always show the first page
+      pages.push(
+        <button
+          key={1}
+          onClick={() => goToPage(1)}
+          className={`px-4 py-2 mx-1 rounded-lg ${
+            currentPage === 1
+              ? "bg-violet-600 text-white"
+              : "bg-gray-300 hover:bg-violet-100"
+          }`}
+        >
+          1
+        </button>
+      );
+
+      // Show the current page, two before, and two after
+      if (currentPage > 3) {
+        pages.push(
+          <span key="ellipsis1" className="px-2">
+            ...
+          </span>
+        );
+      }
+
+      for (
+        let i = Math.max(2, currentPage - 1);
+        i <= Math.min(totalPages - 1, currentPage + 1);
+        i++
+      ) {
+        pages.push(
+          <button
+            key={i}
+            onClick={() => goToPage(i)}
+            className={`px-4 py-2 mx-1 rounded-lg ${
+              currentPage === i
+                ? "bg-violet-600 text-white"
+                : "bg-gray-300 hover:bg-violet-100"
+            }`}
+          >
+            {i}
+          </button>
+        );
+      }
+
+      if (currentPage < totalPages - 2) {
+        pages.push(
+          <span key="ellipsis2" className="px-2">
+            ...
+          </span>
+        );
+      }
+
+      // Always show the last page
+      pages.push(
+        <button
+          key={totalPages}
+          onClick={() => goToPage(totalPages)}
+          className={`px-4 py-2 mx-1 rounded-lg ${
+            currentPage === totalPages
+              ? "bg-violet-600 text-white"
+              : "bg-gray-300 hover:bg-violet-100"
+          }`}
+        >
+          {totalPages}
+        </button>
+      );
+    }
+
+    return pages;
   };
 
-  // Toggle dark mode
-  const toggleDarkMode = () => {
-    setDarkMode((prevMode) => !prevMode);
-  };
-
-  // Filter featured blogs where blog.feature is true
+  //Filter featured blogs where blog.feature is true
   const featuredBlogs = blogs.filter((blog) => blog.feature);
 
   // Filter recent posts based on the latest dates (sort by date)
@@ -103,41 +203,9 @@ export default function BlogClient({ blogs }) {
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(0, 4); // Get the 4 most recent posts
 
-  // Filter blogs based on search term and selected categories
-  const filteredBlogs = blogs.filter((blog) => {
-    const matchesSearch =
-      blog.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      blog.description?.toLowerCase().includes(searchTerm.toLowerCase());
-
-    const matchesCategory =
-      selectedCategories.size === 0 ||
-      blog.category?.some((cat) => selectedCategories.has(cat));
-
-    return matchesSearch && matchesCategory;
-  });
-
-  const paginatedFilteredBlogs = filteredBlogs.slice(
-    indexOfFirstBlog,
-    indexOfLastBlog
-  ); // Apply pagination after filtering
 
   return (
-    <div
-      className={`container mx-auto p-6 ${
-        darkMode ? "bg-gray-900 text-white" : "bg-white text-black"
-      }`}
-    >
-      {/* Toggle Dark Mode */}
-      <div className="flex justify-end mb-4">
-        <button
-          onClick={toggleDarkMode}
-          className="flex items-center px-4 py-2 bg-violet-600 text-white rounded-lg shadow-md transition hover:bg-violet-700"
-        >
-          {darkMode ? <BsSun className="mr-2" /> : <BsMoon className="mr-2" />}
-          {darkMode ? "Light Mode" : "Dark Mode"}
-        </button>
-      </div>
-
+    <div className="container mx-auto p-6">
       {/* Main heading for the blog section */}
       <h1 className="text-4xl font-bold mb-8 text-center text-violet-800">
         Blog
@@ -152,7 +220,7 @@ export default function BlogClient({ blogs }) {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {featuredBlogs.length > 0 ? (
-              featuredBlogs.slice(0, 2).map((blog) => (
+              featuredBlogs.slice(0, 3).map((blog) => (
                 <div
                   key={blog.slug}
                   className="p-4 bg-white rounded-lg shadow-lg"
@@ -162,7 +230,9 @@ export default function BlogClient({ blogs }) {
                     alt={blog.title || "Blog image"}
                     className="h-48 w-full object-cover rounded-lg mb-4"
                   />
-                  <h3 className="text-xl font-bold mb-2">{blog.title || ""}</h3>
+                  {blog.title && (
+                    <h3 className="text-xl font-bold mb-2">{blog.title}</h3>
+                  )}
                   {blog.description && (
                     <p className="text-gray-600 mb-4">
                       {blog.description.slice(0, 120)}...
@@ -196,14 +266,25 @@ export default function BlogClient({ blogs }) {
                   className="w-16 h-16 object-cover rounded-lg"
                 />
                 <div>
-                  <Link
-                    href={`/blogpost/${post.slug}`}
-                    className="text-violet-600 hover:text-violet-800"
-                  >
-                    {post.title || ""}
-                  </Link>
+                  {post.title && (
+                    <Link
+                      href={`/blogpost/${post.slug}`}
+                      className="text-violet-600 hover:text-violet-800"
+                    >
+                      {post.title}
+                    </Link>
+                  )}
                   <p className="text-gray-500 text-sm">
-                    Published on {new Date(post.date).toLocaleDateString()}
+                    {post.date
+                      ? `Published on ${new Date(post.date).toLocaleDateString(
+                          "en-GB",
+                          {
+                            day: "2-digit",
+                            month: "long",
+                            year: "numeric",
+                          }
+                        )}`
+                      : "Unknown date"}
                   </p>
                 </div>
               </li>
@@ -216,7 +297,7 @@ export default function BlogClient({ blogs }) {
       <div className="flex items-center gap-4 mb-6">
         <input
           type="text"
-          placeholder="Search by title or description..."
+          placeholder="Search by title, description, or category..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="border border-gray-300 rounded-lg w-full p-3 shadow-md focus:border-violet-600 focus:outline-none"
@@ -263,9 +344,7 @@ export default function BlogClient({ blogs }) {
           <button
             key={category}
             onClick={() => handleCategorySelect(category)}
-            className={`px-4 py-2 rounded-lg transition bg-gray-300 text-black hover:bg-violet-100 shadow-md ${
-              selectedCategories.has(category) && "bg-violet-500 text-white"
-            }`}
+            className={`px-4 py-2 rounded-lg transition bg-gray-300 text-black hover:bg-violet-100 shadow-md`}
           >
             {category}
           </button>
@@ -315,104 +394,108 @@ export default function BlogClient({ blogs }) {
         )}
       </div>
 
-      {/* Paginated blog posts */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {paginatedFilteredBlogs.map((blog) => (
-          <div
-            key={blog.slug}
-            className="rounded-lg shadow-md overflow-hidden dark:border-2 transition hover:shadow-lg hover:scale-105 transform"
-          >
-            {/* Blog post image */}
-            <img
-              src={blog.image || "/default-image.png"} // Fallback to a default image if blog.image is undefined
-              alt={blog.title || "Blog image"}
-              className="w-full h-64 object-cover transition hover:scale-110"
-            />
+      {/* Show empty state if no blogs are available */}
+      {paginatedBlogs.length === 0 ? (
+        <div className="flex flex-col items-center justify-center">
+          <img
+            src="/empty.png"
+            alt="No blogs available"
+            className="mb-4 rounded-xl shadow-lg"
+          />
+          <p className="text-xl font-semibold text-violet-700">
+            No blogs available
+          </p>
+        </div>
+      ) : (
+        <div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {paginatedBlogs.map((blog, index) => (
+              <div
+                key={index}
+                className="rounded-lg shadow-md overflow-hidden dark:border-2 transition hover:shadow-lg hover:scale-105 transform"
+              >
+                {/* Blog post image */}
+                <img
+                  src={blog.image}
+                  alt={blog.title}
+                  className="w-full h-64 object-cover transition hover:scale-110"
+                />
 
-            {/* Blog post content */}
-            <div className="p-4">
-              {/* Blog post title */}
-              {blog.title && (
-                <h2 className="text-2xl font-bold mb-2 text-violet-800">
-                  {blog.title}
-                </h2>
-              )}
+                {/* Blog post content */}
+                <div className="p-4">
+                  {/* Blog post title */}
+                  <h2 className="text-2xl font-bold mb-2 text-violet-800">
+                    {blog.title}
+                  </h2>
 
-              {/* Blog post description */}
-              {blog.description && (
-                <p className="mb-4 text-gray-700">
-                  {blog.description.slice(0, 100)}...
-                </p>
-              )}
+                  {/* Blog post description */}
+                  <p className="mb-4 text-gray-700">{blog.description}</p>
 
-              {/* Blog post category pills */}
-              <div className="flex flex-wrap gap-2 mb-4">
-                {blog.category?.map((cat, i) => (
-                  <span
-                    key={i}
-                    className="inline-flex items-center px-3 py-1 bg-violet-200 text-violet-800 rounded-full text-sm cursor-pointer shadow-md"
-                    onClick={() => handleCategorySelect(cat)} // Clicking pill filters by category
-                  >
-                    {cat}
-                  </span>
-                ))}
-              </div>
+                  {/* Blog post category pills (for array of categories) */}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {blog.category.map((cat, i) => (
+                      <span
+                        key={i}
+                        className="inline-flex items-center px-3 py-1 bg-violet-200 text-violet-800 rounded-full text-sm cursor-pointer shadow-md"
+                        onClick={() => handleCategorySelect(cat)} // Clicking pill filters by category
+                      >
+                        {cat}
+                      </span>
+                    ))}
+                  </div>
 
-              {/* Blog post author and date */}
-              <div className="text-sm mb-4 text-gray-600">
-                <span>By {blog.author || "Unknown"}</span> |{" "}
-                <span>
-                  {blog.date
-                    ? new Date(blog.date).toLocaleDateString("en-GB", {
+                  {/* Blog post author and date */}
+                  <div className="text-sm mb-4 text-gray-600">
+                    <span>By {blog.author}</span> |{" "}
+                    <span>
+                      {new Date(blog.date).toLocaleDateString("en-GB", {
                         day: "2-digit",
                         month: "long",
                         year: "numeric",
-                      })
-                    : "Unknown date"}
-                </span>
-              </div>
+                      })}
+                    </span>
+                  </div>
 
-              {/* Like and Share Buttons */}
-              <div className="flex gap-4 mb-4">
-                <button className="flex items-center text-violet-600 hover:text-violet-800">
-                  <FaHeart className="mr-2" /> Like
-                </button>
-                <button className="flex items-center text-violet-600 hover:text-violet-800">
-                  <FaShareAlt className="mr-2" /> Share
-                </button>
+                  {/* Link to the full blog post */}
+                  <Link
+                    href={`/blogpost/${blog.slug}`}
+                    className={buttonVariants({ variant: "outline" })}
+                  >
+                    Click here
+                  </Link>
+                </div>
               </div>
-
-              {/* Link to the full blog post */}
-              <Link
-                href={`/blogpost/${blog.slug}`}
-                className={buttonVariants({ variant: "outline" })}
-              >
-                Read More →
-              </Link>
-            </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      {/* Pagination controls */}
-      <div className="flex justify-center mt-8 gap-4">
-        <button
-          onClick={prevPage}
-          disabled={currentPage === 1}
-          className="px-4 py-2 bg-violet-600 text-white rounded-lg shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed"
-        >
-          Previous
-        </button>
-        <button
-          onClick={nextPage}
-          disabled={
-            currentPage === Math.ceil(filteredBlogs.length / blogsPerPage)
-          }
-          className="px-4 py-2 bg-violet-600 text-white rounded-lg shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed"
-        >
-          Next
-        </button>
-      </div>
+          {/* Pagination Controls */}
+          <div className="flex justify-center mt-6">
+            <button
+              className={`px-4 py-2 mx-2 rounded-lg ${
+                currentPage === 1
+                  ? "bg-gray-300 cursor-not-allowed"
+                  : "bg-violet-600 text-white hover:bg-violet-700"
+              }`}
+              onClick={() => goToPage(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              &lt;
+            </button>
+            {getPaginationItems()}
+            <button
+              className={`px-4 py-2 mx-2 rounded-lg ${
+                currentPage === totalPages
+                  ? "bg-gray-300 cursor-not-allowed"
+                  : "bg-violet-600 text-white hover:bg-violet-700"
+              }`}
+              onClick={() => goToPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              &gt;
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
