@@ -5,7 +5,7 @@ slug: "javascript-programming-tutorial"
 date: "2024-09-20"
 author: "Sagnik"
 feature: true
-image: "/javascript-tutorial.jpg"
+image: "/javascript.webp"
 category: ["Technology", "JavaScript", "Programming"]
 ---
 

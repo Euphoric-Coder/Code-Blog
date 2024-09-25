@@ -18,7 +18,7 @@ import { IoClose } from "react-icons/io5"; // Close icon for pills
 
 // Hardcoded initial 8 categories
 const initialCategories = [
-  "Web Development",
+  "Web Technology",
   "JavaScript",
   "React",
   "Node.js",
@@ -201,7 +201,7 @@ export default function BlogClient({ blogs }) {
   return (
     <div className="container mx-auto p-6">
       {/* Main heading for the blog section */}
-      <h1 className="text-4xl font-bold mb-8 text-center text-violet-800">
+      <h1 className="text-6xl font-bold mb-4 text-center text-violet-800">
         Blog
       </h1>
 
@@ -213,7 +213,7 @@ export default function BlogClient({ blogs }) {
             Featured Blogs
           </h2>
           <div className="relative">
-            <div className="flex overflow-x-hidden hover:overflow-x-auto space-x-4 scrollbar-hide hover:scrollbar-visible">
+            <div className="flex overflow-x-auto space-x-4 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
               {featuredBlogs.length > 0 ? (
                 featuredBlogs.map((blog) => (
                   <div
@@ -296,11 +296,11 @@ export default function BlogClient({ blogs }) {
           placeholder="Search by title, description, or category..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="border border-gray-300 rounded-lg w-full p-3 shadow-md focus:border-violet-600 focus:outline-none"
+          className="border border-gray-300 rounded-3xl w-full p-3 px-5 shadow-md focus:border-violet-600 focus:outline-none"
         />
         <button
           onClick={() => setSearchTerm("")}
-          className="px-4 py-2 bg-violet-600 text-white rounded-lg transition hover:bg-violet-700 shadow-md"
+          className="px-4 py-2 bg-violet-500 text-white rounded-3xl transition hover:bg-violet-700 shadow-md active:bg-violet-900"
         >
           Clear
         </button>
@@ -315,7 +315,7 @@ export default function BlogClient({ blogs }) {
           >
             {category}
             <IoClose
-              className="ml-2 cursor-pointer hover:text-violet-900"
+              className="ml-2 cursor-pointer hover:text-red-600 "
               onClick={() => handleCategoryRemove(category)}
             />
           </span>
@@ -327,7 +327,7 @@ export default function BlogClient({ blogs }) {
         {/* All button to clear category selection */}
         <button
           onClick={clearCategories}
-          className={`px-4 py-2 rounded-lg transition ${
+          className={`px-4 py-2 rounded-xl transition ${
             selectedCategories.size === 0
               ? "bg-violet-600 text-white shadow-md"
               : "bg-gray-300 text-black hover:bg-violet-100 shadow-md"
@@ -340,7 +340,7 @@ export default function BlogClient({ blogs }) {
           <button
             key={category}
             onClick={() => handleCategorySelect(category)}
-            className={`px-4 py-2 rounded-lg transition bg-gray-300 text-black hover:bg-violet-100 shadow-md`}
+            className={`px-4 py-2 rounded-3xl transition bg-gray-300 text-black hover:bg-violet-100 shadow-md`}
           >
             {category}
           </button>
@@ -349,7 +349,7 @@ export default function BlogClient({ blogs }) {
         {/* Show More button with shadcn DropdownMenu */}
         {otherCategories.length > 0 && (
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center px-4 py-2 bg-gray-300 text-black rounded-lg transition hover:bg-gray-400 shadow-md">
+            <DropdownMenuTrigger className="flex items-center px-4 py-2 bg-gray-300 text-black rounded-xl transition hover:bg-gray-400 shadow-md">
               More Categories
               <FaChevronDown className="ml-2" />
             </DropdownMenuTrigger>
@@ -457,7 +457,7 @@ export default function BlogClient({ blogs }) {
                     href={`/blogpost/${blog.slug}`}
                     className={buttonVariants({ variant: "outline" })}
                   >
-                    Click here
+                    Read More →
                   </Link>
                 </div>
               </div>
