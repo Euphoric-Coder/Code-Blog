@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
+import { useTheme } from "next-themes";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,6 +35,8 @@ export default function BlogClient({ blogs }) {
   const [selectedCategories, setSelectedCategories] = useState(new Set()); // Allow multiple categories
   const [currentPage, setCurrentPage] = useState(1); // Track current page for pagination
   const itemsPerPage = 6; // Define how many items you want to display per page
+
+  const { theme } = useTheme(); // Get the current theme (light or dark)
 
   // Function to handle selecting a category
   const handleCategorySelect = (category) => {
@@ -103,89 +106,23 @@ export default function BlogClient({ blogs }) {
   // Generate pagination items
   const getPaginationItems = () => {
     const pages = [];
-
-    if (totalPages <= 5) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(
-          <button
-            key={i}
-            onClick={() => goToPage(i)}
-            className={`px-4 py-2 mx-1 rounded-lg ${
-              currentPage === i
-                ? "bg-blue-600 text-white"
-                : "bg-gray-300 hover:bg-blue-100"
-            }`}
-          >
-            {i}
-          </button>
-        );
-      }
-    } else {
+    for (let i = 1; i <= totalPages; i++) {
       pages.push(
         <button
-          key={1}
-          onClick={() => goToPage(1)}
+          key={i}
+          onClick={() => goToPage(i)}
           className={`px-4 py-2 mx-1 rounded-lg ${
-            currentPage === 1
-              ? "bg-blue-600 text-white"
-              : "bg-gray-300 hover:bg-blue-100"
+            currentPage === i
+              ? "bg-purple-600 text-white"
+              : theme === "dark"
+              ? "bg-gray-700 hover:bg-gray-600 text-white"
+              : "bg-gray-300 hover:bg-purple-100"
           }`}
         >
-          1
-        </button>
-      );
-
-      if (currentPage > 3) {
-        pages.push(
-          <span key="ellipsis1" className="px-2">
-            ...
-          </span>
-        );
-      }
-
-      for (
-        let i = Math.max(2, currentPage - 1);
-        i <= Math.min(totalPages - 1, currentPage + 1);
-        i++
-      ) {
-        pages.push(
-          <button
-            key={i}
-            onClick={() => goToPage(i)}
-            className={`px-4 py-2 mx-1 rounded-lg ${
-              currentPage === i
-                ? "bg-blue-600 text-white"
-                : "bg-gray-300 hover:bg-blue-100"
-            }`}
-          >
-            {i}
-          </button>
-        );
-      }
-
-      if (currentPage < totalPages - 2) {
-        pages.push(
-          <span key="ellipsis2" className="px-2">
-            ...
-          </span>
-        );
-      }
-
-      pages.push(
-        <button
-          key={totalPages}
-          onClick={() => goToPage(totalPages)}
-          className={`px-4 py-2 mx-1 rounded-lg ${
-            currentPage === totalPages
-              ? "bg-blue-600 text-white"
-              : "bg-gray-300 hover:bg-blue-100"
-          }`}
-        >
-          {totalPages}
+          {i}
         </button>
       );
     }
-
     return pages;
   };
 
@@ -199,46 +136,39 @@ export default function BlogClient({ blogs }) {
     .slice(0, 4); // Get the 4 most recent posts
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="w-full mx-auto p-6 min-h-screen">
       {/* Main heading for the blog section */}
-      <h1 className="text-6xl font-bold mb-4 text-center text-blue-800">
-        Blog
-      </h1>
+      <h1 className="text-6xl font-bold mb-4 text-center">Blog</h1>
 
       {/* Main section with featured blogs and recent posts */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         {/* Featured Blogs Section */}
         <div className="lg:col-span-2">
-          <h2 className="text-3xl font-semibold text-blue-700 mb-4">
-            Featured Blogs
-          </h2>
-          {/* Featured Blogs Container with better UI and always visible scrollbar */}
-          <div className="relative bg-white p-6 rounded-lg shadow-lg border border-gray-300 overflow-x-auto scrollbar-thin scrollbar-thumb-blue-600 scrollbar-track-gray-300 scrollbar-visible">
+          <h2 className="text-3xl font-semibold mb-4">Featured Blogs</h2>
+          <div className="relative p-6 rounded-lg shadow-lg border overflow-x-auto bg-white border-gray-300">
             <div className="flex space-x-4">
               {featuredBlogs.length > 0 ? (
                 featuredBlogs.map((blog) => (
                   <div
                     key={blog.slug}
-                    className="flex-shrink-0 w-80 p-6 bg-gradient-to-r from-blue-50 via-blue-100 to-blue-200 text-blue-900 rounded-lg shadow-lg transform hover:scale-105 transition duration-300 ease-in-out"
+                    className={`flex-shrink-0 w-80 p-6 rounded-lg shadow-lg transform hover:scale-105 transition duration-300 ease-in-out ${
+                      theme === "dark"
+                        ? "bg-gradient-to-r from-purple-800 to-blue-800 text-white"
+                        : "bg-gradient-to-r from-blue-100 to-purple-200 text-blue-900"
+                    }`}
                   >
                     <img
                       src={blog.image || "/default-image.png"} // Fallback to a default image if blog.image is undefined
                       alt={blog.title || "Blog image"}
                       className="h-48 w-full object-cover rounded-lg mb-4"
                     />
-                    {blog.title && (
-                      <h3 className="text-2xl font-semibold mb-2 text-blue-600 hover:text-violet-600">
-                        {blog.title}
-                      </h3>
-                    )}
-                    {blog.description && (
-                      <p className="text-gray-800 mb-4">
-                        {blog.description.slice(0, 120)}...
-                      </p>
-                    )}
+                    <h3 className="text-2xl font-semibold mb-2">
+                      {blog.title}
+                    </h3>
+                    <p>{blog.description.slice(0, 120)}...</p>
                     <Link
                       href={`/blogpost/${blog.slug}`}
-                      className="text-blue-600 hover:text-violet-600 font-semibold"
+                      className="font-semibold"
                     >
                       Read More →
                     </Link>
@@ -252,28 +182,30 @@ export default function BlogClient({ blogs }) {
         </div>
 
         {/* Recent Posts Sidebar */}
-        <div className="bg-gradient-to-b from-white to-blue-50 p-6 rounded-lg shadow-lg border border-gray-200">
-          <h2 className="text-3xl font-semibold text-blue-700 mb-4">
-            Recent Posts
-          </h2>
+        <div
+          className={`p-6 rounded-lg shadow-lg border ${
+            theme === "dark"
+              ? "bg-gray-900 text-white"
+              : "bg-blue-50 text-blue-900"
+          }`}
+        >
+          <h2 className="text-3xl font-semibold mb-4">Recent Posts</h2>
           <ul className="space-y-4">
             {recentPosts.map((post) => (
               <li key={post.slug} className="flex items-center space-x-4">
                 <img
                   src={post.image} // Only display posts with an image
-                  alt={post.title || "Blog image"}
+                  alt={post.title}
                   className="w-16 h-16 object-cover rounded-lg"
                 />
                 <div>
-                  {post.title && (
-                    <Link
-                      href={`/blogpost/${post.slug}`}
-                      className="text-blue-600 hover:text-violet-600 font-semibold"
-                    >
-                      {post.title}
-                    </Link>
-                  )}
-                  <p className="text-gray-500 text-sm">
+                  <Link
+                    href={`/blogpost/${post.slug}`}
+                    className="font-semibold"
+                  >
+                    {post.title}
+                  </Link>
+                  <p className="text-sm">
                     {post.date
                       ? `Published on ${new Date(post.date).toLocaleDateString(
                           "en-GB",
@@ -299,11 +231,15 @@ export default function BlogClient({ blogs }) {
           placeholder="Search by title, description, or category..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="border-2 border-gray-300 rounded-full w-full p-3 px-5 shadow-md focus:border-blue-600 focus:outline-none"
+          className={`border-2 rounded-full w-full p-3 px-5 shadow-md ${
+            theme === "dark"
+              ? "bg-gray-700 text-white border-gray-600"
+              : "border-gray-300"
+          }`}
         />
         <button
           onClick={() => setSearchTerm("")}
-          className="px-5 py-2 bg-blue-600 text-white rounded-full transition hover:bg-violet-700 shadow-md active:bg-violet-900"
+          className="px-5 py-2 bg-purple-600 text-white rounded-full transition hover:bg-violet-700 shadow-md active:bg-violet-900"
         >
           Clear
         </button>
@@ -314,7 +250,11 @@ export default function BlogClient({ blogs }) {
         {Array.from(selectedCategories).map((category) => (
           <span
             key={category}
-            className="inline-flex items-center px-3 py-1 bg-blue-200 text-blue-800 rounded-full text-sm cursor-pointer shadow-md hover:bg-violet-200 hover:text-violet-800"
+            className={`inline-flex items-center px-3 py-1 rounded-full text-sm cursor-pointer shadow-md ${
+              theme === "dark"
+                ? "bg-blue-900 text-blue-100"
+                : "bg-blue-200 text-blue-800"
+            }`}
           >
             {category}
             <IoClose
@@ -325,15 +265,14 @@ export default function BlogClient({ blogs }) {
         ))}
       </div>
 
-      {/* Filter buttons and Clear Filter */}
+      {/* Filter buttons */}
       <div className="mb-6 flex gap-4 flex-wrap items-center">
-        {/* All button to clear category selection */}
         <button
           onClick={clearCategories}
           className={`px-4 py-2 rounded-lg transition ${
             selectedCategories.size === 0
-              ? "bg-blue-600 text-white shadow-md"
-              : "bg-gray-300 text-black hover:bg-blue-100 shadow-md"
+              ? "bg-purple-600 text-white shadow-md"
+              : "bg-gray-300 text-black hover:bg-purple-100 shadow-md"
           }`}
         >
           All
@@ -343,13 +282,12 @@ export default function BlogClient({ blogs }) {
           <button
             key={category}
             onClick={() => handleCategorySelect(category)}
-            className={`px-4 py-2 rounded-full transition bg-gray-300 text-black hover:bg-blue-100 shadow-md`}
+            className="px-4 py-2 rounded-full transition bg-gray-300 text-black hover:bg-purple-100 shadow-md"
           >
             {category}
           </button>
         ))}
 
-        {/* Show More button with shadcn DropdownMenu */}
         {otherCategories.length > 0 && (
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center px-4 py-2 bg-gray-300 text-black rounded-lg transition hover:bg-gray-400 shadow-md">
@@ -369,8 +307,8 @@ export default function BlogClient({ blogs }) {
                       onClick={() => handleCategorySelect(category)}
                       className={`block w-full text-left px-4 py-2 transition ${
                         selectedCategories.has(category)
-                          ? "bg-blue-600 text-white"
-                          : "hover:bg-blue-100"
+                          ? "bg-purple-600 text-white"
+                          : "hover:bg-purple-100"
                       }`}
                     >
                       {category}
@@ -382,7 +320,6 @@ export default function BlogClient({ blogs }) {
           </DropdownMenu>
         )}
 
-        {/* Clear Filter button */}
         {selectedCategories.size > 0 && (
           <button
             onClick={clearCategories}
@@ -401,9 +338,7 @@ export default function BlogClient({ blogs }) {
             alt="No blogs available"
             className="mb-4 rounded-xl shadow-lg"
           />
-          <p className="text-xl font-semibold text-blue-700">
-            No blogs available
-          </p>
+          <p className="text-xl font-semibold">No blogs available</p>
         </div>
       ) : (
         <div>
@@ -411,7 +346,11 @@ export default function BlogClient({ blogs }) {
             {paginatedBlogs.map((blog, index) => (
               <div
                 key={index}
-                className="rounded-lg shadow-md overflow-hidden dark:border-2 transition hover:shadow-lg hover:scale-105 transform bg-gradient-to-r from-blue-50 via-blue-100 to-blue-200 text-blue-900"
+                className={`rounded-lg shadow-md overflow-hidden dark:border-2 transition hover:shadow-lg hover:scale-105 transform ${
+                  theme === "dark"
+                    ? "bg-gradient-to-r from-purple-800 to-blue-800 text-white"
+                    : "bg-gradient-to-r from-blue-100 to-purple-200 text-blue-900"
+                }`}
               >
                 {/* Blog post image */}
                 <img
@@ -423,20 +362,18 @@ export default function BlogClient({ blogs }) {
                 {/* Blog post content */}
                 <div className="p-4">
                   {/* Blog post title */}
-                  <h2 className="text-2xl font-bold mb-2 text-blue-600 hover:text-violet-600">
-                    {blog.title}
-                  </h2>
+                  <h2 className="text-2xl font-bold mb-2">{blog.title}</h2>
 
                   {/* Blog post description */}
-                  <p className="mb-4 text-gray-800">{blog.description}</p>
+                  <p className="mb-4">{blog.description}</p>
 
-                  {/* Blog post category pills (for array of categories) */}
+                  {/* Blog post category pills */}
                   <div className="flex flex-wrap gap-2 mb-4">
                     {blog.category.map((cat, i) => (
                       <span
                         key={i}
                         className="inline-flex items-center px-3 py-1 bg-blue-200 text-blue-800 rounded-full text-sm cursor-pointer shadow-md hover:bg-violet-200 hover:text-violet-800"
-                        onClick={() => handleCategorySelect(cat)} // Clicking pill filters by category
+                        onClick={() => handleCategorySelect(cat)}
                       >
                         {cat}
                       </span>
@@ -444,7 +381,7 @@ export default function BlogClient({ blogs }) {
                   </div>
 
                   {/* Blog post author and date */}
-                  <div className="text-sm mb-4 text-gray-600">
+                  <div className="text-sm mb-4">
                     <span>By {blog.author}</span> |{" "}
                     <span>
                       {new Date(blog.date).toLocaleDateString("en-GB", {
@@ -473,7 +410,7 @@ export default function BlogClient({ blogs }) {
               className={`px-4 py-2 mx-2 rounded-lg ${
                 currentPage === 1
                   ? "bg-gray-300 cursor-not-allowed"
-                  : "bg-blue-600 text-white hover:bg-blue-700"
+                  : "bg-purple-600 text-white hover:bg-purple-700"
               }`}
               onClick={() => goToPage(currentPage - 1)}
               disabled={currentPage === 1}
@@ -485,7 +422,7 @@ export default function BlogClient({ blogs }) {
               className={`px-4 py-2 mx-2 rounded-lg ${
                 currentPage === totalPages
                   ? "bg-gray-300 cursor-not-allowed"
-                  : "bg-blue-600 text-white hover:bg-blue-700"
+                  : "bg-purple-600 text-white hover:bg-purple-700"
               }`}
               onClick={() => goToPage(currentPage + 1)}
               disabled={currentPage === totalPages}
