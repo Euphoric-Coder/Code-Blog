@@ -1,138 +1,108 @@
 "use client";
-import React from "react";
+
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "./ui/sheet";
-
 import { ModeToggle } from "./theme-btn";
 import LoadingBar from "react-top-loading-bar";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import Image from "next/image";
 
 const Navbar = () => {
   const [progress, setProgress] = useState(0);
   const pathname = usePathname();
 
+  // Loading bar progress
   useEffect(() => {
     setProgress(20);
-
-    setTimeout(() => {
-      setProgress(40);
-    }, 100);
-
-    setTimeout(() => {
-      setProgress(100);
-    }, 400);
+    setTimeout(() => setProgress(40), 100);
+    setTimeout(() => setProgress(100), 400);
   }, [pathname]);
 
   useEffect(() => {
-    setTimeout(() => {
-      setProgress(0);
-    }, 50);
+    setTimeout(() => setProgress(0), 50);
   }, []);
 
+  // Mirror effect for navbar
+  const navbarGradient =
+    "bg-gradient-to-b from-white/30 via-white/10 to-transparent dark:from-gray-800/30 dark:via-gray-800/10 dark:to-transparent backdrop-blur-lg";
+
   return (
-    <nav className="p-4 bg-background/50 sticky top-0 backdrop-blur border-b border-purple-500 z-10">
+    <nav
+      className={`p-4 sticky top-0 z-10 ${navbarGradient} border-b border-purple-500 transition-all duration-300`}
+    >
       <LoadingBar
         color="#933ce6"
         progress={progress}
         onLoaderFinished={() => setProgress(0)}
       />
       <div className="container mx-auto flex justify-between items-center text-purple-600">
-        <Link href={"/"}>
-          <div className="text-lg font-bold flex gap-4 items-center">
-            <img src="/codeblog.png" alt="Logo" className="h-10" />
-            Code Blog
-            <img></img>
+        {/* Logo and Home Link */}
+        <Link href="/">
+          <div className="text-3xl font-bold flex gap-4 items-center hover:scale-105 transition-transform duration-500">
+            <Image
+              src="/codeblog.png"
+              alt="Logo"
+              width={48}
+              height={48}
+              className="hover:opacity-80 transition-opacity duration-300"
+            />
+            <p className="hover:animate-pulse text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500 dark:from-purple-300 dark:to-pink-400">
+              Code Blog
+            </p>
           </div>
         </Link>
-        <div className="hidden md:flex space-x-4 items-center">
+
+        {/* Navigation Links (for larger screens) */}
+        <div className="hidden md:flex space-x-6 items-center">
           <Link
             href="/"
-            className="hover:scale-105 hover:font-semibold transition-transform duration-500"
+            className="hover:scale-110 hover:font-bold transition-transform duration-300 text-lg text-gray-700 dark:text-gray-200"
           >
-            {" "}
             Home
           </Link>
           <Link
             href="/blog"
-            className="hover:scale-105 hover:font-semibold transition-transform duration-300"
+            className="hover:scale-110 hover:font-bold transition-transform duration-300 text-lg text-gray-700 dark:text-gray-200"
           >
             Blog
           </Link>
           <Link
             href="/about"
-            className="hover:scale-105 hover:font-semibold transition-transform duration-300"
+            className="hover:scale-110 hover:font-bold transition-transform duration-300 text-lg text-gray-700 dark:text-gray-200"
           >
             About
           </Link>
           <Link
             href="/contact"
-            className="hover:scale-105 hover:font-semibold transition-transform duration-300"
+            className="hover:scale-110 hover:font-bold transition-transform duration-300 text-lg text-gray-700 dark:text-gray-200"
           >
             Contact
           </Link>
           <div className="flex items-center">
-            {/* <Button className="mx-1" variant="outline">
-              Login
-            </Button>
-            <Button className="mx-1" variant="outline">
-              Signup
-            </Button> */}
             <ModeToggle />
           </div>
         </div>
 
+        {/* Mobile Menu */}
         <div className="md:hidden">
-          <span className="mx-2">
-            <ModeToggle />
-          </span>
-          <Sheet>
-            <SheetTrigger>
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16m-7 6h7"
-                ></path>
-              </svg>
-            </SheetTrigger>
-            <SheetContent>
-              <SheetHeader>
-                <SheetTitle className="font-bold my-4">HarryBlog</SheetTitle>
-                <SheetDescription>
-                  <div className="flex flex-col gap-6">
-                    <Link href="/"> Home</Link>
-                    <Link href="/blog">Blog</Link>
-                    <Link href="/about">About</Link>
-                    <Link href="/contact">Contact</Link>
-                    <div>
-                      <Button className="mx-1 text-xs" variant="outline">
-                        Login
-                      </Button>
-                      <Button className="mx-1 text-xs" variant="outline">
-                        Signup
-                      </Button>
-                    </div>
-                  </div>
-                </SheetDescription>
-              </SheetHeader>
-            </SheetContent>
-          </Sheet>
+          <ModeToggle />
+          <button className="ml-4">
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h16m-7 6h7"
+              />
+            </svg>
+          </button>
         </div>
       </div>
     </nav>

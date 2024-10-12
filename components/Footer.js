@@ -2,6 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import { FaFacebook, FaTwitter, FaLinkedin, FaGithub } from "react-icons/fa";
+import Image from "next/image";
 
 const Footer = () => {
   return (
@@ -10,7 +11,7 @@ const Footer = () => {
         {/* Logo and Brand */}
         <div className="flex items-center mb-4 lg:mb-0 gap-4">
           {/* Logo Icon */}
-          <img src="/codeblog.png" alt="Logo" className="h-10" />
+          <Image src="/codeblog.png" alt="Logo" className="h-10" width={10} height={10}/>
           <span className="text-2xl font-bold text-purple-500">Code Blog</span>
         </div>
 

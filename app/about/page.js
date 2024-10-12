@@ -14,6 +14,8 @@ export default function About() {
                   layout="fill"
                   objectFit="cover"
                   className="rounded-full"
+                  height={10}
+                  width={10}
                 />
               </div>
             </div>
@@ -22,17 +24,17 @@ export default function About() {
                 About Me
               </h1>
               <p className="text-gray-600 dark:text-gray-50 text-lg mb-4">
-                Hello! I'm Harry, a passionate software developer and tech
+                Hello! I&apos;m Harry, a passionate software developer and tech
                 enthusiast. I created this blog to share my experiences, tips,
                 and tutorials on various programming languages and technologies.
-                I believe that learning should be a continuous journey, and I'm
-                here to help others on their path to mastering the art of
-                coding.
+                I believe that learning should be a continuous journey, and
+                I&apos;m here to help others on their path to mastering the art
+                of coding.
               </p>
               <p className="text-gray-600 dark:text-gray-50 text-lg">
-                Whether you're just starting out or looking to sharpen your
-                skills, you'll find a variety of resources and insights here.
-                Let's explore the world of programming together!
+                Whether you&apos;re just starting out or looking to sharpen your
+                skills, you&apos;ll find a variety of resources and insights
+                here. Let&apos;s explore the world of programming together!
               </p>
             </div>
           </div>
@@ -43,20 +45,22 @@ export default function About() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white">
-              Harry's Journey as a Coder
+              Harry&apos;s Journey as a Coder
             </h2>
             <p className="mt-4 text-lg text-gray-600 dark:text-gray-50">
-              From curious beginner to seasoned developer, here's how Harry
+              From curious beginner to seasoned developer, here&apos;s how Harry
               navigated the world of programming.
             </p>
           </div>
           <div className="space-y-12">
             <div className="flex flex-col md:flex-row items-center">
               <div className="md:w-1/3">
-                <img
+                <Image
                   src="/3.jpg"
                   alt="Harry as a beginner"
                   className="w-full rounded-lg shadow-lg"
+                  height={10}
+                  width={10}
                 />
               </div>
               <div className="md:w-2/3 md:pl-8 mt-8 md:mt-0">
@@ -76,10 +80,12 @@ export default function About() {
 
             <div className="flex flex-col md:flex-row-reverse items-center">
               <div className="md:w-1/3">
-                <img
+                <Image
                   src="/2.jpg"
                   alt="Harry learning new skills"
                   className="w-full rounded-lg shadow-lg"
+                  height={10}
+                  width={10}
                 />
               </div>
               <div className="md:w-2/3 md:pr-8 mt-8 md:mt-0">
@@ -99,10 +105,12 @@ export default function About() {
 
             <div className="flex flex-col md:flex-row items-center">
               <div className="md:w-1/3">
-                <img
+                <Image
                   src="/1.jpg"
                   alt="Harry working on a big project"
                   className="w-full rounded-lg shadow-lg"
+                  height={10}
+                  width={10}
                 />
               </div>
               <div className="md:w-2/3 md:pl-8 mt-8 md:mt-0">
@@ -123,10 +131,12 @@ export default function About() {
 
             <div className="flex flex-col md:flex-row-reverse items-center">
               <div className="md:w-1/3">
-                <img
+                <Image
                   src="/4.jpg"
                   alt="Harry mentoring others"
                   className="w-full rounded-lg shadow-lg"
+                  height={10}
+                  width={10}
                 />
               </div>
               <div className="md:w-2/3 md:pr-8 mt-8 md:mt-0">

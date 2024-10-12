@@ -25,12 +25,12 @@ export function ModeToggle() {
   };
 
   return (
-    <Button variant="outline" size="icon" onClick={toggleTheme}>
+    <Button variant="outline" size="icon" onClick={toggleTheme} className="">
       {/* Toggle between Sun and Moon icons based on resolvedTheme */}
       {resolvedTheme === "light" ? (
-        <MoonIcon className="h-[1.2rem] w-[1.2rem] transition-transform" />
+        <MoonIcon className="h-[1.7rem] w-[1.7rem] transition-transform" />
       ) : (
-        <SunIcon className="h-[1.2rem] w-[1.2rem] transition-transform" />
+        <SunIcon className="h-[1.7rem] w-[1.7rem] transition-transform" />
       )}
       <span className="sr-only">Toggle theme</span>
     </Button>

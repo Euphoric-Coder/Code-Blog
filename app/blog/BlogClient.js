@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { FaChevronDown } from "react-icons/fa"; // Icons for dropdown
 import { IoClose } from "react-icons/io5"; // Close icon for pills
+import Image from "next/image";
 
 // Hardcoded initial 8 categories
 const initialCategories = [
@@ -157,10 +158,12 @@ export default function BlogClient({ blogs }) {
                         : "bg-gradient-to-r from-blue-100 to-purple-200 text-blue-900"
                     }`}
                   >
-                    <img
+                    <Image
                       src={blog.image || "/default-image.png"} // Fallback to a default image if blog.image is undefined
                       alt={blog.title || "Blog image"}
                       className="h-48 w-full object-cover rounded-lg mb-4"
+                      height={10}
+                      width={10}
                     />
                     <h3 className="text-2xl font-semibold mb-2">
                       {blog.title}
@@ -193,10 +196,12 @@ export default function BlogClient({ blogs }) {
           <ul className="space-y-4">
             {recentPosts.map((post) => (
               <li key={post.slug} className="flex items-center space-x-4">
-                <img
+                <Image
                   src={post.image} // Only display posts with an image
                   alt={post.title}
                   className="w-16 h-16 object-cover rounded-lg"
+                  height={10}
+                  width={10}
                 />
                 <div>
                   <Link
@@ -333,10 +338,12 @@ export default function BlogClient({ blogs }) {
       {/* Show empty state if no blogs are available */}
       {paginatedBlogs.length === 0 ? (
         <div className="flex flex-col items-center justify-center">
-          <img
+          <Image
             src="/empty.png"
             alt="No blogs available"
             className="mb-4 rounded-xl shadow-lg"
+            height={10}
+            width={10}
           />
           <p className="text-xl font-semibold">No blogs available</p>
         </div>
@@ -353,10 +360,12 @@ export default function BlogClient({ blogs }) {
                 }`}
               >
                 {/* Blog post image */}
-                <img
+                <Image
                   src={blog.image}
                   alt={blog.title}
                   className="w-full h-64 object-cover transition hover:scale-110 rounded-t-lg"
+                  height={10}
+                  width={10}
                 />
 
                 {/* Blog post content */}
