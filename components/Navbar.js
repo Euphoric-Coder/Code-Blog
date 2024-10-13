@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { ModeToggle } from "./theme-btn";
 import LoadingBar from "react-top-loading-bar";
 import { usePathname } from "next/navigation";
@@ -36,7 +35,7 @@ const Navbar = () => {
         progress={progress}
         onLoaderFinished={() => setProgress(0)}
       />
-      <div className="container mx-auto flex justify-between items-center text-purple-600">
+      <div className="container mx-auto flex justify-between items-center">
         {/* Logo and Home Link */}
         <Link href="/">
           <div className="text-3xl font-bold flex gap-4 items-center hover:scale-105 transition-transform duration-500">
@@ -47,7 +46,7 @@ const Navbar = () => {
               height={48}
               className="hover:opacity-80 transition-opacity duration-300"
             />
-            <p className="hover:animate-pulse text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500 dark:from-purple-300 dark:to-pink-400">
+            <p className="hover:animate-pulse text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-teal-500 to-green-500 dark:from-purple-500 dark:via-pink-500 dark:to-yellow-500">
               Code Blog
             </p>
           </div>
@@ -57,25 +56,25 @@ const Navbar = () => {
         <div className="hidden md:flex space-x-6 items-center">
           <Link
             href="/"
-            className="hover:scale-110 hover:font-bold transition-transform duration-300 text-lg text-gray-700 dark:text-gray-200"
+            className="hover:scale-110 font-bold transition-transform duration-300 text-lg text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 dark:from-purple-400 dark:via-pink-500 dark:to-yellow-400 hover:bg-gradient-to-r hover:from-blue-700 hover:to-teal-700 dark:hover:from-pink-600 dark:hover:to-yellow-600"
           >
             Home
           </Link>
           <Link
             href="/blog"
-            className="hover:scale-110 hover:font-bold transition-transform duration-300 text-lg text-gray-700 dark:text-gray-200"
+            className="hover:scale-110 font-bold transition-transform duration-300 text-lg text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 dark:from-purple-400 dark:via-pink-500 dark:to-yellow-400 hover:bg-gradient-to-r hover:from-blue-700 hover:to-teal-700 dark:hover:from-pink-600 dark:hover:to-yellow-600"
           >
             Blog
           </Link>
           <Link
             href="/about"
-            className="hover:scale-110 hover:font-bold transition-transform duration-300 text-lg text-gray-700 dark:text-gray-200"
+            className="hover:scale-110 font-bold transition-transform duration-300 text-lg text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 dark:from-purple-400 dark:via-pink-500 dark:to-yellow-400 hover:bg-gradient-to-r hover:from-blue-700 hover:to-teal-700 dark:hover:from-pink-600 dark:hover:to-yellow-600"
           >
             About
           </Link>
           <Link
             href="/contact"
-            className="hover:scale-110 hover:font-bold transition-transform duration-300 text-lg text-gray-700 dark:text-gray-200"
+            className="hover:scale-110 font-bold transition-transform duration-300 text-lg text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 dark:from-purple-400 dark:via-pink-500 dark:to-yellow-400 hover:bg-gradient-to-r hover:from-blue-700 hover:to-teal-700 dark:hover:from-pink-600 dark:hover:to-yellow-600"
           >
             Contact
           </Link>
@@ -85,7 +84,7 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu */}
-        <div className="md:hidden">
+        <div className="md:hidden flex items-center">
           <ModeToggle />
           <button className="ml-4">
             <svg
