@@ -1,6 +1,6 @@
 ---
 title: "C++ Programming Tutorial"
-description: "This is tutorial and this is for learning"
+description: "This is tutorial and this is for learning C++"
 slug: "cpp-programming-tutorial"
 date: "2024-09-20"
 author: "Sagnik"

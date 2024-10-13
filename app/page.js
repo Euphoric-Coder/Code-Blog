@@ -5,5 +5,5 @@ import HomeClient from "@/components/Home";
 export default async function Home() {
   const posts = await getAllPosts(); // Fetch posts server-side
 
-  return <HomeClient initialPosts={posts} />;
+  return <HomeClient initialPosts={posts}/>;
 }
