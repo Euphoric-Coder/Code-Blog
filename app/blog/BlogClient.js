@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { IoClose } from "react-icons/io5";
 import { FaChevronDown } from "react-icons/fa";
+import { useTheme } from "next-themes";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,7 +16,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useTheme } from "next-themes";
 
 // Hardcoded initial categories and popular tags
 const initialCategories = [
@@ -42,7 +42,6 @@ const popularTags = [
 // Function to format date consistently using Intl.DateTimeFormat with error handling
 const formatDate = (dateString) => {
   const date = new Date(dateString);
-  // Check if the date is valid
   if (isNaN(date.getTime())) {
     return "Invalid Date"; // Handle invalid dates
   }
@@ -74,9 +73,19 @@ export default function BlogClient({ blogs }) {
     });
   };
 
-  // Clear all selected categories
-  const clearCategories = () => {
+  // Handle removing a selected category
+  const handleCategoryRemove = (category) => {
+    setSelectedCategories((prev) => {
+      const updatedCategories = new Set(prev);
+      updatedCategories.delete(category); // Remove category
+      return updatedCategories;
+    });
+  };
+
+  // Clear all selected categories and search term
+  const clearAllFilters = () => {
     setSelectedCategories(new Set());
+    setSearchTerm("");
   };
 
   // Filter blogs based on search term and selected categories
@@ -135,195 +144,116 @@ export default function BlogClient({ blogs }) {
     ),
   ];
 
-  // Find related posts (based on the first category of each post)
-  const getRelatedPosts = (currentPost) => {
-    return blogs.filter(
-      (blog) =>
-        Array.isArray(blog.category) &&
-        blog.category.length > 0 &&
-        Array.isArray(currentPost.category) &&
-        currentPost.category.length > 0 &&
-        blog.category[0] === currentPost.category[0] &&
-        blog.slug !== currentPost.slug
-    );
-  };
-
-  // Theme-based gradients and background
-  const containerGradient =
-    theme === "dark"
-      ? "bg-gradient-to-b from-gray-900 via-gray-800 to-blue-950 text-gray-100"
-      : "bg-gradient-to-b from-blue-50 via-white to-blue-100 text-gray-900";
-
   const buttonGradient =
     theme === "dark"
-      ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white"
-      : "bg-gradient-to-r from-blue-400 to-teal-500 text-white";
+      ? "bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 hover:from-purple-700 hover:via-pink-600 hover:to-red-600"
+      : "bg-gradient-to-r from-blue-400 via-teal-400 to-green-400 hover:from-blue-500 hover:via-teal-500 hover:to-green-500";
 
   return (
-    <main
-      className={`relative w-full min-h-screen ${containerGradient} transition-all duration-700`}
-    >
-      {/* Gradient Heading */}
-      <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-center py-8 text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 dark:from-purple-400 dark:via-pink-500 dark:to-yellow-400">
-        Blog
-      </h1>
-
-      {/* Popular Tags Section */}
-      <section className="mb-8 text-center">
-        <h2 className="text-2xl font-bold mb-4">Popular Tags</h2>
-        <div className="flex justify-center gap-3 flex-wrap">
-          {popularTags.map((tag) => (
-            <button
-              key={tag}
-              onClick={() => handleCategorySelect(tag)}
-              className={`px-4 py-2 rounded-full transition shadow-md ${
-                selectedCategories.has(tag)
-                  ? "bg-purple-600 text-white"
-                  : "bg-gray-300 text-gray-900 hover:bg-purple-100"
-              }`}
-            >
-              {tag}
-            </button>
-          ))}
+    <main className="relative w-full min-h-screen bg-gradient-to-b from-blue-50 via-white to-blue-100 dark:from-gray-900 dark:via-gray-800 dark:to-blue-950 text-gray-900 dark:text-gray-100 transition-all duration-700">
+      {/* Hero Section Heading */}
+      <section className="py-10">
+        <div className="container mx-auto text-center">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 dark:from-purple-400 dark:via-pink-500 dark:to-yellow-400 mb-6">
+            Blog
+          </h1>
+          <p className="text-lg sm:text-xl md:text-2xl font-bold text-gray-700 dark:text-gray-300 leading-relaxed">
+            Stay updated on the latest trends in Full Stack Development, Machine
+            Learning, Tech Innovations, and more!
+          </p>
         </div>
       </section>
 
-      {/* Search Bar */}
+      {/* Search Section */}
       <div className="flex justify-center mb-6">
         <input
           type="text"
           placeholder="Search blogs by title, description, or category..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className={`w-full max-w-lg px-6 py-3 rounded-full shadow-lg border transition-all duration-300 ${
-            theme === "dark"
-              ? "bg-gray-800 text-white border-gray-600"
-              : "bg-white border-gray-300"
-          }`}
+          className="w-full max-w-lg px-6 py-3 rounded-full shadow-lg border transition-all duration-300 bg-white dark:bg-gray-900 dark:text-white text-gray-800 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-4 focus:ring-blue-500 dark:focus:ring-purple-600"
         />
         <button
           onClick={() => setSearchTerm("")}
-          className="ml-4 px-5 py-3 rounded-full bg-red-500 text-white transition hover:bg-red-600 shadow-md"
+          className="ml-4 px-5 py-3 rounded-full bg-red-500 text-white hover:bg-red-600 transition shadow-md"
         >
           Clear
         </button>
       </div>
 
-      {/* Category Filter Section */}
-      <div className="mb-4 flex justify-center gap-4">
-        <button
-          onClick={clearCategories}
-          className="px-4 py-2 bg-purple-600 text-white rounded-lg shadow-md transition hover:bg-purple-700"
-        >
-          All
-        </button>
-        {initialCategories.map((category) => (
-          <button
+      {/* Selected Categories as Pills */}
+      <div className="mb-4 flex gap-2 justify-center flex-wrap">
+        {Array.from(selectedCategories).map((category) => (
+          <span
             key={category}
-            onClick={() => handleCategorySelect(category)}
-            className={`px-4 py-2 rounded-full transition shadow-md ${
-              selectedCategories.has(category)
-                ? "bg-purple-600 text-white"
-                : "bg-gray-300 text-gray-900 hover:bg-purple-100"
-            }`}
+            className="inline-flex items-center px-3 py-1 rounded-full text-sm cursor-pointer bg-blue-200 text-blue-800 shadow-md hover:bg-blue-300 transition-all"
           >
             {category}
-          </button>
+            <IoClose
+              className="ml-2 cursor-pointer hover:text-red-600"
+              onClick={() => handleCategoryRemove(category)}
+            />
+          </span>
         ))}
-
-        {/* More Categories Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger className="flex items-center px-4 py-2 bg-gray-300 text-black rounded-lg transition hover:bg-gray-400 shadow-md">
-            More Categories
-            <FaChevronDown className="ml-2" />
-          </DropdownMenuTrigger>
-          <DropdownMenuPortal>
-            <DropdownMenuContent className="w-56 max-h-64 overflow-y-auto shadow-lg border border-gray-200 rounded-md bg-white dark:bg-gray-800 dark:border-gray-700">
-              <DropdownMenuLabel className="text-gray-700 dark:text-gray-300 font-semibold">
-                Other Categories
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                {otherCategories.map((category) => (
-                  <DropdownMenuItem
-                    key={category}
-                    onClick={() => handleCategorySelect(category)}
-                    className={`block w-full text-left px-4 py-2 transition ${
-                      selectedCategories.has(category)
-                        ? "bg-purple-600 text-white"
-                        : "hover:bg-purple-100 dark:hover:bg-gray-700"
-                    }`}
-                  >
-                    {category}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenuPortal>
-        </DropdownMenu>
       </div>
 
-      {/* Blog Posts Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 py-8">
-        {paginatedBlogs.map((blog, index) => (
-          <div
-            key={index}
-            className={`rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 ${
-              theme === "dark"
-                ? "bg-gradient-to-br from-purple-800 to-blue-800 text-white"
-                : "bg-gradient-to-br from-blue-100 to-teal-100 text-gray-900"
-            }`}
+      {/* Clear All Filters Button */}
+      {(selectedCategories.size > 0 || searchTerm) && (
+        <div className="flex justify-center mb-4">
+          <button
+            onClick={clearAllFilters}
+            className="px-6 py-3 bg-red-600 text-white rounded-full shadow-lg hover:bg-red-700 transition"
           >
-            <Image
-              src={blog.image}
-              alt={blog.title}
-              className="w-full h-48 object-cover"
-              height={200}
-              width={300}
-            />
-            <div className="p-6">
-              <h2 className="text-2xl font-bold mb-2">{blog.title}</h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                By {blog.author} on {formatDate(blog.date)}
-              </p>
-              <p className="mb-4">{blog.description}</p>
+            Clear All Filters
+          </button>
+        </div>
+      )}
 
-              {/* Category Pills */}
-              <div className="flex flex-wrap gap-2 mb-4">
-                {blog.category.map((cat, i) => (
-                  <span
-                    key={i}
-                    className={`inline-block bg-gradient-to-r from-blue-500 to-teal-500 dark:from-pink-400 dark:to-yellow-400 text-white px-2 py-1 rounded-full text-xs xs:text-sm shadow-md transition-transform transform hover:scale-110`}
-                  >
-                    {cat}
-                  </span>
-                ))}
+      {/* Blog Posts Grid */}
+      <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 px-4 py-8">
+        {paginatedBlogs.map((blog, index) => (
+          <Link href={`/blogpost/${blog.slug}`} key={index}>
+            <div className="relative overflow-hidden max-w-sm mx-auto lg:max-w-md rounded-3xl shadow-2xl transform transition-all duration-500 hover:scale-105 bg-gradient-to-br from-blue-400 via-white to-blue-200 dark:from-gray-800 dark:via-gray-900 dark:to-black text-gray-900 dark:text-gray-100 cursor-pointer">
+              {/* Image section */}
+              <div className="relative overflow-hidden rounded-t-3xl">
+                <Image
+                  src={blog.image || "/placeholder.png"}
+                  alt={blog.title}
+                  layout="responsive"
+                  width={700}
+                  height={400}
+                  className="object-cover transition-transform duration-300 hover:scale-110"
+                />
               </div>
 
-              {/* Read More Link */}
-              <Link href={`/blogpost/${blog.slug}`}>
-                <span
-                  className={`text-lg font-bold underline ${buttonGradient}`}
-                >
-                  Read More →
-                </span>
-              </Link>
+              {/* Blog content */}
+              <div className="p-4 xs:p-5 md:p-6 lg:p-8">
+                <h3 className="text-xl xs:text-2xl md:text-3xl lg:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-500 dark:from-pink-400 dark:to-yellow-400 mb-2 transition-all duration-300">
+                  {blog.title}
+                </h3>
+                <p className="text-sm xs:text-base md:text-lg lg:text-xl text-gray-700 dark:text-gray-300 leading-relaxed">
+                  {blog.description}
+                </p>
 
-              {/* Related Posts */}
-              <div className="mt-6">
-                <h3 className="text-xl font-bold mb-2">Related Posts</h3>
-                {getRelatedPosts(blog)
-                  .slice(0, 2)
-                  .map((related) => (
-                    <Link href={`/blogpost/${related.slug}`} key={related.slug}>
-                      <p className="text-blue-600 dark:text-teal-400 hover:underline">
-                        {related.title}
-                      </p>
-                    </Link>
+                {/* Category Pills */}
+                <div className="flex flex-wrap gap-1.5 mt-3">
+                  {blog.category.map((cat, index) => (
+                    <span
+                      key={index}
+                      className="inline-block bg-gradient-to-r from-blue-600 to-teal-500 dark:from-pink-400 dark:to-yellow-500 text-white px-2 py-1 xs:px-3 xs:py-1.5 rounded-full text-xs xs:text-sm md:text-base font-semibold shadow-md transition-transform transform hover:scale-110"
+                    >
+                      {cat}
+                    </span>
                   ))}
+                </div>
+
+                {/* Read more link */}
+                <p className="mt-4 md:mt-6 text-blue-600 dark:text-pink-500 font-semibold underline transition-all hover:text-blue-800 dark:hover:text-pink-600 text-sm xs:text-base md:text-lg">
+                  Read More →
+                </p>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 
