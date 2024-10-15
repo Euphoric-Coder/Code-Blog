@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { IoClose } from "react-icons/io5";
@@ -149,6 +149,19 @@ export default function BlogClient({ blogs }) {
       ? "bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 hover:from-purple-700 hover:via-pink-600 hover:to-red-600"
       : "bg-gradient-to-r from-blue-400 via-teal-400 to-green-400 hover:from-blue-500 hover:via-teal-500 hover:to-green-500";
 
+  // Find related posts for a specific blog post
+  const getRelatedPosts = (currentPost) => {
+    return blogs.filter(
+      (blog) =>
+        Array.isArray(blog.category) &&
+        blog.category.length > 0 &&
+        Array.isArray(currentPost.category) &&
+        currentPost.category.length > 0 &&
+        blog.category[0] === currentPost.category[0] &&
+        blog.slug !== currentPost.slug
+    );
+  };
+
   return (
     <main className="relative w-full min-h-screen bg-gradient-to-b from-blue-50 via-white to-blue-100 dark:from-gray-900 dark:via-gray-800 dark:to-blue-950 text-gray-900 dark:text-gray-100 transition-all duration-700">
       {/* Hero Section Heading */}
@@ -196,6 +209,26 @@ export default function BlogClient({ blogs }) {
           </span>
         ))}
       </div>
+
+      {/* Popular Tags Section */}
+      <section className="mb-8 text-center">
+        <h2 className="text-2xl font-bold mb-4">Popular Tags</h2>
+        <div className="flex justify-center gap-3 flex-wrap">
+          {popularTags.map((tag) => (
+            <button
+              key={tag}
+              onClick={() => handleCategorySelect(tag)}
+              className={`px-4 py-2 rounded-full transition shadow-md ${
+                selectedCategories.has(tag)
+                  ? "bg-purple-600 text-white"
+                  : "bg-gray-300 text-gray-900 hover:bg-purple-100"
+              }`}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+      </section>
 
       {/* Clear All Filters Button */}
       {(selectedCategories.size > 0 || searchTerm) && (
@@ -251,6 +284,23 @@ export default function BlogClient({ blogs }) {
                 <p className="mt-4 md:mt-6 text-blue-600 dark:text-pink-500 font-semibold underline transition-all hover:text-blue-800 dark:hover:text-pink-600 text-sm xs:text-base md:text-lg">
                   Read More →
                 </p>
+
+                {/* Related Posts */}
+                <div className="mt-6">
+                  <h3 className="text-xl font-bold mb-2">Related Posts</h3>
+                  {getRelatedPosts(blog)
+                    .slice(0, 2)
+                    .map((related) => (
+                      <Link
+                        href={`/blogpost/${related.slug}`}
+                        key={related.slug}
+                      >
+                        <p className="text-blue-600 dark:text-teal-400 hover:underline">
+                          {related.title}
+                        </p>
+                      </Link>
+                    ))}
+                </div>
               </div>
             </div>
           </Link>
