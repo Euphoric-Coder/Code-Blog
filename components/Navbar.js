@@ -46,7 +46,7 @@ const Navbar = () => {
               className="hover:opacity-80 transition-opacity duration-300"
             />
             <p className="hover:animate-pulse text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-teal-500 to-green-500 dark:from-purple-500 dark:via-pink-500 dark:to-yellow-500">
-              Code Blog
+              Code Blog (Test App)
             </p>
           </div>
         </Link>
