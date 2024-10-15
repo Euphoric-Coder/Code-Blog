@@ -6,7 +6,6 @@ import { ModeToggle } from "./theme-btn";
 import LoadingBar from "react-top-loading-bar";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-
 const Navbar = () => {
   const [progress, setProgress] = useState(0);
   const pathname = usePathname();
@@ -40,7 +39,7 @@ const Navbar = () => {
         <Link href="/">
           <div className="text-3xl font-bold flex gap-4 items-center hover:scale-105 transition-transform duration-500">
             <Image
-              src="/codeblog.png"
+              src="codeblog.png"
               alt="Logo"
               width={48}
               height={48}
