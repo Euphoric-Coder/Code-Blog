@@ -1,4 +1,5 @@
 import fs from "fs";
+import path from "path";
 import matter from "gray-matter";
 import { notFound } from "next/navigation";
 import rehypeDocument from "rehype-document";
@@ -13,21 +14,39 @@ import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import OnThisPage from "@/components/onthispage";
 
+// Generate static params for dynamic routes
+export async function generateStaticParams() {
+  const contentDir = path.join(process.cwd(), "content");
+
+  // Read all markdown files from the 'content' directory
+  const filenames = fs.readdirSync(contentDir);
+
+  // Map each filename to the corresponding slug (without the .md extension)
+  const slugs = filenames.map((filename) => ({
+    slug: filename.replace(".md", ""),
+  }));
+
+  return slugs; // Return an array of params for each slug
+}
+
 export default async function Page({ params }) {
   const filepath = `content/${params.slug}.md`;
 
+  // Check if the file exists, if not return a 404 page
   if (!fs.existsSync(filepath)) {
     notFound();
     return;
   }
 
+  // Read the content of the markdown file
   const fileContent = fs.readFileSync(filepath, "utf-8");
-  const { content, data } = matter(fileContent);
+  const { content, data } = matter(fileContent); // Parse the frontmatter and content
 
+  // Initialize the unified processor to convert markdown to HTML
   const processor = unified()
     .use(remarkParse)
     .use(remarkRehype)
-    .use(rehypeDocument, { title: "👋🌍" })
+    .use(rehypeDocument, { title: data.title || "Blog Post" })
     .use(rehypeFormat)
     .use(rehypeStringify)
     .use(rehypeSlug)
@@ -42,6 +61,7 @@ export default async function Page({ params }) {
       ],
     });
 
+  // Convert markdown content to HTML
   const htmlContent = (await processor.process(content)).toString();
 
   return (
