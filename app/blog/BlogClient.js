@@ -1,21 +1,20 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { IoClose } from "react-icons/io5";
-import { FaChevronDown } from "react-icons/fa";
 import { useTheme } from "next-themes";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 // Hardcoded initial categories and popular tags
 const initialCategories = [
@@ -56,9 +55,11 @@ export default function BlogClient({ blogs }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategories, setSelectedCategories] = useState(new Set());
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortOption, setSortOption] = useState("name-asc"); // Sorting by name ascending by default
   const itemsPerPage = 6;
 
   const { theme } = useTheme(); // Theme detection for dark/light mode
+  const isSearchActive = searchTerm !== ""; // Check if there is text in the search bar
 
   // Handle category selection
   const handleCategorySelect = (category) => {
@@ -86,23 +87,43 @@ export default function BlogClient({ blogs }) {
   const clearAllFilters = () => {
     setSelectedCategories(new Set());
     setSearchTerm("");
+    setSortOption("name-asc");
+  };
+
+  // Handle sorting of blogs
+  const sortBlogs = (blogs) => {
+    const sortedBlogs = [...blogs];
+    switch (sortOption) {
+      case "name-asc":
+        return sortedBlogs.sort((a, b) => a.title.localeCompare(b.title));
+      case "name-desc":
+        return sortedBlogs.sort((a, b) => b.title.localeCompare(a.title));
+      case "date-newest":
+        return sortedBlogs.sort((a, b) => new Date(b.date) - new Date(a.date));
+      case "date-oldest":
+        return sortedBlogs.sort((a, b) => new Date(a.date) - new Date(b.date));
+      default:
+        return blogs;
+    }
   };
 
   // Filter blogs based on search term and selected categories
-  const filteredBlogs = blogs.filter((blog) => {
-    const matchesSearch =
-      (blog.title &&
-        blog.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (blog.description &&
-        blog.description.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filteredBlogs = sortBlogs(
+    blogs.filter((blog) => {
+      const matchesSearch =
+        (blog.title &&
+          blog.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (blog.description &&
+          blog.description.toLowerCase().includes(searchTerm.toLowerCase()));
 
-    const matchesCategory =
-      selectedCategories.size === 0 ||
-      (Array.isArray(blog.category) &&
-        blog.category.some((cat) => selectedCategories.has(cat)));
+      const matchesCategory =
+        selectedCategories.size === 0 ||
+        (Array.isArray(blog.category) &&
+          blog.category.some((cat) => selectedCategories.has(cat)));
 
-    return matchesSearch && matchesCategory;
-  });
+      return matchesSearch && matchesCategory;
+    })
+  );
 
   // Handle pagination
   const totalPages = Math.ceil(filteredBlogs.length / itemsPerPage);
@@ -144,24 +165,6 @@ export default function BlogClient({ blogs }) {
     ),
   ];
 
-  const buttonGradient =
-    theme === "dark"
-      ? "bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 hover:from-purple-700 hover:via-pink-600 hover:to-red-600"
-      : "bg-gradient-to-r from-blue-400 via-teal-400 to-green-400 hover:from-blue-500 hover:via-teal-500 hover:to-green-500";
-
-  // Find related posts for a specific blog post
-  const getRelatedPosts = (currentPost) => {
-    return blogs.filter(
-      (blog) =>
-        Array.isArray(blog.category) &&
-        blog.category.length > 0 &&
-        Array.isArray(currentPost.category) &&
-        currentPost.category.length > 0 &&
-        blog.category[0] === currentPost.category[0] &&
-        blog.slug !== currentPost.slug
-    );
-  };
-
   return (
     <main className="relative w-full min-h-screen bg-gradient-to-b from-blue-50 via-white to-blue-100 dark:from-gray-900 dark:via-gray-800 dark:to-blue-950 text-gray-900 dark:text-gray-100 transition-all duration-700">
       {/* Hero Section Heading */}
@@ -177,21 +180,126 @@ export default function BlogClient({ blogs }) {
         </div>
       </section>
 
-      {/* Search Section */}
-      <div className="flex justify-center mb-6">
-        <input
-          type="text"
-          placeholder="Search blogs by title, description, or category..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full max-w-lg px-6 py-3 rounded-full shadow-lg border transition-all duration-300 bg-white dark:bg-gray-900 dark:text-white text-gray-800 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-4 focus:ring-blue-500 dark:focus:ring-purple-600"
-        />
-        <button
-          onClick={() => setSearchTerm("")}
-          className="ml-4 px-5 py-3 rounded-full bg-red-500 text-white hover:bg-red-600 transition shadow-md"
-        >
-          Clear
-        </button>
+      {/* Search and Filter Section */}
+      <div className="flex justify-center mb-6 gap-4">
+        {/* Search Bar */}
+        <div className="relative max-w-md w-full">
+          <input
+            type="text"
+            placeholder="Search blogs by title, description, or category..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full px-6 py-4 rounded-full shadow-lg border transition-all duration-300 bg-white dark:bg-gray-900 dark:text-white text-gray-800 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-4 focus:ring-blue-500 dark:focus:ring-purple-600"
+          />
+
+          {/* Clear Button Inside Search Bar */}
+          {isSearchActive && (
+            <button
+              onClick={() => setSearchTerm("")}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white px-3 py-1 rounded-full shadow-md text-sm xs:text-base transition-transform duration-300
+                bg-gradient-to-r from-blue-500 to-teal-500 dark:from-pink-400 dark:to-yellow-400 hover:scale-110 active:scale-95"
+            >
+              Clear
+            </button>
+          )}
+        </div>
+
+        {/* Filter Button with Dialog */}
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-full shadow-md hover:bg-purple-700">
+              Filter
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Filter Blogs</DialogTitle>
+              <DialogDescription>
+                Customize the filters for your blog search.
+              </DialogDescription>
+            </DialogHeader>
+
+            {/* Filter Options */}
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-1 gap-4">
+                <h3 className="font-bold">Sort By Name</h3>
+                <Button
+                  variant={sortOption === "name-asc" ? "default" : "outline"}
+                  onClick={() => setSortOption("name-asc")}
+                >
+                  Name (Ascending)
+                </Button>
+                <Button
+                  variant={sortOption === "name-desc" ? "default" : "outline"}
+                  onClick={() => setSortOption("name-desc")}
+                >
+                  Name (Descending)
+                </Button>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4">
+                <h3 className="font-bold">Sort By Date</h3>
+                <Button
+                  variant={sortOption === "date-newest" ? "default" : "outline"}
+                  onClick={() => setSortOption("date-newest")}
+                >
+                  Date (Newest First)
+                </Button>
+                <Button
+                  variant={sortOption === "date-oldest" ? "default" : "outline"}
+                  onClick={() => setSortOption("date-oldest")}
+                >
+                  Date (Oldest First)
+                </Button>
+              </div>
+
+              {/* Category Filter */}
+              <div className="grid grid-cols-1 gap-4">
+                <h3 className="font-bold">Filter By Categories</h3>
+                {initialCategories.map((category) => (
+                  <Button
+                    key={category}
+                    variant={
+                      selectedCategories.has(category) ? "default" : "outline"
+                    }
+                    onClick={() => handleCategorySelect(category)}
+                  >
+                    {category}
+                  </Button>
+                ))}
+
+                {/* Other Categories */}
+                {otherCategories.length > 0 && (
+                  <div className="grid grid-cols-1 gap-4">
+                    {otherCategories.map((category) => (
+                      <Button
+                        key={category}
+                        variant={
+                          selectedCategories.has(category)
+                            ? "default"
+                            : "outline"
+                        }
+                        onClick={() => handleCategorySelect(category)}
+                      >
+                        {category}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <DialogFooter>
+              <Button onClick={clearAllFilters}>Clear Filters</Button>
+              <Button
+                variant="default"
+                onClick={() => console.log("Apply filters")}
+              >
+                Apply Filters
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
 
       {/* Selected Categories as Pills */}
@@ -209,38 +317,6 @@ export default function BlogClient({ blogs }) {
           </span>
         ))}
       </div>
-
-      {/* Popular Tags Section */}
-      <section className="mb-8 text-center">
-        <h2 className="text-2xl font-bold mb-4">Popular Tags</h2>
-        <div className="flex justify-center gap-3 flex-wrap">
-          {popularTags.map((tag) => (
-            <button
-              key={tag}
-              onClick={() => handleCategorySelect(tag)}
-              className={`px-4 py-2 rounded-full transition shadow-md ${
-                selectedCategories.has(tag)
-                  ? "bg-purple-600 text-white"
-                  : "bg-gray-300 text-gray-900 hover:bg-purple-100"
-              }`}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {/* Clear All Filters Button */}
-      {(selectedCategories.size > 0 || searchTerm) && (
-        <div className="flex justify-center mb-4">
-          <button
-            onClick={clearAllFilters}
-            className="px-6 py-3 bg-red-600 text-white rounded-full shadow-lg hover:bg-red-700 transition"
-          >
-            Clear All Filters
-          </button>
-        </div>
-      )}
 
       {/* Blog Posts Grid */}
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 px-4 py-8">
@@ -284,23 +360,6 @@ export default function BlogClient({ blogs }) {
                 <p className="mt-4 md:mt-6 text-blue-600 dark:text-pink-500 font-semibold underline transition-all hover:text-blue-800 dark:hover:text-pink-600 text-sm xs:text-base md:text-lg">
                   Read More →
                 </p>
-
-                {/* Related Posts */}
-                <div className="mt-6">
-                  <h3 className="text-xl font-bold mb-2">Related Posts</h3>
-                  {getRelatedPosts(blog)
-                    .slice(0, 2)
-                    .map((related) => (
-                      <Link
-                        href={`/blogpost/${related.slug}`}
-                        key={related.slug}
-                      >
-                        <p className="text-blue-600 dark:text-teal-400 hover:underline">
-                          {related.title}
-                        </p>
-                      </Link>
-                    ))}
-                </div>
               </div>
             </div>
           </Link>
