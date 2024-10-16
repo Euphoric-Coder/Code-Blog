@@ -183,7 +183,7 @@ export default function BlogClient({ blogs }) {
       {/* Search and Filter Section */}
       <div className="flex justify-center mb-6 gap-4">
         {/* Search Bar */}
-        <div className="relative max-w-md w-full">
+        <div className="relative max-w-lg w-full">
           <input
             type="text"
             placeholder="Search blogs by title, description, or category..."
@@ -211,7 +211,7 @@ export default function BlogClient({ blogs }) {
               Filter
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="sm:max-w-[600px] sm:max-h-[300px] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Filter Blogs</DialogTitle>
               <DialogDescription>
@@ -223,77 +223,96 @@ export default function BlogClient({ blogs }) {
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-1 gap-4">
                 <h3 className="font-bold">Sort By Name</h3>
-                <Button
-                  variant={sortOption === "name-asc" ? "default" : "outline"}
-                  onClick={() => setSortOption("name-asc")}
-                >
-                  Name (Ascending)
-                </Button>
-                <Button
-                  variant={sortOption === "name-desc" ? "default" : "outline"}
-                  onClick={() => setSortOption("name-desc")}
-                >
-                  Name (Descending)
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant={sortOption === "name-asc" ? "default" : "outline"}
+                    onClick={() => setSortOption("name-asc")}
+                    className="rounded-full px-4 py-1"
+                  >
+                    Name (Asc)
+                  </Button>
+                  <Button
+                    variant={sortOption === "name-desc" ? "default" : "outline"}
+                    onClick={() => setSortOption("name-desc")}
+                    className="rounded-full px-4 py-1"
+                  >
+                    Name (Desc)
+                  </Button>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 gap-4">
                 <h3 className="font-bold">Sort By Date</h3>
-                <Button
-                  variant={sortOption === "date-newest" ? "default" : "outline"}
-                  onClick={() => setSortOption("date-newest")}
-                >
-                  Date (Newest First)
-                </Button>
-                <Button
-                  variant={sortOption === "date-oldest" ? "default" : "outline"}
-                  onClick={() => setSortOption("date-oldest")}
-                >
-                  Date (Oldest First)
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant={
+                      sortOption === "date-newest" ? "default" : "outline"
+                    }
+                    onClick={() => setSortOption("date-newest")}
+                    className="rounded-full px-4 py-1"
+                  >
+                    Newest
+                  </Button>
+                  <Button
+                    variant={
+                      sortOption === "date-oldest" ? "default" : "outline"
+                    }
+                    onClick={() => setSortOption("date-oldest")}
+                    className="rounded-full px-4 py-1"
+                  >
+                    Oldest
+                  </Button>
+                </div>
               </div>
 
               {/* Category Filter */}
               <div className="grid grid-cols-1 gap-4">
                 <h3 className="font-bold">Filter By Categories</h3>
-                {initialCategories.map((category) => (
-                  <Button
-                    key={category}
-                    variant={
-                      selectedCategories.has(category) ? "default" : "outline"
-                    }
-                    onClick={() => handleCategorySelect(category)}
-                  >
-                    {category}
-                  </Button>
-                ))}
+                <div className="flex flex-wrap gap-2">
+                  {initialCategories.map((category) => (
+                    <Button
+                      key={category}
+                      variant={
+                        selectedCategories.has(category) ? "default" : "outline"
+                      }
+                      onClick={() => handleCategorySelect(category)}
+                      className="rounded-full px-4 py-1"
+                    >
+                      {category}
+                    </Button>
+                  ))}
 
-                {/* Other Categories */}
-                {otherCategories.length > 0 && (
-                  <div className="grid grid-cols-1 gap-4">
-                    {otherCategories.map((category) => (
-                      <Button
-                        key={category}
-                        variant={
-                          selectedCategories.has(category)
-                            ? "default"
-                            : "outline"
-                        }
-                        onClick={() => handleCategorySelect(category)}
-                      >
-                        {category}
-                      </Button>
-                    ))}
-                  </div>
-                )}
+                  {/* Other Categories */}
+                  {otherCategories.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {otherCategories.map((category) => (
+                        <Button
+                          key={category}
+                          variant={
+                            selectedCategories.has(category)
+                              ? "default"
+                              : "outline"
+                          }
+                          onClick={() => handleCategorySelect(category)}
+                          className="rounded-full px-4 py-1"
+                        >
+                          {category}
+                        </Button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
             <DialogFooter>
-              <Button onClick={clearAllFilters}>Clear Filters</Button>
+              <Button onClick={clearAllFilters} className="rounded-full">
+                Clear Filters
+              </Button>
               <Button
                 variant="default"
                 onClick={() => console.log("Apply filters")}
+                className="rounded-full"
               >
                 Apply Filters
               </Button>
@@ -343,6 +362,12 @@ export default function BlogClient({ blogs }) {
                 <p className="text-sm xs:text-base md:text-lg lg:text-xl text-gray-700 dark:text-gray-300 leading-relaxed">
                   {blog.description}
                 </p>
+
+                {/* Author and Date */}
+                <div className="mt-2 text-sm xs:text-base text-gray-600 dark:text-gray-400">
+                  <p>By {blog.author}</p>
+                  <p>{formatDate(blog.date)}</p>
+                </div>
 
                 {/* Category Pills */}
                 <div className="flex flex-wrap gap-1.5 mt-3">

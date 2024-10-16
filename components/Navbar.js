@@ -39,14 +39,14 @@ const Navbar = () => {
         <Link href="/">
           <div className="text-3xl font-bold flex gap-4 items-center hover:scale-105 transition-transform duration-500">
             <Image
-              src="codeblog.png"
+              src="/codeblog.png"
               alt="Logo"
               width={48}
               height={48}
               className="hover:opacity-80 transition-opacity duration-300"
             />
             <p className="hover:animate-pulse text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-teal-500 to-green-500 dark:from-purple-500 dark:via-pink-500 dark:to-yellow-500">
-              Code Blog (Test App)
+              Code Blog (Stil in Production)
             </p>
           </div>
         </Link>
