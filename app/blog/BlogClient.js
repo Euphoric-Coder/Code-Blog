@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { IoClose } from "react-icons/io5";
+import { FaFilter } from "react-icons/fa"; // Using react-icons for the filter icon
 import { useTheme } from "next-themes";
 import {
   Dialog,
@@ -54,8 +55,11 @@ const formatDate = (dateString) => {
 export default function BlogClient({ blogs }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategories, setSelectedCategories] = useState(new Set());
+  const [appliedCategories, setAppliedCategories] = useState(new Set()); // To track applied categories
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortOption, setSortOption] = useState("name-asc"); // Sorting by name ascending by default
+  const [sortOption, setSortOption] = useState("name-asc");
+  const [filtersApplied, setFiltersApplied] = useState(false); // To track if filters are applied
+
   const itemsPerPage = 6;
 
   const { theme } = useTheme(); // Theme detection for dark/light mode
@@ -86,8 +90,16 @@ export default function BlogClient({ blogs }) {
   // Clear all selected categories and search term
   const clearAllFilters = () => {
     setSelectedCategories(new Set());
+    setAppliedCategories(new Set());
     setSearchTerm("");
     setSortOption("name-asc");
+    setFiltersApplied(false);
+  };
+
+  // Apply filters only when Apply Filters button is clicked
+  const applyFilters = () => {
+    setAppliedCategories(new Set(selectedCategories)); // Only apply the selected categories
+    setFiltersApplied(true); // Track that filters have been applied
   };
 
   // Handle sorting of blogs
@@ -102,12 +114,16 @@ export default function BlogClient({ blogs }) {
         return sortedBlogs.sort((a, b) => new Date(b.date) - new Date(a.date));
       case "date-oldest":
         return sortedBlogs.sort((a, b) => new Date(a.date) - new Date(b.date));
+      case "author-asc":
+        return sortedBlogs.sort((a, b) => a.author.localeCompare(b.author));
+      case "author-desc":
+        return sortedBlogs.sort((a, b) => b.author.localeCompare(a.author));
       default:
         return blogs;
     }
   };
 
-  // Filter blogs based on search term and selected categories
+  // Filter blogs based on search term and applied categories
   const filteredBlogs = sortBlogs(
     blogs.filter((blog) => {
       const matchesSearch =
@@ -117,9 +133,9 @@ export default function BlogClient({ blogs }) {
           blog.description.toLowerCase().includes(searchTerm.toLowerCase()));
 
       const matchesCategory =
-        selectedCategories.size === 0 ||
+        appliedCategories.size === 0 ||
         (Array.isArray(blog.category) &&
-          blog.category.some((cat) => selectedCategories.has(cat)));
+          blog.category.some((cat) => appliedCategories.has(cat)));
 
       return matchesSearch && matchesCategory;
     })
@@ -156,12 +172,12 @@ export default function BlogClient({ blogs }) {
     return pages;
   };
 
-  // Extract unique categories from the blogs
+  // Extract unique categories from the blogs, ensuring no empty categories
   const otherCategories = [
     ...new Set(
       blogs
         .flatMap((blog) => blog.category)
-        .filter((category) => !initialCategories.includes(category))
+        .filter((category) => category && !initialCategories.includes(category))
     ),
   ];
 
@@ -181,7 +197,7 @@ export default function BlogClient({ blogs }) {
       </section>
 
       {/* Search and Filter Section */}
-      <div className="flex justify-center mb-6 gap-4">
+      <div className="flex justify-center mb-6 gap-4 items-center">
         {/* Search Bar */}
         <div className="relative max-w-lg w-full">
           <input
@@ -204,14 +220,20 @@ export default function BlogClient({ blogs }) {
           )}
         </div>
 
-        {/* Filter Button with Dialog */}
+        {/* Filter Button with Icon and Badge */}
         <Dialog>
           <DialogTrigger asChild>
-            <Button className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-full shadow-md hover:bg-purple-700">
+            <Button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-full shadow-md hover:bg-purple-700 relative">
+              <FaFilter />
               Filter
+              {filtersApplied && (
+                <span className="absolute top-0 right-0 mt-1 mr-1 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center text-xs">
+                  {selectedCategories.size}
+                </span>
+              )}
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px] sm:max-h-[300px] overflow-y-auto">
+          <DialogContent className="sm:max-w-[600px] sm:max-h-[400px] overflow-y-auto rounded-xl shadow-lg">
             <DialogHeader>
               <DialogTitle>Filter Blogs</DialogTitle>
               <DialogDescription>
@@ -221,26 +243,28 @@ export default function BlogClient({ blogs }) {
 
             {/* Filter Options */}
             <div className="grid gap-4 py-4">
+              {/* Sort by Name */}
               <div className="grid grid-cols-1 gap-4">
                 <h3 className="font-bold">Sort By Name</h3>
                 <div className="flex gap-2">
                   <Button
                     variant={sortOption === "name-asc" ? "default" : "outline"}
                     onClick={() => setSortOption("name-asc")}
-                    className="rounded-full px-4 py-1"
+                    className="rounded-full px-4 py-1 bg-gradient-to-r from-blue-600 to-teal-500 dark:from-pink-400 dark:to-yellow-400 text-white hover:bg-blue-700"
                   >
                     Name (Asc)
                   </Button>
                   <Button
                     variant={sortOption === "name-desc" ? "default" : "outline"}
                     onClick={() => setSortOption("name-desc")}
-                    className="rounded-full px-4 py-1"
+                    className="rounded-full px-4 py-1 bg-gradient-to-r from-blue-600 to-teal-500 dark:from-pink-400 dark:to-yellow-400 text-white hover:bg-blue-700"
                   >
                     Name (Desc)
                   </Button>
                 </div>
               </div>
 
+              {/* Sort by Date */}
               <div className="grid grid-cols-1 gap-4">
                 <h3 className="font-bold">Sort By Date</h3>
                 <div className="flex gap-2">
@@ -249,7 +273,7 @@ export default function BlogClient({ blogs }) {
                       sortOption === "date-newest" ? "default" : "outline"
                     }
                     onClick={() => setSortOption("date-newest")}
-                    className="rounded-full px-4 py-1"
+                    className="rounded-full px-4 py-1 bg-gradient-to-r from-blue-600 to-teal-500 dark:from-pink-400 dark:to-yellow-400 text-white hover:bg-blue-700"
                   >
                     Newest
                   </Button>
@@ -258,9 +282,34 @@ export default function BlogClient({ blogs }) {
                       sortOption === "date-oldest" ? "default" : "outline"
                     }
                     onClick={() => setSortOption("date-oldest")}
-                    className="rounded-full px-4 py-1"
+                    className="rounded-full px-4 py-1 bg-gradient-to-r from-blue-600 to-teal-500 dark:from-pink-400 dark:to-yellow-400 text-white hover:bg-blue-700"
                   >
                     Oldest
+                  </Button>
+                </div>
+              </div>
+
+              {/* Sort by Author */}
+              <div className="grid grid-cols-1 gap-4">
+                <h3 className="font-bold">Sort By Author</h3>
+                <div className="flex gap-2">
+                  <Button
+                    variant={
+                      sortOption === "author-asc" ? "default" : "outline"
+                    }
+                    onClick={() => setSortOption("author-asc")}
+                    className="rounded-full px-4 py-1 bg-gradient-to-r from-blue-600 to-teal-500 dark:from-pink-400 dark:to-yellow-400 text-white hover:bg-blue-700"
+                  >
+                    Author (Asc)
+                  </Button>
+                  <Button
+                    variant={
+                      sortOption === "author-desc" ? "default" : "outline"
+                    }
+                    onClick={() => setSortOption("author-desc")}
+                    className="rounded-full px-4 py-1 bg-gradient-to-r from-blue-600 to-teal-500 dark:from-pink-400 dark:to-yellow-400 text-white hover:bg-blue-700"
+                  >
+                    Author (Desc)
                   </Button>
                 </div>
               </div>
@@ -268,7 +317,7 @@ export default function BlogClient({ blogs }) {
               {/* Category Filter */}
               <div className="grid grid-cols-1 gap-4">
                 <h3 className="font-bold">Filter By Categories</h3>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 justify-center">
                   {initialCategories.map((category) => (
                     <Button
                       key={category}
@@ -276,7 +325,7 @@ export default function BlogClient({ blogs }) {
                         selectedCategories.has(category) ? "default" : "outline"
                       }
                       onClick={() => handleCategorySelect(category)}
-                      className="rounded-full px-4 py-1"
+                      className="rounded-full px-4 py-1 bg-gradient-to-r from-blue-600 to-teal-500 dark:from-pink-400 dark:to-yellow-400 text-white hover:scale-105 hover:bg-blue-700"
                     >
                       {category}
                     </Button>
@@ -284,7 +333,7 @@ export default function BlogClient({ blogs }) {
 
                   {/* Other Categories */}
                   {otherCategories.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2 justify-center">
                       {otherCategories.map((category) => (
                         <Button
                           key={category}
@@ -294,7 +343,7 @@ export default function BlogClient({ blogs }) {
                               : "outline"
                           }
                           onClick={() => handleCategorySelect(category)}
-                          className="rounded-full px-4 py-1"
+                          className="rounded-full px-4 py-1 bg-gradient-to-r from-blue-600 to-teal-500 dark:from-pink-400 dark:to-yellow-400 text-white hover:scale-105 hover:bg-blue-700"
                         >
                           {category}
                         </Button>
@@ -305,17 +354,23 @@ export default function BlogClient({ blogs }) {
               </div>
             </div>
 
-            <DialogFooter>
-              <Button onClick={clearAllFilters} className="rounded-full">
-                Clear Filters
-              </Button>
-              <Button
-                variant="default"
-                onClick={() => console.log("Apply filters")}
-                className="rounded-full"
-              >
-                Apply Filters
-              </Button>
+            {/* Sticky Footer with Separate Section */}
+            <DialogFooter className="sticky bottom-0 bg-transparent shadow-md">
+              <div className="flex justify-between w-full px-4 py-3 bg-gradient-to-t from-gray-200 dark:from-gray-800">
+                <Button
+                  onClick={clearAllFilters}
+                  className="rounded-full bg-gradient-to-r from-red-500 to-pink-500 text-white hover:scale-105"
+                >
+                  Clear Filters
+                </Button>
+                <Button
+                  variant="default"
+                  onClick={applyFilters}
+                  className="rounded-full bg-gradient-to-r from-blue-600 to-teal-500 dark:from-pink-400 dark:to-yellow-400 text-white hover:scale-105"
+                >
+                  Apply Filters
+                </Button>
+              </div>
             </DialogFooter>
           </DialogContent>
         </Dialog>

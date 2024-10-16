@@ -2,7 +2,7 @@
 title: "JavaScript Programming Tutorial"
 description: "A tutorial for learning JavaScript"
 slug: "javascript-programming-tutorial"
-date: "2024-09-20"
+date: "2024-09-25"
 author: "Sagnik"
 feature: true
 image: "/javascript.webp"

@@ -2,7 +2,7 @@
 title: HTML Tutorial
 description: This is JavaScript tutorial and this is for learning JavaScript
 slug: css-tutorial
-date: 20/09/2024
+date: "2024-09-24"
 author: Sagnik
 image: "/CSS.webp"
 category: ["Web Technology", "Markup Language"]

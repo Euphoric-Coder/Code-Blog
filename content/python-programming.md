@@ -2,7 +2,7 @@
 title: Python Programming Tutorial
 description: This is JavaScript tutorial and this is for learning JavaScript
 slug: c-programming-tutorial
-date: "2024-09-20"
+date: "2024-09-26"
 author: Sagnik
 feature: true
 image: /python.jpg
