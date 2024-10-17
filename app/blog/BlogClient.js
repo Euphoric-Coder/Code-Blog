@@ -29,16 +29,6 @@ const initialCategories = [
   "Machine Learning",
 ];
 
-const popularTags = [
-  "JavaScript",
-  "React",
-  "Machine Learning",
-  "Blockchain",
-  "DevOps",
-  "Cybersecurity",
-  "Cloud Computing",
-];
-
 // Function to format date consistently using Intl.DateTimeFormat with error handling
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -61,11 +51,10 @@ export default function BlogClient({ blogs }) {
   const [filtersApplied, setFiltersApplied] = useState(false); // To track if filters are applied
 
   const itemsPerPage = 6;
-
   const { theme } = useTheme(); // Theme detection for dark/light mode
   const isSearchActive = searchTerm !== ""; // Check if there is text in the search bar
 
-  // Handle category selection
+  // Handle category selection/deselection
   const handleCategorySelect = (category) => {
     setSelectedCategories((prev) => {
       const updatedCategories = new Set(prev);
@@ -74,15 +63,6 @@ export default function BlogClient({ blogs }) {
       } else {
         updatedCategories.add(category); // Select category
       }
-      return updatedCategories;
-    });
-  };
-
-  // Handle removing a selected category
-  const handleCategoryRemove = (category) => {
-    setSelectedCategories((prev) => {
-      const updatedCategories = new Set(prev);
-      updatedCategories.delete(category); // Remove category
       return updatedCategories;
     });
   };
@@ -325,9 +305,15 @@ export default function BlogClient({ blogs }) {
                         selectedCategories.has(category) ? "default" : "outline"
                       }
                       onClick={() => handleCategorySelect(category)}
-                      className="rounded-full px-4 py-1 bg-gradient-to-r from-blue-600 to-teal-500 dark:from-pink-400 dark:to-yellow-400 text-white hover:scale-105 hover:bg-blue-700"
+                      className={`rounded-full px-4 py-1 bg-gradient-to-r from-blue-600 to-teal-500 dark:from-pink-400 dark:to-yellow-400 text-white hover:bg-blue-700 flex items-center justify-center relative`}
                     >
                       {category}
+                      {selectedCategories.has(category) && (
+                        <IoClose
+                          className="ml-2 cursor-pointer hover:text-red-600"
+                          onClick={() => handleCategorySelect(category)}
+                        />
+                      )}
                     </Button>
                   ))}
 
@@ -343,9 +329,15 @@ export default function BlogClient({ blogs }) {
                               : "outline"
                           }
                           onClick={() => handleCategorySelect(category)}
-                          className="rounded-full px-4 py-1 bg-gradient-to-r from-blue-600 to-teal-500 dark:from-pink-400 dark:to-yellow-400 text-white hover:scale-105 hover:bg-blue-700"
+                          className={`rounded-full px-4 py-1 bg-gradient-to-r from-blue-600 to-teal-500 dark:from-pink-400 dark:to-yellow-400 text-white hover:bg-blue-700 flex items-center justify-center relative`}
                         >
                           {category}
+                          {selectedCategories.has(category) && (
+                            <IoClose
+                              className="ml-2 cursor-pointer hover:text-red-600"
+                              onClick={() => handleCategorySelect(category)}
+                            />
+                          )}
                         </Button>
                       ))}
                     </div>
@@ -354,9 +346,9 @@ export default function BlogClient({ blogs }) {
               </div>
             </div>
 
-            {/* Sticky Footer with Separate Section */}
-            <DialogFooter className="sticky bottom-0 bg-transparent shadow-md">
-              <div className="flex justify-between w-full px-4 py-3 bg-gradient-to-t from-gray-200 dark:from-gray-800">
+            {/* Sticky Footer with Apply and Clear Filters */}
+            <DialogFooter className="sticky bottom-0 bg-transparent py-3 px-4">
+              <div className="flex justify-end gap-4 w-full">
                 <Button
                   onClick={clearAllFilters}
                   className="rounded-full bg-gradient-to-r from-red-500 to-pink-500 text-white hover:scale-105"
@@ -374,22 +366,6 @@ export default function BlogClient({ blogs }) {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      </div>
-
-      {/* Selected Categories as Pills */}
-      <div className="mb-4 flex gap-2 justify-center flex-wrap">
-        {Array.from(selectedCategories).map((category) => (
-          <span
-            key={category}
-            className="inline-flex items-center px-3 py-1 rounded-full text-sm cursor-pointer bg-blue-200 text-blue-800 shadow-md hover:bg-blue-300 transition-all"
-          >
-            {category}
-            <IoClose
-              className="ml-2 cursor-pointer hover:text-red-600"
-              onClick={() => handleCategoryRemove(category)}
-            />
-          </span>
-        ))}
       </div>
 
       {/* Blog Posts Grid */}
