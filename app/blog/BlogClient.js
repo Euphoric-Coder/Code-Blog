@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { IoClose } from "react-icons/io5";
 import { FaFilter } from "react-icons/fa"; // Using react-icons for the filter icon
 import { useTheme } from "next-themes";
 import {
@@ -29,6 +28,16 @@ const initialCategories = [
   "Machine Learning",
 ];
 
+const popularTags = [
+  "JavaScript",
+  "React",
+  "Machine Learning",
+  "Blockchain",
+  "DevOps",
+  "Cybersecurity",
+  "Cloud Computing",
+];
+
 // Function to format date consistently using Intl.DateTimeFormat with error handling
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -44,19 +53,22 @@ const formatDate = (dateString) => {
 
 export default function BlogClient({ blogs }) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState(new Set());
-  const [appliedCategories, setAppliedCategories] = useState(new Set()); // To track applied categories
+  const [tempSelectedCategories, setTempSelectedCategories] = useState(
+    new Set()
+  ); // Temporary selection
+  const [appliedCategories, setAppliedCategories] = useState(new Set()); // Applied filters
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortOption, setSortOption] = useState("name-asc");
+  const [sortOption, setSortOption] = useState(""); // Sorting state (empty by default)
   const [filtersApplied, setFiltersApplied] = useState(false); // To track if filters are applied
 
   const itemsPerPage = 6;
+
   const { theme } = useTheme(); // Theme detection for dark/light mode
   const isSearchActive = searchTerm !== ""; // Check if there is text in the search bar
 
-  // Handle category selection/deselection
+  // Handle category selection
   const handleCategorySelect = (category) => {
-    setSelectedCategories((prev) => {
+    setTempSelectedCategories((prev) => {
       const updatedCategories = new Set(prev);
       if (updatedCategories.has(category)) {
         updatedCategories.delete(category); // Deselect category
@@ -69,17 +81,22 @@ export default function BlogClient({ blogs }) {
 
   // Clear all selected categories and search term
   const clearAllFilters = () => {
-    setSelectedCategories(new Set());
+    setTempSelectedCategories(new Set());
     setAppliedCategories(new Set());
     setSearchTerm("");
-    setSortOption("name-asc");
+    setSortOption("");
     setFiltersApplied(false);
   };
 
   // Apply filters only when Apply Filters button is clicked
   const applyFilters = () => {
-    setAppliedCategories(new Set(selectedCategories)); // Only apply the selected categories
+    setAppliedCategories(new Set(tempSelectedCategories)); // Only apply the selected categories
     setFiltersApplied(true); // Track that filters have been applied
+  };
+
+  // Close the dialog without applying filters
+  const handleDialogClose = () => {
+    setTempSelectedCategories(new Set()); // Clear temporary selected categories when dialog is closed
   };
 
   // Handle sorting of blogs
@@ -161,6 +178,9 @@ export default function BlogClient({ blogs }) {
     ),
   ];
 
+  // Calculate the filter counter (number of applied filters)
+  const filterCounter = appliedCategories.size + (sortOption ? 1 : 0); // Count applied categories and sorting option
+
   return (
     <main className="relative w-full min-h-screen bg-gradient-to-b from-blue-50 via-white to-blue-100 dark:from-gray-900 dark:via-gray-800 dark:to-blue-950 text-gray-900 dark:text-gray-100 transition-all duration-700">
       {/* Hero Section Heading */}
@@ -201,14 +221,14 @@ export default function BlogClient({ blogs }) {
         </div>
 
         {/* Filter Button with Icon and Badge */}
-        <Dialog>
+        <Dialog onOpenChange={handleDialogClose}>
           <DialogTrigger asChild>
             <Button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-full shadow-md hover:bg-purple-700 relative">
               <FaFilter />
               Filter
               {filtersApplied && (
                 <span className="absolute top-0 right-0 mt-1 mr-1 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center text-xs">
-                  {selectedCategories.size}
+                  {filterCounter}
                 </span>
               )}
             </Button>
@@ -302,18 +322,18 @@ export default function BlogClient({ blogs }) {
                     <Button
                       key={category}
                       variant={
-                        selectedCategories.has(category) ? "default" : "outline"
+                        tempSelectedCategories.has(category)
+                          ? "default"
+                          : "outline"
                       }
                       onClick={() => handleCategorySelect(category)}
-                      className={`rounded-full px-4 py-1 bg-gradient-to-r from-blue-600 to-teal-500 dark:from-pink-400 dark:to-yellow-400 text-white hover:bg-blue-700 flex items-center justify-center relative`}
+                      className={`rounded-full px-4 py-1 ${
+                        tempSelectedCategories.has(category)
+                          ? "bg-gradient-to-r from-blue-600 to-teal-500 dark:from-pink-400 dark:to-yellow-400 text-white"
+                          : "bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-white"
+                      } hover:scale-105 hover:bg-blue-700`}
                     >
                       {category}
-                      {selectedCategories.has(category) && (
-                        <IoClose
-                          className="ml-2 cursor-pointer hover:text-red-600"
-                          onClick={() => handleCategorySelect(category)}
-                        />
-                      )}
                     </Button>
                   ))}
 
@@ -324,20 +344,18 @@ export default function BlogClient({ blogs }) {
                         <Button
                           key={category}
                           variant={
-                            selectedCategories.has(category)
+                            tempSelectedCategories.has(category)
                               ? "default"
                               : "outline"
                           }
                           onClick={() => handleCategorySelect(category)}
-                          className={`rounded-full px-4 py-1 bg-gradient-to-r from-blue-600 to-teal-500 dark:from-pink-400 dark:to-yellow-400 text-white hover:bg-blue-700 flex items-center justify-center relative`}
+                          className={`rounded-full px-4 py-1 ${
+                            tempSelectedCategories.has(category)
+                              ? "bg-gradient-to-r from-blue-600 to-teal-500 dark:from-pink-400 dark:to-yellow-400 text-white"
+                              : "bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-white"
+                          } hover:scale-105 hover:bg-blue-700`}
                         >
                           {category}
-                          {selectedCategories.has(category) && (
-                            <IoClose
-                              className="ml-2 cursor-pointer hover:text-red-600"
-                              onClick={() => handleCategorySelect(category)}
-                            />
-                          )}
                         </Button>
                       ))}
                     </div>
@@ -346,24 +364,22 @@ export default function BlogClient({ blogs }) {
               </div>
             </div>
 
-            {/* Sticky Footer with Apply and Clear Filters */}
-            <DialogFooter className="sticky bottom-0 bg-transparent py-3 px-4">
-              <div className="flex justify-end gap-4 w-full">
-                <Button
-                  onClick={clearAllFilters}
-                  className="rounded-full bg-gradient-to-r from-red-500 to-pink-500 text-white hover:scale-105"
-                >
-                  Clear Filters
-                </Button>
-                <Button
-                  variant="default"
-                  onClick={applyFilters}
-                  className="rounded-full bg-gradient-to-r from-blue-600 to-teal-500 dark:from-pink-400 dark:to-yellow-400 text-white hover:scale-105"
-                >
-                  Apply Filters
-                </Button>
-              </div>
-            </DialogFooter>
+            {/* Buttons for clearing/applying filters */}
+            <div className="flex justify-end gap-4 pt-4 pb-2">
+              <Button
+                onClick={clearAllFilters}
+                className="rounded-full bg-gradient-to-r from-red-500 to-pink-500 text-white hover:scale-105"
+              >
+                Clear Filters
+              </Button>
+              <Button
+                variant="default"
+                onClick={applyFilters}
+                className="rounded-full bg-gradient-to-r from-blue-600 to-teal-500 dark:from-pink-400 dark:to-yellow-400 text-white hover:scale-105"
+              >
+                Apply Filters
+              </Button>
+            </div>
           </DialogContent>
         </Dialog>
       </div>
