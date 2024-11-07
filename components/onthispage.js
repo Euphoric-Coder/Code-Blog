@@ -1,9 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 const OnThisPage = ({ htmlContent }) => {
   const [headings, setHeadings] = useState([]);
   const [activeId, setActiveId] = useState("");
+  const activeElementRef = useRef(null); // Ref for the currently active heading element
 
   useEffect(() => {
     const tempDiv = document.createElement("div");
@@ -15,7 +16,6 @@ const OnThisPage = ({ htmlContent }) => {
 
     allHeadings.forEach((heading) => {
       if (heading.tagName.toLowerCase() === "h1") {
-        // Create a new h1 entry
         currentH1 = {
           h1: {
             text: heading.textContent,
@@ -25,7 +25,6 @@ const OnThisPage = ({ htmlContent }) => {
         };
         structuredHeadings.push(currentH1);
       } else if (heading.tagName.toLowerCase() === "h2" && currentH1) {
-        // Add h2 to the current h1's list
         currentH1.h2.push({
           text: heading.textContent,
           id: heading.id,
@@ -66,13 +65,20 @@ const OnThisPage = ({ htmlContent }) => {
     };
   }, [headings]);
 
+  useEffect(() => {
+    if (activeElementRef.current) {
+      activeElementRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }
+  }, [activeId]);
+
   return (
     <div className="on-this-page fixed top-24 left-4 w-64 p-6 bg-white dark:bg-gray-900 shadow-lg rounded-lg overflow-y-auto max-h-[80vh] border-l-4 border-purple-500">
-      {/* Sidebar Heading */}
       <h2 className="text-lg font-bold mb-6 text-purple-700">On This Page</h2>
       {headings.map((section, index) => (
         <div key={index} className="mb-6">
-          {/* Block for each h1 element */}
           <h3
             className={`font-semibold mb-2 text-md transition-colors duration-200 ${
               activeId === section.h1.id
@@ -88,7 +94,6 @@ const OnThisPage = ({ htmlContent }) => {
             </a>
           </h3>
 
-          {/* Nested h2 elements under the respective h1 */}
           {section.h2.length > 0 && (
             <ul className="pl-4 text-sm space-y-2">
               {section.h2.map((heading, subIndex) => (
@@ -99,6 +104,7 @@ const OnThisPage = ({ htmlContent }) => {
                       ? "font-bold text-purple-600"
                       : "text-gray-700 dark:text-gray-300"
                   }`}
+                  ref={activeId === heading.id ? activeElementRef : null}
                 >
                   <a href={`#${heading.id}`} className="block py-1">
                     {heading.text}
