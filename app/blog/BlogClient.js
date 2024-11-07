@@ -53,12 +53,12 @@ const formatDate = (dateString) => {
 
 export default function BlogClient({ blogs }) {
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState(new Set()); // Applied filters
   const [tempSelectedCategories, setTempSelectedCategories] = useState(
     new Set()
-  ); // Temporary selection
-  const [appliedCategories, setAppliedCategories] = useState(new Set()); // Applied filters
+  ); // Temporary selection state for the dialog
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortOption, setSortOption] = useState(""); // Sorting state (empty by default)
+  const [sortOption, setSortOption] = useState(""); // Sorting state
   const [filtersApplied, setFiltersApplied] = useState(false); // To track if filters are applied
 
   const itemsPerPage = 6;
@@ -82,7 +82,7 @@ export default function BlogClient({ blogs }) {
   // Clear all selected categories and search term
   const clearAllFilters = () => {
     setTempSelectedCategories(new Set());
-    setAppliedCategories(new Set());
+    setSelectedCategories(new Set());
     setSearchTerm("");
     setSortOption("");
     setFiltersApplied(false);
@@ -90,13 +90,8 @@ export default function BlogClient({ blogs }) {
 
   // Apply filters only when Apply Filters button is clicked
   const applyFilters = () => {
-    setAppliedCategories(new Set(tempSelectedCategories)); // Only apply the selected categories
+    setSelectedCategories(new Set(tempSelectedCategories)); // Apply the selected categories
     setFiltersApplied(true); // Track that filters have been applied
-  };
-
-  // Close the dialog without applying filters
-  const handleDialogClose = () => {
-    setTempSelectedCategories(new Set()); // Clear temporary selected categories when dialog is closed
   };
 
   // Handle sorting of blogs
@@ -130,9 +125,9 @@ export default function BlogClient({ blogs }) {
           blog.description.toLowerCase().includes(searchTerm.toLowerCase()));
 
       const matchesCategory =
-        appliedCategories.size === 0 ||
+        selectedCategories.size === 0 ||
         (Array.isArray(blog.category) &&
-          blog.category.some((cat) => appliedCategories.has(cat)));
+          blog.category.some((cat) => selectedCategories.has(cat)));
 
       return matchesSearch && matchesCategory;
     })
@@ -179,14 +174,14 @@ export default function BlogClient({ blogs }) {
   ];
 
   // Calculate the filter counter (number of applied filters)
-  const filterCounter = appliedCategories.size + (sortOption ? 1 : 0); // Count applied categories and sorting option
+  const filterCounter = selectedCategories.size + (sortOption ? 1 : 0); // Count applied categories and sorting option
 
   return (
     <main className="relative w-full min-h-screen bg-gradient-to-b from-blue-50 via-white to-blue-100 dark:from-gray-900 dark:via-gray-800 dark:to-blue-950 text-gray-900 dark:text-gray-100 transition-all duration-700">
       {/* Hero Section Heading */}
       <section className="py-10">
         <div className="container mx-auto text-center">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 dark:from-purple-400 dark:via-pink-500 dark:to-yellow-400 mb-6">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 dark:from-purple-400 dark:via-pink-500 dark:to-yellow-400 mb-6 p-2">
             Blog
           </h1>
           <p className="text-lg sm:text-xl md:text-2xl font-bold text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -221,7 +216,14 @@ export default function BlogClient({ blogs }) {
         </div>
 
         {/* Filter Button with Icon and Badge */}
-        <Dialog onOpenChange={handleDialogClose}>
+        <Dialog
+          onOpenChange={(isOpen) => {
+            if (!isOpen) {
+              // Reset temp selections if dialog is closed without applying
+              setTempSelectedCategories(new Set(selectedCategories));
+            }
+          }}
+        >
           <DialogTrigger asChild>
             <Button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-full shadow-md hover:bg-purple-700 relative">
               <FaFilter />
@@ -233,7 +235,10 @@ export default function BlogClient({ blogs }) {
               )}
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px] sm:max-h-[400px] overflow-y-auto rounded-xl shadow-lg">
+          <DialogContent
+            className="sm:max-w-[600px] sm:max-h-[400px] overflow-y-auto rounded-xl shadow-lg"
+            onClose={() => setTempSelectedCategories(selectedCategories)} // Reset pills when dialog is closed
+          >
             <DialogHeader>
               <DialogTitle>Filter Blogs</DialogTitle>
               <DialogDescription>
@@ -439,7 +444,7 @@ export default function BlogClient({ blogs }) {
       </div>
 
       {/* Pagination Controls */}
-      <div className="flex justify-center mt-6">
+      <div className="flex justify-center mt-6 pb-5">
         <button
           className={`px-4 py-2 mx-2 rounded-lg transition-transform ${
             currentPage === 1

@@ -363,6 +363,8 @@ int main() {
 }
 ```
 
+# **Ending of the Tutorial**
+
 ## Conclusion
 
 Congratulations on completing this C++ tutorial! You’ve learned everything from the basics to advanced topics like inheritance and operator overloading. C++ is a powerful language, and with continued practice, you can build high-performance applications.
