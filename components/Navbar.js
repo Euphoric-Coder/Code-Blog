@@ -66,6 +66,12 @@ const Navbar = () => {
             Blog
           </Link>
           <Link
+            href="/tutorial"
+            className="hover:scale-110 font-bold transition-transform duration-300 text-lg text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 dark:from-purple-400 dark:via-pink-500 dark:to-yellow-400 hover:bg-gradient-to-r hover:from-blue-700 hover:to-teal-700 dark:hover:from-pink-600 dark:hover:to-yellow-600"
+          >
+            Tutorial
+          </Link>
+          <Link
             href="/about"
             className="hover:scale-110 font-bold transition-transform duration-300 text-lg text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 dark:from-purple-400 dark:via-pink-500 dark:to-yellow-400 hover:bg-gradient-to-r hover:from-blue-700 hover:to-teal-700 dark:hover:from-pink-600 dark:hover:to-yellow-600"
           >
