@@ -1,9 +1,10 @@
-import { getAllPosts } from "@/lib/posts";
+import { getAllPosts, getallTutorials } from "@/lib/posts";
 import HomeClient from "@/components/Home";
 
 // Server Component
 export default async function Home() {
-  const posts = await getAllPosts(); // Fetch posts server-side
+  const blogposts = await getAllPosts(); // Fetch posts server-side
+  const tutorialposts = await getallTutorials();
 
-  return <HomeClient initialPosts={posts}/>;
+  return <HomeClient initialPosts={blogposts} tutorialPosts={tutorialposts}/>;
 }

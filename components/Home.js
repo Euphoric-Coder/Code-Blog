@@ -5,11 +5,13 @@ import HeroSection from "./HeroSection";
 import SearchSection from "./SearchSection";
 import FeaturedBlogsSection from "./FeaturedBlogsSection";
 import { useTheme } from "next-themes";
+import FeaturedTutorialSection from "./FeaturedTutorialsSection";
 
-export default function HomeClient({ initialPosts }) {
+export default function HomeClient({ initialPosts, tutorialPosts }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [featuredPosts, setFeaturedPosts] = useState([]);
+  const [featuredTutorials, setFeaturedTutorials] = useState([]);
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -46,6 +48,12 @@ export default function HomeClient({ initialPosts }) {
     setFeaturedPosts(featured);
   }, [initialPosts]);
 
+  // Filter tutorial posts with the 'feature' tag set to true
+  useEffect(() => {
+    const featured = tutorialPosts.filter((post) => post.feature === true);
+    setFeaturedTutorials(featured);
+  }, [tutorialPosts]);
+
   // Return null if not mounted to avoid hydration errors
   if (!mounted) return null;
 
@@ -81,6 +89,8 @@ export default function HomeClient({ initialPosts }) {
 
       {/* Featured Blogs Section */}
       <FeaturedBlogsSection featuredPosts={featuredPosts} />
+
+      <FeaturedTutorialSection featuredPosts={featuredTutorials}/>
     </main>
   );
 }

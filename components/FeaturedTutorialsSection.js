@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-export default function FeaturedBlogsSection({ featuredPosts }) {
+export default function FeaturedTutorialSection({ featuredPosts }) {
   return (
     <section className="w-full py-8">
       {/* Container for featured blogs */}
