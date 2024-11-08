@@ -229,9 +229,11 @@ export default function BlogClient({ blogs }) {
 
           {/* Illustration Section */}
           <div className="lg:w-2/5 flex justify-center items-center">
-            <img
+            <Image
               src="/tutorial-page.jpeg"
               alt="Coding Tutorial Illustration"
+              width={400}
+              height={400}
               className="w-full h-auto max-w-sm drop-shadow-lg rounded-lg transform hover:scale-105 transition-transform duration-500 ease-in-out"
             />
           </div>
@@ -252,8 +254,8 @@ export default function BlogClient({ blogs }) {
 
           {/* Additional description */}
           <p className="text-md sm:text-lg md:text-xl font-mono font-extrabold text-center text-gray-700 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto">
-            Whether you're just starting with coding or honing advanced skills,
-            our tutorials cover essential topics. Dive into{" "}
+            Whether you&apos;re just starting with coding or honing advanced
+            skills, our tutorials cover essential topics. Dive into{" "}
             <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-blue-600 dark:from-teal-300 dark:to-blue-400">
               Data Structures & Algorithms
             </span>

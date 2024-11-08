@@ -233,9 +233,11 @@ export default function BlogClient({ blogs }) {
 
           {/* Illustration Section */}
           <div className="lg:w-2/5 flex justify-center items-center">
-            <img
+            <Image
               src="/blog-page.png"
               alt="Blog Illustration"
+              width={400}
+              height={400}
               className="w-full h-auto max-w-sm drop-shadow-lg rounded-lg transform hover:scale-105 transition-transform duration-500 ease-in-out"
             />
           </div>
