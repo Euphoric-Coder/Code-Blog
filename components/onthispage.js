@@ -1,9 +1,11 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
+import { FaBars } from "react-icons/fa"; // Import an icon for the button
 
 const OnThisPage = ({ htmlContent }) => {
   const [headings, setHeadings] = useState([]);
   const [activeId, setActiveId] = useState("");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State to handle sidebar visibility
   const activeElementRef = useRef(null); // Ref for the currently active heading element
 
   useEffect(() => {
@@ -75,47 +77,70 @@ const OnThisPage = ({ htmlContent }) => {
   }, [activeId]);
 
   return (
-    <div className="on-this-page fixed top-24 left-4 w-64 p-6 bg-white dark:bg-gray-900 shadow-lg rounded-lg overflow-y-auto max-h-[80vh] border-l-4 border-purple-500">
-      <h2 className="text-lg font-bold mb-6 text-purple-700">On This Page</h2>
-      {headings.map((section, index) => (
-        <div key={index} className="mb-6">
-          <h3
-            className={`font-semibold mb-2 text-md transition-colors duration-200 ${
-              activeId === section.h1.id
-                ? "text-purple-600"
-                : "text-gray-800 dark:text-gray-300"
-            }`}
-          >
-            <a
-              href={`#${section.h1.id}`}
-              className="hover:underline block py-1"
-            >
-              {section.h1.text}
-            </a>
-          </h3>
+    <>
+      {/* Button to toggle sidebar on smaller displays */}
+      <button
+        className="fixed top-4 left-4 z-50 p-2 bg-blue-600 text-white rounded-full shadow-lg lg:hidden"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      >
+        <FaBars />
+      </button>
 
-          {section.h2.length > 0 && (
-            <ul className="pl-4 text-sm space-y-2">
-              {section.h2.map((heading, subIndex) => (
-                <li
-                  key={subIndex}
-                  className={`hover:underline transition-colors duration-200 ${
-                    activeId === heading.id
-                      ? "font-bold text-purple-600"
-                      : "text-gray-700 dark:text-gray-300"
-                  }`}
-                  ref={activeId === heading.id ? activeElementRef : null}
-                >
-                  <a href={`#${heading.id}`} className="block py-1">
-                    {heading.text}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      ))}
-    </div>
+      {/* Sidebar */}
+      <div
+        className={`fixed top-0 left-0 h-full w-64 p-6 bg-white dark:bg-gray-900 shadow-lg rounded-lg overflow-y-auto transition-transform transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 lg:top-24 lg:w-64 lg:max-h-[80vh] border-l-4 border-purple-500 z-40`}
+      >
+        <h2 className="text-lg font-bold mb-6 text-purple-700">On This Page</h2>
+        {headings.map((section, index) => (
+          <div key={index} className="mb-6">
+            <h3
+              className={`font-semibold mb-2 text-md transition-colors duration-200 ${
+                activeId === section.h1.id
+                  ? "text-purple-600"
+                  : "text-gray-800 dark:text-gray-300"
+              }`}
+            >
+              <a
+                href={`#${section.h1.id}`}
+                className="hover:underline block py-1"
+              >
+                {section.h1.text}
+              </a>
+            </h3>
+
+            {section.h2.length > 0 && (
+              <ul className="pl-4 text-sm space-y-2">
+                {section.h2.map((heading, subIndex) => (
+                  <li
+                    key={subIndex}
+                    className={`hover:underline transition-colors duration-200 ${
+                      activeId === heading.id
+                        ? "font-bold text-purple-600"
+                        : "text-gray-700 dark:text-gray-300"
+                    }`}
+                    ref={activeId === heading.id ? activeElementRef : null}
+                  >
+                    <a href={`#${heading.id}`} className="block py-1">
+                      {heading.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Overlay for small screens */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black opacity-50 z-30 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+      )}
+    </>
   );
 };
 

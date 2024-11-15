@@ -483,7 +483,6 @@ export default function BlogClient({ blogs }) {
                 <Image
                   src={blog.image || "/placeholder.png"}
                   alt={blog.title}
-                  layout="responsive"
                   width={700}
                   height={400}
                   className="object-cover transition-transform duration-300 hover:scale-110"

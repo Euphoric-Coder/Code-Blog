@@ -11,7 +11,7 @@ const Footer = () => {
         {/* Logo and Brand */}
         <div className="flex items-center mb-4 lg:mb-0 gap-4">
           {/* Logo Icon */}
-          <Image src="/codeblog.png" alt="Logo" className="h-10" width={10} height={10}/>
+          <Image src="/codeblog.png" alt="Logo" width={48} height={48}/>
           <span className="text-2xl font-bold text-purple-500">Code Blog</span>
         </div>
 

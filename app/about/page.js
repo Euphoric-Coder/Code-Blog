@@ -11,7 +11,6 @@ export default function About() {
                 <Image
                   src="/logo.jpg"
                   alt="Profile"
-                  layout="fill"
                   objectFit="cover"
                   className="rounded-full"
                   height={10}
