@@ -6,9 +6,17 @@ import { ModeToggle } from "./theme-btn";
 import LoadingBar from "react-top-loading-bar";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import {
+  SignInButton,
+  SignOutButton,
+  UserButton,
+  useUser,
+} from "@clerk/nextjs";
+import { Button } from "./ui/button";
 const Navbar = () => {
   const [progress, setProgress] = useState(0);
   const pathname = usePathname();
+  const { isSignedIn, user } = useUser();
 
   // Loading bar progress
   useEffect(() => {
@@ -83,8 +91,21 @@ const Navbar = () => {
           >
             Contact
           </Link>
-          <div className="flex items-center">
+          <div className="flex items-center gap-3">
             <ModeToggle />
+            {isSignedIn ? (
+              <div className="flex items-center gap-3">
+                <UserButton />
+                <Button asChild>
+                  <SignOutButton />
+                </Button>
+              </div>
+            ) : (
+              <Button asChild>
+                <SignInButton />
+              </Button>
+            )}
+            {/* <UserButton /> */}
           </div>
         </div>
 

@@ -61,8 +61,11 @@ export default async function Page({ params }) {
       ],
     });
 
+  console.log(content);
   // Convert markdown content to HTML
   const htmlContent = (await processor.process(content)).toString();
+
+  console.log(htmlContent);
 
   return (
     <div className="max-w-[95%] mx-auto p-4">
