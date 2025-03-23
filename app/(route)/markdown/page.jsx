@@ -1,10 +1,12 @@
-import EditorPage from "@/components/Editor";
+import TutorialEditor from "@/components/TutorialEditor";
 import React from "react";
 
 const page = () => {
-  return <div>
-    <EditorPage />
-  </div>;
+  return (
+    <div className="p-8">
+      <TutorialEditor />
+    </div>
+  );
 };
 
 export default page;

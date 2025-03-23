@@ -36,9 +36,14 @@ export default function EditorPage() {
       <MdEditor
         value={content}
         style={{ height: "500px" }}
-        renderHTML={(text) => marked(text)}
+        renderHTML={(text) =>
+          `<div class="prose prose-lg dark:prose-invert max-w-none">${marked(
+            text
+          )}</div>`
+        }
         onChange={handleEditorChange}
       />
+      {/* prose prose-lg dark:prose-invert max-w-none */}
       <button
         className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
         onClick={handleSubmit}
