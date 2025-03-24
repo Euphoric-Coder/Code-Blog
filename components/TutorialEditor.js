@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import "react-markdown-editor-lite/lib/index.css";
-import { markdownToHtml } from "./markdownProcessor";
+import { markdownToHtml } from "./MarkdownProcessor";
 
 // Dynamically load the Markdown editor
 const MdEditor = dynamic(() => import("react-markdown-editor-lite"), {
