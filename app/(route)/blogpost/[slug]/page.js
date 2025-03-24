@@ -35,7 +35,6 @@ export default async function Page({ params }) {
   // Check if the file exists, if not return a 404 page
   if (!fs.existsSync(filepath)) {
     notFound();
-    return;
   }
 
   // Read the content of the markdown file

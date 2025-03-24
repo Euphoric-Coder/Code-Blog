@@ -1,11 +1,11 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useState } from "react";
-import { marked } from "marked";
+import { useState, useEffect } from "react";
 import "react-markdown-editor-lite/lib/index.css";
+import { markdownToHtml } from "./markdownProcessor";
 
-// Dynamically load MdEditor only on the client
+// Load the editor dynamically on client side
 const MdEditor = dynamic(() => import("react-markdown-editor-lite"), {
   ssr: false,
 });
@@ -13,14 +13,16 @@ const MdEditor = dynamic(() => import("react-markdown-editor-lite"), {
 export default function EditorPage() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [html, setHtml] = useState("");
 
-  const handleEditorChange = ({ text }) => {
+  const handleEditorChange = async ({ text }) => {
     setContent(text);
+    const rendered = await markdownToHtml(text);
+    setHtml(rendered);
   };
 
   const handleSubmit = async () => {
     const slug = title.toLowerCase().replace(/ /g, "-");
-
     console.log({ title, content, slug });
   };
 
@@ -29,23 +31,24 @@ export default function EditorPage() {
       <input
         type="text"
         placeholder="Blog Title"
-        className="w-full p-2 mb-4 border rounded"
+        className="w-full p-2 mb-4 border rounded dark:bg-slate-800 dark:text-white dark:border-slate-600"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
-      <MdEditor
-        value={content}
-        style={{ height: "500px" }}
-        renderHTML={(text) =>
-          `<div class="prose prose-lg dark:prose-invert max-w-none">${marked(
-            text
-          )}</div>`
-        }
-        onChange={handleEditorChange}
+      <div className="mb-8">
+        <MdEditor
+          value={content}
+          style={{ height: "500px" }}
+          renderHTML={() => html}
+          onChange={handleEditorChange}
+        />
+      </div>
+      <div
+        className="prose prose-lg dark:prose-invert max-w-none"
+        dangerouslySetInnerHTML={{ __html: html }}
       />
-      {/* prose prose-lg dark:prose-invert max-w-none */}
       <button
-        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
+        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
         onClick={handleSubmit}
       >
         Save Blog
