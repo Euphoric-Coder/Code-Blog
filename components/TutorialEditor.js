@@ -35,8 +35,8 @@ export default function EditorPage() {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
-      <div className="mb-8 flex gap-8">
-        <div className="w-1/2">
+      <div className="mb-8 flex flex-col md:flex-row gap-8">
+        <div className="md:w-1/2">
           <MdEditor
             value={content}
             style={{ height: "750px", width: "100%" }}
@@ -52,16 +52,21 @@ export default function EditorPage() {
                 md: false,
                 html: false,
                 both: false,
-                fullScreen: false,
+                fullScreen: true,
               },
             }}
             onChange={handleEditorChange}
+            placeholder="Write your blog content here..."
           />
         </div>
-        <div
-          className="w-1/2 max-h-[750px] prose prose-lg dark:prose-invert max-w-none overflow-y-auto"
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
+        <div className="md:w-1/2">
+          <div className="rounded-xl border dark:border-slate-700 border-gray-300 p-6 bg-white dark:bg-slate-900 shadow-sm overflow-y-auto min-h-[750px]">
+            <div
+              className="prose prose-lg dark:prose-invert max-w-none"
+              dangerouslySetInnerHTML={{ __html: html }}
+            />
+          </div>
+        </div>
       </div>
       <button
         className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
