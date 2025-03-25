@@ -45,7 +45,7 @@ const MenuBar = ({ editor }) => {
     }`;
 
   return (
-    <div className="sticky top-0 z-50 flex flex-wrap gap-2 border-b p-2 backdrop-blur-md bg-white/60 dark:bg-slate-900/60">
+    <div className="sticky top-0 z-50 flex flex-wrap rounded-2xl gap-2 border-2 p-4 backdrop-blur-md bg-white/60 dark:bg-slate-900/60">
       {[1, 2, 3].map((level) => (
         <Button
           key={level}
@@ -145,7 +145,7 @@ export default function BlogEditor() {
     editorProps: {
       attributes: {
         class:
-          "prose dark:prose-invert max-w-none p-4 min-h-[300px] rounded-b border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 outline-none",
+          "prose dark:prose-invert max-w-none p-4 min-h-[750px] rounded-3xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 outline-none",
       },
     },
     onUpdate: ({ editor }) => {
@@ -191,18 +191,13 @@ export default function BlogEditor() {
         onChange={(e) => setTitle(e.target.value)}
       />
 
-      <div className="border rounded-lg overflow-hidden">
+      <div className="flex flex-col space-y-5">
         <MenuBar editor={editor} />
-        <EditorContent editor={editor} />
+        <EditorContent
+          editor={editor}
+          className="overflow-y-auto max-h-[1000px]"
+        />
       </div>
-
-      <h2 className="mt-6 text-xl font-semibold text-gray-700 dark:text-gray-300">
-        👀 Live HTML Preview
-      </h2>
-      <div
-        className="prose dark:prose-invert mt-4 p-4 rounded border dark:border-slate-700 border-gray-300 bg-white dark:bg-slate-900"
-        dangerouslySetInnerHTML={{ __html: content }}
-      />
 
       <button
         className="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
