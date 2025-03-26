@@ -20,7 +20,7 @@ import { common, createLowlight } from "lowlight";
 const lowlight = createLowlight(common);
 
 import { useState } from "react";
-import CodeBlockComponent from "./CodeBlogComponent";
+import CodeBlockComponent from "./CodeComponent";
 import { Button } from "./ui/button";
 import {
   MdFormatBold,
@@ -33,6 +33,7 @@ import {
   MdLink,
   MdTableChart,
 } from "react-icons/md";
+import { toast } from "sonner";
 
 const MenuBar = ({ editor }) => {
   if (!editor) return null;
@@ -119,14 +120,14 @@ const MenuBar = ({ editor }) => {
   );
 };
 
-export default function BlogEditor() {
+export default function TutorialEditor() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ codeBlock: false }),
-      Placeholder.configure({ placeholder: "Start writing your blog here..." }),
+      Placeholder.configure({ placeholder: "Start writing your tutorial here..." }),
       Document,
       Paragraph,
       Text,
@@ -154,6 +155,11 @@ export default function BlogEditor() {
   });
 
   const handleSubmit = async () => {
+    if (!title) {
+      toast.error("Please enter a title");
+      return;
+    }
+
     const slug = title.toLowerCase().replace(/ /g, "-");
 
     const turndownService = new TurndownService({ headingStyle: "atx" });

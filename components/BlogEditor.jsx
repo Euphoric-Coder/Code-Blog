@@ -12,16 +12,29 @@ import TableCell from "@tiptap/extension-table-cell";
 import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
+import Placeholder from "@tiptap/extension-placeholder";
 import TurndownService from "turndown";
 
 // Highlight + Lowlight
-import { all, common, createLowlight } from "lowlight";
+import { common, createLowlight } from "lowlight";
 const lowlight = createLowlight(common);
 
 import { useState } from "react";
-import CodeBlockComponent from "./CodeBlogComponent";
+import CodeBlockComponent from "./CodeComponent";
 import { Button } from "./ui/button";
-import Placeholder from "@tiptap/extension-placeholder";
+import {
+  MdFormatBold,
+  MdFormatItalic,
+  MdFormatQuote,
+  MdCode,
+  MdFormatListBulleted,
+  MdFormatListNumbered,
+  MdTitle,
+  MdLink,
+  MdTableChart,
+} from "react-icons/md";
+import { toast } from "sonner";
+import SlashCommand from "./SlashExtension";
 
 const MenuBar = ({ editor }) => {
   if (!editor) return null;
@@ -34,51 +47,52 @@ const MenuBar = ({ editor }) => {
     }`;
 
   return (
-    <div className="flex flex-wrap gap-2 border p-2 rounded-t bg-slate-100 dark:bg-slate-800">
-      {[1, 2, 3, 4, 5, 6].map((level) => (
+    <div className="sticky top-0 z-50 flex flex-wrap rounded-2xl gap-2 border-2 p-4 backdrop-blur-md bg-white/60 dark:bg-slate-900/60">
+      {[1, 2, 3].map((level) => (
         <Button
           key={level}
           className={buttonStyle(editor.isActive("heading", { level }))}
           onClick={() => editor.chain().focus().toggleHeading({ level }).run()}
         >
-          H{level}
+          <MdTitle className="mr-1" /> H{level}
         </Button>
       ))}
+
       <Button
         className={buttonStyle(editor.isActive("bulletList"))}
         onClick={() => editor.chain().focus().toggleBulletList().run()}
       >
-        • Bullet
+        <MdFormatListBulleted className="mr-1" /> Bullet
       </Button>
       <Button
         className={buttonStyle(editor.isActive("orderedList"))}
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
       >
-        1. Numbered
+        <MdFormatListNumbered className="mr-1" /> Numbered
       </Button>
       <Button
         className={buttonStyle(editor.isActive("bold"))}
         onClick={() => editor.chain().focus().toggleBold().run()}
       >
-        Bold
+        <MdFormatBold className="mr-1" /> Bold
       </Button>
       <Button
         className={buttonStyle(editor.isActive("italic"))}
         onClick={() => editor.chain().focus().toggleItalic().run()}
       >
-        Italic
+        <MdFormatItalic className="mr-1" /> Italic
       </Button>
       <Button
         className={buttonStyle(editor.isActive("blockquote"))}
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
       >
-        Quote
+        <MdFormatQuote className="mr-1" /> Quote
       </Button>
       <Button
         className={buttonStyle(editor.isActive("codeBlock"))}
         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
       >
-        Code Block
+        <MdCode className="mr-1" /> Code Block
       </Button>
       <Button
         className={buttonStyle(editor.isActive("table"))}
@@ -90,7 +104,7 @@ const MenuBar = ({ editor }) => {
             .run()
         }
       >
-        Table
+        <MdTableChart className="mr-1" /> Table
       </Button>
       <Button
         className={buttonStyle(editor.isActive("link"))}
@@ -101,7 +115,7 @@ const MenuBar = ({ editor }) => {
           }
         }}
       >
-        Link
+        <MdLink className="mr-1" /> Link
       </Button>
     </div>
   );
@@ -114,6 +128,7 @@ export default function BlogEditor() {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ codeBlock: false }),
+      SlashCommand,
       Placeholder.configure({ placeholder: "Start writing your blog here..." }),
       Document,
       Paragraph,
@@ -133,7 +148,7 @@ export default function BlogEditor() {
     editorProps: {
       attributes: {
         class:
-          "prose dark:prose-invert max-w-none p-4 min-h-[300px] rounded-b border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 outline-none",
+          "prose dark:prose-invert max-w-none p-4 min-h-[750px] rounded-3xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 outline-none",
       },
     },
     onUpdate: ({ editor }) => {
@@ -142,6 +157,11 @@ export default function BlogEditor() {
   });
 
   const handleSubmit = async () => {
+    if (!title) {
+      toast.error("Please enter a title");
+      return;
+    }
+
     const slug = title.toLowerCase().replace(/ /g, "-");
 
     const turndownService = new TurndownService({ headingStyle: "atx" });
@@ -179,18 +199,13 @@ export default function BlogEditor() {
         onChange={(e) => setTitle(e.target.value)}
       />
 
-      <div className="border rounded-lg overflow-hidden">
+      <div className="flex flex-col space-y-5">
         <MenuBar editor={editor} />
-        <EditorContent editor={editor} />
+        <EditorContent
+          editor={editor}
+          className="overflow-y-auto max-h-[1000px]"
+        />
       </div>
-
-      <h2 className="mt-6 text-xl font-semibold text-gray-700 dark:text-gray-300">
-        👀 Live HTML Preview
-      </h2>
-      <div
-        className="prose dark:prose-invert mt-4 p-4 rounded border dark:border-slate-700 border-gray-300 bg-white dark:bg-slate-900"
-        dangerouslySetInnerHTML={{ __html: content }}
-      />
 
       <button
         className="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
