@@ -1,8 +1,9 @@
+// components/slash-extension.js
 import { Extension } from "@tiptap/core";
 import Suggestion from "@tiptap/suggestion";
 import ReactDOM from "react-dom/client";
+import { SlashCommandList } from "./SlashCommandList";
 import { SLASH_COMMANDS } from "./slash-commands-data";
-import SlashMenu from "./SlashCommandList";
 
 export const SlashCommand = Extension.create({
   name: "slash-command",
@@ -11,50 +12,44 @@ export const SlashCommand = Extension.create({
     return {
       suggestion: {
         char: "/",
-        startOfLine: false,
+        startOfLine: false, // allow anywhere
+        items: ({ query }) =>
+          SLASH_COMMANDS.filter((item) =>
+            item.title.toLowerCase().includes(query.toLowerCase())
+          ).slice(0, 5),
+
         command: ({ editor, range, props }) => {
           props.command({ editor, range });
         },
+
         render: () => {
-          let popup = document.createElement("div");
           let reactRoot;
-          let editorRef = null;
+          let container = document.createElement("div");
 
           return {
-            onStart: (props) => {
-              editorRef = props.editor;
-              document.body.appendChild(popup);
-              reactRoot = ReactDOM.createRoot(popup);
+            onStart(props) {
+              document.body.appendChild(container);
+              reactRoot = ReactDOM.createRoot(container);
               reactRoot.render(
-                <SlashMenu
-                  editor={editorRef}
-                  items={props.items}
-                  command={props.command}
-                  clientRect={props.clientRect}
-                />
+                <SlashCommandList {...props} editor={props.editor} />
               );
             },
             onUpdate(props) {
               reactRoot.render(
-                <SlashMenu
-                  editor={editorRef}
-                  items={props.items}
-                  command={props.command}
-                  clientRect={props.clientRect}
-                />
+                <SlashCommandList {...props} editor={props.editor} />
               );
             },
             onKeyDown({ event }) {
               if (event.key === "Escape") {
-                reactRoot?.unmount();
-                popup?.remove();
+                reactRoot.unmount();
+                container.remove();
                 return true;
               }
               return false;
             },
             onExit() {
-              reactRoot?.unmount();
-              popup?.remove();
+              reactRoot.unmount();
+              container.remove();
             },
           };
         },

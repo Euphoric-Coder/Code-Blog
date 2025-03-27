@@ -2,7 +2,7 @@
 export const SLASH_COMMANDS = [
   {
     title: "Heading 1",
-    description: "Large heading",
+    description: "Large title",
     command: ({ editor, range }) => {
       editor
         .chain()
@@ -13,41 +13,22 @@ export const SLASH_COMMANDS = [
     },
   },
   {
-    title: "Heading 2",
-    description: "Medium heading",
-    command: ({ editor, range }) => {
-      editor
-        .chain()
-        .focus()
-        .deleteRange(range)
-        .setNode("heading", { level: 2 })
-        .run();
-    },
-  },
-  {
     title: "Bullet List",
-    description: "Create bullet list",
+    description: "Create a bullet list",
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleBulletList().run();
     },
   },
   {
-    title: "Numbered List",
-    description: "Create ordered list",
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).toggleOrderedList().run();
-    },
-  },
-  {
     title: "Quote",
-    description: "Insert blockquote",
+    description: "Insert a quote block",
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleBlockquote().run();
     },
   },
   {
     title: "Code Block",
-    description: "Insert code block",
+    description: "Insert a code block",
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleCodeBlock().run();
     },
