@@ -53,7 +53,7 @@ const MenuBar = ({ editor }) => {
   return (
     <div className="sticky top-0 z-50 flex flex-wrap rounded-tr-2xl rounded-tl-2xl gap-2 border-r border-l border-2 p-4 backdrop-blur-md bg-white/60 dark:bg-slate-900/60">
       {[1, 2, 3].map((level) => (
-        <TooltipProvider>
+        <TooltipProvider key={level}>
           <Tooltip>
             <TooltipTrigger asChild>
               <button
@@ -292,7 +292,7 @@ export default function BlogEditor() {
         onChange={(e) => setTitle(e.target.value)}
       />
 
-      <div className="">
+      <div>
         <MenuBar editor={editor} />
         <EditorContent
           editor={editor}
