@@ -34,14 +34,37 @@ import {
   MdCode,
   MdFormatListBulleted,
   MdFormatListNumbered,
-  MdTitle,
   MdLink,
   MdTableChart,
 } from "react-icons/md";
+import {
+  Dialog,
+  DialogClose,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useUser } from "@clerk/nextjs";
+import { v4 as uuid } from "uuid";
 
 const MenuBar = ({ editor }) => {
+  const [open, setOpen] = useState(false);
+  const [url, setUrl] = useState("");
+
   if (!editor) return null;
+
+  const insertLink = () => {
+    if (url) {
+      editor.chain().focus().setLink({ href: url }).run();
+      setOpen(false);
+      setUrl("");
+    }
+  };
 
   const buttonStyle = (isActive) =>
     `text-md px-3 py-1 rounded-xl transition ${
@@ -196,12 +219,7 @@ const MenuBar = ({ editor }) => {
           <TooltipTrigger asChild>
             <button
               className={buttonStyle(editor.isActive("link"))}
-              onClick={() => {
-                const url = prompt("Enter URL");
-                if (url) {
-                  editor.chain().focus().setLink({ href: url }).run();
-                }
-              }}
+              onClick={() => setOpen(true)}
             >
               <MdLink className="mr-1" />
             </button>
@@ -211,13 +229,40 @@ const MenuBar = ({ editor }) => {
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
+
+      <Dialog
+        open={open}
+        onOpenChange={() => {
+          setOpen(false);
+          setUrl("");
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Insert Link</DialogTitle>
+          </DialogHeader>
+          <Input
+            type="url"
+            placeholder="https://example.com"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+          />
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button>Cancel</Button>
+            </DialogClose>
+            <Button onClick={insertLink}>Insert</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
 
-export default function BlogEditor() {
+export default function BlogEditor({ initialContent = "", editing = false }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const { user } = useUser();
 
   const editor = useEditor({
     extensions: [
@@ -238,6 +283,7 @@ export default function BlogEditor() {
         },
       }).configure({ lowlight }),
     ],
+    content: initialContent,
     editorProps: {
       attributes: {
         class:
@@ -279,7 +325,59 @@ export default function BlogEditor() {
 
     const markdown = turndownService.turndown(content);
 
-    console.log({ title, markdown, slug });
+    console.log({
+      id: `${slug}--${uuid()}`,
+      title: title,
+      mdFormat: markdown,
+      htmlFormat: content,
+      author: user?.fullName,
+      categories: "Programming",
+      subCategories: "React, Javascript",
+      date: new Date().toISOString(),
+      createdBy: user?.primaryEmailAddress.emailAddress,
+    });
+  };
+
+  const handleEdit = async () => {
+    if (!title) {
+      toast.error("Please enter a title");
+      return;
+    }
+
+    const slug = title.toLowerCase().replace(/ /g, "-");
+
+    const turndownService = new TurndownService({ headingStyle: "atx" });
+
+    // ✅ Add custom rule for code blocks with language
+    turndownService.addRule("fencedCodeBlockWithLang", {
+      filter: (node) =>
+        node.nodeName === "PRE" &&
+        node.firstChild &&
+        node.firstChild.nodeName === "CODE",
+      replacement: (content, node) => {
+        const codeNode = node.firstChild;
+        const language = (codeNode.getAttribute("class") || "")
+          .replace("language-", "")
+          .trim();
+
+        return `\n\n\`\`\`${language || ""}\n${
+          codeNode.textContent
+        }\n\`\`\`\n\n`;
+      },
+    });
+
+    const markdown = turndownService.turndown(content);
+
+    console.log({
+      id: `${slug}--${uuid()}`,
+      title: title,
+      mdFormat: markdown,
+      htmlFormat: content,
+      author: user?.fullName,
+      categories: "Programming",
+      subCategories: "React, Javascript",
+      date: new Date().toISOString(),
+    });
   };
 
   return (
@@ -300,12 +398,21 @@ export default function BlogEditor() {
         />
       </div>
 
-      <button
-        className="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-        onClick={handleSubmit}
-      >
-        Save Blog
-      </button>
+      {editing ? (
+        <button
+          className="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+          onClick={handleEdit}
+        >
+          Edit Blog
+        </button>
+      ) : (
+        <button
+          className="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+          onClick={handleSubmit}
+        >
+          Save Blog
+        </button>
+      )}
     </div>
   );
 }
