@@ -295,9 +295,9 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
     },
   });
 
-  const handleSubmit = async () => {
-    if (!title) {
-      toast.error("Please enter a title");
+  const AddBlog = async () => {
+    if (!title || content === "") {
+      toast.error("Please enter both a title & content");
       return;
     }
 
@@ -338,9 +338,9 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
     });
   };
 
-  const handleEdit = async () => {
-    if (!title) {
-      toast.error("Please enter a title");
+  const EditBlog = async () => {
+    if (!title && content) {
+      toast.error("Please enter a title and content");
       return;
     }
 
@@ -401,14 +401,14 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
       {editing ? (
         <button
           className="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-          onClick={handleEdit}
+          onClick={EditBlog}
         >
           Edit Blog
         </button>
       ) : (
         <button
           className="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-          onClick={handleSubmit}
+          onClick={AddBlog}
         >
           Save Blog
         </button>

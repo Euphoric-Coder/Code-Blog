@@ -66,45 +66,6 @@
       font-weight: 700;
     }
 
-/* Force larger font size inside the Markdown editor */
-.rc-md-editor .editor-container textarea {
-  font-size: 1.125rem !important;  /* 18px */
-  line-height: 1.75 !important;
-  font-family: inherit !important;
-  padding: 1rem !important;
-  color: inherit !important;
-}
-
-/* === DARK MODE SUPPORT FOR MdEditor === */
-.dark .rc-md-editor {
-  background-color: #1f2937; /* slate-800 */
-  color: #f9fafb; /* slate-100 */
-  border-color: #334155; /* slate-700 */
-}
-
-.dark .rc-md-editor .editor-container,
-.dark .rc-md-editor .section {
-  background-color: #1f2937 !important;
-  color: #f9fafb !important;
-}
-
-.dark .rc-md-editor .editor-toolbar {
-  background-color: #111827 !important; /* slate-900 */
-  border-color: #334155 !important;
-}
-
-.dark .rc-md-editor .editor-toolbar button {
-  color: #e5e7eb !important; /* gray-200 */
-}
-
-.dark .rc-md-editor .editor-toolbar button.active {
-  background-color: #334155 !important;
-}
-
-.dark .rc-md-editor .editor-container textarea {
-  background-color: #1f2937 !important;
-  color: #f9fafb !important;
-}
 
 :root {
   --foreground-rgb: 0, 0, 0;
