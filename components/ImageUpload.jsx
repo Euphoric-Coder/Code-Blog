@@ -165,30 +165,30 @@ export default function ImageUpload({ setImgURL, setImgId }) {
         </>
       ) : (
         <>
-          <div className="p-4 border rounded-md mt-4 bg-gradient-to-br from-gray-50 to-gray-100 shadow-sm flex flex-col items-center gap-3">
-            <p className="text-green-600 font-medium">Upload Successful</p>
-            <Image
-              src={uploadData.url}
-              alt="Uploaded"
-              className="rounded-lg shadow-md max-w-full max-h-[300px]"
-              height={300}
-              width={300}
-            />
-            <p className="text-blue-600 text-sm break-words text-center">
-              <a
-                href={uploadData.url}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {uploadData.url}
-              </a>
-            </p>
-            <div className="flex gap-4 mt-3">
-              <Button onClick={handleReUpload}>Reupload</Button>
-              {/* <Button onClick={() => inputRef.current.click()}>Reupload</Button> */}
-              <Button variant="destructive" onClick={handleReset}>
-                Reset
-              </Button>
+          <div className="p-4 border border-gray-300 dark:border-gray-700 rounded-lg bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 dark:from-gray-800 dark:via-gray-900 dark:to-gray-950 shadow-md">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-800 dark:text-gray-200 font-medium">
+                  <strong>Uploaded File:</strong> {uploadData.name}
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  File size: {(uploadData.size / 1024).toFixed(2)} KB
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  onClick={handleReset}
+                  className="px-4 py-2 font-semibold text-white bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 dark:from-blue-500 dark:via-purple-600 dark:to-pink-500 rounded-xl shadow-xl hover:from-blue-500 hover:to-purple-700 dark:hover:from-purple-600 dark:hover:to-pink-600 transition-transform transform hover:scale-110 hover:backdrop-brightness-125 dark:hover:backdrop-brightness-110"
+                >
+                  Reupload
+                </Button>
+              </div>
+            </div>
+            <div>
+              <p className="text-gray-800 dark:text-gray-200 font-medium">
+                <strong>Cover Image Preview</strong>
+              </p>
+              <Image src={uploadData.url} alt="Uploaded" width={300} height={300}/>
             </div>
           </div>
         </>
