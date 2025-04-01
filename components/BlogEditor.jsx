@@ -51,6 +51,8 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useUser } from "@clerk/nextjs";
 import { v4 as uuid } from "uuid";
+import { Trash } from "lucide-react";
+import ImageUpload from "./ImageUpload";
 
 const MenuBar = ({ editor }) => {
   const [open, setOpen] = useState(false);
@@ -74,161 +76,167 @@ const MenuBar = ({ editor }) => {
     }`;
 
   return (
-    <div className="sticky top-0 z-50 flex flex-wrap rounded-tr-2xl rounded-tl-2xl gap-2 border-r border-l border-2 p-4 backdrop-blur-md bg-white/60 dark:bg-slate-900/60">
-      {[1, 2, 3].map((level) => (
-        <TooltipProvider key={level}>
+    <div className="sticky top-0 flex flex-wrap items-center justify-between rounded-tr-2xl rounded-tl-2xl gap-2 border-r border-l border-2 p-4 backdrop-blur-md bg-white/60 dark:bg-slate-900/60">
+      <div className="flex gap-2 items-center">
+        {[1, 2, 3].map((level) => (
+          <TooltipProvider key={level}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  key={level}
+                  className={buttonStyle(editor.isActive("heading", { level }))}
+                  onClick={() =>
+                    editor.chain().focus().toggleHeading({ level }).run()
+                  }
+                >
+                  H{level}
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Heading {level}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ))}
+
+        <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <button
-                key={level}
-                className={buttonStyle(editor.isActive("heading", { level }))}
-                onClick={() =>
-                  editor.chain().focus().toggleHeading({ level }).run()
-                }
+                className={buttonStyle(editor.isActive("bulletList"))}
+                onClick={() => editor.chain().focus().toggleBulletList().run()}
               >
-                H{level}
+                <MdFormatListBulleted size={30} className="mr-1" />
               </button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Heading {level}</p>
+              <p>Bullet List</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-      ))}
 
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              className={buttonStyle(editor.isActive("bulletList"))}
-              onClick={() => editor.chain().focus().toggleBulletList().run()}
-            >
-              <MdFormatListBulleted size={30} className="mr-1" />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Bullet List</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className={buttonStyle(editor.isActive("orderedList"))}
+                onClick={() => editor.chain().focus().toggleOrderedList().run()}
+              >
+                <MdFormatListNumbered size={30} className="mr-1" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Numbered List</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
 
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              className={buttonStyle(editor.isActive("orderedList"))}
-              onClick={() => editor.chain().focus().toggleOrderedList().run()}
-            >
-              <MdFormatListNumbered size={30} className="mr-1" />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Numbered List</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className={buttonStyle(editor.isActive("bold"))}
+                onClick={() => editor.chain().focus().toggleBold().run()}
+              >
+                <MdFormatBold size={30} className="mr-1" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Bold</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
 
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              className={buttonStyle(editor.isActive("bold"))}
-              onClick={() => editor.chain().focus().toggleBold().run()}
-            >
-              <MdFormatBold size={30} className="mr-1" />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Bold</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className={buttonStyle(editor.isActive("italic"))}
+                onClick={() => editor.chain().focus().toggleItalic().run()}
+              >
+                <MdFormatItalic size={30} className="mr-1" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Italics</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
 
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              className={buttonStyle(editor.isActive("italic"))}
-              onClick={() => editor.chain().focus().toggleItalic().run()}
-            >
-              <MdFormatItalic size={30} className="mr-1" />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Italics</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className={buttonStyle(editor.isActive("blockquote"))}
+                onClick={() => editor.chain().focus().toggleBlockquote().run()}
+              >
+                <MdFormatQuote size={30} className="mr-1" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Quote</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
 
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              className={buttonStyle(editor.isActive("blockquote"))}
-              onClick={() => editor.chain().focus().toggleBlockquote().run()}
-            >
-              <MdFormatQuote size={30} className="mr-1" />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Quote</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className={buttonStyle(editor.isActive("codeBlock"))}
+                onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+              >
+                <MdCode size={30} className="mr-1" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Code Block</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
 
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              className={buttonStyle(editor.isActive("codeBlock"))}
-              onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-            >
-              <MdCode size={30} className="mr-1" />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Code Block</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className={buttonStyle(editor.isActive("table"))}
+                onClick={() =>
+                  editor
+                    .chain()
+                    .focus()
+                    .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+                    .run()
+                }
+              >
+                <MdTableChart className="mr-1" /> Table
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Table</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
 
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              className={buttonStyle(editor.isActive("table"))}
-              onClick={() =>
-                editor
-                  .chain()
-                  .focus()
-                  .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
-                  .run()
-              }
-            >
-              <MdTableChart className="mr-1" /> Table
-            </button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Table</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className={buttonStyle(editor.isActive("link"))}
+                onClick={() => setOpen(true)}
+              >
+                <MdLink className="mr-1" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Link</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
 
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              className={buttonStyle(editor.isActive("link"))}
-              onClick={() => setOpen(true)}
-            >
-              <MdLink className="mr-1" />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Link</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <button onClick={() => editor.commands.clearContent(true)}>
+        <Trash />
+      </button>
 
       <Dialog
         open={open}
@@ -382,6 +390,7 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
 
   return (
     <div className="p-8">
+      <ImageUpload />
       <input
         type="text"
         placeholder="Blog Title"
