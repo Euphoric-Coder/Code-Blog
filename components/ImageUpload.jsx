@@ -4,11 +4,19 @@ import React, { useRef, useState } from "react";
 import ImageKit from "imagekit-javascript";
 import { FiUploadCloud } from "react-icons/fi";
 import { Button } from "./ui/button";
+import Image from "next/image";
 
 const publicKey = process.env.NEXT_PUBLIC_PUBLIC_KEY;
 const urlEndpoint = process.env.NEXT_PUBLIC_URL_ENDPOINT;
 
-const uploadToImageKit = async (file, setProgress, setData, setFileId) => {
+const uploadToImageKit = async (
+  file,
+  setProgress,
+  setData,
+  setFileId,
+  setId,
+  setURL
+) => {
   const auth = await fetch("/api/upload-auth").then((res) => res.json());
 
   const imagekit = new ImageKit({
@@ -35,6 +43,8 @@ const uploadToImageKit = async (file, setProgress, setData, setFileId) => {
         console.log("Upload success", result);
         setData(result);
         setFileId(result.fileId);
+        setId(result.fileId);
+        setURL(result.url);
         setProgress(null);
       }
     },
@@ -57,7 +67,7 @@ const deleteFile = async (fileId) => {
   }
 };
 
-export default function ImageUpload() {
+export default function ImageUpload({ setImgURL, setImgId }) {
   const inputRef = useRef(null);
   const [progress, setProgress] = useState(null);
   const [uploadData, setUploadData] = useState(null);
@@ -76,7 +86,7 @@ export default function ImageUpload() {
     setUploadData(null);
     setFileId(null);
     setProgress(0);
-    await uploadToImageKit(file, setProgress, setUploadData, setFileId);
+    await uploadToImageKit(file, setProgress, setUploadData, setFileId, setImgId, setImgURL);
   };
 
   const handleDrop = (e) => {
@@ -96,6 +106,8 @@ export default function ImageUpload() {
     setUploadData(null);
     setProgress(null);
     setFileId(null);
+    setImgId(null);
+    setImgURL(null);
     if (inputRef.current) inputRef.current.value = "";
   };
 
@@ -155,10 +167,12 @@ export default function ImageUpload() {
         <>
           <div className="p-4 border rounded-md mt-4 bg-gradient-to-br from-gray-50 to-gray-100 shadow-sm flex flex-col items-center gap-3">
             <p className="text-green-600 font-medium">Upload Successful</p>
-            <img
+            <Image
               src={uploadData.url}
               alt="Uploaded"
               className="rounded-lg shadow-md max-w-full max-h-[300px]"
+              height={300}
+              width={300}
             />
             <p className="text-blue-600 text-sm break-words text-center">
               <a

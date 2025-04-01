@@ -270,6 +270,8 @@ const MenuBar = ({ editor }) => {
 export default function BlogEditor({ initialContent = "", editing = false }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [imgURL, setImgURL] = useState("");
+  const [ImgId, setImgId] = useState("");
   const { user } = useUser();
 
   const editor = useEditor({
@@ -390,7 +392,7 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
 
   return (
     <div className="p-8">
-      <ImageUpload />
+      <ImageUpload setImgId={setImgId} setImgURL={setImgURL}/>
       <input
         type="text"
         placeholder="Blog Title"
