@@ -272,6 +272,8 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
   const [content, setContent] = useState("");
   const [imgURL, setImgURL] = useState("");
   const [ImgId, setImgId] = useState("");
+  const [uploadData, setUploadData] = useState(null);
+  const [fileId, setFileId] = useState(null);
   const { user } = useUser();
 
   const editor = useEditor({
@@ -399,7 +401,7 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
             <h1 className="text-4xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 via-cyan-400 to-purple-500 bg-clip-text text-transparent">
               Blog Editor
             </h1>
-            <p className="mt-1 text-sm text-gray-700 dark:text-gray-300 max-w-md">
+            <p className="mt-1 text-sm text-gray-700 dark:text-gray-300 max-w-lg">
               Start writing your thoughts, stories, or tutorials. This is your
               creative space.
             </p>
@@ -440,7 +442,7 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
-      <ImageUpload setImgId={setImgId} setImgURL={setImgURL} />
+      <ImageUpload uploadData={uploadData} setUploadData={setUploadData} fileId={fileId} setFileId={setFileId} />
 
       <div>
         <MenuBar editor={editor} />

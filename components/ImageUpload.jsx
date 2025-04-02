@@ -9,14 +9,7 @@ import Image from "next/image";
 const publicKey = process.env.NEXT_PUBLIC_PUBLIC_KEY;
 const urlEndpoint = process.env.NEXT_PUBLIC_URL_ENDPOINT;
 
-const uploadToImageKit = async (
-  file,
-  setProgress,
-  setData,
-  setFileId,
-  setId,
-  setURL
-) => {
+const uploadToImageKit = async (file, setProgress, setData, setFileId) => {
   const auth = await fetch("/api/upload-auth").then((res) => res.json());
 
   const imagekit = new ImageKit({
@@ -43,8 +36,6 @@ const uploadToImageKit = async (
         console.log("Upload success", result);
         setData(result);
         setFileId(result.fileId);
-        setId(result.fileId);
-        setURL(result.url);
         setProgress(null);
       }
     },
@@ -67,11 +58,14 @@ const deleteFile = async (fileId) => {
   }
 };
 
-export default function ImageUpload({ setImgURL, setImgId }) {
+export default function ImageUpload({
+  uploadData,
+  setUploadData,
+  fileId,
+  setFileId,
+}) {
   const inputRef = useRef(null);
   const [progress, setProgress] = useState(null);
-  const [uploadData, setUploadData] = useState(null);
-  const [fileId, setFileId] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
 
   const handleUpload = async (file) => {
@@ -86,14 +80,7 @@ export default function ImageUpload({ setImgURL, setImgId }) {
     setUploadData(null);
     setFileId(null);
     setProgress(0);
-    await uploadToImageKit(
-      file,
-      setProgress,
-      setUploadData,
-      setFileId,
-      setImgId,
-      setImgURL
-    );
+    await uploadToImageKit(file, setProgress, setUploadData, setFileId);
   };
 
   const handleDrop = (e) => {
@@ -113,8 +100,6 @@ export default function ImageUpload({ setImgURL, setImgId }) {
     setUploadData(null);
     setProgress(null);
     setFileId(null);
-    setImgId(null);
-    setImgURL(null);
     if (inputRef.current) inputRef.current.value = "";
   };
 
