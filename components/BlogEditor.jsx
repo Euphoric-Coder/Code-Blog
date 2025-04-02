@@ -392,14 +392,55 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
 
   return (
     <div className="p-8">
-      <ImageUpload setImgId={setImgId} setImgURL={setImgURL}/>
+      <div className="w-full bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-[#111827] dark:via-[#0f172a] dark:to-[#1e1b4b] rounded-2xl p-6 shadow-md mb-8 transition-all duration-300">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          {/* Title & subtitle */}
+          <div>
+            <h1 className="text-4xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 via-cyan-400 to-purple-500 bg-clip-text text-transparent">
+              Blog Editor
+            </h1>
+            <p className="mt-1 text-sm text-gray-700 dark:text-gray-300 max-w-md">
+              Start writing your thoughts, stories, or tutorials. This is your
+              creative space.
+            </p>
+            <p className="text-xs mt-1 italic text-blue-500 dark:text-cyan-400">
+              "Writing is the painting of the voice."
+            </p>
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex flex-wrap gap-3">
+            <button
+              // onClick={handleClear}
+              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-[#1b1b1b] border border-gray-300 dark:border-gray-700 rounded-xl shadow-sm hover:bg-gray-200 dark:hover:bg-[#2a2a2a] transition-all"
+            >
+              Clear
+            </button>
+            <button
+              // onClick={handleSubmit}
+              className="px-5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-blue-500 via-cyan-500 to-purple-600 dark:from-blue-600 dark:via-purple-700 dark:to-pink-600 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform"
+            >
+              Submit Post
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <label
+        htmlFor="blog-title"
+        className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
+      >
+        Blog Title
+      </label>
       <input
         type="text"
+        id="blog-title"
         placeholder="Blog Title"
-        className="w-full p-2 mb-4 border rounded dark:bg-slate-800 dark:text-white dark:border-slate-600"
+        className="w-full mt-3 p-2 mb-4 border rounded dark:bg-slate-800 dark:text-white dark:border-slate-600"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
+      <ImageUpload setImgId={setImgId} setImgURL={setImgURL} />
 
       <div>
         <MenuBar editor={editor} />

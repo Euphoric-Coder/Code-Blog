@@ -86,7 +86,14 @@ export default function ImageUpload({ setImgURL, setImgId }) {
     setUploadData(null);
     setFileId(null);
     setProgress(0);
-    await uploadToImageKit(file, setProgress, setUploadData, setFileId, setImgId, setImgURL);
+    await uploadToImageKit(
+      file,
+      setProgress,
+      setUploadData,
+      setFileId,
+      setImgId,
+      setImgURL
+    );
   };
 
   const handleDrop = (e) => {
@@ -121,12 +128,12 @@ export default function ImageUpload({ setImgURL, setImgId }) {
   };
 
   return (
-    <div className="mt-6">
+    <div className="mt-2 mb-10">
       {!uploadData ? (
         <>
           <label
             htmlFor="cover-upload"
-            className="absolute left-6 text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
+            className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
           >
             Upload Cover Image
           </label>
@@ -138,7 +145,7 @@ export default function ImageUpload({ setImgURL, setImgId }) {
               setIsDragging(true);
             }}
             onDragLeave={() => setIsDragging(false)}
-            className={`relative flex flex-col items-center justify-center p-8 border-2 rounded-xl cursor-pointer transition-all ${
+            className={`relative mt-5 flex flex-col items-center justify-center p-8 border-2 rounded-xl cursor-pointer transition-all ${
               isDragging
                 ? "border-blue-600 bg-gradient-to-br from-cyan-100 to-indigo-200"
                 : "border-blue-300 bg-gradient-to-br from-cyan-50 to-indigo-100"
@@ -165,30 +172,49 @@ export default function ImageUpload({ setImgURL, setImgId }) {
         </>
       ) : (
         <>
-          <div className="p-4 border border-gray-300 dark:border-gray-700 rounded-lg bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 dark:from-gray-800 dark:via-gray-900 dark:to-gray-950 shadow-md">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-800 dark:text-gray-200 font-medium">
-                  <strong>Uploaded File:</strong> {uploadData.name}
+          <div className="p-6 rounded-2xl border border-gray-200 dark:border-gray-800 bg-gradient-to-br from-white via-gray-50 to-gray-100 dark:from-[#1b1b1b] dark:via-[#121212] dark:to-black shadow-xl space-y-6 transition-all duration-300">
+            {/* File Details + Actions */}
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              {/* File Info */}
+              <div className="space-y-1">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
+                  File Uploaded Successfully
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <span className="font-medium text-gray-900 dark:text-gray-100">
+                    {uploadData.name}
+                  </span>
                 </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  File size: {(uploadData.size / 1024).toFixed(2)} KB
+                <p className="text-sm text-gray-500 dark:text-gray-500">
+                  {(uploadData.size / 1024).toFixed(2)} KB
                 </p>
               </div>
-              <div className="flex gap-2">
+
+              {/* Action Buttons */}
+              <div className="flex gap-3">
                 <Button
                   onClick={handleReset}
-                  className="px-4 py-2 font-semibold text-white bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 dark:from-blue-500 dark:via-purple-600 dark:to-pink-500 rounded-xl shadow-xl hover:from-blue-500 hover:to-purple-700 dark:hover:from-purple-600 dark:hover:to-pink-600 transition-transform transform hover:scale-110 hover:backdrop-brightness-125 dark:hover:backdrop-brightness-110"
+                  className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 dark:from-blue-600 dark:via-purple-700 dark:to-pink-600 text-white font-medium px-5 py-2 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform"
                 >
                   Reupload
                 </Button>
               </div>
             </div>
+
+            {/* Image Preview */}
             <div>
-              <p className="text-gray-800 dark:text-gray-200 font-medium">
-                <strong>Cover Image Preview</strong>
-              </p>
-              <Image src={uploadData.url} alt="Uploaded" width={300} height={300}/>
+              <h4 className="text-md font-medium text-gray-900 dark:text-gray-100 mb-3">
+                Cover Image Preview
+              </h4>
+              <div className="overflow-hidden rounded-2xl border-2 border-dashed border-blue-300 dark:border-purple-600 shadow-lg hover:shadow-xl transition-shadow duration-300 max-w-md">
+                <Image
+                  src={uploadData.url}
+                  alt="Uploaded Cover"
+                  width={1000}
+                  height={400}
+                  className="object-fit w-full p-4 h-auto max-h-[400px] rounded-xl transition-transform duration-500 hover:scale-[1.03]"
+                />
+              </div>
             </div>
           </div>
         </>
