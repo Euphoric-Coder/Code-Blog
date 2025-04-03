@@ -51,8 +51,9 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useUser } from "@clerk/nextjs";
 import { v4 as uuid } from "uuid";
-import { Trash } from "lucide-react";
+import { PenBox, Send, Trash, Trash2 } from "lucide-react";
 import ImageUpload from "./ImageUpload";
+import { Label } from "./ui/label";
 
 const MenuBar = ({ editor }) => {
   const [open, setOpen] = useState(false);
@@ -270,8 +271,6 @@ const MenuBar = ({ editor }) => {
 export default function BlogEditor({ initialContent = "", editing = false }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [imgURL, setImgURL] = useState("");
-  const [ImgId, setImgId] = useState("");
   const [uploadData, setUploadData] = useState(null);
   const [fileId, setFileId] = useState(null);
   const { user } = useUser();
@@ -398,7 +397,7 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           {/* Title & subtitle */}
           <div>
-            <h1 className="text-4xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 via-cyan-400 to-purple-500 bg-clip-text text-transparent">
+            <h1 className="text-4xl p-1 font-extrabold tracking-tight bg-gradient-to-r from-blue-600 via-cyan-400 to-purple-500 bg-clip-text text-transparent">
               Blog Editor
             </h1>
             <p className="mt-1 text-sm text-gray-700 dark:text-gray-300 max-w-lg">
@@ -414,26 +413,37 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
           <div className="flex flex-wrap gap-3">
             <button
               // onClick={handleClear}
-              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-[#1b1b1b] border border-gray-300 dark:border-gray-700 rounded-xl shadow-sm hover:bg-gray-200 dark:hover:bg-[#2a2a2a] transition-all"
+              className="px-4 py-2 flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-[#1b1b1b] border border-gray-300 dark:border-gray-700 rounded-xl shadow-sm hover:bg-gray-200 dark:hover:bg-[#2a2a2a] transition-all"
             >
+              <Trash2 />
               Clear
             </button>
-            <button
-              // onClick={handleSubmit}
-              className="px-5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-blue-500 via-cyan-500 to-purple-600 dark:from-blue-600 dark:via-purple-700 dark:to-pink-600 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform"
-            >
-              Submit Post
-            </button>
+            {editing ? (
+              <Button
+                onClick={EditBlog}
+                className="px-5 py-2 flex items-center gap-2 text-sm font-bold text-white bg-gradient-to-r from-blue-500 via-cyan-500 to-purple-600 dark:from-blue-600 dark:via-purple-700 dark:to-pink-600 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform"
+              >
+                <PenBox />
+                Edit Blog
+              </Button>
+            ) : (
+              <Button
+                onClick={AddBlog}
+                className="px-5 py-2 flex items-center gap-2 text-sm font-bold text-white bg-gradient-to-r from-blue-500 via-cyan-500 to-purple-600 dark:from-blue-600 dark:via-purple-700 dark:to-pink-600 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform"
+              >
+                <Send />
+                Submit Blog
+              </Button>
+            )}
           </div>
         </div>
       </div>
-
-      <label
+      <Label
         htmlFor="blog-title"
         className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
       >
         Blog Title
-      </label>
+      </Label>
       <input
         type="text"
         id="blog-title"
@@ -442,7 +452,12 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
-      <ImageUpload uploadData={uploadData} setUploadData={setUploadData} fileId={fileId} setFileId={setFileId} />
+      <ImageUpload
+        uploadData={uploadData}
+        setUploadData={setUploadData}
+        fileId={fileId}
+        setFileId={setFileId}
+      />
 
       <div>
         <MenuBar editor={editor} />
