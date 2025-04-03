@@ -20,3 +20,25 @@ export const Blogs = pgTable("blogs", {
   featured: boolean("featured").notNull().default(false),
   createdBy: varchar("createdBy").notNull(),
 });
+
+export const Comments = pgTable("comments", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  blogId: varchar("blogId")
+    .notNull()
+    .references(() => Blogs.id),
+  name: varchar("name").notNull(),
+  createdBy: varchar("createdBy").notNull(),
+  text: varchar("text").notNull(),
+  time: varchar("time").notNull(),
+});
+
+export const Replies = pgTable("replies", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  commentId: uuid("commentId")
+    .notNull()
+    .references(() => Comments.id),
+  name: varchar("name").notNull(),
+  createdBy: varchar("createdBy").notNull(),
+  text: varchar("text").notNull(),
+  time: varchar("time").notNull(),
+});

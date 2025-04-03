@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FaReply } from "react-icons/fa";
 
@@ -11,11 +11,40 @@ const truncateText = (text, wordLimit) => {
     : words.slice(0, wordLimit).join(" ") + "...";
 };
 
-const Comment = () => {
+const Comment = ({ blogId }) => {
   const [comment, setComment] = useState("");
   const [showReplies, setShowReplies] = useState({});
   const [showFullComment, setShowFullComment] = useState({});
   const [showFullReply, setShowFullReply] = useState({});
+
+  useEffect(() => {
+
+    fetchComments(blogId);
+  }, []);
+
+  const fetchComments = async (blogId) => {
+    if (!blogId) return;
+    try {
+      const resp = await fetch("/api/comments", {
+        method: "POST",
+        body: JSON.stringify({ blogId }),
+      });
+
+      const result = await resp.json();
+      console.log(result);
+
+      const commentId = result[0].id;
+
+      const replies = await fetch("/api/reply", {
+        method: "POST",
+        body: JSON.stringify({ commentId }),
+      });
+      const repliesResult = await replies.json();
+      console.log(repliesResult);
+    } catch (err) {
+      console.error("Failed to fetch comments!", err);
+    }
+  };
 
   const [comments, setComments] = useState([
     {
@@ -23,6 +52,11 @@ const Comment = () => {
       time: "2 hours ago",
       text: "Great post! Loved the explanation on React rendering. The section on virtual DOM was especially insightful. I also liked the part about hydration mismatches and real-world use cases of SSR.",
       replies: [
+        {
+          name: "John JS",
+          time: "1 hour ago",
+          text: "Totally agree! It was very helpful. Learned a lot about React’s SSR hydration behavior!",
+        },
         {
           name: "John JS",
           time: "1 hour ago",
@@ -71,7 +105,7 @@ const Comment = () => {
 
       <div className="flex items-start gap-4 mb-6">
         <Avatar className="h-10 w-10">
-          <AvatarImage src="/avatars/user.png" />
+          {/* <AvatarImage src="/avatars/user.png" /> */}
           <AvatarFallback>U</AvatarFallback>
         </Avatar>
         <textarea
@@ -100,9 +134,9 @@ const Comment = () => {
           >
             <div className="flex gap-3">
               <Avatar>
-                <AvatarImage
+                {/* <AvatarImage
                   src={`/avatars/${comment.name.toLowerCase().replace(" ", "")}.png`}
-                />
+                /> */}
                 <AvatarFallback>{comment.name.charAt(0)}</AvatarFallback>
               </Avatar>
               <div className="flex-1">
@@ -156,9 +190,9 @@ const Comment = () => {
                         >
                           <div className="flex gap-3">
                             <Avatar>
-                              <AvatarImage
+                              {/* <AvatarImage
                                 src={`/avatars/${reply.name.toLowerCase().replace(" ", "")}.png`}
-                              />
+                              /> */}
                               <AvatarFallback>
                                 {reply.name.charAt(0)}
                               </AvatarFallback>

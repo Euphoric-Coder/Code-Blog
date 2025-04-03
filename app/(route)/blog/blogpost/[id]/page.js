@@ -8,6 +8,7 @@ import Comment from "@/components/Comments";
 
 export default function Page() {
   const blogId = useParams().id;
+
   const [htmlContent, setHtmlContent] = useState("");
 
   useEffect(() => {
@@ -66,7 +67,8 @@ export default function Page() {
           {/* Comment Component - sticky on large screens */}
           <div className="lg:w-1/4 w-full">
             <div className="lg:sticky top-24">
-              <Comment />
+              <Comment blogId="this-is-just-a-test-for-the-following--cb6c5e7a-bab2-459a-a94c-556bbd59184c" />
+              {/* <Comment blogId={blogId}/> */}
             </div>
           </div>
         </div>
