@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FaReply } from "react-icons/fa";
+import { useUser } from "@clerk/nextjs";
+import { toast } from "sonner";
 
 // Word limit logic
 const truncateText = (text, wordLimit) => {
@@ -16,9 +18,10 @@ const Comment = ({ blogId }) => {
   const [showReplies, setShowReplies] = useState({});
   const [showFullComment, setShowFullComment] = useState({});
   const [showFullReply, setShowFullReply] = useState({});
+  const [comments, setComments] = useState([]);
+  const { user } = useUser();
 
   useEffect(() => {
-
     fetchComments(blogId);
   }, []);
 
@@ -32,45 +35,23 @@ const Comment = ({ blogId }) => {
 
       const result = await resp.json();
       console.log(result);
-
-      const commentId = result[0].id;
-
-      const replies = await fetch("/api/reply", {
-        method: "POST",
-        body: JSON.stringify({ commentId }),
-      });
-      const repliesResult = await replies.json();
-      console.log(repliesResult);
+      if (result.length > 0) {
+        setComments(result);
+      }
     } catch (err) {
       console.error("Failed to fetch comments!", err);
+      toast.error("Failed to fetch comments!");
+      // setTimeout(() => {
+      //   // Retry fetching comments after a delay
+      //   toast.info("Trying to fetch comments again...");
+      //   fetchComments(blogId);
+      // }, 2000);
     }
   };
 
-  const [comments, setComments] = useState([
-    {
-      name: "Alice Dev",
-      time: "2 hours ago",
-      text: "Great post! Loved the explanation on React rendering. The section on virtual DOM was especially insightful. I also liked the part about hydration mismatches and real-world use cases of SSR.",
-      replies: [
-        {
-          name: "John JS",
-          time: "1 hour ago",
-          text: "Totally agree! It was very helpful. Learned a lot about React’s SSR hydration behavior!",
-        },
-        {
-          name: "John JS",
-          time: "1 hour ago",
-          text: "Totally agree! It was very helpful. Learned a lot about React’s SSR hydration behavior!",
-        },
-      ],
-    },
-    {
-      name: "Bob Codes",
-      time: "1 day ago",
-      text: "Can you do a deep dive on server actions in Next.js 14? Especially about mutations, optimistic updates, revalidation strategies, and best practices.",
-      replies: [],
-    },
-  ]);
+  const refreshData = async () => {
+    await fetchComments(blogId);
+  };
 
   const handlePost = () => {
     if (!comment.trim()) return;

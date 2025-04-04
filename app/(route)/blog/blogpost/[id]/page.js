@@ -33,8 +33,6 @@ export default function Page() {
     description: "Lorem ipsum dolor sit amet",
   };
 
-  console.log(markdownToHtml(data.htmlFormat));
-
   return (
     <div className="max-w-[95%] mx-auto p-4">
       {/* Main container for flex layout */}
