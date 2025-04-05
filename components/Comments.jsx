@@ -4,6 +4,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FaReply } from "react-icons/fa";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
+import { Button } from "./ui/button";
+import { PenBox, Trash } from "lucide-react";
+import { db } from "@/lib/dbConfig";
+import { Comments, Replies } from "@/lib/schema";
+import { eq } from "drizzle-orm";
 
 // Word limit logic
 const truncateText = (text, wordLimit) => {
@@ -78,6 +83,30 @@ const Comment = ({ blogId }) => {
     setShowFullReply((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
+  const editComment = async (commentId, text) => {
+    const result = await db
+      .update(Comments)
+      .set({
+        text: text,
+        time: new Date().toLocaleString(),
+      })
+      .where(eq(Comments.id, commentId))
+      .returning();
+    if (result) {
+      refreshData();
+      toast.success("Comment edited successfully!");
+    }
+  };
+
+  const deleteComment = async (commentId) => {
+    const delReplies = await db.delete(Replies).where(eq(Replies.commentId, commentId));
+    const delComment = await db.delete(Comments).where(eq(Comments.id, commentId));
+    if (delComment && delReplies) {
+      refreshData();
+      toast.success("Comment deleted successfully!");
+    }
+  };
+
   return (
     <div className="max-w-2xl mx-auto mt-10 p-6 rounded-xl border border-blue-100 bg-gradient-to-br from-blue-50 via-cyan-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 shadow-2xl backdrop-blur-md">
       <h2 className="text-3xl font-bold mb-6 text-slate-800 dark:text-cyan-200 tracking-tight">
@@ -86,8 +115,8 @@ const Comment = ({ blogId }) => {
 
       <div className="flex items-start gap-4 mb-6">
         <Avatar className="h-10 w-10">
-          {/* <AvatarImage src="/avatars/user.png" /> */}
-          <AvatarFallback>U</AvatarFallback>
+          <AvatarImage src={user?.imageUrl} />
+          <AvatarFallback>{user?.fullName.charAt(0)}</AvatarFallback>
         </Avatar>
         <textarea
           value={comment}
@@ -115,20 +144,44 @@ const Comment = ({ blogId }) => {
           >
             <div className="flex gap-3">
               <Avatar>
-                {/* <AvatarImage
-                  src={`/avatars/${comment.name.toLowerCase().replace(" ", "")}.png`}
-                /> */}
                 <AvatarFallback>{comment.name.charAt(0)}</AvatarFallback>
               </Avatar>
               <div className="flex-1">
-                <div className="flex justify-between items-center">
-                  <h4 className="text-md font-semibold text-slate-800 dark:text-white">
-                    {comment.name}
-                  </h4>
-                  <span className="text-xs text-slate-500 dark:text-slate-400">
-                    {comment.time}
-                  </span>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h4 className="text-md font-semibold text-slate-800 dark:text-white">
+                      {comment.name}
+                    </h4>
+                    <span className="text-xs text-slate-500 dark:text-slate-400">
+                      {comment.time}
+                    </span>
+                  </div>
+                  {user?.primaryEmailAddress.emailAddress ===
+                    comment.createdBy && (
+                    <div className="flex gap-1">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="text-blue-600 dark:text-blue-400 hover:underline px-2 py-1"
+                        onClick={() => {
+                          const newText = prompt("Edit your comment:");
+                          editComment(comment.id, newText);
+                        }}
+                      >
+                        <PenBox />
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="text-red-500 dark:text-red-400 hover:underline px-2 py-1"
+                        onClick={() => deleteComment(comment.id)}
+                      >
+                        <Trash />
+                      </Button>
+                    </div>
+                  )}
                 </div>
+
                 <p className="mt-2 text-slate-700 dark:text-slate-300 leading-relaxed">
                   {showFullComment[cIdx]
                     ? comment.text
@@ -136,7 +189,7 @@ const Comment = ({ blogId }) => {
                 </p>
                 {comment.text.split(" ").length > 20 && (
                   <button
-                    onClick={() => toggleShowMoreComment(cIdx)}
+                    onClick={() => toggleShowMore(cIdx)}
                     className="text-sm mt-1 text-blue-600 dark:text-cyan-300 hover:underline"
                   >
                     {showFullComment[cIdx] ? "Show Less" : "Show More"}
@@ -171,9 +224,6 @@ const Comment = ({ blogId }) => {
                         >
                           <div className="flex gap-3">
                             <Avatar>
-                              {/* <AvatarImage
-                                src={`/avatars/${reply.name.toLowerCase().replace(" ", "")}.png`}
-                              /> */}
                               <AvatarFallback>
                                 {reply.name.charAt(0)}
                               </AvatarFallback>
@@ -194,9 +244,7 @@ const Comment = ({ blogId }) => {
                               </p>
                               {reply.text.split(" ").length > 20 && (
                                 <button
-                                  onClick={() =>
-                                    toggleShowMoreReply(cIdx, rIdx)
-                                  }
+                                  onClick={() => toggleShowMore(key, true)}
                                   className="text-xs mt-1 text-blue-600 dark:text-cyan-300 hover:underline"
                                 >
                                   {showFullReply[key]
