@@ -59,13 +59,11 @@ const Comment = ({ blogId }) => {
   };
 
   const handlePost = async () => {
-    console.log("Posting comment:", comment);
     if (!comment) {
       toast.error("Comment cannot be empty!");
       return;
     }
 
-    console.log(blogId);
     const result = await db
       .insert(Comments)
       .values({
@@ -82,19 +80,6 @@ const Comment = ({ blogId }) => {
       setComment("");
       toast.success("Comment posted successfully!");
     }
-  };
-
-  const toggleReplies = (index) => {
-    setShowReplies((prev) => ({ ...prev, [index]: !prev[index] }));
-  };
-
-  const toggleShowMoreComment = (idx) => {
-    setShowFullComment((prev) => ({ ...prev, [idx]: !prev[idx] }));
-  };
-
-  const toggleShowMoreReply = (cIdx, rIdx) => {
-    const key = `${cIdx}-${rIdx}`;
-    setShowFullReply((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
   const editComment = async (commentId, text) => {
@@ -123,6 +108,42 @@ const Comment = ({ blogId }) => {
       refreshData();
       toast.success("Comment deleted successfully!");
     }
+  };
+
+  const handleReplies = async (commentId, text, name, createdBy) => {
+    console.log(commentId, text, name, createdBy);
+    if (!text) {
+      toast.error("Reply cannot be empty!");
+      return;
+    }
+    const result = await db
+      .insert(Replies)
+      .values({
+        commentId: commentId,
+        name: name,
+        createdBy: createdBy,
+        text: text,
+        time: new Date().toLocaleString(),
+      })
+      .returning({ id: Replies.id });
+    if (result) {
+      console.log(result);
+      refreshData();
+      toast.success("Reply posted successfully!");
+    }
+  };
+
+  const toggleReplies = (index) => {
+    setShowReplies((prev) => ({ ...prev, [index]: !prev[index] }));
+  };
+
+  const toggleShowMoreComment = (idx) => {
+    setShowFullComment((prev) => ({ ...prev, [idx]: !prev[idx] }));
+  };
+
+  const toggleShowMoreReply = (cIdx, rIdx) => {
+    const key = `${cIdx}-${rIdx}`;
+    setShowFullReply((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
   return (
@@ -186,7 +207,10 @@ const Comment = ({ blogId }) => {
                         variant="ghost"
                         className="text-blue-600 dark:text-blue-400 hover:underline px-2 py-1"
                         onClick={() => {
-                          const newText = prompt("Edit your comment:");
+                          const newText = prompt(
+                            "Edit your comment:",
+                            comment.text
+                          );
                           editComment(comment.id, newText);
                         }}
                       >
@@ -218,7 +242,22 @@ const Comment = ({ blogId }) => {
                   </button>
                 )}
                 <div className="flex items-center gap-4 mt-3">
-                  <button className="text-sm text-blue-600 dark:text-cyan-300 hover:underline flex items-center gap-1">
+                  <button
+                    className="text-sm text-blue-600 dark:text-cyan-300 hover:underline flex items-center gap-1"
+                    onClick={() => {
+                      const text = prompt("Reply to this comment:");
+                      if (text) {
+                        handleReplies(
+                          comment.id,
+                          text,
+                          user?.fullName,
+                          user?.primaryEmailAddress.emailAddress
+                        );
+                      } else {
+                        toast.error("Reply cannot be empty!");
+                      }
+                    }}
+                  >
                     <FaReply size={14} />
                     Reply
                   </button>
