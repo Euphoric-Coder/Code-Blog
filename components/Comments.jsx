@@ -58,16 +58,30 @@ const Comment = ({ blogId }) => {
     await fetchComments(blogId);
   };
 
-  const handlePost = () => {
-    if (!comment.trim()) return;
-    const newComment = {
-      name: "You",
-      time: "Just now",
-      text: comment,
-      replies: [],
-    };
-    setComments([newComment, ...comments]);
-    setComment("");
+  const handlePost = async () => {
+    console.log("Posting comment:", comment);
+    if (!comment) {
+      toast.error("Comment cannot be empty!");
+      return;
+    }
+
+    console.log(blogId);
+    const result = await db
+      .insert(Comments)
+      .values({
+        blogId: blogId,
+        name: user?.fullName,
+        createdBy: user?.primaryEmailAddress.emailAddress,
+        text: comment,
+        time: new Date().toLocaleString(),
+      })
+      .returning({ id: Comments.id });
+    if (result) {
+      console.log(result);
+      refreshData();
+      setComment("");
+      toast.success("Comment posted successfully!");
+    }
   };
 
   const toggleReplies = (index) => {
@@ -99,8 +113,12 @@ const Comment = ({ blogId }) => {
   };
 
   const deleteComment = async (commentId) => {
-    const delReplies = await db.delete(Replies).where(eq(Replies.commentId, commentId));
-    const delComment = await db.delete(Comments).where(eq(Comments.id, commentId));
+    const delReplies = await db
+      .delete(Replies)
+      .where(eq(Replies.commentId, commentId));
+    const delComment = await db
+      .delete(Comments)
+      .where(eq(Comments.id, commentId));
     if (delComment && delReplies) {
       refreshData();
       toast.success("Comment deleted successfully!");
@@ -108,15 +126,18 @@ const Comment = ({ blogId }) => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-10 p-6 rounded-xl border border-blue-100 bg-gradient-to-br from-blue-50 via-cyan-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 shadow-2xl backdrop-blur-md">
-      <h2 className="text-3xl font-bold mb-6 text-slate-800 dark:text-cyan-200 tracking-tight">
+    <div
+      id="comments"
+      className="sm:max-w-4xl md:max-w-6xl lg:max-w-7xl xl:max-w-9xl mx-auto mt-10 mb-10 p-6 rounded-xl border border-blue-100 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 shadow-lg backdrop-blur-md"
+    >
+      <h2 className="lg:text-4xl md:text-3xl text-xl font-bold mb-6 text-slate-800 dark:text-cyan-200 tracking-tight">
         💬 Share Your Thoughts
       </h2>
 
       <div className="flex items-start gap-4 mb-6">
         <Avatar className="h-10 w-10">
           <AvatarImage src={user?.imageUrl} />
-          <AvatarFallback>{user?.fullName.charAt(0)}</AvatarFallback>
+          <AvatarFallback>T</AvatarFallback>
         </Avatar>
         <textarea
           value={comment}
@@ -144,6 +165,7 @@ const Comment = ({ blogId }) => {
           >
             <div className="flex gap-3">
               <Avatar>
+                <AvatarImage src={comment?.name.imgURL} />
                 <AvatarFallback>{comment.name.charAt(0)}</AvatarFallback>
               </Avatar>
               <div className="flex-1">

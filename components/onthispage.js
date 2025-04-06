@@ -127,6 +127,16 @@ const OnThisPage = ({ htmlContent }) => {
                     </a>
                   </li>
                 ))}
+                <li>
+                  <a
+                    href={`#comments`}
+                    className="block py-1 text-gray-500 hover:text-purple-600"
+                  >
+                    {/* This should be the ID of your comments section */}
+                    {/* Replace with the actual ID of your comments section */}
+                    View Blog Comments
+                  </a>
+                </li>
               </ul>
             )}
           </div>
