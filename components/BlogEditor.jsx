@@ -1,6 +1,11 @@
 "use client";
 
-import { useEditor, EditorContent, ReactNodeViewRenderer } from "@tiptap/react";
+import {
+  useEditor,
+  EditorContent,
+  ReactNodeViewRenderer,
+  textInputRule,
+} from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
@@ -19,7 +24,7 @@ import TurndownService from "turndown";
 import { common, createLowlight } from "lowlight";
 const lowlight = createLowlight(common);
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CodeBlockComponent from "./CodeComponent";
 import {
   Tooltip,
@@ -51,9 +56,17 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useUser } from "@clerk/nextjs";
 import { v4 as uuid } from "uuid";
-import { PenBox, Send, Trash, Trash2 } from "lucide-react";
+import {
+  AlertCircle,
+  PenBox,
+  Send,
+  Trash,
+  Trash2,
+  XCircle,
+} from "lucide-react";
 import ImageUpload from "./ImageUpload";
 import { Label } from "./ui/label";
+import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 
 const MenuBar = ({ editor }) => {
   const [open, setOpen] = useState(false);
@@ -273,7 +286,27 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
   const [content, setContent] = useState("");
   const [uploadData, setUploadData] = useState(null);
   const [fileId, setFileId] = useState(null);
+  const [unfinishedBlog, setUnfinishedBlog] = useState(false);
   const { user } = useUser();
+
+  // Generate a unique key for current blog's pending content
+  const storageKey = `pendingBlogData`;
+
+  useEffect(() => {
+    const storedBlogData = JSON.parse(localStorage.getItem(storageKey) || "{}");
+    console.log("Stored blog data:", storedBlogData);
+    if (storedBlogData.title || storedBlogData.content) {
+      setTitle(storedBlogData.title || "");
+      setUploadData(storedBlogData.uploadData || "");
+      setFileId(storedBlogData.fileId || "");
+      setContent(storedBlogData.content || "");
+      console.log(
+        "Unfinished blog data found in local storage:",
+        storedBlogData
+      );
+      setUnfinishedBlog(true);
+    }
+  }, []); // Only re-run when budgetId changes
 
   const editor = useEditor({
     extensions: [
@@ -391,8 +424,66 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
     });
   };
 
+  const handleInputChange = (field, value) => {
+    console.log(`Field: ${field}, Value: ${value}`);
+    const updatedBlogData = {
+      title: field === "title" ? value : title,
+      fileId: field === "fileId" ? value : fileId,
+      uploadData: field === "uploadData" ? value : uploadData,
+      content: field === "content" ? value : content,
+    };
+    console.log("Updated blog data:", updatedBlogData);
+    localStorage.setItem(storageKey, JSON.stringify(updatedBlogData));
+  };
+
+  const clearData = () => {
+    localStorage.removeItem(storageKey);
+    setTitle("");
+    setContent("");
+    setUploadData(null);
+    setFileId(null);
+    setUnfinishedBlog(false);
+  };
+
+  const removePendingBlogData = () => {
+    localStorage.removeItem(storageKey);
+    setTitle("");
+    setContent("");
+    setUploadData(null);
+    setFileId(null);
+    setUnfinishedBlog(false);
+  };
+
   return (
     <div className="p-8">
+      {/* Pending Expense Alert */}
+      {unfinishedBlog && (
+        <Alert
+          variant="warning"
+          className="mt-6 mb-5 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 border border-yellow-400 dark:border-gray-600 shadow-lg p-4 rounded-xl flex items-center hover:shadow-xl transition-transform transform hover:scale-[1.02]"
+        >
+          <AlertCircle className="h-5 w-5 text-yellow-600 dark:text-yellow-400 mr-3" />
+          <div>
+            <AlertTitle className="text-yellow-700 dark:text-yellow-300 font-bold">
+              Pending Expense
+            </AlertTitle>
+            <AlertDescription className="text-yellow-600 dark:text-yellow-400">
+              You have an unfinished expense: "
+              <b>{title ? title : "Untitled"}</b>". Would you like to continue?
+            </AlertDescription>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            className="ml-auto"
+            onClick={removePendingBlogData}
+          >
+            <XCircle className="h-4 w-4 mr-1" />
+            Dismiss
+          </Button>
+        </Alert>
+      )}
+
       <div className="w-full bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-[#111827] dark:via-[#0f172a] dark:to-[#1e1b4b] rounded-2xl p-6 shadow-md mb-8 transition-all duration-300">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           {/* Title & subtitle */}
@@ -414,6 +505,9 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
             <button
               // onClick={handleClear}
               className="px-4 py-2 flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-[#1b1b1b] border border-gray-300 dark:border-gray-700 rounded-xl shadow-sm hover:bg-gray-200 dark:hover:bg-[#2a2a2a] transition-all"
+              onClick={() => {
+                clearData;
+              }}
             >
               <Trash2 />
               Clear
@@ -450,7 +544,10 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
         placeholder="Blog Title"
         className="w-full mt-3 p-2 mb-4 border rounded dark:bg-slate-800 dark:text-white dark:border-slate-600"
         value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        onChange={(e) => {
+          setTitle(e.target.value);
+          handleInputChange("title", e.target.value);
+        }}
       />
       <ImageUpload
         uploadData={uploadData}
