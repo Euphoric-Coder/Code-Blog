@@ -294,7 +294,6 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
 
   useEffect(() => {
     const storedBlogData = JSON.parse(localStorage.getItem(storageKey) || "{}");
-    console.log("Stored blog data:", storedBlogData);
     if (storedBlogData.title || storedBlogData.content) {
       setTitle(storedBlogData.title || "");
       setUploadData(storedBlogData.uploadData || "");
@@ -304,6 +303,7 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
         "Unfinished blog data found in local storage:",
         storedBlogData
       );
+      console.log(storedBlogData.content)
       setUnfinishedBlog(true);
     }
   }, []); // Only re-run when budgetId changes
@@ -328,6 +328,12 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
       }).configure({ lowlight }),
     ],
     content: initialContent,
+    onCreate({ editor }) {
+      // The editor is ready.
+      if (content && unfinishedBlog) {
+        editor.commands.setContent(content, false); // false = no history entry
+      }
+    },
     editorProps: {
       attributes: {
         class:
@@ -336,6 +342,7 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
     },
     onUpdate: ({ editor }) => {
       setContent(editor.getHTML());
+      handleInputChange("content", editor.getHTML());
     },
   });
 
@@ -424,12 +431,25 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
     });
   };
 
+  const deleteFile = async (fileId) => {
+    if (!fileId) return;
+    try {
+      await fetch("/api/delete-image", {
+        method: "POST",
+        body: JSON.stringify({ fileId }),
+      });
+      console.log("Deleted previous file:", fileId);
+    } catch (err) {
+      console.error("Delete failed", err);
+    }
+  };
+
   const handleInputChange = (field, value) => {
     console.log(`Field: ${field}, Value: ${value}`);
     const updatedBlogData = {
       title: field === "title" ? value : title,
-      fileId: field === "fileId" ? value : fileId,
-      uploadData: field === "uploadData" ? value : uploadData,
+      fileId: field === "coverImage" ? value.fileId : fileId,
+      uploadData: field === "coverImage" ? value.data : uploadData,
       content: field === "content" ? value : content,
     };
     console.log("Updated blog data:", updatedBlogData);
@@ -438,20 +458,24 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
 
   const clearData = () => {
     localStorage.removeItem(storageKey);
+    if (fileId) deleteFile(fileId);
     setTitle("");
     setContent("");
     setUploadData(null);
     setFileId(null);
     setUnfinishedBlog(false);
+    editor.commands.clearContent();
   };
 
   const removePendingBlogData = () => {
     localStorage.removeItem(storageKey);
+    if (fileId) deleteFile(fileId);
     setTitle("");
     setContent("");
     setUploadData(null);
     setFileId(null);
     setUnfinishedBlog(false);
+    editor.commands.clearContent();
   };
 
   return (
@@ -554,6 +578,7 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
         setUploadData={setUploadData}
         fileId={fileId}
         setFileId={setFileId}
+        handleInputChange={handleInputChange}
       />
 
       <div>

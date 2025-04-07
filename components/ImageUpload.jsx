@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ImageKit from "imagekit-javascript";
 import { FiUploadCloud } from "react-icons/fi";
 import { Button } from "./ui/button";
@@ -63,10 +63,22 @@ export default function ImageUpload({
   setUploadData,
   fileId,
   setFileId,
+  handleInputChange,
 }) {
   const inputRef = useRef(null);
   const [progress, setProgress] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
+
+  useEffect(() => {
+    // Whenever uploadData or fileId changes, we call handleInputChange
+    // Only call if both are defined, or tweak the logic as needed
+    if (uploadData && fileId) {
+      handleInputChange("coverImage", {
+        data: uploadData,
+        fileId: fileId,
+      });
+    }
+  }, [uploadData, fileId, handleInputChange]);
 
   const handleUpload = async (file) => {
     if (!file?.type.startsWith("image/")) {
