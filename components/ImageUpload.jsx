@@ -125,7 +125,7 @@ export default function ImageUpload({
   };
 
   return (
-    <div className="mt-2 mb-10">
+    <div className="mt-2 mb-5">
       {!uploadData ? (
         <>
           <label

@@ -571,23 +571,25 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
           </div>
         </div>
       </div>
-      <Label
-        htmlFor="blog-title"
-        className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
-      >
-        Blog Title
-      </Label>
-      <input
-        type="text"
-        id="blog-title"
-        placeholder="Blog Title"
-        className="w-full mt-3 p-2 mb-4 border rounded dark:bg-slate-800 dark:text-white dark:border-slate-600"
-        value={title}
-        onChange={(e) => {
-          setTitle(e.target.value);
-          handleInputChange("title", e.target.value);
-        }}
-      />
+      <div>
+        <Label
+          htmlFor="blog-title"
+          className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
+        >
+          Blog Title
+        </Label>
+        <Input
+          type="text"
+          id="blog-title"
+          placeholder="Blog Title"
+          className="w-full mt-3 p-2 mb-4 border rounded dark:bg-slate-800 dark:text-white dark:border-slate-600"
+          value={title}
+          onChange={(e) => {
+            setTitle(e.target.value);
+            handleInputChange("title", e.target.value);
+          }}
+        />
+      </div>
       <ImageUpload
         uploadData={uploadData}
         setUploadData={setUploadData}
@@ -597,8 +599,13 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
       />
 
       {/* Categories  */}
-      <div className="mt-1">
-        <h2 className="blog-text1">Category</h2>
+      <div className="mt-1 space-y-4 mb-10">
+        <Label
+          htmlFor="blog-category"
+          className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
+        >
+          Blog Title
+        </Label>
         <Select
           value={category.toLowerCase()}
           onValueChange={(e) => {
@@ -606,7 +613,10 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
             setSelectedSubCategories("");
           }}
         >
-          <SelectTrigger className="blog-select-field focus:ring-cyan-400 dark:focus:ring-blue-400 focus:ring-[3px]">
+          <SelectTrigger
+            id="blog-category"
+            className="blog-select-field focus:ring-cyan-400 dark:focus:ring-blue-400 focus:ring-[3px]"
+          >
             <SelectValue />
           </SelectTrigger>
           <SelectContent className="blog-select-content mt-2">
@@ -623,50 +633,54 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
             </ScrollArea>
           </SelectContent>
         </Select>
-      </div>
 
-      {/* Sub-Categories (Only Show When Category is Selected) */}
-      {category && blogSubCategoriesList[category.toLowerCase()] && (
-        <div
-          className="relative max-h-[200px] mt-2 overflow-y-auto 
+        {/* Sub-Categories (Only Show When Category is Selected) */}
+        {category && blogSubCategoriesList[category.toLowerCase()] && (
+          <div
+            className="relative max-h-[200px] mt-2 overflow-y-auto 
         p-3 shadow-sm rounded-xl border 
         bg-gradient-to-r from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-900
         border-blue-300 dark:border-blue-500 transition-all"
-        >
-          <div className="flex items-center justify-between">
-            {/* Title & Selected Badge */}
-            <div className="flex items-center gap-2">
-              <label className="blog-text1">
-                Sub-Categories (
-                {new Set(blogSubCategoriesList[category.toLowerCase()] || []).size})
-              </label>
+          >
+            <div className="flex items-center justify-between">
+              {/* Title & Selected Badge */}
+              <div className="flex items-center gap-2">
+                <label className="blog-text1">
+                  Sub-Categories (
+                  {
+                    new Set(blogSubCategoriesList[category.toLowerCase()] || [])
+                      .size
+                  }
+                  )
+                </label>
 
-              {/* Show Selected Count Badge */}
-              {selectedCount > 0 && (
-                <Badge className="border-0 bg-gradient-to-r from-green-400 to-green-600 text-white px-2 py-1 rounded-full text-xs dark:from-green-500 dark:to-green-700 ">
-                  Selected: {selectedCount}
-                </Badge>
-              )}
+                {/* Show Selected Count Badge */}
+                {selectedCount > 0 && (
+                  <Badge className="border-0 bg-gradient-to-r from-green-400 to-green-600 text-white px-2 py-1 rounded-full text-xs dark:from-green-500 dark:to-green-700 ">
+                    Selected: {selectedCount}
+                  </Badge>
+                )}
+              </div>
+              <div>
+                {/* Clear Button */}
+                {selectedCount > 0 && (
+                  <Button
+                    variant="outline"
+                    onClick={() => setSelectedSubCategories("")}
+                    className="text-sm rounded-full text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-500 dark:border-gray-300"
+                    size="sm"
+                  >
+                    Clear Selection
+                  </Button>
+                )}
+              </div>
             </div>
-            <div>
-              {/* Clear Button */}
-              {selectedCount > 0 && (
-                <Button
-                  variant="outline"
-                  onClick={() => setSelectedSubCategories("")}
-                  className="text-sm rounded-full text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-500 dark:border-gray-300"
-                  size="sm"
-                >
-                  Clear Selection
-                </Button>
-              )}
-            </div>
-          </div>
 
-          {/* Subcategories List */}
-          <div className="flex flex-wrap gap-2 mt-3">
-            {[...new Set(blogSubCategoriesList[category.toLowerCase()] || [])].map(
-              (subCategory) => {
+            {/* Subcategories List */}
+            <div className="flex flex-wrap gap-2 mt-3">
+              {[
+                ...new Set(blogSubCategoriesList[category.toLowerCase()] || []),
+              ].map((subCategory) => {
                 const lowerSubCategory = subCategory.toLowerCase();
                 const isSelected =
                   selectedSubCategories.includes(lowerSubCategory);
@@ -699,18 +713,25 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
                     {subCategory}
                   </Badge>
                 );
-              }
-            )}
+              })}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
-      <div>
-        <MenuBar editor={editor} />
-        <EditorContent
-          editor={editor}
-          className="overflow-y-auto max-h-[1000px]"
-        />
+      <div className="space-y-5">
+        <Label
+          className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
+        >
+          Blog Editor
+        </Label>
+        <div>
+          <MenuBar editor={editor} />
+          <EditorContent
+            editor={editor}
+            className="overflow-y-auto max-h-[1000px]"
+          />
+        </div>
       </div>
 
       {editing ? (
