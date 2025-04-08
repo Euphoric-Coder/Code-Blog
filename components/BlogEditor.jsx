@@ -67,6 +67,16 @@ import {
 import ImageUpload from "./ImageUpload";
 import { Label } from "./ui/label";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { blogCategories, blogSubCategoriesList } from "@/lib/data";
+import { Badge } from "./ui/badge";
 
 const MenuBar = ({ editor }) => {
   const [open, setOpen] = useState(false);
@@ -287,6 +297,11 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
   const [uploadData, setUploadData] = useState(null);
   const [fileId, setFileId] = useState(null);
   const [unfinishedBlog, setUnfinishedBlog] = useState(false);
+  const [category, setCategory] = useState(blogCategories[0]);
+  const [selectedSubCategories, setSelectedSubCategories] = useState("");
+  const selectedCount = selectedSubCategories
+    ? selectedSubCategories.split(", ").length
+    : 0;
   const { user } = useUser();
 
   // Generate a unique key for current blog's pending content
@@ -303,7 +318,7 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
         "Unfinished blog data found in local storage:",
         storedBlogData
       );
-      console.log(storedBlogData.content)
+      console.log(storedBlogData.content);
       setUnfinishedBlog(true);
     }
   }, []); // Only re-run when budgetId changes
@@ -580,6 +595,115 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
         setFileId={setFileId}
         handleInputChange={handleInputChange}
       />
+
+      {/* Categories  */}
+      <div className="mt-1">
+        <h2 className="blog-text1">Category</h2>
+        <Select
+          value={category.toLowerCase()}
+          onValueChange={(e) => {
+            setCategory(e);
+            setSelectedSubCategories("");
+          }}
+        >
+          <SelectTrigger className="blog-select-field focus:ring-cyan-400 dark:focus:ring-blue-400 focus:ring-[3px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent className="blog-select-content mt-2">
+            <ScrollArea className="max-h-60 overflow-auto">
+              {blogCategories.map((category, index) => (
+                <SelectItem
+                  key={index}
+                  value={category.toLowerCase()}
+                  className="blog-select-item"
+                >
+                  {category}
+                </SelectItem>
+              ))}
+            </ScrollArea>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Sub-Categories (Only Show When Category is Selected) */}
+      {category && blogSubCategoriesList[category.toLowerCase()] && (
+        <div
+          className="relative max-h-[200px] mt-2 overflow-y-auto 
+        p-3 shadow-sm rounded-xl border 
+        bg-gradient-to-r from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-900
+        border-blue-300 dark:border-blue-500 transition-all"
+        >
+          <div className="flex items-center justify-between">
+            {/* Title & Selected Badge */}
+            <div className="flex items-center gap-2">
+              <label className="blog-text1">
+                Sub-Categories (
+                {new Set(blogSubCategoriesList[category.toLowerCase()] || []).size})
+              </label>
+
+              {/* Show Selected Count Badge */}
+              {selectedCount > 0 && (
+                <Badge className="border-0 bg-gradient-to-r from-green-400 to-green-600 text-white px-2 py-1 rounded-full text-xs dark:from-green-500 dark:to-green-700 ">
+                  Selected: {selectedCount}
+                </Badge>
+              )}
+            </div>
+            <div>
+              {/* Clear Button */}
+              {selectedCount > 0 && (
+                <Button
+                  variant="outline"
+                  onClick={() => setSelectedSubCategories("")}
+                  className="text-sm rounded-full text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-500 dark:border-gray-300"
+                  size="sm"
+                >
+                  Clear Selection
+                </Button>
+              )}
+            </div>
+          </div>
+
+          {/* Subcategories List */}
+          <div className="flex flex-wrap gap-2 mt-3">
+            {[...new Set(blogSubCategoriesList[category.toLowerCase()] || [])].map(
+              (subCategory) => {
+                const lowerSubCategory = subCategory.toLowerCase();
+                const isSelected =
+                  selectedSubCategories.includes(lowerSubCategory);
+
+                return (
+                  <Badge
+                    key={subCategory}
+                    onClick={() => {
+                      setSelectedSubCategories((prev) => {
+                        let subCategoriesArray = prev ? prev.split(", ") : [];
+
+                        if (isSelected) {
+                          subCategoriesArray = subCategoriesArray.filter(
+                            (c) => c !== lowerSubCategory
+                          );
+                        } else {
+                          subCategoriesArray.push(lowerSubCategory);
+                        }
+
+                        return subCategoriesArray.join(", ");
+                      });
+                    }}
+                    className={`border-0 rounded-full text-sm cursor-pointer px-3 py-1 transition-all
+                  ${
+                    isSelected
+                      ? "bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                  }`}
+                  >
+                    {subCategory}
+                  </Badge>
+                );
+              }
+            )}
+          </div>
+        </div>
+      )}
 
       <div>
         <MenuBar editor={editor} />
