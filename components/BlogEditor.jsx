@@ -313,7 +313,9 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
       setTitle(storedBlogData.title || "");
       setUploadData(storedBlogData.uploadData || "");
       setFileId(storedBlogData.fileId || "");
-      setContent(storedBlogData.content || "");
+      setContent(storedBlogData.content === "<p></p>"? "" : storedBlogData.content || "");
+      setCategory(storedBlogData.category || blogCategories[0]);
+      setSelectedSubCategories(storedBlogData.subcategories || "");
       console.log(
         "Unfinished blog data found in local storage:",
         storedBlogData
@@ -394,11 +396,12 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
     console.log({
       id: `${slug}--${uuid()}`,
       title: title,
+      blogImage: uploadData?.url,
       mdFormat: markdown,
       htmlFormat: content,
       author: user?.fullName,
-      categories: "Programming",
-      subCategories: "React, Javascript",
+      categories: category,
+      subCategories: selectedSubCategories,
       date: new Date().toISOString(),
       createdBy: user?.primaryEmailAddress.emailAddress,
     });
@@ -466,6 +469,8 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
       fileId: field === "coverImage" ? value.fileId : fileId,
       uploadData: field === "coverImage" ? value.data : uploadData,
       content: field === "content" ? value : content,
+      category: field === "category" ? value : category,
+      subcategories: field === "subcategories" ? value : selectedSubCategories,
     };
     console.log("Updated blog data:", updatedBlogData);
     localStorage.setItem(storageKey, JSON.stringify(updatedBlogData));
@@ -611,6 +616,8 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
           onValueChange={(e) => {
             setCategory(e);
             setSelectedSubCategories("");
+            handleInputChange("category", e); // <- Add this
+            handleInputChange("subcategories", ""); // Reset subcategories too
           }}
         >
           <SelectTrigger
@@ -666,7 +673,10 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
                 {selectedCount > 0 && (
                   <Button
                     variant="outline"
-                    onClick={() => setSelectedSubCategories("")}
+                    onClick={() => {
+                      setSelectedSubCategories("");
+                      handleInputChange("subcategories", ""); // <- Clear in localStorage too
+                    }}
                     className="text-sm rounded-full text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-500 dark:border-gray-300"
                     size="sm"
                   >
@@ -700,7 +710,9 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
                           subCategoriesArray.push(lowerSubCategory);
                         }
 
-                        return subCategoriesArray.join(", ");
+                        const updatedValue = subCategoriesArray.join(", ");
+                        handleInputChange("subcategories", updatedValue); // <- Track this change
+                        return updatedValue;
                       });
                     }}
                     className={`border-0 rounded-full text-sm cursor-pointer px-3 py-1 transition-all
@@ -720,9 +732,7 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
       </div>
 
       <div className="space-y-5">
-        <Label
-          className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
-        >
+        <Label className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105">
           Blog Editor
         </Label>
         <div>
