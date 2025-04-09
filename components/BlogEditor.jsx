@@ -77,6 +77,8 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { blogCategories, blogSubCategoriesList } from "@/lib/data";
 import { Badge } from "./ui/badge";
+import { db } from "@/lib/dbConfig";
+import { Blogs } from "@/lib/schema";
 
 const MenuBar = ({ editor }) => {
   const [open, setOpen] = useState(false);
@@ -313,17 +315,19 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
       setTitle(storedBlogData.title || "");
       setUploadData(storedBlogData.uploadData || "");
       setFileId(storedBlogData.fileId || "");
-      setContent(storedBlogData.content === "<p></p>"? "" : storedBlogData.content || "");
+      setContent(
+        storedBlogData.content === "<p></p>" ? "" : storedBlogData.content || ""
+      );
       setCategory(storedBlogData.category || blogCategories[0]);
       setSelectedSubCategories(storedBlogData.subcategories || "");
-      console.log(
-        "Unfinished blog data found in local storage:",
-        storedBlogData
-      );
-      console.log(storedBlogData.content);
+      // console.log(
+      //   "Unfinished blog data found in local storage:",
+      //   storedBlogData
+      // );
+      // console.log(storedBlogData.content);
       setUnfinishedBlog(true);
     }
-  }, []); // Only re-run when budgetId changes
+  }, []);
 
   const editor = useEditor({
     extensions: [
@@ -405,6 +409,32 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
       date: new Date().toISOString(),
       createdBy: user?.primaryEmailAddress.emailAddress,
     });
+
+    const addBlog = await db
+      .insert(Blogs)
+      .values({
+        id: `${slug}--${uuid()}`,
+        title: title,
+        blogImage: uploadData?.url,
+        mdFormat: markdown,
+        htmlFormat: content,
+        author: user?.fullName,
+        categories: category,
+        subCategories: selectedSubCategories,
+        date: new Date().toISOString(),
+        createdBy: user?.primaryEmailAddress.emailAddress,
+      })
+      .returning({
+        id: Blogs.id,
+      });
+    console.log("Blog added successfully:", addBlog);
+    if (!addBlog) {
+      toast.error("Failed to add blog");
+      return;
+    } else {
+      clearDataAfterAdding();
+      toast.success("Blog added successfully!");
+    }
   };
 
   const EditBlog = async () => {
@@ -440,12 +470,14 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
     console.log({
       id: `${slug}--${uuid()}`,
       title: title,
+      blogImage: uploadData?.url,
       mdFormat: markdown,
       htmlFormat: content,
       author: user?.fullName,
-      categories: "Programming",
-      subCategories: "React, Javascript",
+      categories: category,
+      subCategories: selectedSubCategories,
       date: new Date().toISOString(),
+      createdBy: user?.primaryEmailAddress.emailAddress,
     });
   };
 
@@ -463,7 +495,6 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
   };
 
   const handleInputChange = (field, value) => {
-    console.log(`Field: ${field}, Value: ${value}`);
     const updatedBlogData = {
       title: field === "title" ? value : title,
       fileId: field === "coverImage" ? value.fileId : fileId,
@@ -472,8 +503,18 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
       category: field === "category" ? value : category,
       subcategories: field === "subcategories" ? value : selectedSubCategories,
     };
-    console.log("Updated blog data:", updatedBlogData);
+    // console.log("Updated blog data:", updatedBlogData);
     localStorage.setItem(storageKey, JSON.stringify(updatedBlogData));
+  };
+
+  const clearDataAfterAdding = () => {
+    localStorage.removeItem(storageKey);
+    setTitle("");
+    setContent("");
+    setUploadData(null);
+    setFileId(null);
+    setUnfinishedBlog(false);
+    editor.commands.clearContent();
   };
 
   const clearData = () => {
