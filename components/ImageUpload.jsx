@@ -95,11 +95,40 @@ export default function ImageUpload({
     await uploadToImageKit(file, setProgress, setUploadData, setFileId);
   };
 
-  const handleDrop = (e) => {
+  // const handleDrop = (e) => {
+  //   e.preventDefault();
+  //   setIsDragging(false);
+  //   const file = e.dataTransfer.files?.[0];
+  //   if (file) handleUpload(file);
+  // };
+
+  const handleDrop = async (e) => {
     e.preventDefault();
     setIsDragging(false);
+
     const file = e.dataTransfer.files?.[0];
-    if (file) handleUpload(file);
+    if (file) {
+      handleUpload(file);
+    } else {
+      // Handle browser drag (e.g. from Chrome)
+      const htmlData = e.dataTransfer.getData("text/html");
+      const urlMatch = htmlData.match(/src\s*=\s*"([^"]+)"/);
+      const imageUrl = urlMatch?.[1];
+
+      if (imageUrl) {
+        try {
+          const res = await fetch(imageUrl);
+          const blob = await res.blob();
+          const fileName =
+            imageUrl.split("/").pop()?.split("?")[0] || "image.jpg";
+          const fileFromUrl = new File([blob], fileName, { type: blob.type });
+          handleUpload(fileFromUrl);
+        } catch (err) {
+          console.error("Failed to fetch image from URL:", err);
+          alert("Could not upload image from browser source");
+        }
+      }
+    }
   };
 
   const handleFileSelect = (e) => {
