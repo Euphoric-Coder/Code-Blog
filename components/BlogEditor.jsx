@@ -552,8 +552,8 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
               Pending Expense
             </AlertTitle>
             <AlertDescription className="text-yellow-600 dark:text-yellow-400">
-              You have an unfinished expense: "
-              <b>{title ? title : "Untitled"}</b>". Would you like to continue?
+              You have an unfinished expense: &quote;
+              <b>{title ? title : "Untitled"}</b>&quote;. Would you like to continue?
             </AlertDescription>
           </div>
           <Button
@@ -580,7 +580,7 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
               creative space.
             </p>
             <p className="text-xs mt-1 italic text-blue-500 dark:text-cyan-400">
-              "Writing is the painting of the voice."
+              &quote;Writing is the painting of the voice.&quote;
             </p>
           </div>
 
