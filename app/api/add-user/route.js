@@ -28,15 +28,15 @@ export async function POST() {
       });
 
       // Send Welcome Email
-      await sendEmail({
-        from: "Code Blog Team <onboarding@resend.dev>",
-        to: email,
-        subject:
-          "Welcome to BudgetEase! 🚀 Ready to Take Control of Your Finances?",
-        react: WelcomeEmail({
-          username: user.firstName.split(" ")[0],
-        }),
-      });
+      // await sendEmail({
+      //   from: "Code Blog Team <onboarding@resend.dev>",
+      //   to: email,
+      //   subject:
+      //     "Welcome to BudgetEase! 🚀 Ready to Take Control of Your Finances?",
+      //   react: WelcomeEmail({
+      //     username: user.firstName.split(" ")[0],
+      //   }),
+      // });
     }
 
     return NextResponse.json({ message: "User initialized successfully" });
