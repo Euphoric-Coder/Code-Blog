@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
-import { db } from "@/utils/dbConfig";
-import { Users } from "@/utils/schema";
 import WelcomeEmail from "@/emails/WelcomeEmail";
 import { sendEmail } from "@/lib/sendEmail";
+import { db } from "@/lib/dbConfig";
+import { Users } from "@/lib/schema";
 
 // Add user to DB
 export async function POST() {
