@@ -1,8 +1,22 @@
+"use client";
+
 import BlogLoader from "@/components/Blog/BlogLoader";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const page = () => {
+  const [blogData, setblogData] = useState([]);
+
+  useEffect(() => {
+    loadBlogs();
+  }, [blogData]);
+
+  const loadBlogs = async () => {
+    const response = await fetch("/api/fetch-blogs/");
+    const data = await response.json();
+    setblogData(data);
+  };
+
   return (
     <main className="relative w-full min-h-screen bg-gradient-to-b from-blue-100 via-white to-blue-100 dark:from-gray-800 dark:via-gray-800 dark:to-blue-950 text-gray-900 dark:text-gray-100 transition-all duration-700">
       {/* Hero Section Heading */}
@@ -110,7 +124,9 @@ const page = () => {
         </div>
       </section>
 
-      <section><BlogLoader /></section>
+      <section>
+        <BlogLoader blogs={blogData}/>
+      </section>
     </main>
   );
 };
