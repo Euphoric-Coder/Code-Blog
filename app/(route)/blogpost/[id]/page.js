@@ -5,6 +5,7 @@ import { markdownToHtml } from "@/components/MarkdownProcessor";
 import OnThisPage from "@/components/onthispage";
 import Comment from "@/components/Comments";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function Page() {
   const blogId = useParams().id;
@@ -44,15 +45,25 @@ export default function Page() {
         <div className="flex flex-col gap-2 w-full">
           {/* Blog Main Content */}
           <div className="w-full">
-            <h1 className="text-4xl font-bold mb-4">{blogData?.title}</h1>
+            <div className="flex justify-center items-center">
+              <Image
+                src={blogData?.blogImage || "/placeholder.png"}
+                alt={blogData?.title || "Blog Cover Image"}
+                width={800}
+                height={400}
+                className="object-contain w-full h-[400px] rounded-lg mb-4"
+                draggable="false"
+              />
+            </div>
+            <h1 className="flex justify-center text-6xl font-bold mb-4">{blogData?.title}</h1>
             <p className="text-base mb-2 border-l-4 border-gray-500 pl-4 italic">
               &quot;{blogData?.description}&quot;
             </p>
-            <div className="flex gap-2 mb-10">
+            <div className="flex justify-between items-center gap-2 mb-10">
               <p className="text-sm text-gray-500 mb-4 italic">
                 By {blogData?.author}
               </p>
-              <p className="text-sm text-gray-500 mb-4">{blogData?.date}</p>
+              <p className="text-sm text-gray-500 mb-4">Updated: {blogData?.date.split("T")[0]}</p>
             </div>
             <div
               dangerouslySetInnerHTML={{ __html: htmlContent }}

@@ -9,7 +9,7 @@ const Page = () => {
 
   useEffect(() => {
     loadBlogs();
-  }, [blogData]);
+  }, []);
 
   const loadBlogs = async () => {
     const response = await fetch("/api/fetch-blogs/");
