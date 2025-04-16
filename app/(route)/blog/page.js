@@ -2,7 +2,7 @@
 
 import BlogLoader from "@/components/Blog/BlogLoader";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const page = () => {
   const [blogData, setblogData] = useState([]);

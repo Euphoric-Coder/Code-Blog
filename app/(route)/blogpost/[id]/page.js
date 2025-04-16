@@ -2,10 +2,9 @@
 
 import { useParams } from "next/navigation";
 import { markdownToHtml } from "@/components/MarkdownProcessor";
-import { useEffect, useState } from "react";
 import OnThisPage from "@/components/onthispage";
 import Comment from "@/components/Comments";
-import BlogHTMLContent from "@/components/Blog/BlogHTMLContent";
+import { useEffect, useState } from "react";
 
 export default function Page() {
   const blogId = useParams().id;
@@ -55,8 +54,10 @@ export default function Page() {
               </p>
               <p className="text-sm text-gray-500 mb-4">{blogData?.date}</p>
             </div>
-            <BlogHTMLContent mdContent={blogData?.mdFormat}/>
-            {blogData?.mdFormat}
+            <div
+              dangerouslySetInnerHTML={{ __html: htmlContent }}
+              className="prose prose-lg dark:prose-invert max-w-none mb-10"
+            ></div>
           </div>
 
           {/* Comment Component - sticky on large screens */}
