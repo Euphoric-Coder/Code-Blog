@@ -4,7 +4,7 @@ import BlogLoader from "@/components/Blog/BlogLoader";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-const page = () => {
+const Page = () => {
   const [blogData, setblogData] = useState([]);
 
   useEffect(() => {
@@ -75,7 +75,7 @@ const page = () => {
           {/* Illustration Section */}
           <div className="lg:w-2/5 flex justify-center items-center">
             <Image
-              src="/blog-page.png"
+              src="/blog-Page.png"
               alt="Blog Illustration"
               width={400}
               height={400}
@@ -125,10 +125,10 @@ const page = () => {
       </section>
 
       <section>
-        <BlogLoader blogs={blogData}/>
+        <BlogLoader blogs={blogData} />
       </section>
     </main>
   );
 };
 
-export default page;
+export default Page;
