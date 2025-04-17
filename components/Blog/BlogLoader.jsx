@@ -24,6 +24,8 @@ import { CalendarIcon, Filter } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { blogCategories, blogSubCategoriesList } from "@/lib/data";
 import { Badge } from "../ui/badge";
+import { toast } from "sonner";
+import { format } from "date-fns";
 
 const BlogLoader = ({ blogs }) => {
   // Function to format date consistently using Intl.DateTimeFormat with error handling
@@ -82,9 +84,9 @@ const BlogLoader = ({ blogs }) => {
 
       const matchesDateRange =
         (!filtersToApply.dateRange.from ||
-          bg.createdAt.split(" ")[0] >= filtersToApply.dateRange.from) &&
+          bg.date.split(" ")[0] >= filtersToApply.dateRange.from) &&
         (!filtersToApply.dateRange.to ||
-          bg.createdAt.split(" ")[0] <= filtersToApply.dateRange.to);
+          bg.date.split(" ")[0] <= filtersToApply.dateRange.to);
 
       return matchesSearch && matchesCategory && matchesDateRange;
     });
@@ -120,9 +122,9 @@ const BlogLoader = ({ blogs }) => {
 
       const matchesDateRange =
         (!tempFilters.dateRange.from ||
-          bg.createdAt.split(" ")[0] >= tempFilters.dateRange.from) &&
+          bg.date.split(" ")[0] >= tempFilters.dateRange.from) &&
         (!tempFilters.dateRange.to ||
-          bg.createdAt.split(" ")[0] <= tempFilters.dateRange.to);
+          bg.date.split(" ")[0] <= tempFilters.dateRange.to);
 
       return (matchesCategory && matchesSubCategory && matchesDateRange);
     });
@@ -170,7 +172,7 @@ const BlogLoader = ({ blogs }) => {
   return (
     <div>
       {/* Search Bar & Filter Button */}
-      <div className="flex justify-center mb-6 gap-4 items-center pt-3">
+      <div className="flex justify-center mb-6 gap-4 items-center pt-3 px-6">
         <div className="relative max-w-3xl w-full">
           <Input
             type="text"
@@ -204,7 +206,7 @@ const BlogLoader = ({ blogs }) => {
                 {filterCount > 0 ? `Filters (${filterCount})` : "Filter"}
               </Button>
             </DialogTrigger>
-            <DialogContent className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-br from-white via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-8 rounded-3xl shadow-[0_0_40px_rgba(0,200,255,0.3)] w-[95%] max-w-lg max-h-[80vh] md:max-h-[90vh] overflow-y-auto">
+            <DialogContent className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-br from-white via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-8 rounded-3xl shadow-[0_0_40px_rgba(0,200,255,0.3)] w-[95%] max-w-2xl max-h-[80vh] md:max-h-[90vh] overflow-y-auto">
               {/* Background Effects */}
               <div className="absolute inset-0 pointer-events-none">
                 <div className="absolute -top-10 -left-10 w-60 h-60 bg-gradient-radial from-purple-400 via-blue-400 to-transparent dark:from-indigo-800 dark:via-blue-800 dark:to-gray-800 opacity-25 blur-3xl animate-spin-slow"></div>
@@ -224,17 +226,17 @@ const BlogLoader = ({ blogs }) => {
               <div className="space-y-6">
                 {/* Date Range */}
                 <div>
-                  <label className="budg-text1">
-                    Budget Creation Date Range
+                  <label className="blog-text1">
+                    Blog Creation Date Range
                   </label>
                   <div className="mt-2">
-                    <Popover>
+                    <Popover modal>
                       <PopoverTrigger asChild>
                         <Button
                           id="date"
                           variant="outline"
                           className={cn(
-                            "budg-select-field justify-start",
+                            "blog-select-field justify-start",
                             !tempFilters.dateRange.from &&
                               "text-muted-foreground"
                           )}
