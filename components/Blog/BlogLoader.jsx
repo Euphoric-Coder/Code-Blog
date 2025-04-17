@@ -1,6 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useMemo, useState } from "react";
 
 const BlogLoader = ({ blogs }) => {
   // Function to format date consistently using Intl.DateTimeFormat with error handling
@@ -16,9 +18,127 @@ const BlogLoader = ({ blogs }) => {
     }).format(date);
   };
 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [tempFilters, setTempFilters] = useState({
+    categories: [],
+    subCategories: [],
+    dateRange: { from: "", to: "" },
+  });
+  const selectedCategoryCount = tempFilters.categories
+    ? tempFilters.categories.length
+    : 0;
+  const selectedSubCategoryCount = tempFilters.subCategories
+    ? tempFilters.subCategories.length
+    : 0;
+  const [appliedFilters, setAppliedFilters] = useState({ ...tempFilters });
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const isSearchActive = searchTerm !== ""; // Check if there is text in the search bar
+
+  const filterCount = useMemo(() => {
+    let count = 0;
+    count += tempFilters.categories.length;
+    count += tempFilters.subCategories.length;
+    if (tempFilters.dateRange.from) count += 1;
+    if (tempFilters.dateRange.to) count += 1;
+    return count;
+  }, [tempFilters]);
+
+  const filteredTransactions = useMemo(() => {
+    return blogs.filter((bg) => {
+      const filtersToApply = appliedFilters;
+
+      const matchesSearch =
+        bg.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        bg.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        bg.subCategories.toString().includes(searchTerm.toLowerCase()) ||
+        bg.categories.includes(searchTerm.toLowerCase()) ||
+        bg.author.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesCategory =
+        filtersToApply.categories.length === 0 ||
+        filtersToApply.categories.includes(bg.categories.toLowerCase());
+
+      const matchesDateRange =
+        (!filtersToApply.dateRange.from ||
+          bg.createdAt.split(" ")[0] >= filtersToApply.dateRange.from) &&
+        (!filtersToApply.dateRange.to ||
+          bg.createdAt.split(" ")[0] <= filtersToApply.dateRange.to);
+
+      return matchesSearch && matchesCategory && matchesDateRange;
+    });
+  }, [searchTerm, appliedFilters, blogs]);
+
+  const previewedTransactions = useMemo(() => {
+    return blogs.filter((bg) => {
+      const matchesCategory =
+        tempFilters.categories.length === 0 ||
+        tempFilters.categories.includes(bg.categories.toLowerCase());
+
+      const transactionSubCategories = bg.subCategory
+        ? bg.subCategory.split(",").map((sub) => sub.trim()) // Convert to array and trim spaces
+        : [];
+
+      const matchesSubCategory =
+        tempFilters.subCategories.length === 0 ||
+        transactionSubCategories.some((sub) =>
+          tempFilters.subCategories.includes(sub)
+        );
+
+      const matchesDateRange =
+        (!tempFilters.dateRange.from ||
+          bg.createdAt.split(" ")[0] >= tempFilters.dateRange.from) &&
+        (!tempFilters.dateRange.to ||
+          bg.createdAt.split(" ")[0] <= tempFilters.dateRange.to);
+
+      return matchesCategory && matchesSubCategory && matchesDateRange;
+    });
+  }, [tempFilters, blogs]);
+
+  const applyFilters = () => {
+    setAppliedFilters({ ...tempFilters });
+    setIsDialogOpen(false); // Close the dialog
+  };
+
+  const clearFilters = () => {
+    setTempFilters(appliedFilters);
+  };
+
+  const resetFilters = () => {
+    setAppliedFilters({
+      categories: [],
+      subCategories: [],
+      dateRange: { from: "", to: "" },
+    });
+    setTempFilters({
+      categories: [],
+      subCategories: [],
+      dateRange: { from: "", to: "" },
+    });
+
+    toast.success("Filters have been successfully reset to default!");
+  };
+
+  const handleDialogClose = (isOpen) => {
+    if (!isOpen) {
+      setTempFilters({ ...appliedFilters }); // Reset temp filters to applied filters when dialog is closed
+    }
+    setIsDialogOpen(isOpen); // Track dialog state
+  };
+
+  const displayedBlogs = isDialogOpen
+    ? previewedTransactions
+    : filteredTransactions;
+
+  const hasActiveFilters =
+    appliedFilters.categories.length > 0 ||
+    (appliedFilters.dateRange.from &&
+      appliedFilters.dateRange.from.trim() !== "") ||
+    (appliedFilters.dateRange.to && appliedFilters.dateRange.to.trim() !== "");
+
   return (
     <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 px-4 py-10">
-      {blogs.map((blog, index) => (
+      {displayedBlogs.map((blog, index) => (
         <Link href={`/blogpost/${blog.id}`} key={index}>
           <div className="relative max-w-sm mx-auto lg:max-w-md rounded-3xl shadow-xl hover:shadow-2xl transform transition-all duration-500 hover:scale-[1.03] bg-gradient-to-br from-blue-400 via-white to-blue-200 dark:from-gray-800 dark:via-gray-900 dark:to-black text-gray-900 dark:text-gray-100 cursor-pointer overflow-hidden">
             {/* Image Section */}
