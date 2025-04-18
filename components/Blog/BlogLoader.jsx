@@ -43,6 +43,7 @@ const BlogLoader = ({ blogs }) => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [tempFilters, setTempFilters] = useState({
+    authors: [],
     categories: [],
     subCategories: [],
     dateRange: { from: "", to: "" },
@@ -54,6 +55,10 @@ const BlogLoader = ({ blogs }) => {
   const selectedSubCategoryCount = tempFilters.subCategories
     ? tempFilters.subCategories.length
     : 0;
+  const selectedAuthorCount = tempFilters.authors
+    ? tempFilters.authors.length
+    : 0;
+  const blogAuthors = [...new Set(blogs.map((blog) => blog.author))];
   const [appliedFilters, setAppliedFilters] = useState({ ...tempFilters });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -61,6 +66,7 @@ const BlogLoader = ({ blogs }) => {
 
   const filterCount = useMemo(() => {
     let count = 0;
+    count += tempFilters.authors.length;
     count += tempFilters.categories.length;
     count += tempFilters.subCategories.length;
     if (tempFilters.dateRange.from) count += 1;
@@ -100,11 +106,16 @@ const BlogLoader = ({ blogs }) => {
         (!filtersToApply.dateRange.to ||
           bg.date.split(" ")[0] <= filtersToApply.dateRange.to);
 
+      const matchesAuthor =
+        filtersToApply.authors.length === 0 || // Check if no authors are selected
+        filtersToApply.authors.includes(bg.author.toLowerCase());
+
       return (
         matchesSearch &&
         matchesCategory &&
         matchesSubCategory &&
-        matchesDateRange
+        matchesDateRange &&
+        matchesAuthor
       );
     });
 
@@ -132,13 +143,22 @@ const BlogLoader = ({ blogs }) => {
           tempFilters.subCategories.includes(sub)
         );
 
+      const matchesAuthor =
+        tempFilters.authors.length === 0 || // Check if no authors are selected
+        tempFilters.authors.includes(bg.author.toLowerCase());
+
       const matchesDateRange =
         (!tempFilters.dateRange.from ||
           bg.createdAt.split(" ")[0] >= tempFilters.dateRange.from) &&
         (!tempFilters.dateRange.to ||
           bg.createdAt.split(" ")[0] <= tempFilters.dateRange.to);
 
-      return matchesCategory && matchesSubCategory && matchesDateRange;
+      return (
+        matchesCategory &&
+        matchesSubCategory &&
+        matchesDateRange &&
+        matchesAuthor
+      );
     });
 
     // Conditionally sort by oldest
@@ -161,12 +181,14 @@ const BlogLoader = ({ blogs }) => {
 
   const resetFilters = () => {
     setAppliedFilters({
+      authors: [],
       categories: [],
       subCategories: [],
       dateRange: { from: "", to: "" },
       oldestBlog: false,
     });
     setTempFilters({
+      authors: [],
       categories: [],
       subCategories: [],
       dateRange: { from: "", to: "" },
@@ -186,6 +208,7 @@ const BlogLoader = ({ blogs }) => {
   const displayedBlogs = isDialogOpen ? previewedBlogs : filteredBlogs;
 
   const hasActiveFilters =
+    appliedFilters.authors.length > 0 ||
     appliedFilters.categories.length > 0 ||
     (appliedFilters.dateRange.from &&
       appliedFilters.dateRange.from.trim() !== "") ||
@@ -547,6 +570,70 @@ const BlogLoader = ({ blogs }) => {
                     </div>
                   </div>
                 )}
+
+                {/* Authors */}
+                <div
+                  className="relative max-h-[300px] overflow-y-auto 
+                    p-3 shadow-sm rounded-xl border-2 
+                    bg-gradient-to-r from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-900
+                    border-cyan-400 dark:border-blue-800 transition-all"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <label className="budg-text1">
+                        Authors ({blogAuthors.length})
+                      </label>
+                      {/* Show Selected Count Badge */}
+                      {selectedAuthorCount > 0 && (
+                        <Badge className="border-0 bg-gradient-to-r from-green-400 to-green-600 text-white px-2 py-1 rounded-full text-xs dark:from-green-500 dark:to-green-700 ">
+                          Selected: {selectedAuthorCount}
+                        </Badge>
+                      )}
+                    </div>
+                    <div>
+                      {/* Clear Button */}
+                      {selectedAuthorCount > 0 && (
+                        <Button
+                          variant="outline"
+                          onClick={() =>
+                            setTempFilters({
+                              ...tempFilters,
+                              authors: [],
+                            })
+                          }
+                          className="del2"
+                          size="sm"
+                        >
+                          Clear Selection
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                  <div className="mt-2 flex flex-wrap gap-3">
+                    {blogAuthors.map((author) => (
+                      <Badge
+                        key={author}
+                        onClick={() => {
+                          setTempFilters((prev) => ({
+                            ...prev,
+                            authors: prev.authors.includes(author.toLowerCase())
+                              ? prev.authors.filter(
+                                  (c) => c !== author.toLowerCase()
+                                )
+                              : [...prev.categories, author.toLowerCase()],
+                          }));
+                        }}
+                        className={`border-0 rounded-full text-sm cursor-pointer px-3 py-1 transition-all font-bold ${
+                          tempFilters.authors.includes(author.toLowerCase())
+                            ? "bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800"
+                            : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                        }`}
+                      >
+                        {author}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
 
                 {/* Buttons */}
                 <div className="flex justify-end space-x-4">
