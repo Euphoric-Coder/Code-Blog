@@ -46,6 +46,7 @@ const BlogLoader = ({ blogs }) => {
     categories: [],
     subCategories: [],
     dateRange: { from: "", to: "" },
+    oldestBlog: false,
   });
   const selectedCategoryCount = tempFilters.categories
     ? tempFilters.categories.length
@@ -64,11 +65,12 @@ const BlogLoader = ({ blogs }) => {
     count += tempFilters.subCategories.length;
     if (tempFilters.dateRange.from) count += 1;
     if (tempFilters.dateRange.to) count += 1;
+    if (tempFilters.oldestBlog) count += 1;
     return count;
   }, [tempFilters]);
 
   const filteredBlogs = useMemo(() => {
-    return blogs.filter((bg) => {
+    let filters = blogs.filter((bg) => {
       const filtersToApply = appliedFilters;
 
       const matchesSearch =
@@ -82,35 +84,9 @@ const BlogLoader = ({ blogs }) => {
         filtersToApply.categories.length === 0 ||
         filtersToApply.categories.includes(bg.categories.toLowerCase());
 
-      const matchesDateRange =
-        (!filtersToApply.dateRange.from ||
-          bg.date.split(" ")[0] >= filtersToApply.dateRange.from) &&
-        (!filtersToApply.dateRange.to ||
-          bg.date.split(" ")[0] <= filtersToApply.dateRange.to);
-
-      return matchesSearch && matchesCategory && matchesDateRange;
-    });
-  }, [searchTerm, appliedFilters, blogs]);
-
-  const previewedBlogs = useMemo(() => {
-    return blogs.filter((bg) => {
-      const matchesCategory =
-        tempFilters.categories.length === 0 ||
-        tempFilters.categories.includes(bg.categories.toLowerCase());
-
       const blogSubCategories = bg.subCategories
         ? bg.subCategories.split(",").map((sub) => sub.trim()) // Convert to array and trim spaces
         : [];
-
-      console.log(blogSubCategories);
-
-      console.log(tempFilters.subCategories);
-
-      console.log(
-        blogSubCategories.some((sub) => 
-          console.log(tempFilters.subCategories.includes(sub))
-        )
-      );
 
       const matchesSubCategory =
         tempFilters.subCategories.length === 0 ||
@@ -118,16 +94,60 @@ const BlogLoader = ({ blogs }) => {
           tempFilters.subCategories.includes(sub)
         );
 
-      console.log("matchesSubCategory:",matchesSubCategory);
+      const matchesDateRange =
+        (!filtersToApply.dateRange.from ||
+          bg.date.split(" ")[0] >= filtersToApply.dateRange.from) &&
+        (!filtersToApply.dateRange.to ||
+          bg.date.split(" ")[0] <= filtersToApply.dateRange.to);
+
+      return (
+        matchesSearch &&
+        matchesCategory &&
+        matchesSubCategory &&
+        matchesDateRange
+      );
+    });
+
+    // Conditionally sort by oldest
+    // If oldestBlog is true, reverse the filtered list
+    if (appliedFilters.oldestBlog) {
+      filters = [...filters].reverse(); // clone before reverse to avoid mutating original array
+    }
+    return filters;
+  }, [searchTerm, appliedFilters, blogs]);
+
+  const previewedBlogs = useMemo(() => {
+    let filtered = blogs.filter((bg) => {
+      const matchesCategory =
+        tempFilters.categories.length === 0 ||
+        tempFilters.categories.includes(bg.categories.toLowerCase());
+
+      const blogSubCategories = bg.subCategories
+        ? bg.subCategories.split(",").map((sub) => sub.trim())
+        : [];
+
+      const matchesSubCategory =
+        tempFilters.subCategories.length === 0 ||
+        blogSubCategories.some((sub) =>
+          tempFilters.subCategories.includes(sub)
+        );
 
       const matchesDateRange =
         (!tempFilters.dateRange.from ||
-          bg.date.split(" ")[0] >= tempFilters.dateRange.from) &&
+          bg.createdAt.split(" ")[0] >= tempFilters.dateRange.from) &&
         (!tempFilters.dateRange.to ||
-          bg.date.split(" ")[0] <= tempFilters.dateRange.to);
+          bg.createdAt.split(" ")[0] <= tempFilters.dateRange.to);
 
-      return (matchesCategory && matchesSubCategory && matchesDateRange);
+      return matchesCategory && matchesSubCategory && matchesDateRange;
     });
+
+    // Conditionally sort by oldest
+    // If oldestBlog is true, reverse the filtered list
+    if (tempFilters.oldestBlog) {
+      filtered = [...filtered].reverse(); // clone before reverse to avoid mutating original array
+    }
+
+    return filtered;
   }, [tempFilters, blogs]);
 
   const applyFilters = () => {
@@ -144,11 +164,13 @@ const BlogLoader = ({ blogs }) => {
       categories: [],
       subCategories: [],
       dateRange: { from: "", to: "" },
+      oldestBlog: false,
     });
     setTempFilters({
       categories: [],
       subCategories: [],
       dateRange: { from: "", to: "" },
+      oldestBlog: false,
     });
 
     toast.success("Filters have been successfully reset to default!");
@@ -167,7 +189,9 @@ const BlogLoader = ({ blogs }) => {
     appliedFilters.categories.length > 0 ||
     (appliedFilters.dateRange.from &&
       appliedFilters.dateRange.from.trim() !== "") ||
-    (appliedFilters.dateRange.to && appliedFilters.dateRange.to.trim() !== "");
+    (appliedFilters.dateRange.to &&
+      appliedFilters.dateRange.to.trim() !== "") ||
+    appliedFilters.oldestBlog;
 
   return (
     <div>
@@ -223,12 +247,77 @@ const BlogLoader = ({ blogs }) => {
                   </p>
                 </DialogDescription>
               </DialogHeader>
+              {/* Filter Options */}
               <div className="space-y-6">
+                {/* Sort Blogs By */}
+                <div
+                  className="relative max-h-[300px] p-3 shadow-sm rounded-xl border-2 
+             bg-gradient-to-r from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-900
+             border-purple-400 dark:border-blue-800 transition-all"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <label className="budg-text1">Sort Blogs By</label>
+                      <Badge className="border-0 bg-gradient-to-r from-amber-400 to-yellow-500 text-white px-2 py-1 rounded-full text-xs dark:from-yellow-500 dark:to-yellow-600">
+                        {tempFilters.oldestBlog
+                          ? "Oldest First"
+                          : "Newest First"}
+                      </Badge>
+                    </div>
+
+                    {tempFilters.oldestBlog && (
+                      <Button
+                        variant="outline"
+                        onClick={() =>
+                          setTempFilters((prev) => ({
+                            ...prev,
+                            oldestBlog: false,
+                          }))
+                        }
+                        className="del2"
+                        size="sm"
+                      >
+                        Reset Sort
+                      </Button>
+                    )}
+                  </div>
+
+                  <div className="mt-2 flex flex-wrap gap-3">
+                    <Badge
+                      onClick={() =>
+                        setTempFilters((prev) => ({
+                          ...prev,
+                          oldestBlog: true,
+                        }))
+                      }
+                      className={`px-3 py-1 rounded-full text-sm font-bold cursor-pointer transition-all ${
+                        tempFilters.oldestBlog
+                          ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white dark:from-blue-600 dark:to-purple-700"
+                          : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                      }`}
+                    >
+                      Oldest
+                    </Badge>
+                    <Badge
+                      onClick={() =>
+                        setTempFilters((prev) => ({
+                          ...prev,
+                          oldestBlog: false,
+                        }))
+                      }
+                      className={`px-3 py-1 rounded-full text-sm font-bold cursor-pointer transition-all ${
+                        !tempFilters.oldestBlog
+                          ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white dark:from-blue-600 dark:to-purple-700"
+                          : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                      }`}
+                    >
+                      Newest
+                    </Badge>
+                  </div>
+                </div>
                 {/* Date Range */}
                 <div>
-                  <label className="blog-text1">
-                    Blog Creation Date Range
-                  </label>
+                  <label className="blog-text1">Blog Creation Date Range</label>
                   <div className="mt-2">
                     <Popover modal>
                       <PopoverTrigger asChild>

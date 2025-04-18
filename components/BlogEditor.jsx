@@ -78,6 +78,7 @@ import { blogCategories, blogSubCategoriesList } from "@/lib/data";
 import { Badge } from "./ui/badge";
 import { db } from "@/lib/dbConfig";
 import { Blogs } from "@/lib/schema";
+import { getISTDate } from "@/lib/utils";
 
 const MenuBar = ({ editor }) => {
   const [open, setOpen] = useState(false);
@@ -447,7 +448,7 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
         author: user?.fullName,
         categories: category,
         subCategories: selectedSubCategories,
-        date: new Date().toISOString(),
+        date: getISTDate(),
         createdBy: user?.primaryEmailAddress.emailAddress,
       })
       .returning({
