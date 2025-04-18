@@ -394,6 +394,33 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
       },
     });
 
+    // ✅ Add rule for converting HTML tables to Markdown
+    turndownService.addRule("table", {
+      filter: "table",
+      replacement: function (content, node) {
+        const rows = Array.from(node.querySelectorAll("tr"));
+        const tableData = rows.map((row) =>
+          Array.from(row.children).map((cell) => cell.textContent.trim())
+        );
+
+        if (tableData.length === 0) return "";
+
+        const header = tableData[0];
+        const separator = header.map(() => "---");
+        const body = tableData.slice(1);
+
+        const formatRow = (row) => `| ${row.join(" | ")} |`;
+
+        return [
+          "",
+          formatRow(header),
+          formatRow(separator),
+          ...body.map(formatRow),
+          "",
+        ].join("\n");
+      },
+    });
+
     const markdown = turndownService.turndown(content);
 
     console.log({
