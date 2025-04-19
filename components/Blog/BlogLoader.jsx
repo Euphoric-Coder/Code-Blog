@@ -685,8 +685,9 @@ const BlogLoader = ({ blogs }) => {
               {/* Blog Content */}
               <div className="p-5 md:p-6 lg:p-7 space-y-4">
                 {/* Title */}
-                <h3 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-teal-500 to-emerald-400 dark:from-pink-400 dark:via-orange-300 dark:to-yellow-400 transition-all duration-300 leading-tight">
-                  {blog.title}
+                <h3 className="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-teal-500 to-emerald-400 dark:from-pink-400 dark:via-orange-300 dark:to-yellow-400 transition-all duration-300 leading-tight">
+                  {blog.title.slice(0, 40) +
+                    (blog.title.length > 40 ? "..." : "")}
                 </h3>
 
                 {/* Author, Date, and Category */}
@@ -727,7 +728,10 @@ const BlogLoader = ({ blogs }) => {
 
                 {/* Description */}
                 <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed line-clamp-3">
-                  {blog.description}
+                  {blog.description ?
+                  blog.description?.slice(0, 100) +
+                    (blog.description?.length > 100 ? "..." : "") :
+                    "No description available."}
                 </p>
 
                 {/* Subcategories */}

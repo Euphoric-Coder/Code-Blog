@@ -79,6 +79,7 @@ import { Badge } from "./ui/badge";
 import { db } from "@/lib/dbConfig";
 import { Blogs } from "@/lib/schema";
 import { getISTDate } from "@/lib/utils";
+import { Textarea } from "./ui/textarea";
 
 const MenuBar = ({ editor }) => {
   const [open, setOpen] = useState(false);
@@ -295,6 +296,7 @@ const MenuBar = ({ editor }) => {
 
 export default function BlogEditor({ initialContent = "", editing = false }) {
   const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [uploadData, setUploadData] = useState(null);
   const [fileId, setFileId] = useState(null);
@@ -311,8 +313,9 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
 
   useEffect(() => {
     const storedBlogData = JSON.parse(localStorage.getItem(storageKey) || "{}");
-    if (storedBlogData.title || storedBlogData.content) {
+    if (storedBlogData.title || storedBlogData.content || storedBlogData.fileId || storedBlogData.uploadData || storedBlogData.category || storedBlogData.subcategories || storedBlogData.description) {
       setTitle(storedBlogData.title || "");
+      setDescription(storedBlogData.description || "");
       setUploadData(storedBlogData.uploadData || "");
       setFileId(storedBlogData.fileId || "");
       setContent(
@@ -524,6 +527,7 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
   const handleInputChange = (field, value) => {
     const updatedBlogData = {
       title: field === "title" ? value : title,
+      description: field === "description" ? value : description,
       fileId: field === "coverImage" ? value.fileId : fileId,
       uploadData: field === "coverImage" ? value.data : uploadData,
       content: field === "content" ? value : content,
@@ -537,6 +541,7 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
   const clearDataAfterAdding = () => {
     localStorage.removeItem(storageKey);
     setTitle("");
+    setDescription("");
     setContent("");
     setUploadData(null);
     setFileId(null);
@@ -548,6 +553,7 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
     localStorage.removeItem(storageKey);
     if (fileId) deleteFile(fileId);
     setTitle("");
+    setDescription("");
     setContent("");
     setUploadData(null);
     setFileId(null);
@@ -559,6 +565,7 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
     localStorage.removeItem(storageKey);
     if (fileId) deleteFile(fileId);
     setTitle("");
+    setDescription("");
     setContent("");
     setUploadData(null);
     setFileId(null);
@@ -660,6 +667,25 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
           onChange={(e) => {
             setTitle(e.target.value);
             handleInputChange("title", e.target.value);
+          }}
+        />
+      </div>
+      <div>
+        <Label
+          htmlFor="blog-description"
+          className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
+        >
+          Blog Description
+        </Label>
+        <Textarea
+          type="text"
+          id="blog-description"
+          placeholder="Enter a brief description of your blog..."
+          className="w-full mt-3 p-2 mb-4 border rounded dark:bg-slate-800 dark:text-white dark:border-slate-600"
+          value={description}
+          onChange={(e) => {
+            setDescription(e.target.value);
+            handleInputChange("description", e.target.value);
           }}
         />
       </div>
