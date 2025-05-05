@@ -1,14 +1,19 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { markdownToHtml } from "@/components/MarkdownProcessor";
 import OnThisPage from "@/components/onthispage";
 import Comment from "@/components/Comments";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { PenBox } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
 
 export default function Page() {
   const blogId = useParams().id;
+  const router = useRouter();
+  const { user } = useUser();
   const [blogData, setBlogData] = useState(null);
 
   const [htmlContent, setHtmlContent] = useState("");
@@ -17,7 +22,6 @@ export default function Page() {
     const loadBlog = async () => {
       const response = await fetch(`/api/fetch-blogs/${blogId}`);
       const data = await response.json();
-      console.log(data)
       setBlogData(data);
     };
 
@@ -28,9 +32,22 @@ export default function Page() {
     };
 
     loadBlog();
-    convertMarkdownToHtml()
-    
+    convertMarkdownToHtml();
   }, [blogId, blogData, htmlContent]);
+
+  const redirectBlogEditor = () => {
+    router.push(`/blog/edit-blog/${blogId}`);
+  };
+
+  if (!blogData) {
+    return (
+      <div className="max-w-[95%] mx-auto p-4">
+        <h1 className="flex justify-center text-6xl font-bold mb-4">
+          Loading...
+        </h1>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-[95%] mx-auto p-4">
@@ -45,6 +62,14 @@ export default function Page() {
         <div className="flex flex-col gap-2 w-full">
           {/* Blog Main Content */}
           <div className="w-full">
+            {blogData.createdBy ===
+              `${user?.primaryEmailAddress.emailAddress}` && (
+              <div className="flex justify-end mb-2">
+                <Button onClick={redirectBlogEditor}>
+                  <PenBox className="mr-2" /> Edit Blog
+                </Button>
+              </div>
+            )}
             <div className="flex justify-center items-center">
               <Image
                 src={blogData?.blogImage || "/placeholder.png"}
@@ -55,7 +80,9 @@ export default function Page() {
                 draggable="false"
               />
             </div>
-            <h1 className="flex justify-center text-6xl font-bold mb-4">{blogData?.title}</h1>
+            <h1 className="flex justify-center text-6xl font-bold mb-4">
+              {blogData?.title}
+            </h1>
             <p className="text-base mb-2 border-l-4 border-gray-500 pl-4 italic">
               &quot;{blogData?.description}&quot;
             </p>
@@ -63,7 +90,9 @@ export default function Page() {
               <p className="text-sm text-gray-500 mb-4 italic">
                 By {blogData?.author}
               </p>
-              <p className="text-sm text-gray-500 mb-4">Updated: {blogData?.date.split("T")[0]}</p>
+              <p className="text-sm text-gray-500 mb-4">
+                Updated: {blogData?.date.split("T")[0]}
+              </p>
             </div>
             <div
               dangerouslySetInnerHTML={{ __html: htmlContent }}
