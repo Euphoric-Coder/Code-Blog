@@ -33,6 +33,8 @@ export default function Page() {
 
     loadBlog();
     convertMarkdownToHtml();
+    console.log(htmlContent);
+    console.log(blogData?.htmlFormat);
   }, [blogId, blogData, htmlContent]);
 
   const redirectBlogEditor = () => {
@@ -98,6 +100,10 @@ export default function Page() {
               dangerouslySetInnerHTML={{ __html: htmlContent }}
               className="prose prose-lg dark:prose-invert max-w-none mb-10"
             ></div>
+            {/* <div
+              dangerouslySetInnerHTML={{ __html: blogData.htmlFormat }}
+              className="prose prose-lg dark:prose-invert max-w-none mb-10"
+            ></div> */}
           </div>
 
           {/* Comment Component - sticky on large screens */}
