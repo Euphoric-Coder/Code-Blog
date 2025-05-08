@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  useEditor,
-  EditorContent,
-  ReactNodeViewRenderer,
-} from "@tiptap/react";
+import { useEditor, EditorContent, ReactNodeViewRenderer } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
@@ -24,7 +20,7 @@ import { common, createLowlight } from "lowlight";
 const lowlight = createLowlight(common);
 
 import { useEffect, useState } from "react";
-import CodeBlockComponent from "./CodeComponent";
+import CodeBlockComponent from "./CodeBlock";
 import {
   Tooltip,
   TooltipContent,
@@ -313,7 +309,15 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
 
   useEffect(() => {
     const storedBlogData = JSON.parse(localStorage.getItem(storageKey) || "{}");
-    if (storedBlogData.title || storedBlogData.content || storedBlogData.fileId || storedBlogData.uploadData || storedBlogData.category || storedBlogData.subcategories || storedBlogData.description) {
+    if (
+      storedBlogData.title ||
+      storedBlogData.content ||
+      storedBlogData.fileId ||
+      storedBlogData.uploadData ||
+      storedBlogData.category ||
+      storedBlogData.subcategories ||
+      storedBlogData.description
+    ) {
       setTitle(storedBlogData.title || "");
       setDescription(storedBlogData.description || "");
       setUploadData(storedBlogData.uploadData || "");
@@ -588,7 +592,8 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
             </AlertTitle>
             <AlertDescription className="text-yellow-600 dark:text-yellow-400">
               You have an unfinished expense: &quote;
-              <b>{title ? title : "Untitled"}</b>&quote;. Would you like to continue?
+              <b>{title ? title : "Untitled"}</b>&quote;. Would you like to
+              continue?
             </AlertDescription>
           </div>
           <Button

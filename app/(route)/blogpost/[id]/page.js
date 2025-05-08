@@ -1,15 +1,9 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { markdownToHtml } from "@/components/MarkdownProcessor";
-import OnThisPage from "@/components/onthispage";
 import Comment from "@/components/Comments";
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { PenBox } from "lucide-react";
 import {
-  ArrowLeft,
   Clock,
   Share2,
   Heart,
@@ -18,7 +12,7 @@ import {
 } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { format } from "date-fns";
-import { processContent } from "../../test/_utils/processContent";
+import { processContent } from "@/lib/processContent";
 
 export default function Page() {
   const blogId = useParams().id;
@@ -35,11 +29,11 @@ export default function Page() {
       setBlogData(data);
     };
 
-    const convertMarkdownToHtml = async () => {
+    const convertMarkdownToHtml = () => {
       if (blogData) {
         // setHtmlContent(await markdownToHtml(blogData?.mdFormat));
-        // setHtmlContent(processContent(blogData?.htmlFormat));
-        setHtmlContent(blogData?.htmlFormat);
+        setHtmlContent(processContent(blogData?.htmlFormat));
+        // setHtmlContent(blogData?.htmlFormat);
       }
     };
 
@@ -47,7 +41,7 @@ export default function Page() {
     convertMarkdownToHtml();
     console.log(htmlContent);
     console.log(blogData?.htmlFormat);
-  }, [blogId, blogData, htmlContent]);
+  }, [blogId, blogData]);
 
   const redirectBlogEditor = () => {
     router.push(`/blog/edit-blog/${blogId}`);
@@ -133,8 +127,7 @@ export default function Page() {
 
           {/* Main Blog Content */}
           <article className="prose prose-lg lg:prose-xl dark:prose-invert prose-indigo max-w-none">
-            {/* <div className="blog-content">{htmlContent}</div> */}
-            <div dangerouslySetInnerHTML={{ __html: htmlContent }}></div>
+            <div className="blog-content">{htmlContent}</div>
           </article>
 
           {/* Author Bio */}

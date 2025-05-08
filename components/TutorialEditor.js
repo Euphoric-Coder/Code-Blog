@@ -20,7 +20,7 @@ import { common, createLowlight } from "lowlight";
 const lowlight = createLowlight(common);
 
 import { useState } from "react";
-import CodeBlockComponent from "./CodeComponent";
+import CodeBlockComponent from "./CodeBlock";
 import { Button } from "./ui/button";
 import {
   MdFormatBold,
@@ -127,7 +127,9 @@ export default function TutorialEditor() {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ codeBlock: false }),
-      Placeholder.configure({ placeholder: "Start writing your tutorial here..." }),
+      Placeholder.configure({
+        placeholder: "Start writing your tutorial here...",
+      }),
       Document,
       Paragraph,
       Text,
