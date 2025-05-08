@@ -2,8 +2,8 @@ import React, { useState, useCallback } from "react";
 import { Check, Copy } from "lucide-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import {
-  oneDark,
-  oneLight,
+  solarizedlight,
+  solarizedDarkAtom, 
 } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
@@ -30,7 +30,7 @@ const CodeBlock = ({ language = "javascript", children }) => {
   }, [safeContent]);
 
   const customStyle = {
-    backgroundColor: isDark ? "#1a1b26" : "#ffffff",
+    backgroundColor: isDark ? "#1a1b26" : "#f9f9f9",
     margin: 0,
     padding: "1.5rem",
     borderRadius: "0.75rem",
@@ -68,7 +68,7 @@ const CodeBlock = ({ language = "javascript", children }) => {
       <div className="relative">
         <SyntaxHighlighter
           language={language}
-          style={isDark ? oneDark : oneLight}
+          style={isDark ? solarizedDarkAtom : solarizedlight}
           customStyle={customStyle}
           showLineNumbers
           wrapLongLines
