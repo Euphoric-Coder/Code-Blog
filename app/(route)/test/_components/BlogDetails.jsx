@@ -9,19 +9,29 @@ import {
   Bookmark,
   Calendar,
 } from "lucide-react";
-import { formatDate } from "date-fns";
+import { format } from "date-fns";
+import { processContent } from "../_utils/processContent";
+import CommentSection from "./CommenSection";
 
-const BlogDetail = ({ blogData }) => {
-  const htmlContent = blogData.content;
+const BlogDetail = ({ blogData, onBack }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [blogData]);
 
   if (!blogData) return null;
 
+  const htmlContent = processContent(blogData.content);
+
+  console.log(htmlContent);
+
+  const handleAddComment = (content) => {
+    console.log("New comment:", content);
+    // Optional: Add logic to POST comment to server or update state
+  };
+
   return (
     <div className="animate-fadeIn">
-      {/* Blog Hero Section */}
+      {/* Hero Section */}
       <div
         className="relative h-[50vh] md:h-[60vh] w-full bg-cover bg-center"
         style={{
@@ -59,7 +69,7 @@ const BlogDetail = ({ blogData }) => {
 
               <div className="flex items-center">
                 <Calendar className="w-5 h-5 mr-2" />
-                <span>{formatDate(blogData.createdAt, "PPP")}</span>
+                <span>{format(new Date(blogData.createdAt), "PPP")}</span>
               </div>
             </div>
           </div>
@@ -87,12 +97,9 @@ const BlogDetail = ({ blogData }) => {
             </button>
           </div>
 
-          {/* Content */}
+          {/* Main Blog Content */}
           <article className="prose prose-lg lg:prose-xl dark:prose-invert prose-indigo max-w-none">
-            <div
-              dangerouslySetInnerHTML={{ __html: htmlContent }}
-              className="blog-content"
-            />
+            <div className="blog-content">{htmlContent}</div>
           </article>
 
           {/* Author Bio */}
@@ -114,6 +121,12 @@ const BlogDetail = ({ blogData }) => {
               </div>
             </div>
           </div>
+
+          {/* Comments */}
+          <CommentSection
+            comments={blogData.comments || []}
+            onAddComment={handleAddComment}
+          />
         </div>
       </div>
     </div>

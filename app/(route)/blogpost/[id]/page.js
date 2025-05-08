@@ -8,7 +8,17 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { PenBox } from "lucide-react";
+import {
+  ArrowLeft,
+  Clock,
+  Share2,
+  Heart,
+  Bookmark,
+  Calendar,
+} from "lucide-react";
 import { useUser } from "@clerk/nextjs";
+import { format } from "date-fns";
+import { processContent } from "../../test/_utils/processContent";
 
 export default function Page() {
   const blogId = useParams().id;
@@ -27,7 +37,9 @@ export default function Page() {
 
     const convertMarkdownToHtml = async () => {
       if (blogData) {
-        setHtmlContent(await markdownToHtml(blogData?.mdFormat));
+        // setHtmlContent(await markdownToHtml(blogData?.mdFormat));
+        // setHtmlContent(processContent(blogData?.htmlFormat));
+        setHtmlContent(blogData?.htmlFormat);
       }
     };
 
@@ -52,67 +64,104 @@ export default function Page() {
   }
 
   return (
-    <div className="max-w-[95%] mx-auto p-4">
-      {/* Main container for flex layout */}
-      <div className="flex flex-col lg:flex-row gap-6">
-        {/* Sidebar - takes up the left part of the screen on large screens */}
-        <div className="lg:w-1/4 hidden lg:block">
-          <OnThisPage htmlContent={htmlContent} />
-        </div>
+    <div className="animate-fadeIn">
+      {/* Hero Section */}
+      <div
+        className="relative h-[50vh] md:h-[60vh] w-full bg-cover bg-center"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(${blogData.blogImage})`,
+        }}
+      >
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-4 sm:p-6 md:p-10 text-white">
+          <div className="max-w-3xl">
+            <span className="inline-block px-3 py-1 bg-indigo-600 rounded-full text-sm font-medium mb-4">
+              {blogData.category}
+            </span>
 
-        {/* Main content + comment side-by-side */}
-        <div className="flex flex-col gap-2 w-full">
-          {/* Blog Main Content */}
-          <div className="w-full">
-            {blogData.createdBy ===
-              `${user?.primaryEmailAddress.emailAddress}` && (
-              <div className="flex justify-end mb-2">
-                <Button onClick={redirectBlogEditor}>
-                  <PenBox className="mr-2" /> Edit Blog
-                </Button>
-              </div>
-            )}
-            <div className="flex justify-center items-center">
-              <Image
-                src={blogData?.blogImage || "/placeholder.png"}
-                alt={blogData?.title || "Blog Cover Image"}
-                width={800}
-                height={400}
-                className="object-contain w-full h-[400px] rounded-lg mb-4"
-                draggable="false"
-              />
-            </div>
-            <h1 className="flex justify-center text-6xl font-bold mb-4">
-              {blogData?.title}
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-4 leading-tight">
+              {blogData.title}
             </h1>
-            <p className="text-base mb-2 border-l-4 border-gray-500 pl-4 italic">
-              &quot;{blogData?.description}&quot;
+
+            <p className="text-lg md:text-xl opacity-90 mb-6">
+              {blogData.description}
             </p>
-            <div className="flex justify-between items-center gap-2 mb-10">
-              <p className="text-sm text-gray-500 mb-4 italic">
-                By {blogData?.author}
-              </p>
-              <p className="text-sm text-gray-500 mb-4">
-                Updated: {blogData?.date.split("T")[0]}
-              </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center space-y-3 sm:space-y-0 sm:space-x-6">
+              <div className="flex items-center">
+                <img
+                  src={blogData?.author.avatar}
+                  alt={blogData?.author.name}
+                  className="w-10 h-10 rounded-full mr-3"
+                />
+                <span>{blogData?.author.name}</span>
+              </div>
+
+              <div className="flex items-center">
+                <Clock className="w-5 h-5 mr-2" />
+                <span>{blogData?.readingTime} min read</span>
+              </div>
+
+              <div className="flex items-center">
+                <Calendar className="w-5 h-5 mr-2" />
+                <span>{format(new Date(blogData.date), "PPP")}</span>
+              </div>
             </div>
-            <div
-              dangerouslySetInnerHTML={{ __html: htmlContent }}
-              className="prose prose-lg dark:prose-invert max-w-none mb-10"
-            ></div>
-            {/* <div
-              dangerouslySetInnerHTML={{ __html: blogData.htmlFormat }}
-              className="prose prose-lg dark:prose-invert max-w-none mb-10"
-            ></div> */}
+          </div>
+        </div>
+      </div>
+
+      {/* Content Section */}
+      <div className="container mx-auto px-4 py-12">
+        <div className="max-w-5xl mx-auto">
+          {/* Share and Save Buttons */}
+          <div className="flex justify-between items-center mb-8 pb-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex space-x-4">
+              <button className="flex items-center text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">
+                <Heart className="w-5 h-5 mr-2" />
+                <span>Like</span>
+              </button>
+              <button className="flex items-center text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">
+                <Share2 className="w-5 h-5 mr-2" />
+                <span>Share</span>
+              </button>
+            </div>
+            <button className="flex items-center text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">
+              <Bookmark className="w-5 h-5 mr-2" />
+              <span>Save</span>
+            </button>
           </div>
 
-          {/* Comment Component - sticky on large screens */}
-          <div className="w-full">
-            <div className="w-full">
-              <Comment blogId="this-is-just-a-test-for-the-following--cb6c5e7a-bab2-459a-a94c-556bbd59184c" />
-              {/* <Comment blogId={blogId}/> */}
+          {/* Main Blog Content */}
+          <article className="prose prose-lg lg:prose-xl dark:prose-invert prose-indigo max-w-none">
+            {/* <div className="blog-content">{htmlContent}</div> */}
+            <div dangerouslySetInnerHTML={{ __html: htmlContent }}></div>
+          </article>
+
+          {/* Author Bio */}
+          <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-start space-x-4">
+              <img
+                src={blogData.author.avatar}
+                alt={blogData.author.name}
+                className="w-16 h-16 rounded-full"
+              />
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                  {blogData.author.name}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Content creator and technology enthusiast. Writing about the
+                  future of technology and how it shapes our world.
+                </p>
+              </div>
             </div>
           </div>
+
+          {/* Comments */}
+          {/* <CommentSection
+            comments={blogData.comments || []}
+            onAddComment={handleAddComment}
+          /> */}
         </div>
       </div>
     </div>

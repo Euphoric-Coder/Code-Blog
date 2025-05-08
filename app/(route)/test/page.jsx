@@ -3,7 +3,7 @@ import { blogPosts } from "./_utils/data";
 import BlogDetail from "./_components/BlogDetails";
 
 const page = () => {
-  const blog = blogPosts[1];
+  const blog = blogPosts[0];
   return (
     <div>
       <BlogDetail blogData={blog} />

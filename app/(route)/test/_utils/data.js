@@ -1,4 +1,3 @@
-// Utility to calculate reading time based on word count
 export const calculateReadingTime = (content) => {
   const wordsPerMinute = 200;
   const textOnly = content.replace(/<[^>]*>/g, "");
@@ -6,7 +5,117 @@ export const calculateReadingTime = (content) => {
   return Math.ceil(wordCount / wordsPerMinute);
 };
 
-// Sample blog post data
+const sampleComments = {
+  "post-1": [
+    {
+      id: "c1",
+      author: {
+        name: "Sarah Chen",
+        avatar:
+          "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      },
+      content:
+        "This is a fantastic overview of where web development is heading! The section about AI-driven development particularly resonated with me.",
+      createdAt: "2025-04-16T08:30:00Z",
+      likes: 12,
+      replies: [
+        {
+          id: "c1-r1",
+          author: {
+            name: "David Kim",
+            avatar:
+              "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+          },
+          content:
+            "Agreed! I've been using AI coding assistants and they've dramatically improved my workflow.",
+          createdAt: "2025-04-16T09:15:00Z",
+          likes: 8,
+        },
+      ],
+    },
+    {
+      id: "c2",
+      author: {
+        name: "Mike Thompson",
+        avatar:
+          "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      },
+      content:
+        "The WebAssembly section was eye-opening. I'm curious about how this will affect the development of browser-based IDEs.",
+      createdAt: "2025-04-16T10:45:00Z",
+      likes: 15,
+    },
+  ],
+  "post-2": [
+    {
+      id: "c3",
+      author: {
+        name: "Emma Wilson",
+        avatar:
+          "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      },
+      content:
+        "The insights about microinteractions really changed how I think about UX design. Great article!",
+      createdAt: "2025-03-29T11:20:00Z",
+      likes: 23,
+      replies: [
+        {
+          id: "c3-r1",
+          author: {
+            name: "Alex Johnson",
+            avatar:
+              "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+          },
+          content:
+            "Thanks Emma! Microinteractions are indeed crucial for creating engaging user experiences.",
+          createdAt: "2025-03-29T12:05:00Z",
+          likes: 11,
+        },
+      ],
+    },
+  ],
+  "post-3": [
+    {
+      id: "c4",
+      author: {
+        name: "Lucas Martinez",
+        avatar:
+          "https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      },
+      content:
+        "It's great to see more attention being paid to the environmental impact of web development. The tips about efficient design principles are very practical.",
+      createdAt: "2025-02-11T14:30:00Z",
+      likes: 19,
+    },
+    {
+      id: "c5",
+      author: {
+        name: "Rachel Green",
+        avatar:
+          "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      },
+      content:
+        "I've implemented some of these optimization techniques and saw significant improvements in both performance and energy consumption.",
+      createdAt: "2025-02-11T16:45:00Z",
+      likes: 14,
+      replies: [
+        {
+          id: "c5-r1",
+          author: {
+            name: "Marcus Green",
+            avatar:
+              "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+          },
+          content:
+            "That's fantastic to hear, Rachel! Would you mind sharing some specific metrics?",
+          createdAt: "2025-02-11T17:20:00Z",
+          likes: 7,
+        },
+      ],
+    },
+  ],
+};
+
 export const blogPosts = [
   {
     id: "1",
@@ -19,6 +128,8 @@ export const blogPosts = [
         "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     },
     category: "Technology",
+    type: "blog",
+    tags: ["Web Development", "AI", "WebAssembly", "Future Tech"],
     description:
       "Exploring the latest trends and technologies shaping the future of web development in 2025 and beyond.",
     content: `
@@ -27,10 +138,92 @@ export const blogPosts = [
       <h2>AI-Driven Development</h2>
       <p>Artificial intelligence is no longer just a buzzword in web development. Today's developers are leveraging AI tools to automate repetitive tasks, generate boilerplate code, and even debug applications with unprecedented efficiency.</p>
       
+      <p>Here's an example of how AI can help generate React components:</p>
+
+      <pre><code class="language-javascript">// AI-generated React component with TypeScript
+import React, { useState, useEffect } from 'react';
+
+interface DataItem {
+  id: string;
+  title: string;
+  completed: boolean;
+}
+
+const AIAssistedComponent: React.FC = () => {
+  const [data, setData] = useState<DataItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://api.example.com/data');
+        const items = await response.json();
+        setData(items);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  return (
+    <div className="p-4 bg-white rounded-lg shadow">
+      <h2 className="text-2xl font-bold mb-4">AI Generated List</h2>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <ul className="space-y-2">
+          {data.map((item) => (
+            <li 
+              key={item.id}
+              className="flex items-center space-x-2"
+            >
+              <input
+                type="checkbox"
+                checked={item.completed}
+                onChange={() => {
+                  setData(data.map(d =>
+                    d.id === item.id
+                      ? { ...d, completed: !d.completed }
+                      : d
+                  ));
+                }}
+              />
+              <span className={item.completed ? 'line-through' : ''}>
+                {item.title}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};</code></pre>
+      
       <p>The most significant advancement has been in the realm of natural language programming, where developers can describe functionality in plain English and have AI generate the corresponding code. This has dramatically reduced development time for common features and allowed teams to focus on more complex challenges.</p>
       
       <h2>WebAssembly Dominance</h2>
       <p>WebAssembly (Wasm) has finally achieved its promise of bringing near-native performance to web applications. Complex applications that once required desktop installation can now run seamlessly in the browser, opening new possibilities for web-based software.</p>
+      
+      <p>Here's a simple example of using WebAssembly with JavaScript:</p>
+
+      <pre><code class="language-javascript">// Loading and using a Wasm module
+const wasmInstance = await WebAssembly.instantiateStreaming(
+  fetch('example.wasm'),
+  {
+    env: {
+      memory: new WebAssembly.Memory({ initial: 256 }),
+      log: (value) => console.log(value)
+    }
+  }
+);
+
+// Using a Wasm function
+const result = wasmInstance.instance.exports.computeExpensive(42);
+console.log('Result from Wasm:', result);</code></pre>
       
       <p>Game development, video editing, and even 3D modeling applications have made the leap to the web, offering users the convenience of browser-based tools without sacrificing performance.</p>
       
@@ -44,6 +237,7 @@ export const blogPosts = [
     `,
     createdAt: "2025-04-15T10:30:00Z",
     readingTime: 4,
+    comments: sampleComments["post-1"],
   },
   {
     id: "2",
@@ -56,6 +250,8 @@ export const blogPosts = [
         "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     },
     category: "Design",
+    type: "blog",
+    tags: ["Design", "UX", "Emotion", "User Experience"],
     description:
       "How thoughtful design choices can create emotional connections with your users and elevate your website beyond mere functionality.",
     content: `
@@ -83,6 +279,7 @@ export const blogPosts = [
     `,
     createdAt: "2025-03-28T14:15:00Z",
     readingTime: 5,
+    comments: sampleComments["post-2"],
   },
   {
     id: "3",
@@ -95,6 +292,8 @@ export const blogPosts = [
         "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     },
     category: "Sustainability",
+    type: "blog",
+    tags: ["Sustainability", "Green Web", "Performance", "Optimization"],
     description:
       "How web designers and developers can create beautiful, functional websites while minimizing environmental impact.",
     content: `
@@ -122,10 +321,11 @@ export const blogPosts = [
     `,
     createdAt: "2025-02-10T09:45:00Z",
     readingTime: 4,
+    comments: sampleComments["post-3"],
   },
 ];
 
-// Function to return blog posts with calculated reading time
+// Export posts with calculated reading time if not provided
 export const getBlogPosts = () => {
   return blogPosts.map((post) => ({
     ...post,
