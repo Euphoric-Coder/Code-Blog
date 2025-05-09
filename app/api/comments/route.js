@@ -1,6 +1,6 @@
 import { db } from "@/lib/dbConfig";
 import { Comments, Replies } from "@/lib/schema";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
@@ -11,7 +11,8 @@ export async function POST(req) {
     const comments = await db
       .select()
       .from(Comments)
-      .where(eq(Comments.blogId, blogId));
+      .where(eq(Comments.blogId, blogId))
+      .orderBy(Comments.time);
 
     if (comments.length === 0) {
       return NextResponse.json([]);

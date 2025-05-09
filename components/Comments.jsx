@@ -5,7 +5,7 @@ import { FaReply } from "react-icons/fa";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
-import { PenBox, Trash } from "lucide-react";
+import { PenBox, Send, Trash } from "lucide-react";
 import { db } from "@/lib/dbConfig";
 import { Comments, Replies } from "@/lib/schema";
 import { eq } from "drizzle-orm";
@@ -147,13 +147,10 @@ const Comment = ({ blogId }) => {
   };
 
   return (
-    <div
-      id="comments"
-      className="sm:max-w-4xl md:max-w-6xl lg:max-w-7xl xl:max-w-9xl mx-auto mt-10 mb-10 p-6 rounded-xl border border-blue-100 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 shadow-lg backdrop-blur-md"
-    >
-      <h2 className="lg:text-4xl md:text-3xl text-xl font-bold mb-6 text-slate-800 dark:text-cyan-200 tracking-tight">
-        💬 Share Your Thoughts
-      </h2>
+    <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-gray-200 dark:border-gray-700">
+      <h3 className="text-xl sm:text-2xl font-serif font-bold text-gray-900 dark:text-white mb-6 sm:mb-8">
+        Comments ({comments.length})
+      </h3>
 
       <div className="flex items-start gap-4 mb-6">
         <Avatar className="h-10 w-10">
@@ -170,12 +167,13 @@ const Comment = ({ blogId }) => {
       </div>
 
       <div className="flex justify-end">
-        <button
+        <Button
           onClick={handlePost}
-          className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-indigo-700 hover:to-blue-700 text-white font-medium px-5 py-2 rounded-lg shadow-md transition duration-300"
+          className="bg-indigo-600 text-white rounded-lg px-4 sm:px-6 py-2 text-sm sm:text-base hover:bg-indigo-700 transition-colors flex items-center space-x-2"
         >
-          Post Comment
-        </button>
+          <Send className="w-4 h-4" />
+          <span>Comment</span>
+        </Button>
       </div>
 
       <div className="mt-10 space-y-6 max-h-[480px] overflow-y-auto scrollbar-thin scrollbar-thumb-blue-300 dark:scrollbar-thumb-slate-600">

@@ -1,18 +1,12 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import Comment from "@/components/Comments";
 import { useEffect, useState } from "react";
-import {
-  Clock,
-  Share2,
-  Heart,
-  Bookmark,
-  Calendar,
-} from "lucide-react";
+import { Clock, Share2, Heart, Bookmark, Calendar } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { format } from "date-fns";
 import { processContent } from "@/lib/processContent";
+import Comment from "@/components/Comments";
 
 export default function Page() {
   const blogId = useParams().id;
@@ -39,8 +33,6 @@ export default function Page() {
 
     loadBlog();
     convertMarkdownToHtml();
-    console.log(htmlContent);
-    console.log(blogData?.htmlFormat);
   }, [blogId, blogData]);
 
   const redirectBlogEditor = () => {
@@ -61,7 +53,7 @@ export default function Page() {
     <div className="animate-fadeIn">
       {/* Hero Section */}
       <div
-        className="relative h-[50vh] md:h-[60vh] w-full bg-cover bg-center"
+        className="relative h-[50vh] md:h-[60vh] w-full bg-[length:100%_100%] bg-no-repeat bg-center"
         style={{
           backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(${blogData.blogImage})`,
         }}
@@ -155,6 +147,9 @@ export default function Page() {
             comments={blogData.comments || []}
             onAddComment={handleAddComment}
           /> */}
+                    
+          <Comment blogId={blogId} />
+         
         </div>
       </div>
     </div>
