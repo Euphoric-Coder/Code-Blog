@@ -7,6 +7,7 @@ import { useUser } from "@clerk/nextjs";
 import { format } from "date-fns";
 import { processContent } from "@/lib/processContent";
 import Comment from "@/components/Comments";
+import BlogLoader from "@/components/Blog/BlogLoader";
 
 export default function Page() {
   const blogId = useParams().id;
@@ -40,13 +41,7 @@ export default function Page() {
   };
 
   if (!blogData) {
-    return (
-      <div className="max-w-[95%] mx-auto p-4">
-        <h1 className="flex justify-center text-6xl font-bold mb-4">
-          Loading...
-        </h1>
-      </div>
-    );
+    return <BlogLoader />;
   }
 
   return (
@@ -147,9 +142,8 @@ export default function Page() {
             comments={blogData.comments || []}
             onAddComment={handleAddComment}
           /> */}
-                    
+
           <Comment blogId={blogId} />
-         
         </div>
       </div>
     </div>

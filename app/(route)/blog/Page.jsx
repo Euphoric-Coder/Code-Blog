@@ -1,6 +1,6 @@
 "use client";
 
-import BlogLoader from "@/components/Blog/BlogLoader";
+import BlogFetch from "@/components/Blog/BlogFetch";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -125,7 +125,7 @@ const Page = () => {
       </section>
 
       <section>
-        <BlogLoader blogs={blogData} />
+        <BlogFetch blogs={blogData} />
       </section>
     </main>
   );
