@@ -11,6 +11,8 @@ import {
   Heart,
   Menu,
   EllipsisVertical,
+  ThumbsUp,
+  ThumbsDown,
 } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
@@ -22,6 +24,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { format, set } from "date-fns";
+import { getISTDateTime } from "@/lib/utils";
 
 // Word truncation
 const truncateText = (text, limit) => {
@@ -65,7 +69,7 @@ const Comment = ({ blogId }) => {
       name: user.fullName,
       createdBy: user.primaryEmailAddress.emailAddress,
       text: comment,
-      time: new Date().toLocaleString(),
+      time: getISTDateTime(),
     });
     setComment("");
     toast.success("Comment posted!");
@@ -156,7 +160,10 @@ const Comment = ({ blogId }) => {
                       {c.time}
                     </span>
                   </div>
-                  <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      {format(c.time.split(", ")[0], "PPP")}
+                    </span>
                     <Popover>
                       <PopoverTrigger asChild>
                         <Button
@@ -208,74 +215,36 @@ const Comment = ({ blogId }) => {
                     {showFullComment[c.id] ? "Show less" : "Show more"}
                   </button>
                 )}
-
-                {/* Reply form */}
-                {replyingTo === c.id && (
-                  <div className="flex items-start gap-2 mt-4">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src={user?.imageUrl} />
-                      <AvatarFallback>{user?.fullName?.[0]}</AvatarFallback>
-                    </Avatar>
-                    <input
-                      type="text"
-                      value={reply}
-                      onChange={(e) => setReply(e.target.value)}
-                      placeholder="Write a reply..."
-                      className="flex-1 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm rounded-lg px-3 py-2"
-                    />
-                    <Button
-                      onClick={handlePostReply}
-                      className="bg-indigo-600 text-white hover:bg-indigo-700"
-                    >
-                      Reply
-                    </Button>
-                  </div>
-                )}
               </div>
               {/* Actions */}
-              <div className="flex items-center justify-between mt-2 text-xs sm:text-sm gap-4 flex-wrap">
+              <div className="flex items-center justify-between mt-2 text-xs sm:text-sm gap-2 flex-wrap">
                 {/* Action Buttons: Like, Edit, Delete, Reply */}
-                <div className="flex items-center gap-3 flex-wrap">
+                <div className="flex items-center gap-1 flex-wrap">
                   {/* Like Button */}
-                  <Button variant="ghost" size="icon">
-                    <Heart size={16} className="text-red-500" />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="rounded-full hover:text-blue-500 dark:hover:text-blue-300 [&_svg]:size-5"
+                  >
+                    <ThumbsUp size={20} />
                   </Button>
-
-                  {/* Edit/Delete Buttons for the creator */}
-                  {user?.primaryEmailAddress.emailAddress === c.createdBy && (
-                    <>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        onClick={() => handleEditComment(c.id, c.text)}
-                      >
-                        <PenBox size={16} className="text-blue-500" />
-                      </Button>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        onClick={() => handleDeleteComment(c.id)}
-                      >
-                        <Trash size={16} className="text-red-500" />
-                      </Button>
-                    </>
-                  )}
+                  {/* Like Button */}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="rounded-full hover:text-blue-500 dark:hover:text-blue-300 [&_svg]:size-5"
+                  >
+                    <ThumbsDown size={20} />
+                  </Button>
 
                   {/* Reply Button */}
                   <Button
                     size="sm"
                     variant="ghost"
-                    className="text-indigo-600 dark:text-indigo-400 hover:underline px-2"
-                    onClick={() => {
-                      if (replyingTo === c.id) {
-                        setReplyingTo(null);
-                        setReply("");
-                      } else {
-                        setReplyingTo(c.id);
-                      }
-                    }}
+                    className="rounded-3xl text-indigo-600 dark:text-indigo-400 p-4"
+                    onClick={() => setReplyingTo(c.id)}
                   >
-                    <ReplyIcon size={14} className="mr-1" />
+                    <ReplyIcon size={14} />
                     Reply
                   </Button>
                 </div>
@@ -297,6 +266,44 @@ const Comment = ({ blogId }) => {
                   </button>
                 )}
               </div>
+
+              {/* Reply form */}
+              {replyingTo === c.id && (
+                <div>
+                  <div className="flex items-start gap-2 mt-4">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={user?.imageUrl} />
+                      <AvatarFallback>{user?.fullName?.[0]}</AvatarFallback>
+                    </Avatar>
+                    <input
+                      type="text"
+                      value={reply}
+                      onChange={(e) => setReply(e.target.value)}
+                      placeholder="Write a reply..."
+                      className="flex-1 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm rounded-lg px-3 py-2"
+                    />
+                  </div>
+                  <div className="flex justify-end mt-4">
+                    <Button
+                      variant="ghost"
+                      onClick={() => {
+                        setReplyingTo(null);
+                        setReply("");
+                      }}
+                      className="mr-2 rounded-3xl"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={handlePostReply}
+                      className="rounded-3xl bg-indigo-600 text-white hover:bg-indigo-700"
+                    >
+                      Reply
+                    </Button>
+                  </div>
+                </div>
+              )}
+
               {/* Replies */}
               {showReplies[cIdx] && c.replies.length > 0 && (
                 <div className="mt-5 space-y-4 pl-4 border-l-2 border-indigo-300 dark:border-indigo-600">

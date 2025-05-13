@@ -12,7 +12,7 @@ export async function POST(req) {
       .select()
       .from(Comments)
       .where(eq(Comments.blogId, blogId))
-      .orderBy(Comments.time);
+      .orderBy(desc(Comments.time));
 
     if (comments.length === 0) {
       return NextResponse.json([]);
