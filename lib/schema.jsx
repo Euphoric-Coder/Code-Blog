@@ -1,10 +1,15 @@
-import { pgTable, varchar, uuid, boolean } from "drizzle-orm/pg-core";
+import { pgTable, varchar, uuid, boolean, jsonb } from "drizzle-orm/pg-core";
 
 export const Users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
   name: varchar("name").notNull(),
   email: varchar("email").notNull(),
   imgURL: varchar("imgURL"),
+  username: varchar("username"),
+  bio: varchar("bio"),
+  websites: jsonb("websites"),
+  aboutSection: jsonb("aboutSection"),
+  hasOnboarded: boolean("hasOnboarded").notNull().default(false),
 });
 
 export const Blogs = pgTable("blogs", {
