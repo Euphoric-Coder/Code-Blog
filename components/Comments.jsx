@@ -31,6 +31,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogClose,
 } from "@/components/ui/dialog";
 import {
   AlertDialog,
@@ -65,6 +66,8 @@ const Comment = ({ blogId }) => {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [editCommentId, setEditCommentId] = useState(null);
   const [editText, setEditText] = useState("");
+  const [editReplyId, setEditReplyId] = useState(null);
+  const [editReplyText, setReplyEditText] = useState("");
 
   useEffect(() => {
     fetchComments(blogId);
@@ -168,7 +171,24 @@ const Comment = ({ blogId }) => {
     refreshData();
   };
 
-  const handleDeleteComment = async (id) => {
+  const DeleteComment = async (id) => {
+    await db.delete(Replies).where(eq(Replies.commentId, id));
+    await db.delete(Comments).where(eq(Comments.id, id));
+    toast.success("Comment deleted!");
+    refreshData();
+  };
+
+  const EditReply = async (id, newText) => {
+    if (!newText) return;
+    await db
+      .update(Comments)
+      .set({ text: newText, time: getISTDateTime() })
+      .where(eq(Comments.id, id));
+    toast.success("Comment edited!");
+    refreshData();
+  };
+
+  const DeleteReply = async (id) => {
     await db.delete(Replies).where(eq(Replies.commentId, id));
     await db.delete(Comments).where(eq(Comments.id, id));
     toast.success("Comment deleted!");
@@ -194,7 +214,18 @@ const Comment = ({ blogId }) => {
             placeholder="Write a comment..."
             className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
-          <div className="flex justify-end mt-2">
+          <div className="flex justify-end mt-2 gap-3">
+            {comment.length > 0 && (
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  setComment("");
+                }}
+                className="rounded-3xl"
+              >
+                Cancel
+              </Button>
+            )}
             <Button
               onClick={handlePostComment}
               className="flex gap-2 bg-indigo-600 hover:bg-indigo-700 text-white"
@@ -221,9 +252,6 @@ const Comment = ({ blogId }) => {
                     <h4 className="font-semibold text-gray-900 dark:text-white">
                       {c.name}
                     </h4>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                      {c.time}
-                    </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -293,12 +321,14 @@ const Comment = ({ blogId }) => {
                                 >
                                   Save Changes
                                 </Button>
-                                <Button
-                                  variant="ghost"
-                                  onClick={() => setEditDialogOpen(false)}
-                                >
-                                  Cancel
-                                </Button>
+                                <DialogClose asChild>
+                                  <Button
+                                    variant="ghost"
+                                    onClick={() => setEditDialogOpen(false)}
+                                  >
+                                    Cancel
+                                  </Button>
+                                </DialogClose>
                               </DialogFooter>
                             </DialogContent>
                           </Dialog>
@@ -329,7 +359,7 @@ const Comment = ({ blogId }) => {
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <AlertDialogAction
                                   className="bg-red-600 hover:bg-red-700 text-white"
-                                  onClick={() => handleDeleteComment(c.id)}
+                                  onClick={() => DeleteComment(c.id)}
                                 >
                                   Delete
                                 </AlertDialogAction>
@@ -463,12 +493,149 @@ const Comment = ({ blogId }) => {
                             <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
                               <div className="flex justify-between items-start mb-1">
                                 <div>
-                                  <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                                  <h4 className="font-semibold text-gray-900 dark:text-white">
                                     {r.name}
-                                  </p>
-                                  <span className="text-xs text-gray-500 dark:text-gray-400">
-                                    {r.time}
+                                  </h4>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-sm text-gray-500 dark:text-gray-400">
+                                    {format(r.time.split(", ")[0], "PPP")}
                                   </span>
+                                  <Popover>
+                                    <PopoverTrigger asChild>
+                                      <Button
+                                        size="icon"
+                                        variant="ghost"
+                                        className="rounded-xl [&_svg]:size-6 hover:bg-gray-200 dark:hover:bg-gray-700"
+                                      >
+                                        <EllipsisVertical />
+                                      </Button>
+                                    </PopoverTrigger>
+
+                                    {user?.primaryEmailAddress.emailAddress ===
+                                      r.createdBy && (
+                                      <PopoverContent className="w-32 p-1 space-y-1">
+                                        {/* Edit and Delete Replies */}
+
+                                        {/* Edit Reply */}
+                                        <Dialog
+                                          open={editDialogOpen}
+                                          onOpenChange={setEditDialogOpen}
+                                        >
+                                          <DialogTrigger asChild>
+                                            <Button
+                                              variant="ghost"
+                                              className="w-full justify-start text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900"
+                                              // onClick={() => EditComment(r.id, r.text)}
+                                              onClick={() => {
+                                                setEditReplyId(r.id);
+                                                setReplyEditText(r.text);
+                                              }}
+                                            >
+                                              <PenBox
+                                                size={16}
+                                                className="mr-2"
+                                              />
+                                              Edit
+                                            </Button>
+                                          </DialogTrigger>
+                                          <DialogContent>
+                                            <DialogHeader>
+                                              <DialogTitle>
+                                                Edit Reply
+                                              </DialogTitle>
+                                            </DialogHeader>
+                                            <div className="space-y-4">
+                                              <Input
+                                                value={editReplyText}
+                                                onChange={(e) =>
+                                                  setReplyEditText(
+                                                    e.target.value
+                                                  )
+                                                }
+                                                className="w-full"
+                                                placeholder="Edit your comment"
+                                              />
+                                            </div>
+                                            <DialogFooter className="pt-4">
+                                              <DialogClose asChild>
+                                                <Button variant="ghost">
+                                                  Cancel
+                                                </Button>
+                                              </DialogClose>
+                                              <Button
+                                                onClick={async () => {
+                                                  if (
+                                                    editReplyId &&
+                                                    editReplyText.trim()
+                                                  ) {
+                                                    await EditComment(
+                                                      editReplyId,
+                                                      editReplyText
+                                                    );
+                                                    setEditReplyId(null);
+                                                    setReplyEditText("");
+                                                    setEditDialogOpen(false);
+                                                  } else {
+                                                    toast.error(
+                                                      "Comment cannot be empty!"
+                                                    );
+                                                    setEditReplyId(null);
+                                                    setReplyEditText("");
+                                                    setEditDialogOpen(false);
+                                                  }
+                                                }}
+                                                className="bg-indigo-600 text-white hover:bg-indigo-700"
+                                              >
+                                                Save Changes
+                                              </Button>
+                                            </DialogFooter>
+                                          </DialogContent>
+                                        </Dialog>
+
+                                        {/* Delete Comment */}
+                                        <AlertDialog>
+                                          <AlertDialogTrigger asChild>
+                                            <Button
+                                              variant="ghost"
+                                              className="w-full justify-start text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900"
+                                            >
+                                              <Trash
+                                                size={16}
+                                                className="mr-2"
+                                              />
+                                              Delete
+                                            </Button>
+                                          </AlertDialogTrigger>
+                                          <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                              <AlertDialogTitle>
+                                                Are you sure?
+                                              </AlertDialogTitle>
+                                              <AlertDialogDescription>
+                                                This action will permanently
+                                                delete the comment and all its
+                                                replies. This cannot be undone.
+                                              </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                              <AlertDialogCancel>
+                                                Cancel
+                                              </AlertDialogCancel>
+                                              <AlertDialogAction
+                                                className="bg-red-600 hover:bg-red-700 text-white"
+                                                onClick={() =>
+                                                  DeleteComment(r.id)
+                                                }
+                                              >
+                                                Delete
+                                              </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                          </AlertDialogContent>
+                                        </AlertDialog>
+                                      </PopoverContent>
+                                    )}
+                                  </Popover>
                                 </div>
                               </div>
                               <p className="text-sm text-gray-700 dark:text-gray-300">
