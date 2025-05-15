@@ -31,6 +31,8 @@ export const Comments = pgTable("comments", {
   blogId: varchar("blogId")
     .notNull()
     .references(() => Blogs.id),
+  userId: uuid("userId")
+    .references(() => Users.id),
   name: varchar("name").notNull(),
   createdBy: varchar("createdBy").notNull(),
   text: varchar("text").notNull(),

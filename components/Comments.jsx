@@ -53,8 +53,50 @@ const Comment = ({ blogId }) => {
         method: "POST",
         body: JSON.stringify({ blogId }),
       });
-      const data = await res.json();
-      setComments(data);
+
+      const data = await res.json(); // array of comments
+
+      // Helper function to fetch image URL by email
+      const getImgURL = async (email) => {
+        try {
+          const imgRes = await fetch("/api/get-imgurl", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+          });
+
+          const { imgURL } = await imgRes.json();
+          return imgURL || null;
+        } catch {
+          return null;
+        }
+      };
+
+      // Enrich comments and their replies
+      const enrichedComments = await Promise.all(
+        data.map(async (comment) => {
+          const commentImgURL = await getImgURL(comment.createdBy);
+          console.log("Comment Image URL:", commentImgURL);
+
+          const enrichedReplies = await Promise.all(
+            (comment.replies || []).map(async (reply) => {
+              const replyImgURL = await getImgURL(reply.createdBy);
+              console.log("Reply Image URL:", replyImgURL);
+              return { ...reply, imgURL: replyImgURL };
+            })
+          );
+
+          return {
+            ...comment,
+            imgURL: commentImgURL,
+            replies: enrichedReplies,
+          };
+        })
+      );
+
+      console.log("Enriched Comments:", enrichedComments);
+
+      setComments(enrichedComments);
     } catch (error) {
       toast.error("Failed to fetch comments!");
     }
@@ -65,11 +107,12 @@ const Comment = ({ blogId }) => {
   const handlePostComment = async () => {
     if (!comment.trim()) return toast.error("Comment cannot be empty!");
     await db.insert(Comments).values({
-      blogId,
+      blogId: blogId,
       name: user.fullName,
       createdBy: user.primaryEmailAddress.emailAddress,
       text: comment,
       time: getISTDateTime(),
+      userId: user.id,
     });
     setComment("");
     toast.success("Comment posted!");
@@ -146,7 +189,7 @@ const Comment = ({ blogId }) => {
         {comments.map((c, cIdx) => (
           <div key={c.id} className="flex items-start gap-4">
             <Avatar>
-              <AvatarImage src={c.name?.imgURL} />
+              <AvatarImage src={c.imgURL} />
               <AvatarFallback>{c.name?.[0]}</AvatarFallback>
             </Avatar>
             <div className="flex-1">
@@ -306,52 +349,55 @@ const Comment = ({ blogId }) => {
 
               {/* Replies */}
               {showReplies[cIdx] && c.replies.length > 0 && (
-                <div className="mt-5 space-y-4 pl-4 border-l-2 border-indigo-300 dark:border-indigo-600">
-                  {c.replies.map((r, rIdx) => {
-                    const replyKey = `${c.id}-${rIdx}`;
-                    return (
-                      <div
-                        key={rIdx}
-                        className="bg-indigo-50 dark:bg-slate-800 p-4 rounded-lg"
-                      >
-                        <div className="flex gap-3 items-start">
-                          <Avatar className="h-8 w-8">
+                <div className="mt-5 space-y-4 pl-10">
+                  <div className="mt-5 space-y-4 pl-2">
+                    {c.replies.map((r, rIdx) => {
+                      const replyKey = `${c.id}-${rIdx}`;
+                      return (
+                        <div key={rIdx} className="flex items-start gap-3">
+                          {/* Avatar outside the bubble */}
+                          <Avatar className="h-8 w-8 mt-1">
                             <AvatarFallback>{r.name[0]}</AvatarFallback>
                           </Avatar>
+
                           <div className="flex-1">
-                            <div className="flex justify-between items-center">
-                              <p className="text-sm font-semibold text-indigo-800 dark:text-white">
-                                {r.name}
-                              </p>
-                              <span className="text-xs text-gray-500 dark:text-gray-400">
-                                {r.time}
-                              </span>
-                            </div>
-                            <p className="text-sm mt-1 text-gray-700 dark:text-gray-300">
-                              {showFullReply[replyKey]
-                                ? r.text
-                                : truncateText(r.text, 20)}
-                            </p>
-                            {r.text.split(" ").length > 20 && (
-                              <button
-                                className="text-xs text-indigo-600 dark:text-cyan-300 hover:underline"
-                                onClick={() =>
-                                  setShowFullReply((prev) => ({
-                                    ...prev,
-                                    [replyKey]: !prev[replyKey],
-                                  }))
-                                }
-                              >
+                            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                              <div className="flex justify-between items-start mb-1">
+                                <div>
+                                  <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                                    {r.name}
+                                  </p>
+                                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                                    {r.time}
+                                  </span>
+                                </div>
+                              </div>
+                              <p className="text-sm text-gray-700 dark:text-gray-300">
                                 {showFullReply[replyKey]
-                                  ? "Show less"
-                                  : "Show more"}
-                              </button>
-                            )}
+                                  ? r.text
+                                  : truncateText(r.text, 20)}
+                              </p>
+                              {r.text.split(" ").length > 20 && (
+                                <button
+                                  className="text-xs mt-1 text-indigo-600 dark:text-cyan-300 hover:underline"
+                                  onClick={() =>
+                                    setShowFullReply((prev) => ({
+                                      ...prev,
+                                      [replyKey]: !prev[replyKey],
+                                    }))
+                                  }
+                                >
+                                  {showFullReply[replyKey]
+                                    ? "Show less"
+                                    : "Show more"}
+                                </button>
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
               )}
             </div>
