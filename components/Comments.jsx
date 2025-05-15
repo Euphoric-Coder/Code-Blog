@@ -158,12 +158,11 @@ const Comment = ({ blogId }) => {
     refreshData();
   };
 
-  const handleEditComment = async (id, currentText) => {
-    const newText = prompt("Edit your comment:", currentText);
+  const EditComment = async (id, newText) => {
     if (!newText) return;
     await db
       .update(Comments)
-      .set({ text: newText, time: new Date().toLocaleString() })
+      .set({ text: newText, time: getISTDateTime() })
       .where(eq(Comments.id, id));
     toast.success("Comment edited!");
     refreshData();
@@ -255,7 +254,7 @@ const Comment = ({ blogId }) => {
                               <Button
                                 variant="ghost"
                                 className="w-full justify-start text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900"
-                                // onClick={() => handleEditComment(c.id, c.text)}
+                                // onClick={() => EditComment(c.id, c.text)}
                                 onClick={() => {
                                   setEditCommentId(c.id);
                                   setEditText(c.text);
@@ -281,7 +280,7 @@ const Comment = ({ blogId }) => {
                                 <Button
                                   onClick={async () => {
                                     if (editCommentId && editText.trim()) {
-                                      await handleEditComment(
+                                      await EditComment(
                                         editCommentId,
                                         editText
                                       );

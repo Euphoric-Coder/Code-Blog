@@ -5,6 +5,7 @@ import { ThemeProvider } from "../components/theme-provider";
 import Footer from "@/components/Footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
+import ThemedNotification from "@/components/ThemedNotification";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,8 +34,9 @@ export default function RootLayout({ children }) {
               <main className="flex-grow">{children}</main>
               <Footer />
             </div>
+            <ThemedNotification />
           </ThemeProvider>
-          <Toaster richColors />
+          {/* <Toaster richColors theme="system"/> */}
         </body>
       </html>
     </ClerkProvider>
