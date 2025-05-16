@@ -1,11 +1,10 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
 import { ThemeProvider } from "../components/theme-provider";
-import Footer from "@/components/Footer";
 import { ClerkProvider } from "@clerk/nextjs";
-import { Toaster } from "@/components/ui/sonner";
 import ThemedNotification from "@/components/ThemedNotification";
+import NavbarWrapper from "@/components/NavbarWrapper";
+import FooterWrapper from "@/components/FooterWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,9 +29,9 @@ export default function RootLayout({ children }) {
             disableTransitionOnChange
           >
             <div className="flex flex-col min-h-screen">
-              <Navbar />
+              <NavbarWrapper />
               <main className="flex-grow">{children}</main>
-              <Footer />
+              <FooterWrapper />
             </div>
             <ThemedNotification />
           </ThemeProvider>

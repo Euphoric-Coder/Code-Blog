@@ -47,6 +47,10 @@ import {
 import { format, set } from "date-fns";
 import { getISTDateTime } from "@/lib/utils";
 import { Input } from "./ui/input";
+import {
+  MdOutlineKeyboardArrowDown,
+  MdOutlineKeyboardArrowUp,
+} from "react-icons/md";
 
 // Word truncation
 const truncateText = (text, limit) => {
@@ -153,7 +157,7 @@ const Comment = ({ blogId }) => {
       name: user.fullName,
       createdBy: user.primaryEmailAddress.emailAddress,
       text: reply,
-      time: new Date().toLocaleString(),
+      time: getISTDateTime(),
     });
     setReply("");
     setReplyingTo(null);
@@ -181,16 +185,15 @@ const Comment = ({ blogId }) => {
   const EditReply = async (id, newText) => {
     if (!newText) return;
     await db
-      .update(Comments)
+      .update(Replies)
       .set({ text: newText, time: getISTDateTime() })
-      .where(eq(Comments.id, id));
+      .where(eq(Replies.id, id));
     toast.success("Comment edited!");
     refreshData();
   };
 
   const DeleteReply = async (id) => {
-    await db.delete(Replies).where(eq(Replies.commentId, id));
-    await db.delete(Comments).where(eq(Comments.id, id));
+    await db.delete(Replies).where(eq(Replies.id, id));
     toast.success("Comment deleted!");
     refreshData();
   };
@@ -375,7 +378,8 @@ const Comment = ({ blogId }) => {
                   {showFullComment[c.id] ? c.text : truncateText(c.text, 25)}
                 </p>
                 {c.text.split(" ").length > 25 && (
-                  <button
+                  <Button
+                  variant="ghost"
                     className="text-xs text-indigo-600 hover:underline mt-1"
                     onClick={() =>
                       setShowFullComment((prev) => ({
@@ -385,13 +389,13 @@ const Comment = ({ blogId }) => {
                     }
                   >
                     {showFullComment[c.id] ? "Show less" : "Show more"}
-                  </button>
+                  </Button>
                 )}
               </div>
               {/* Actions */}
-              <div className="flex items-center justify-between mt-2 text-xs sm:text-sm gap-2 flex-wrap">
+              <div className="flex items-center mt-2 text-xs sm:text-sm flex-wrap">
                 {/* Action Buttons: Like, Edit, Delete, Reply */}
-                <div className="flex items-center gap-1 flex-wrap">
+                <div className="flex items-center flex-wrap">
                   {/* Like Button */}
                   <Button
                     variant="ghost"
@@ -423,8 +427,9 @@ const Comment = ({ blogId }) => {
 
                 {/* Show/Hide Replies Toggle */}
                 {c.replies.length > 0 && (
-                  <button
-                    className="text-gray-500 dark:text-gray-400 hover:underline"
+                  <Button
+                    variant="ghost"
+                    className="rounded-3xl text-indigo-600 dark:text-indigo-400 p-4 flex items-center gap-1"
                     onClick={() =>
                       setShowReplies((prev) => ({
                         ...prev,
@@ -432,10 +437,18 @@ const Comment = ({ blogId }) => {
                       }))
                     }
                   >
-                    {showReplies[cIdx]
-                      ? "Hide Replies"
-                      : `Show Replies (${c.replies.length})`}
-                  </button>
+                    {showReplies[cIdx] ? (
+                      <>
+                        <MdOutlineKeyboardArrowUp size={20} />
+                        Hide Replies
+                      </>
+                    ) : (
+                      <>
+                        <MdOutlineKeyboardArrowDown size={20} />
+                        Show Replies ({c.replies.length})
+                      </>
+                    )}
+                  </Button>
                 )}
               </div>
 
@@ -499,6 +512,7 @@ const Comment = ({ blogId }) => {
                                 </div>
                                 <div className="flex items-center gap-2">
                                   <span className="text-sm text-gray-500 dark:text-gray-400">
+                                    {/* {format(r.time.split(", ")[0], "PPP")} */}
                                     {format(r.time.split(", ")[0], "PPP")}
                                   </span>
                                   <Popover>
@@ -569,7 +583,7 @@ const Comment = ({ blogId }) => {
                                                     editReplyId &&
                                                     editReplyText.trim()
                                                   ) {
-                                                    await EditComment(
+                                                    await EditReply(
                                                       editReplyId,
                                                       editReplyText
                                                     );
@@ -625,7 +639,7 @@ const Comment = ({ blogId }) => {
                                               <AlertDialogAction
                                                 className="bg-red-600 hover:bg-red-700 text-white"
                                                 onClick={() =>
-                                                  DeleteComment(r.id)
+                                                  DeleteReply(r.id)
                                                 }
                                               >
                                                 Delete
