@@ -6,8 +6,8 @@ import { Clock, Share2, Heart, Bookmark, Calendar } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { format } from "date-fns";
 import { processContent } from "@/lib/processContent";
-import Comment from "@/components/Comments";
 import BlogLoader from "@/components/Blog/BlogLoader";
+import Comment from "@/components/Blog/Comments";
 
 export default function Page() {
   const blogId = useParams().id;

@@ -1,6 +1,6 @@
+import HomeClient from "@/components/LandingPage/Home";
 import { getAllPosts, getallTutorials } from "@/lib/posts";
-import HomeClient from "@/components/Home";
-
+w
 // Server Component
 export default async function Home() {
   const blogposts = await getAllPosts(); // Fetch posts server-side

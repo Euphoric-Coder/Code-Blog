@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { ModeToggle } from "./theme-btn";
 import LoadingBar from "react-top-loading-bar";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
@@ -12,7 +11,8 @@ import {
   UserButton,
   useUser,
 } from "@clerk/nextjs";
-import { Button } from "./ui/button";
+import { ModeToggle } from "../theme-btn";
+import { Button } from "../ui/button";
 const Navbar = () => {
   const [progress, setProgress] = useState(0);
   const pathname = usePathname();

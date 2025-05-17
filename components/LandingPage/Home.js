@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import HeroSection from "./HeroSection";
 import SearchSection from "./SearchSection";
-import FeaturedBlogsSection from "./FeaturedBlogsSection";
 import { useTheme } from "next-themes";
+import HeroSection from "./HeroSection";
+import FeaturedBlogsSection from "./FeaturedBlogsSection";
 import FeaturedTutorialSection from "./FeaturedTutorialsSection";
 
 export default function HomeClient({ initialPosts, tutorialPosts }) {

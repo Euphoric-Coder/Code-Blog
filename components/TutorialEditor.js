@@ -20,7 +20,7 @@ import { common, createLowlight } from "lowlight";
 const lowlight = createLowlight(common);
 
 import { useState } from "react";
-import CodeBlockComponent from "./CodeBlock";
+import CodeBlockComponent from "./Blog/CodeBlock";
 import { Button } from "./ui/button";
 import {
   MdFormatBold,

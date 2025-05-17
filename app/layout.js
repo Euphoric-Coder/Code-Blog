@@ -3,8 +3,8 @@ import "./globals.css";
 import { ThemeProvider } from "../components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import ThemedNotification from "@/components/ThemedNotification";
-import NavbarWrapper from "@/components/NavbarWrapper";
-import FooterWrapper from "@/components/FooterWrapper";
+import NavbarWrapper from "@/components/LandingPage/NavbarWrapper";
+import FooterWrapper from "@/components/LandingPage/FooterWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
