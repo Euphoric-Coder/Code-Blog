@@ -50,6 +50,7 @@ import {
   MdOutlineKeyboardArrowDown,
   MdOutlineKeyboardArrowUp,
 } from "react-icons/md";
+import { Input } from "../ui/input";
 
 // Word truncation
 const truncateText = (text, limit) => {

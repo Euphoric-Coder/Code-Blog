@@ -7,6 +7,7 @@ import { Button } from "../ui/button";
 import { FiUploadCloud } from "react-icons/fi";
 import { toast } from "sonner";
 import FormBackgroundEffect from "../Effect/FormBackgroundEffect";
+import { Label } from "../ui/label";
 
 const BasicInfoSection = ({ fullName, email, profileImage, user }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -35,20 +36,23 @@ const BasicInfoSection = ({ fullName, email, profileImage, user }) => {
   };
 
   const handleSave = async () => {
+    const loadingToastId = toast.loading("Updating profile...");
     try {
-      toast.loading("Updating profile...");
       const [firstName, ...rest] = name.split(" ");
       const lastName = rest.join(" ");
 
-      await user.update({ firstName, lastName });
+      console.log(firstName, lastName);
+
+      await user.update({ firstName: firstName, lastName: lastName });
 
       if (newFile) {
         await user.setProfileImage({ file: newFile });
       }
-      toast.dismiss();
+      toast.dismiss(loadingToastId);
       toast.success("Profile updated!");
       setIsEditing(false);
     } catch (err) {
+      toast.dismiss(loadingToastId);
       console.error("Update failed", err);
       toast.error("Failed to update profile");
     }
@@ -73,13 +77,15 @@ const BasicInfoSection = ({ fullName, email, profileImage, user }) => {
         </h2>
 
         {!isEditing ? (
-          <Button onClick={() => setIsEditing(true)} className="btn9"><PenBox /> Update Profile</Button>
+          <Button onClick={() => setIsEditing(true)} className="btn9">
+            <PenBox /> Update Profile
+          </Button>
         ) : (
           <div className="flex gap-2">
-            <Button onClick={handleSave}>Save</Button>
-            <Button variant="outline" onClick={handleCancel}>
+            <Button variant="ghost" onClick={handleCancel} className="rounded-3xl">
               Cancel
             </Button>
+            <Button onClick={handleSave} className="btn9">Save</Button>
           </div>
         )}
       </div>
@@ -107,36 +113,47 @@ const BasicInfoSection = ({ fullName, email, profileImage, user }) => {
       </div>
 
       {isEditing && (
-        <div
-          className={`relative mt-5 flex flex-col items-center justify-center p-8 border-2 rounded-xl cursor-pointer transition-all ${
-            isDragging
-              ? "border-blue-600 bg-gradient-to-br from-cyan-100 to-indigo-200"
-              : "border-blue-300 bg-gradient-to-br from-cyan-50 to-indigo-100"
-          } shadow-md hover:shadow-lg`}
-          onClick={() => fileInputRef.current?.click()}
-          onDrop={handleFileDrop}
-          onDragOver={(e) => {
-            e.preventDefault();
-            setIsDragging(true);
-          }}
-          onDragLeave={() => setIsDragging(false)}
-        >
-          <FiUploadCloud className="text-blue-600 text-6xl mb-4" />
-          <div className="text-center">
-            <p className="text-blue-800 text-lg font-semibold">
-              Drag & Drop your image here
-            </p>
-            <p className="text-md text-indigo-500 mt-1">
-              or click to browse files
-            </p>
-          </div>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleFileSelect}
+        <div>
+          <Label className="text">Edit Full Name</Label>
+          <Input
+            type="text"
+            placeholder="Full Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="mt-2 input-field"
+            disabled={!isEditing}
           />
+          <div
+            className={`relative mt-5 flex flex-col items-center justify-center p-8 border-2 rounded-xl cursor-pointer transition-all ${
+              isDragging
+                ? "border-blue-600 bg-gradient-to-br from-cyan-100 to-indigo-200"
+                : "border-blue-300 bg-gradient-to-br from-cyan-50 to-indigo-100"
+            } shadow-md hover:shadow-lg`}
+            onClick={() => fileInputRef.current?.click()}
+            onDrop={handleFileDrop}
+            onDragOver={(e) => {
+              e.preventDefault();
+              setIsDragging(true);
+            }}
+            onDragLeave={() => setIsDragging(false)}
+          >
+            <FiUploadCloud className="text-blue-600 text-6xl mb-4" />
+            <div className="text-center">
+              <p className="text-blue-800 text-lg font-semibold">
+                Drag & Drop your image here
+              </p>
+              <p className="text-md text-indigo-500 mt-1">
+                or click to browse files
+              </p>
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileSelect}
+            />
+          </div>
         </div>
       )}
     </div>

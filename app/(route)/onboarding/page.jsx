@@ -4,7 +4,6 @@ import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import BasicInfoSection from "@/components/Form/BasicInfoSection";
-import UserTypeSelector from "@/components/Form/UserTypeSelector";
 import ApplicantFieldsSection from "@/components/Form/ApplicantFieldsSection";
 import CommonFieldsSection from "@/components/Form/CommonFieldsSection";
 import RecruiterFieldsSection from "@/components/Form/RecruiterFieldsSection";
@@ -116,22 +115,6 @@ const page = () => {
     localStorage.setItem(storageKey, JSON.stringify(updatedBlogData));
   };
 
-  const handleUserTypeChange = (value) => {
-    setFormData((prev) => ({
-      ...prev,
-      userType: value,
-    }));
-    if (value === "recruiter") {
-      setFormData((prev) => ({
-        ...prev,
-        organisationName: "",
-        recruiterPosition: "",
-        companyWebsite: "",
-        industry: "",
-      }));
-    }
-  };
-
   const handleMultiSelectChange = (field, values) => {
     setFormData((prev) => ({
       ...prev,
@@ -177,131 +160,10 @@ const page = () => {
     }
   };
 
-  const addEducation = () => {
-    setFormData((prev) => ({
-      ...prev,
-      education: [
-        ...prev.education,
-        {
-          degree: "",
-          university: "",
-          fieldOfStudy: "",
-          website: "", // initialize to empty string
-          customDegree: "", // initialize to empty string
-          customUniversity: "", // initialize to empty string
-          startDate: "",
-          endDate: "",
-          customStartDate: "",
-          customEndDate: "",
-        },
-      ],
-    }));
-  };
-
-  const removeEducation = (index) => {
-    setFormData((prev) => {
-      const updated = [...prev.education];
-      updated.splice(index, 1);
-      return { ...prev, education: updated };
-    });
-  };
-
-  const validateForm = () => {
-    const errors = {};
-
-    if (!formData.currentStatus) {
-      errors.currentStatus = "This field is required";
-    }
-
-    formData.education.forEach((edu, index) => {
-      if (!edu.degree) {
-        errors[`degree-${index}`] = "Degree is required";
-      } else if (edu.degree === "other" && !edu.customDegree) {
-        errors[`customDegree-${index}`] = "Please specify your degree";
-      }
-
-      if (!edu.fieldOfStudy) {
-        errors[`fieldOfStudy-${index}`] = "Major is required";
-      }
-
-      if (!edu.university) {
-        errors[`university-${index}`] = "University is required";
-      } else if (edu.university === "other" && !edu.customUniversity) {
-        errors[`customUniversity-${index}`] = "Please specify your university";
-      }
-
-      if (!edu.startDate) {
-        errors[`startDate-${index}`] = "Start Date is required";
-      } else if (edu.startDate === "other" && !edu.customStartDate) {
-        errors[`customStartDate-${index}`] = "Please enter your start date";
-      }
-
-      if (!edu.endDate) {
-        errors[`endDate-${index}`] = "End Date is required";
-      } else if (edu.endDate === "other" && !edu.customEndDate) {
-        errors[`customEndDate-${index}`] = "Please enter your end date";
-      }
-    });
-
-    if (formData.preferredRoles.length === 0) {
-      errors.preferredRoles = "Please add at least one preferred role";
-    }
-
-    if (formData.keySkills.length === 0) {
-      errors.keySkills = "Please add at least one skill";
-    }
-
-    if (!formData.gender) errors.gender = "Gender is required";
-
-    if (!formData.age || formData.age < 18)
-      errors.age = "Valid age is required";
-
-    if (!formData.location) errors.location = "Location is required";
-
-    if (!formData.bio) errors.bio = "Bio is required";
-
-    if (
-      formData.linkedInUrl.trim() &&
-      !/^(https:\/\/)?(www\.|[a-z]{2}\.)linkedin\.com\/in\/[A-Za-z0-9_-]+\/?$/.test(
-        formData.linkedInUrl.trim()
-      )
-    ) {
-      errors.linkedInUrl =
-        "Enter a valid LinkedIn profile URL (e.g., www.linkedin.com/country-code/your-name)";
-    }
-
-    if (formData.userType === "recruiter") {
-      if (!formData.organisationName)
-        errors.organisationName = "Organisation Name is required";
-
-      if (!formData.recruiterPosition)
-        errors.recruiterPosition = "Your position is required";
-
-      if (formData.companyWebsite?.trim()) {
-        const urlPattern =
-          /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/i;
-        if (!urlPattern.test(formData.companyWebsite.trim())) {
-          errors.companyWebsite = "Enter a valid company website URL";
-        }
-      }
-
-      if (!formData.industry)
-        errors.industry = "Industry selection is required";
-    }
-
-    setFormErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     console.log("Submitted form data:", formData);
-
-    if (!validateForm()) {
-      toast.error("Please fill in all required fields");
-      return;
-    }
 
     const loadingToastId = toast.loading("Submitting your profile...");
 
@@ -427,48 +289,27 @@ const page = () => {
           user={user}
         />
 
-        <UserTypeSelector
-          selectedType={formData.userType}
-          onChange={handleUserTypeChange}
-        />
-
         {formData.userType && (
-          <CommonFieldsSection
-            formState={formData}
-            formErrors={formErrors}
-            handleChange={handleChange}
-            handleFileChange={(file) =>
-              setFormData((prev) => ({
-                ...prev,
-                resume: file,
-              }))
-            }
-            handleInputChange={handleInputChange}
-            userType={formData.userType}
-          />
+          <div className="mt-10">
+            <CommonFieldsSection
+              formState={formData}
+              formErrors={formErrors}
+              handleChange={handleChange}
+              handleFileChange={(file) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  resume: file,
+                }))
+              }
+              handleInputChange={handleInputChange}
+              userType={"recruiter"}
+            />
+          </div>
         )}
 
-        {formData.userType === "recruiter" && (
-          <RecruiterFieldsSection
-            formState={formData}
-            formErrors={formErrors}
-            handleChange={handleChange}
-          />
-        )}
-
-        {formData.userType === "applicant" && (
-          <ApplicantFieldsSection
-            formState={formData}
-            formErrors={formErrors}
-            handleChange={handleChange}
-            updateEducationField={updateEducationField}
-            handleMultiSelectChange={handleMultiSelectChange}
-            addEducation={addEducation}
-            removeEducation={removeEducation}
-          />
-        )}
         {formData.userType !== "" && (
-          <div className="mt-6">
+          <div className="mt-6 flex gap-4">
+            <Button className="w-full rounded-3xl">Skip for now</Button>
             <Button
               onClick={handleSubmit}
               className="w-full btn10 rounded-full"

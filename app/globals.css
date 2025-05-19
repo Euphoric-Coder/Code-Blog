@@ -169,6 +169,103 @@
   }
 }
 
+.form-layout {
+  @apply border-[3px] border-blue-500 dark:border-blue-400 p-5 rounded-[20px] bg-gradient-to-b from-cyan-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 shadow-xl relative overflow-hidden
+}
+
+.input-field {
+  @apply w-full border-[2px] border-blue-100 dark:border-indigo-900 rounded-xl shadow-lg bg-gradient-to-br from-cyan-50 to-blue-100 dark:from-gray-800 dark:to-gray-700 text-gray-800 dark:text-gray-200 transition-all duration-500 ring-2 ring-blue-400 dark:ring-blue-600;
+}
+
+.input-error-field {
+  @apply w-full border-[2px] border-red-300 dark:border-red-700 rounded-xl shadow-lg bg-gradient-to-br from-red-50 to-red-100 dark:from-gray-800 dark:to-gray-700 text-gray-800 dark:text-gray-200 transition-all duration-500 ring-2 ring-red-400 dark:ring-red-500;
+}
+
+.select-field {
+  @apply w-full border-[2px] border-sky-300 dark:border-blue-900 rounded-xl shadow-lg p-2 bg-gradient-to-br from-cyan-50 via-blue-100 to-indigo-100 dark:from-gray-900 dark:to-gray-950 text-gray-800 dark:text-gray-100 transition-transform transform hover:scale-105 duration-200
+}
+
+.select-content {
+  @apply mb-2 w-[90%] p-2 rounded-lg shadow-md bg-gradient-to-r from-cyan-50 via-blue-100 to-indigo-100 dark:from-gray-800 dark:to-gray-700 text-gray-800 border-[2px] border-blue-300 dark:border-indigo-800 dark:text-gray-200 ring-2 ring-blue-400 dark:ring-blue-500 transition duration-200
+}
+
+.select-item {
+  @apply w-[90%] text-lg text-gray-800 dark:text-white hover:font-semibold rounded-2xl cursor-pointer bg-gradient-to-r hover:from-cyan-200 hover:to-blue-200 dark:hover:from-gray-700 dark:hover:to-gray-600 transition-all duration-200
+}
+
+.multiselect-content {
+  @apply mt-3 select-content max-h-32 overflow-auto
+}
+
+.multiselect-item {
+  @apply px-3 py-2 text-lg text-gray-800 dark:text-white hover:font-semibold rounded-2xl cursor-pointer bg-gradient-to-r hover:from-cyan-200 hover:to-blue-200 dark:hover:from-gray-700 dark:hover:to-gray-600 transition-all duration-200
+}
+
+
+.text {
+  @apply text-blue-700 dark:text-blue-300 font-bold mb-2
+}
+
+.btn1 {
+  @apply py-4 rounded-2xl bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 dark:from-blue-600 dark:via-indigo-600 dark:to-teal-600 text-white font-bold hover:shadow-lg hover:dark:shadow-gray-700 hover:bg-gradient-to-r hover:from-pink-600 hover:via-purple-600 hover:to-indigo-600 dark:hover:bg-gradient-to-r dark:hover:from-blue-700 dark:hover:via-indigo-700 dark:hover:to-teal-700 transition-transform transform md:hover:scale-105 hover:backdrop-brightness-125
+}
+
+.btn2 {
+  @apply py-4 rounded-2xl 
+    bg-gradient-to-r from-fuchsia-500 via-purple-500 to-pink-500 dark:from-cyan-600 dark:via-blue-600 dark:to-violet-600 text-white font-bold hover:shadow-lg hover:dark:shadow-gray-700 hover:bg-gradient-to-r hover:from-fuchsia-600 hover:via-purple-600 hover:to-pink-600 dark:hover:bg-gradient-to-r dark:hover:from-cyan-700 dark:hover:via-blue-700 dark:hover:to-violet-700 transition-transform transform md:hover:scale-105 hover:backdrop-brightness-125;
+}
+
+.btn3 {
+  @apply py-4 rounded-2xl bg-gradient-to-r from-blue-400 via-sky-500 to-purple-500 dark:from-indigo-600 dark:via-blue-700 dark:to-teal-600 text-white font-bold hover:shadow-lg hover:dark:shadow-gray-700 hover:bg-gradient-to-r hover:from-blue-500 hover:via-sky-600 hover:to-purple-600 dark:hover:bg-gradient-to-r dark:hover:from-indigo-700 dark:hover:via-blue-800 dark:hover:to-teal-700 transition-transform transform md:hover:scale-105 hover:backdrop-brightness-125
+}
+
+.btn4 {
+  @apply bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 dark:from-blue-700 dark:via-indigo-800 dark:to-purple-800 hover:dark:from-blue-800 hover:dark:via-indigo-900 hover:dark:to-purple-900 text-white font-medium text-sm sm:text-base rounded-full shadow-lg hover:opacity-90 transition-transform transform hover:scale-105
+}
+
+.btn5 {
+  @applyw-full py-4 rounded-2xl bg-gradient-to-r from-cyan-400 via-blue-400 to-sky-400 dark:from-indigo-600 dark:via-blue-700 dark:to-teal-600 text-white font-bold hover:shadow-lg hover:dark:shadow-gray-700 hover:bg-gradient-to-r hover:from-cyan-500 hover:via-blue-500 hover:to-sky-500  dark:hover:bg-gradient-to-r dark:hover:from-indigo-700 dark:hover:via-blue-800 dark:hover:to-teal-700 transition-transform transform md:hover:scale-105 hover:backdrop-brightness-125
+}
+
+
+.btn6 {
+  @apply rounded-full bg-gradient-to-r from-cyan-400 via-blue-400 to-sky-400 hover:from-cyan-500 hover:via-blue-500 hover:to-sky-500 dark:from-blue-600 dark:via-cyan-500 dark:to-teal-500 hover:dark:from-blue-700 hover:dark:via-cyan-600 hover:dark:to-teal-600 text-white font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-300
+}
+
+.btn7 {
+  @apply py-4 rounded-2xl bg-gradient-to-r from-teal-500 via-blue-500 to-indigo-500 dark:from-blue-600 dark:via-cyan-500 dark:to-teal-500 text-white font-bold shadow-lg hover:shadow-[0_0_30px_rgba(0,100,255,0.5)] transition-transform transform hover:scale-105 disabled:opacity-50
+}
+
+.btn8 {
+  @apply py-4 rounded-2xl border-2 border-indigo-500 text-indigo-500 font-bold
+    bg-transparent dark:border-purple-500 dark:text-purple-500 
+    hover:bg-indigo-500 hover:text-white hover:shadow-lg 
+    dark:hover:bg-purple-500 dark:hover:text-white 
+    transition-all duration-300 ease-in-out
+  }
+  
+  .btn9 {
+    @apply px-4 py-2 font-semibold rounded-3xl text-white bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 dark:from-blue-500 dark:via-purple-600 dark:to-pink-500 shadow-xl hover:from-blue-500 hover:to-purple-700 dark:hover:from-purple-600 dark:hover:to-pink-600 transition-transform transform hover:scale-110 hover:backdrop-brightness-125 dark:hover:backdrop-brightness-110
+  }
+  
+  .btn10 {
+    @apply text-sm bg-gradient-to-r from-fuchsia-500 via-blue-600 to-teal-500 text-white font-bold shadow-xl hover:shadow-2xl transition-transform transform hover:scale-[1.04] duration-300 disabled:opacity-50 disabled:cursor-not-allowed dark:from-pink-600 dark:via-purple-700 dark:to-blue-600 dark:text-gray-200 hover:from-purple-600 hover:via-blue-500 hover:to-teal-400 dark:hover:from-pink-700 dark:hover:via-purple-800 dark:hover:to-blue-700 active:scale-95 active:shadow-md
+  }
+
+.del1 {
+  @apply py-3 rounded-2xl bg-gradient-to-r from-red-500 via-red-600 to-red-700 text-white font-bold shadow-lg hover:shadow-[0_0_20px_rgba(255,100,100,0.5)] hover:scale-105 active:scale-95 transition-transform transform dark:bg-gradient-to-r dark:from-red-700 dark:via-red-800 dark:to-red-900 dark:shadow-[0_0_20px_rgba(200,50,50,0.5)] dark:hover:shadow-[0_0_30px_rgba(200,50,50,0.7)]
+}
+
+.del2 {
+  @apply text-sm rounded-full text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-500 dark:border-gray-300
+}
+
+.del3 {
+  @apply px-4 py-2 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-700 rounded-full
+}
+
+
+
 
 code[data-line-numbers] {
   counter-reset: line;

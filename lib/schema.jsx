@@ -3,12 +3,13 @@ import { pgTable, varchar, uuid, boolean, jsonb } from "drizzle-orm/pg-core";
 export const Users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
   name: varchar("name").notNull(),
-  email: varchar("email").notNull(),
+  email: varchar("email").notNull().unique(),
   imgURL: varchar("imgURL"),
   username: varchar("username"),
+  gender: varchar("gender"),
   bio: varchar("bio"),
   websites: jsonb("websites"),
-  aboutSection: jsonb("aboutSection"),
+  aboutMe: jsonb("aboutMe"),
   hasOnboarded: boolean("hasOnboarded").notNull().default(false),
 });
 
@@ -31,8 +32,7 @@ export const Comments = pgTable("comments", {
   blogId: varchar("blogId")
     .notNull()
     .references(() => Blogs.id),
-  userId: uuid("userId")
-    .references(() => Users.id),
+  userId: uuid("userId").references(() => Users.id),
   name: varchar("name").notNull(),
   createdBy: varchar("createdBy").notNull(),
   text: varchar("text").notNull(),
