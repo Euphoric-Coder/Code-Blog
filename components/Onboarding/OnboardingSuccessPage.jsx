@@ -5,7 +5,7 @@ import SuccessIcon from "./SuccessIcon";
 import { Button } from "../ui/button";
 import { redirect } from "next/navigation";
 
-const OnboardingSuccess = ({ userType }) => {
+const OnboardingSuccess = () => {
   const [visible, setVisible] = useState(false);
   const [countdown, setCountdown] = useState(10);
 
@@ -34,12 +34,7 @@ const OnboardingSuccess = ({ userType }) => {
     // In a real app, you'd use router navigation here
     // e.g., router.push('/dashboard')
     // redirect("/test");
-    if (userType === "recruiter") {
-      redirect("/recruiter");
-    }
-    if (userType === "applicant") {
-      redirect("/applicant");
-    }
+    redirect("/");
   };
 
   return (

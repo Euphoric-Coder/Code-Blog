@@ -2,11 +2,12 @@ import { pgTable, varchar, uuid, boolean, jsonb } from "drizzle-orm/pg-core";
 
 export const Users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
-  name: varchar("name").notNull(),
+  fullName: varchar("fullName").notNull(),
   email: varchar("email").notNull().unique(),
-  imgURL: varchar("imgURL"),
+  profileImage: varchar("profileImage"),
   username: varchar("username"),
   gender: varchar("gender"),
+  age: varchar("age"),
   bio: varchar("bio"),
   websites: jsonb("websites"),
   aboutMe: jsonb("aboutMe"),

@@ -21,48 +21,23 @@ const page = () => {
     fullName: "",
     email: "",
     profileImage: "",
-    userType: "",
     gender: "",
     age: "",
     location: "",
     bio: "",
     linkedInUrl: "",
-    resumeURL: null,
-    resumeId: "",
-    resumeName: "",
-
-    organisationName: "",
-    recruiterPosition: "",
-    companyWebsite: "",
-    industry: "",
-
-    currentStatus: "",
-    education: [
-      {
-        degree: "",
-        university: "",
-        fieldOfStudy: "",
-        website: "",
-        customDegree: "",
-        customUniversity: "",
-        startDate: "",
-        endDate: "",
-        customStartDate: "",
-        customEndDate: "",
-      },
-    ],
-    preferredRoles: [],
-    keySkills: [],
+    websites: {},
+    aboutMe: {},
 
     isOnboarded: false,
   });
+
+  const [willSkip, setWillSkip] = useState(false);
   const [formErrors, setFormErrors] = useState({});
 
   const [submitted, setSubmitted] = useState(false);
 
   const [onboarded, setOnboarded] = useState(false);
-
-  const storageKey = `pendingOnboarding-${user?.id}`;
 
   useEffect(() => {
     const checkUser = async () => {
@@ -79,15 +54,6 @@ const page = () => {
 
     if (isSignedIn && user) {
       checkUser();
-      const type = localStorage.getItem("userType");
-      if (type) {
-        setFormData((prev) => ({
-          ...prev,
-          userType: type,
-        }));
-        // Optionally: clear it after reading
-        // localStorage.removeItem("userType");
-      }
       setFormData((prev) => ({
         ...prev,
         email: user?.primaryEmailAddress?.emailAddress,
@@ -98,34 +64,6 @@ const page = () => {
       redirect("/sign-in");
     }
   }, [isSignedIn, user]);
-
-  const handleInputChange = (field, value) => {
-    const updatedBlogData = {
-      // title: field === "title" ? value : title,
-      // description: field === "description" ? value : description,
-      fileId: field === "coverImage" ? value.fileId : fileId,
-      uploadData: field === "coverImage" ? value.data : uploadData,
-      // content: field === "content" ? value : content,
-      // category: field === "category" ? value : category,
-      // subcategories: field === "subcategories" ? value : selectedSubCategories,
-    };
-    // console.log("Updated blog data:", updatedBlogData);
-    localStorage.setItem(storageKey, JSON.stringify(updatedBlogData));
-  };
-
-  const handleMultiSelectChange = (field, values) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: values,
-    }));
-
-    if (formErrors[field]) {
-      setFormErrors((prev) => ({
-        ...prev,
-        [field]: undefined,
-      }));
-    }
-  };
 
   const handleChange = (name, value) => {
     setFormData((prev) => ({
@@ -138,23 +76,6 @@ const page = () => {
         ...prev,
         [name]: undefined,
       }));
-    }
-  };
-
-  const updateEducationField = (index, field, value) => {
-    setFormData((prev) => {
-      const updated = [...prev.education];
-      updated[index][field] = value;
-      return { ...prev, education: updated };
-    });
-
-    const errorKey = `${field}-${index}`;
-    if (formErrors[errorKey]) {
-      setFormErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors[errorKey];
-        return newErrors;
-      });
     }
   };
 
@@ -200,17 +121,13 @@ const page = () => {
   if (onboarded && isLoggedIn)
     return (
       <div>
-        {formData.userType === "recruiter" ? (
-          <RedirectPage redirectTo="/recruiter" userName={user.firstName} />
-        ) : (
-          <RedirectPage redirectTo="/applicant" userName={user.firstName} />
-        )}
+        <RedirectPage redirectTo="/" userName={user.firstName} />
       </div>
     );
   if (submitted)
     return (
       <div>
-        <OnboardingSuccess userType={formData.userType} />
+        <OnboardingSuccess />
       </div>
     );
 
@@ -229,57 +146,6 @@ const page = () => {
           <ModeToggle />
         </header>
 
-        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label
-              htmlFor="email"
-              className="text-sm font-medium mb-1 text-gray-700 dark:text-gray-200"
-            >
-              Full Name
-            </label>
-            <Input
-              id="fullName"
-              label="Full Name"
-              value={fullName || ""}
-              onChange={() => {}}
-              readOnly
-              icon={<User size={18} />}
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="email"
-              className="text-sm font-medium mb-1 text-gray-700 dark:text-gray-200"
-            >
-              Email Address
-            </label>
-            <Input
-              id="email"
-              label="Email Address"
-              type="email"
-              value={email || ""}
-              onChange={() => {}}
-              readOnly
-              icon={
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-5 h-5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
-                  />
-                </svg>
-              }
-            />
-          </div>
-        </div> */}
-
         <BasicInfoSection
           fullName={formData.fullName}
           email={formData.email}
@@ -287,36 +153,20 @@ const page = () => {
           user={user}
         />
 
-        {formData.userType && (
-          <div className="mt-10">
-            <CommonFieldsSection
-              formState={formData}
-              formErrors={formErrors}
-              handleChange={handleChange}
-              handleFileChange={(file) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  resume: file,
-                }))
-              }
-              handleInputChange={handleInputChange}
-              userType={"recruiter"}
-            />
-          </div>
-        )}
+        <div className="mt-10">
+          <CommonFieldsSection
+            formState={formData}
+            formErrors={formErrors}
+            handleChange={handleChange}
+          />
+        </div>
 
-        {formData.userType !== "" && (
-          <div className="mt-6 flex gap-4">
-            <Button className="w-full rounded-3xl">Skip for now</Button>
-            <Button
-              onClick={handleSubmit}
-              className="w-full btn10 rounded-full"
-              disabled={!formData.userType}
-            >
-              Submit
-            </Button>
-          </div>
-        )}
+        <div className="mt-6 flex gap-4">
+          <Button className="w-full rounded-3xl">Skip for now</Button>
+          <Button onClick={handleSubmit} className="w-full btn10 rounded-full">
+            Submit
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -5,38 +5,18 @@ import { MapPin, User2, LinkedinIcon, Hourglass } from "lucide-react";
 import FormSelect from "./UI/FormSelect";
 import FormInput from "./UI/FormInput";
 import FormTextarea from "./UI/FormTextArea";
-import ResumeUpload from "./UI/ResumeUpload";
 import FormBackgroundEffect from "../Effect/FormBackgroundEffect";
 
 const CommonFieldsSection = ({
   formState,
   formErrors,
   handleChange,
-  handleFileChange,
-  handleInputChange,
-  userType,
 }) => {
   const genderOptions = [
     { value: "male", label: "Male" },
     { value: "female", label: "Female" },
     { value: "other", label: "Other" },
   ];
-  const [uploadData, setUploadData] = useState();
-  const [fileId, setFileId] = useState(formState.resumeId || null);
-
-  useEffect(() => {
-    if (uploadData && fileId) {
-      handleChange("resumeURL", uploadData.url || "");
-      handleChange("resumeId", fileId || "");
-      handleChange(
-        "resumeName",
-        uploadData.name.replace(/_(?!.*_)[^_]+(?=\.\w+$)/, "") || ""
-      );
-    }
-  }, [uploadData, fileId]);
-
-  console.log("File ID:", fileId);
-  console.log("Upload Data:", uploadData);
 
   return (
     <div className="form-layout mb-10">
@@ -115,25 +95,6 @@ const CommonFieldsSection = ({
             icon={<LinkedinIcon size={24} />}
           />
         </div>
-
-        {userType === "applicant" && (
-          <div className="md:col-span-2">
-            {/* <FileUpload
-              id="resume"
-              label="Upload Resume"
-              onChange={handleFileChange}
-              error={formErrors.resume}
-              selectedFile={formState.resume}
-            /> */}
-            <ResumeUpload
-              uploadData={uploadData}
-              setUploadData={setUploadData}
-              fileId={fileId}
-              setFileId={setFileId}
-              handleInputChange={handleInputChange}
-            />
-          </div>
-        )}
       </div>
     </div>
   );
