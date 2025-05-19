@@ -4,9 +4,7 @@ import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import BasicInfoSection from "@/components/Form/BasicInfoSection";
-import ApplicantFieldsSection from "@/components/Form/ApplicantFieldsSection";
 import CommonFieldsSection from "@/components/Form/CommonFieldsSection";
-import RecruiterFieldsSection from "@/components/Form/RecruiterFieldsSection";
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
 import OnboardingSuccess from "@/components/Onboarding/OnboardingSuccessPage";
@@ -170,7 +168,7 @@ const page = () => {
     try {
       setFormData((prev) => ({
         ...prev,
-        isOnboarded: true,
+        // isOnboarded: true,
       }));
 
       const result = await db
@@ -184,7 +182,7 @@ const page = () => {
           toast.dismiss(loadingToastId);
           toast.success("Profile submitted successfully!");
           console.log("Form submitted:", formData);
-          setSubmitted(true);
+          // setSubmitted(true);
         }, 1000);
       } else {
         setTimeout(() => {
