@@ -14,7 +14,7 @@ import { Users } from "@/lib/schema";
 import { eq } from "drizzle-orm";
 import { ModeToggle } from "@/components/theme-btn";
 
-const page = () => {
+const Page = () => {
   const { user, isSignedIn } = useUser();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [formData, setFormData] = useState({
@@ -172,4 +172,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
