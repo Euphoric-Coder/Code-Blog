@@ -26,7 +26,7 @@ const page = () => {
     location: "",
     bio: "",
     linkedInUrl: "",
-    websites: {},
+    websites: [],
     aboutMe: {},
 
     isOnboarded: false,
