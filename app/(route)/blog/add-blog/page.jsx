@@ -1,4 +1,4 @@
-import BlogEditor from '@/components/BlogEditor'
+import BlogEditor from '@/components/Blog/BlogEditor'
 import React from 'react'
 
 const page = () => {

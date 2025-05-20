@@ -14,6 +14,7 @@ import FormSelect from "./UI/FormSelect";
 import FormInput from "./UI/FormInput";
 import FormTextarea from "./UI/FormTextArea";
 import FormBackgroundEffect from "../Effect/FormBackgroundEffect";
+import { Button } from "../ui/button";
 
 const CommonFieldsSection = ({ formState, formErrors, handleChange }) => {
   const genderOptions = [
@@ -131,9 +132,9 @@ const CommonFieldsSection = ({ formState, formErrors, handleChange }) => {
         {(formState.websites || []).map((website, index) => (
           <div
             key={index}
-            className="grid md:grid-cols-12 gap-4 items-end mb-4"
+            className="flex items-center justify-between gap-4"
           >
-            <div className="md:col-span-4">
+            <div className="flex-1 min-w-[200px]">
               <FormInput
                 id={`website-name-${index}`}
                 label="Website Name"
@@ -146,7 +147,7 @@ const CommonFieldsSection = ({ formState, formErrors, handleChange }) => {
               />
             </div>
 
-            <div className="md:col-span-5">
+            <div className="flex-1 min-w-[200px]">
               <FormInput
                 id={`website-url-${index}`}
                 label="Website URL"
@@ -160,8 +161,8 @@ const CommonFieldsSection = ({ formState, formErrors, handleChange }) => {
               />
             </div>
 
-            <div className="md:col-span-1 flex items-center">
-              <button
+            <div className="flex items-center gap-2">
+              <Button
                 type="button"
                 onClick={() =>
                   website.url &&
@@ -173,33 +174,29 @@ const CommonFieldsSection = ({ formState, formErrors, handleChange }) => {
                   )
                 }
                 title="Preview link"
-                className="bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-600 dark:text-blue-400 rounded-md px-3 py-2 text-sm w-full"
+                className="bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-600 dark:text-blue-400 rounded-md px-3 py-2 text-sm h-fit"
               >
                 Preview
-              </button>
-            </div>
-
-            <div className="md:col-span-2 flex items-center">
-              <button
+              </Button>
+              <Button
                 type="button"
                 onClick={() => removeWebsite(index)}
                 title="Remove website"
-                className="bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-600 dark:text-red-400 rounded-md px-3 py-2 text-sm w-full"
+                className="bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-600 dark:text-red-400 rounded-md px-3 py-2 text-sm h-fit"
               >
                 Remove
-              </button>
+              </Button>
             </div>
           </div>
         ))}
 
-        <button
-          type="button"
+        <Button
           onClick={addWebsite}
           className="mt-2 px-4 py-2 rounded-md bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-white text-sm font-medium flex items-center gap-2"
         >
           <Plus size={16} />
           Add Website
-        </button>
+        </Button>
       </div>
     </div>
   );
