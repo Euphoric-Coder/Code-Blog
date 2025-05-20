@@ -68,7 +68,7 @@ const OnboardingRedirect = ({ userType, delay = 2500 }) => {
 
           {/* Manual Link */}
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            If you're not redirected automatically,{" "}
+            If you&apos;re not redirected automatically,{" "}
             <span
               onClick={() => router.push("/sign-in")}
               className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline cursor-pointer"

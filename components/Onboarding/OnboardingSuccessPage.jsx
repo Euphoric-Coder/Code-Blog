@@ -87,7 +87,7 @@ const OnboardingSuccess = () => {
             ${visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}
           `}
           >
-            Thank you for signing up. You're all set to get started!
+            Thank you for signing up. You&apos;re all set to get started!
           </p>
 
           {/* Countdown Message */}
