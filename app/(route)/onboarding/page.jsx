@@ -140,7 +140,7 @@ const Page = () => {
               Complete Your Profile
             </h1>
             <p className="text-gray-600 dark:text-gray-400 mt-1">
-              Let's get to know you better
+              Let&apos;s get to know you better
             </p>
           </div>
           <ModeToggle />
