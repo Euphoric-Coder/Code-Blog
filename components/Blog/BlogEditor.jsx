@@ -59,9 +59,8 @@ import {
   Trash2,
   XCircle,
 } from "lucide-react";
-import ImageUpload from "./ImageUpload";
-import { Label } from "./ui/label";
-import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Select,
   SelectContent,
@@ -71,11 +70,12 @@ import {
 } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { blogCategories, blogSubCategoriesList } from "@/lib/data";
-import { Badge } from "./ui/badge";
+import { Badge } from "@/components/ui/badge";
 import { db } from "@/lib/dbConfig";
 import { Blogs } from "@/lib/schema";
 import { getISTDate } from "@/lib/utils";
-import { Textarea } from "./ui/textarea";
+import { Textarea } from "@/components/ui/textarea";
+import ImageUpload from "../ImageUpload";
 
 const MenuBar = ({ editor }) => {
   const [open, setOpen] = useState(false);
