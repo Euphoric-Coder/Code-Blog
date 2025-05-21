@@ -8,6 +8,7 @@ const nextConfig = {
         port: "",
       },
     ],
+    domains: ['img.clerk.com'],
   },
 };
 

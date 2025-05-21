@@ -8,6 +8,7 @@ import { FiUploadCloud } from "react-icons/fi";
 import { toast } from "sonner";
 import FormBackgroundEffect from "../Effect/FormBackgroundEffect";
 import { Label } from "../ui/label";
+import Image from "next/image";
 
 const BasicInfoSection = ({ fullName, email, profileImage, user }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -92,8 +93,8 @@ const BasicInfoSection = ({ fullName, email, profileImage, user }) => {
 
       <div className="flex flex-col md:flex-row items-start md:items-center gap-4 mb-4">
         {profileImage ? (
-          <img
-            src={profileImage}
+          <Image
+            src={`${profileImage}`}
             alt={fullName}
             width={64}
             height={64}

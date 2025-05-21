@@ -78,6 +78,7 @@ import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "../ImageUpload";
 
 const MenuBar = ({ editor }) => {
+  const { user } = useUser();
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState("");
 
@@ -305,7 +306,7 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
   const { user } = useUser();
 
   // Generate a unique key for current blog's pending content
-  const storageKey = `pendingBlogData`;
+  const storageKey = `pendingBlogData-${user.id}`;
 
   useEffect(() => {
     const storedBlogData = JSON.parse(localStorage.getItem(storageKey) || "{}");
@@ -334,7 +335,7 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
       // console.log(storedBlogData.content);
       setUnfinishedBlog(true);
     }
-  }, []);
+  }, [storageKey]);
 
   const editor = useEditor({
     extensions: [

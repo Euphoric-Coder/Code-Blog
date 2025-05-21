@@ -8,6 +8,7 @@ import { format } from "date-fns";
 import { processContent } from "@/lib/processContent";
 import BlogLoader from "@/components/Blog/BlogLoader";
 import Comment from "@/components/Blog/Comments";
+import Image from "next/image";
 
 export default function Page() {
   const blogId = useParams().id;
@@ -69,7 +70,7 @@ export default function Page() {
 
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-3 sm:space-y-0 sm:space-x-6">
               <div className="flex items-center">
-                <img
+                <Image
                   src={blogData?.author.avatar}
                   alt={blogData?.author.name}
                   width={40}
@@ -122,7 +123,7 @@ export default function Page() {
           {/* Author Bio */}
           <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
             <div className="flex items-start space-x-4">
-              <img
+              <Image
                 src={blogData.author.avatar}
                 alt={blogData.author.name}
                 width={64}
