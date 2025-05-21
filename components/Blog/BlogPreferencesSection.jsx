@@ -25,7 +25,7 @@ const BlogPreferencesSection = ({ preferences, handleChange }) => {
         Choose Your Blog Preferences
       </h2>
       <p className="text-sm text-gray-600 dark:text-gray-400">
-        Pick the topics you're interested in reading or writing about.
+        Pick the topics you&apos;re interested in reading or writing about.
       </p>
       <div className="flex flex-wrap gap-3">
         {blogOptions.map((topic) => (
