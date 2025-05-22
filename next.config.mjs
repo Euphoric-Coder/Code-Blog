@@ -7,8 +7,12 @@ const nextConfig = {
         hostname: "ik.imagekit.io",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "img.clerk.com",
+        port: "",
+      },
     ],
-    domains: ['img.clerk.com'],
   },
 };
 

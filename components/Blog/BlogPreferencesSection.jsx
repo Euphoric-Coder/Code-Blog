@@ -1,15 +1,7 @@
 // components/Form/BlogPreferencesSection.jsx
 "use client";
+import { blogCategories } from "@/lib/data";
 import React from "react";
-
-const blogOptions = [
-  "Technology",
-  "Health",
-  "Finance",
-  "Travel",
-  "Education",
-  "Gaming",
-];
 
 const BlogPreferencesSection = ({ preferences, handleChange }) => {
   const togglePreference = (topic) => {
@@ -28,7 +20,7 @@ const BlogPreferencesSection = ({ preferences, handleChange }) => {
         Pick the topics you&apos;re interested in reading or writing about.
       </p>
       <div className="flex flex-wrap gap-3">
-        {blogOptions.map((topic) => (
+        {blogCategories.map((topic) => (
           <button
             key={topic}
             type="button"
