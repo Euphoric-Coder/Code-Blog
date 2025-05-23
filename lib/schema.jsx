@@ -9,8 +9,11 @@ export const Users = pgTable("users", {
   gender: varchar("gender"),
   age: varchar("age"),
   bio: varchar("bio"),
+  location: varchar("location"),
+  linkedInUrl: varchar("linkedInUrl"),
   websites: jsonb("websites"),
   aboutMe: jsonb("aboutMe"),
+  preferences: jsonb("preferences"),
   hasOnboarded: boolean("hasOnboarded").notNull().default(false),
 });
 

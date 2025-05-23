@@ -143,8 +143,8 @@ const Page = () => {
           <div>
             <h1 className="text-3xl font-extrabold text-blue-900 dark:text-blue-200">
               {currentPage === 1
-                ? "Step 1: Basic Information"
-                : "Step 2: Blog Preferences"}
+                ? "Let Us Know You"
+                : "Choose Your Interests"}
             </h1>
             <p className="text-gray-700 dark:text-gray-300 mt-2 text-sm md:text-base">
               {currentPage === 1
