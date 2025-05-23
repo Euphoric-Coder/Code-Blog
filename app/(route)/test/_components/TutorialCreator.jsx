@@ -12,8 +12,7 @@ import {
 } from "lucide-react";
 import TutorialMetadata from "./TutorialMetadata";
 import SectionEditor from "./SectionEditor";
-import { v4 as uuidv4 } from 'uuid';
-
+import { v4 as uuidv4 } from "uuid";
 
 const TutorialCreator = () => {
   const [currentStep, setCurrentStep] = useState("metadata");
@@ -26,13 +25,16 @@ const TutorialCreator = () => {
     tags: [],
   });
 
+  const initialSectionId = uuidv4();
+  const initialSubsectionId = uuidv4();
+
   const [sections, setSections] = useState([
     {
-      id: "1",
+      id: initialSectionId,
       title: "Introduction",
       subsections: [
         {
-          id: "1-1",
+          id: initialSubsectionId,
           title: "Welcome",
           content: "<p>Welcome to this tutorial!</p>",
         },
@@ -40,8 +42,9 @@ const TutorialCreator = () => {
     },
   ]);
 
-  const [activeSectionId, setActiveSectionId] = useState("1");
-  const [activeSubsectionId, setActiveSubsectionId] = useState("1-1");
+  const [activeSectionId, setActiveSectionId] = useState(initialSectionId);
+  const [activeSubsectionId, setActiveSubsectionId] =
+    useState(initialSubsectionId);
   const [draggingSection, setDraggingSection] = useState(null);
   const [draggingSubsection, setDraggingSubsection] = useState(null);
 
@@ -51,13 +54,13 @@ const TutorialCreator = () => {
   };
 
   const addNewSection = () => {
-    const newId = Date.now().toString();
+    const newId = uuidv4();
     const newSection = {
       id: newId,
       title: "New Section",
       subsections: [
         {
-          id: `${newId}-1`,
+          id: uuidv4(),
           title: "New Subsection",
           content: "<p>Add your content here...</p>",
         },
@@ -66,21 +69,21 @@ const TutorialCreator = () => {
 
     setSections([...sections, newSection]);
     setActiveSectionId(newId);
-    setActiveSubsectionId(`${newId}-1`);
+    setActiveSubsectionId(newSection.subsections[0].id);
   };
 
   const addNewSubsection = (sectionId) => {
     setSections((prev) =>
       prev.map((section) => {
         if (section.id === sectionId) {
-          const newId = `${sectionId}-${section.subsections.length + 1}`;
+          const newSubId = uuidv4();
           const newSubsection = {
-            id: newId,
+            id: newSubId,
             title: "New Subsection",
             content: "<p>Add your content here...</p>",
           };
 
-          setActiveSubsectionId(newId);
+          setActiveSubsectionId(newSubId);
           return {
             ...section,
             subsections: [...section.subsections, newSubsection],
@@ -258,7 +261,7 @@ const TutorialCreator = () => {
                 onClick={saveTutorial}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors flex items-center"
               >
-                <Save className="h-5 w-5 mr-2"/>
+                <Save className="h-5 w-5 mr-2" />
                 Save Tutorial
               </button>
             </div>

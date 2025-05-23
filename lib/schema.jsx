@@ -1,3 +1,4 @@
+import { json } from "drizzle-orm/gel-core";
 import { pgTable, varchar, uuid, boolean, jsonb } from "drizzle-orm/pg-core";
 
 export const Users = pgTable("users", {
@@ -25,6 +26,21 @@ export const Blogs = pgTable("blogs", {
   htmlFormat: varchar("htmlFormat").notNull(),
   categories: varchar("categories").notNull().default("Programming"),
   subCategories: varchar("subCategories"),
+  author: varchar("author").notNull(),
+  date: varchar("date").notNull(),
+  featured: boolean("featured").notNull().default(false),
+  createdBy: varchar("createdBy").notNull(),
+});
+
+export const Tutorials = pgTable("tutorials", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  title: varchar("title").notNull(),
+  coverImage: varchar("coverImage"),
+  description: varchar("description").notNull(),
+  categories: jsonb("categories").notNull().default("Programming"),
+  subCategories: jsonb("subCategories"),
+  tags: jsonb("tags").notNull(),
+  sections: jsonb("sections").notNull(),
   author: varchar("author").notNull(),
   date: varchar("date").notNull(),
   featured: boolean("featured").notNull().default(false),
