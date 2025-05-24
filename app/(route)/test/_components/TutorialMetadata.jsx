@@ -1,9 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Upload, X, ChevronRight } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
 
 const TutorialMetadata = ({ initialData, onComplete }) => {
-  const [data, setData] = useState(initialData);
+  const { user } = useUser();
+  const LOCAL_STORAGE_KEY = `tutorialMetadata-${user?.id || "guest"}`;
+
+  const [data, setData] = useState(() => {
+    // Load from localStorage if available
+    if (typeof window !== "undefined") {
+      const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (savedData) {
+        try {
+          return JSON.parse(savedData);
+        } catch (error) {
+          console.error(
+            "Failed to parse tutorial metadata from localStorage:",
+            error
+          );
+        }
+      }
+    }
+    return initialData; // Fallback to initialData
+  });
+
   const [tag, setTag] = useState("");
+
+  // Save to localStorage whenever metadata changes
+  useEffect(() => {
+    if (typeof window !== "undefined" && data) {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+    }
+  }, [data]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

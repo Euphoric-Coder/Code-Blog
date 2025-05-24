@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Upload,
   ChevronRight,
@@ -13,43 +13,100 @@ import {
 import TutorialMetadata from "./TutorialMetadata";
 import SectionEditor from "./SectionEditor";
 import { v4 as uuidv4 } from "uuid";
+import { useUser } from "@clerk/nextjs";
 
 const TutorialCreator = () => {
+  const { user } = useUser();
+  const LOCAL_STORAGE_KEY = `tutorialCreatorData-${user?.id || "guest"}`;
+
+  const [initialData, setInitialData] = useState(null);
+  const [tutorial, setTutorial] = useState(null);
+  const [sections, setSections] = useState([]);
+  const [activeSectionId, setActiveSectionId] = useState(null);
+  const [activeSubsectionId, setActiveSubsectionId] = useState(null);
   const [currentStep, setCurrentStep] = useState("metadata");
-  const [tutorial, setTutorial] = useState({
-    title: "",
-    description: "",
-    coverImage: "",
-    category: "",
-    subcategory: "",
-    tags: [],
-  });
-
-  const initialSectionId = uuidv4();
-  const initialSubsectionId = uuidv4();
-
-  const [sections, setSections] = useState([
-    {
-      id: initialSectionId,
-      title: "Introduction",
-      subsections: [
-        {
-          id: initialSubsectionId,
-          title: "Welcome",
-          content: "<p>Welcome to this tutorial!</p>",
-        },
-      ],
-    },
-  ]);
-
-  const [activeSectionId, setActiveSectionId] = useState(initialSectionId);
-  const [activeSubsectionId, setActiveSubsectionId] =
-    useState(initialSubsectionId);
   const [draggingSection, setDraggingSection] = useState(null);
   const [draggingSubsection, setDraggingSubsection] = useState(null);
 
+  // ✅ Load initial data from localStorage after mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (savedData) {
+        try {
+          const parsed = JSON.parse(savedData);
+          setInitialData(parsed);
+          setTutorial(parsed.tutorial);
+          setSections(parsed.sections);
+          setActiveSectionId(parsed.activeSectionId);
+          setActiveSubsectionId(parsed.activeSubsectionId);
+          return;
+        } catch (error) {
+          console.error("Failed to parse localStorage data:", error);
+        }
+      }
+
+      // Fallback default data
+      const initialSectionId = uuidv4();
+      const initialSubsectionId = uuidv4();
+      const defaultData = {
+        tutorial: {
+          title: "",
+          description: "",
+          coverImage: "",
+          category: "",
+          subcategory: "",
+          tags: [],
+        },
+        sections: [
+          {
+            id: initialSectionId,
+            title: "Introduction",
+            subsections: [
+              {
+                id: initialSubsectionId,
+                title: "Welcome",
+                content: "<p>Welcome to this tutorial!</p>",
+              },
+            ],
+          },
+        ],
+        activeSectionId: initialSectionId,
+        activeSubsectionId: initialSubsectionId,
+      };
+      setInitialData(defaultData);
+      setTutorial(defaultData.tutorial);
+      setSections(defaultData.sections);
+      setActiveSectionId(defaultData.activeSectionId);
+      setActiveSubsectionId(defaultData.activeSubsectionId);
+    }
+  }, [user?.id]);
+
+  // ✅ Save changes to localStorage
+  useEffect(() => {
+    if (tutorial && sections) {
+      const dataToSave = {
+        tutorial,
+        sections,
+        activeSectionId,
+        activeSubsectionId,
+      };
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataToSave));
+    }
+  }, [tutorial, sections, activeSectionId, activeSubsectionId]);
+
+  // ✅ Avoid rendering until initial data is loaded
+  if (!initialData) return <div>Loading tutorial data...</div>;
+
+  // ✅ Safely find the active section/subsection
+  const activeSection =
+    sections?.find((s) => s.id === activeSectionId) || sections[0];
+  const activeSubsection =
+    activeSection?.subsections?.find((sub) => sub.id === activeSubsectionId) ||
+    activeSection?.subsections?.[0];
+
   const handleMetadataComplete = (metadata) => {
-    setTutorial({ ...tutorial, ...metadata });
+    setTutorial((prev) => ({ ...prev, ...metadata }));
     setCurrentStep("sections");
   };
 
