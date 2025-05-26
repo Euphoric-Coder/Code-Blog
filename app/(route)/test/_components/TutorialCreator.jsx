@@ -9,11 +9,55 @@ import {
   Image,
   Trash2,
   GripVertical,
+  XCircle,
+  AlertCircle,
 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import TutorialMetadata from "./TutorialMetadata";
 import SectionEditor from "./SectionEditor";
 import { v4 as uuidv4 } from "uuid";
 import { useUser } from "@clerk/nextjs";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+
+const initialSectionId = uuidv4();
+const initialSubsectionId = uuidv4();
+const defaultData = {
+  tutorial: {
+    title: "",
+    description: "",
+    coverImage: "",
+    category: "",
+    subcategory: "",
+    tags: [],
+  },
+  sections: [
+    {
+      id: initialSectionId,
+      title: "Introduction",
+      subsections: [
+        {
+          id: initialSubsectionId,
+          title: "Welcome",
+          content: "<p>Welcome to this tutorial!</p>",
+        },
+      ],
+    },
+  ],
+  activeSectionId: initialSectionId,
+  activeSubsectionId: initialSubsectionId,
+};
+
+console.log(initialSectionId, initialSubsectionId);
 
 const TutorialCreator = () => {
   const { user } = useUser();
@@ -27,12 +71,14 @@ const TutorialCreator = () => {
   const [currentStep, setCurrentStep] = useState("metadata");
   const [draggingSection, setDraggingSection] = useState(null);
   const [draggingSubsection, setDraggingSubsection] = useState(null);
+  const [pendingTutorial, setPendingTutorial] = useState(false);
+  const [clearPendingAlert, setClearPendingAlert] = useState(false);
 
   // ✅ Load initial data from localStorage after mount
   useEffect(() => {
     if (typeof window !== "undefined") {
       const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
-      if (savedData) {
+      if (JSON.stringify(savedData) !== JSON.stringify(defaultData)) {
         try {
           const parsed = JSON.parse(savedData);
           // console.log("Loaded tutorial data from localStorage:", parsed);
@@ -41,6 +87,7 @@ const TutorialCreator = () => {
           setSections(parsed.sections);
           setActiveSectionId(parsed.activeSectionId);
           setActiveSubsectionId(parsed.activeSubsectionId);
+          setPendingTutorial(true);
           return;
         } catch (error) {
           console.error("Failed to parse localStorage data:", error);
@@ -48,33 +95,6 @@ const TutorialCreator = () => {
       }
 
       // Fallback default data
-      const initialSectionId = uuidv4();
-      const initialSubsectionId = uuidv4();
-      const defaultData = {
-        tutorial: {
-          title: "",
-          description: "",
-          coverImage: "",
-          category: "",
-          subcategory: "",
-          tags: [],
-        },
-        sections: [
-          {
-            id: initialSectionId,
-            title: "Introduction",
-            subsections: [
-              {
-                id: initialSubsectionId,
-                title: "Welcome",
-                content: "<p>Welcome to this tutorial!</p>",
-              },
-            ],
-          },
-        ],
-        activeSectionId: initialSectionId,
-        activeSubsectionId: initialSubsectionId,
-      };
       setInitialData(defaultData);
       setTutorial(defaultData.tutorial);
       setSections(defaultData.sections);
@@ -287,6 +307,44 @@ const TutorialCreator = () => {
     }
   };
 
+  const clearData = () => {
+    localStorage.removeItem(LOCAL_STORAGE_KEY); // Clear localStorage
+    setPendingTutorial(false); // Reset pending state
+    const initialSectionId = uuidv4();
+    const initialSubsectionId = uuidv4();
+    const defaultData = {
+      tutorial: {
+        title: "",
+        description: "",
+        coverImage: "",
+        category: "",
+        subcategory: "",
+        tags: [],
+      },
+      sections: [
+        {
+          id: initialSectionId,
+          title: "Introduction",
+          subsections: [
+            {
+              id: initialSubsectionId,
+              title: "Welcome",
+              content: "<p>Welcome to this tutorial!</p>",
+            },
+          ],
+        },
+      ],
+      activeSectionId: initialSectionId,
+      activeSubsectionId: initialSubsectionId,
+    };
+    setTutorial(defaultData.tutorial);
+    setSections(defaultData.sections);
+    setActiveSectionId(initialSectionId);
+    setActiveSubsectionId(initialSubsectionId);
+    setCurrentStep("metadata");
+    console.log("Tutorial data fully reset.");
+  };
+
   const saveTutorial = () => {
     const fullTutorial = {
       ...tutorial,
@@ -296,21 +354,75 @@ const TutorialCreator = () => {
     alert("Tutorial saved successfully!");
   };
 
-  const isTutorialValid = (tutorial) => {
-    return (
-      tutorial &&
-      tutorial.title?.trim() &&
-      tutorial.description?.trim() &&
-      tutorial.coverImage?.trim() &&
-      tutorial.category?.trim() &&
-      tutorial.subcategory?.trim() &&
-      Array.isArray(tutorial.tags) &&
-      tutorial.tags.length > 0
-    );
-  };
-
   return (
     <div className="container mx-auto px-4 py-8">
+      <AlertDialog open={clearPendingAlert}>
+        <AlertDialogContent className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-br from-white via-blue-50 to-cyan-200 dark:from-gray-800 dark:via-gray-900 dark:to-blue-800 p-8 rounded-3xl shadow-[0_0_40px_rgba(0,150,255,0.3)] dark:shadow-[0_0_40px_rgba(0,75,150,0.5)] w-[95%] max-w-lg">
+          {/* Background Effects */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute -top-10 -left-10 w-60 h-60 bg-gradient-radial from-blue-500 via-blue-400 to-transparent dark:from-blue-900 dark:via-gray-800 dark:to-transparent opacity-25 blur-3xl"></div>
+            <div className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-radial from-cyan-400 via-blue-300 to-transparent dark:from-cyan-800 dark:via-blue-900 dark:to-transparent opacity-30 blur-[120px]"></div>
+          </div>
+
+          {/* Dialog Header */}
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-400 dark:from-blue-300 dark:via-cyan-400 dark:to-blue-500">
+              Are you absolutely sure to delete?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-sm text-gray-600 dark:text-gray-300 mt-2">
+              This action cannot be undone. This will permanently delete your
+              income <strong>""</strong> and all of its associated data.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+
+          {/* Dialog Footer */}
+          <AlertDialogFooter className="flex gap-4 mt-6">
+            <AlertDialogCancel
+              onClick={() => setClearPendingAlert(false)}
+              className="w-full py-3 rounded-2xl border border-blue-300 bg-gradient-to-r from-white to-blue-50 text-blue-600 font-semibold shadow-sm hover:shadow-md hover:bg-blue-100 transition-transform transform hover:scale-105 active:scale-95 dark:border-blue-500 dark:bg-gradient-to-r dark:from-gray-800 dark:to-blue-900 dark:text-blue-300 dark:hover:bg-blue-800 hover:text-indigo-500 dark:hover:text-indigo-200"
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                clearData();
+                setClearPendingAlert(false);
+              }}
+              className="w-full py-3 rounded-2xl bg-gradient-to-r from-red-500 via-red-600 to-red-700 text-white font-bold shadow-lg hover:shadow-[0_0_20px_rgba(255,100,100,0.5)] hover:scale-105 active:scale-95 transition-transform transform dark:bg-gradient-to-r dark:from-red-700 dark:via-red-800 dark:to-red-900 dark:shadow-[0_0_20px_rgba(200,50,50,0.5)] dark:hover:shadow-[0_0_30px_rgba(200,50,50,0.7)]"
+            >
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Pending Expense Alert */}
+      {pendingTutorial && (
+        <Alert
+          variant="warning"
+          className="mt-6 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 border border-yellow-400 dark:border-gray-600 shadow-lg p-4 rounded-xl flex items-center hover:shadow-xl transition-transform transform hover:scale-105"
+        >
+          <AlertCircle className="h-5 w-5 text-yellow-600 dark:text-yellow-400 mr-3" />
+          <div>
+            <AlertTitle className="text-yellow-700 dark:text-yellow-300 font-bold">
+              Pending Expense
+            </AlertTitle>
+            <AlertDescription className="text-yellow-600 dark:text-yellow-400">
+              You have an unfinished expense: "<b>{name}</b>". Would you like to
+              continue?
+            </AlertDescription>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            className="ml-auto"
+            onClick={clearData}
+          >
+            <XCircle className="h-4 w-4 mr-1" />
+            Dismiss
+          </Button>
+        </Alert>
+      )}
       {currentStep === "metadata" ? (
         <TutorialMetadata
           initialData={
