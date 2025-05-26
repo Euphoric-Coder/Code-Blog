@@ -1,47 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Upload, X, ChevronRight } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
-import { set } from "date-fns";
 
 const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
   const { user } = useUser();
-
-  // console.log(initialData, "Initial Data in TutorialMetadata");
-  console.log(initialData)
   const LOCAL_STORAGE_KEY = `tutorialMetadata-${user?.id}`;
-  
+
+  // Initialize metadata from initialData
   useEffect(() => {
     setData(initialData);
-  
   }, [initialData]);
-  
-  // const [data, setData] = useState(() => {
-  //   if (typeof window !== "undefined") {
-  //     const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
-  //     // console.log(initialData)
-  //     // console.log("Loading tutorial metadata from localStorage:", savedData);
-  //     if (savedData) {
-  //       try {
-  //         return JSON.parse(savedData);
-  //       } catch (error) {
-  //         console.error(
-  //           "Failed to parse tutorial metadata from localStorage:",
-  //           error
-  //         );
-  //       }
-  //     }
-  //   }
-  //   return initialData;
-  // });
-  const [data, setData] = useState(initialData)
+  const [data, setData] = useState(initialData);
 
   const [tag, setTag] = useState("");
 
+
   useEffect(() => {
-    if (typeof window !== "undefined" && data) {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
-      onUpdateMetadata && onUpdateMetadata(data); // ✅ Sync metadata with parent
-    }
+    onUpdateMetadata && onUpdateMetadata(data); // ✅ Sync metadata with parent
   }, [data]);
 
   const handleChange = (e) => {
