@@ -1,35 +1,46 @@
 import React, { useEffect, useState } from "react";
 import { Upload, X, ChevronRight } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
+import { set } from "date-fns";
 
-const TutorialMetadata = ({ initialData, onComplete }) => {
+const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
   const { user } = useUser();
-  const LOCAL_STORAGE_KEY = `tutorialMetadata-${user?.id || "guest"}`;
 
-  const [data, setData] = useState(() => {
-    // Load from localStorage if available
-    if (typeof window !== "undefined") {
-      const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
-      if (savedData) {
-        try {
-          return JSON.parse(savedData);
-        } catch (error) {
-          console.error(
-            "Failed to parse tutorial metadata from localStorage:",
-            error
-          );
-        }
-      }
-    }
-    return initialData; // Fallback to initialData
-  });
+  // console.log(initialData, "Initial Data in TutorialMetadata");
+  console.log(initialData)
+  const LOCAL_STORAGE_KEY = `tutorialMetadata-${user?.id}`;
+  
+  useEffect(() => {
+    setData(initialData);
+  
+  }, [initialData]);
+  
+  // const [data, setData] = useState(() => {
+  //   if (typeof window !== "undefined") {
+  //     const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+  //     // console.log(initialData)
+  //     // console.log("Loading tutorial metadata from localStorage:", savedData);
+  //     if (savedData) {
+  //       try {
+  //         return JSON.parse(savedData);
+  //       } catch (error) {
+  //         console.error(
+  //           "Failed to parse tutorial metadata from localStorage:",
+  //           error
+  //         );
+  //       }
+  //     }
+  //   }
+  //   return initialData;
+  // });
+  const [data, setData] = useState(initialData)
 
   const [tag, setTag] = useState("");
 
-  // Save to localStorage whenever metadata changes
   useEffect(() => {
     if (typeof window !== "undefined" && data) {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+      onUpdateMetadata && onUpdateMetadata(data); // ✅ Sync metadata with parent
     }
   }, [data]);
 
@@ -62,6 +73,20 @@ const TutorialMetadata = ({ initialData, onComplete }) => {
     onComplete(data);
   };
 
+  const clearMetadata = () => {
+    const emptyData = {
+      title: "",
+      description: "",
+      coverImage: "",
+      category: "",
+      subcategory: "",
+      tags: [],
+    };
+    setData(emptyData);
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+    onUpdateMetadata && onUpdateMetadata(emptyData); // Sync reset with parent
+  };
+
   const categories = [
     "Programming",
     "Design",
@@ -69,7 +94,6 @@ const TutorialMetadata = ({ initialData, onComplete }) => {
     "Business",
     "Personal Development",
   ];
-
   const subcategories = {
     Programming: [
       "JavaScript",

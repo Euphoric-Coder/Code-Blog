@@ -35,6 +35,7 @@ const TutorialCreator = () => {
       if (savedData) {
         try {
           const parsed = JSON.parse(savedData);
+          // console.log("Loaded tutorial data from localStorage:", parsed);
           setInitialData(parsed);
           setTutorial(parsed.tutorial);
           setSections(parsed.sections);
@@ -91,6 +92,7 @@ const TutorialCreator = () => {
         activeSectionId,
         activeSubsectionId,
       };
+      // console.log("Saving tutorial data to localStorage:", dataToSave);
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataToSave));
     }
   }, [tutorial, sections, activeSectionId, activeSubsectionId]);
@@ -294,12 +296,35 @@ const TutorialCreator = () => {
     alert("Tutorial saved successfully!");
   };
 
+  const isTutorialValid = (tutorial) => {
+    return (
+      tutorial &&
+      tutorial.title?.trim() &&
+      tutorial.description?.trim() &&
+      tutorial.coverImage?.trim() &&
+      tutorial.category?.trim() &&
+      tutorial.subcategory?.trim() &&
+      Array.isArray(tutorial.tags) &&
+      tutorial.tags.length > 0
+    );
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       {currentStep === "metadata" ? (
         <TutorialMetadata
-          initialData={tutorial}
+          initialData={
+            tutorial || {
+              title: "",
+              description: "",
+              coverImage: "",
+              category: "",
+              subcategory: "",
+              tags: [],
+            }
+          }
           onComplete={handleMetadataComplete}
+          onUpdateMetadata={(updatedMetadata) => setTutorial(updatedMetadata)} // ✅ Sync metadata updates
         />
       ) : (
         <div>
