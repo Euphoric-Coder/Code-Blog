@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Upload, X, ChevronRight } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
+import ImageUpload from "@/components/ImageUpload";
+import { set } from "date-fns";
 
 const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
   const { user } = useUser();
@@ -9,27 +11,39 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
   // Initialize metadata from initialData
   useEffect(() => {
     setData(initialData);
+    setUploadData(initialData?.coverImage || null);
+    setFileId(initialData?.imageId || null);
   }, [initialData]);
   const [data, setData] = useState(initialData);
+  const [uploadData, setUploadData] = useState(null);
+  const [fileId, setFileId] = useState(null);
 
   const [tag, setTag] = useState("");
 
+  useEffect(() => {
+    if (onUpdateMetadata) {
+      console.log("Updating metadata:", data);
+      onUpdateMetadata(data);
+    }
+  }, [data]);
 
   useEffect(() => {
-    onUpdateMetadata && onUpdateMetadata(data); // ✅ Sync metadata with parent
-  }, [data]);
+    if (uploadData && fileId) {
+      console.log("Upload data:", uploadData);
+      // Check if data is already updated to avoid infinite loop
+      if (data.coverImage !== uploadData.url || data.imageId !== fileId) {
+        setData((prev) => ({
+          ...prev,
+          coverImage: uploadData,
+          imageId: fileId,
+        }));
+      }
+    }
+  }, [uploadData, fileId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
-  };
-
-  const handleImageUpload = (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setData({ ...data, coverImage: imageUrl });
-    }
   };
 
   const addTag = () => {
@@ -259,40 +273,14 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Cover Image
               </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 h-64 flex flex-col items-center justify-center overflow-hidden">
-                {data.coverImage ? (
-                  <div className="relative w-full h-full">
-                    <img
-                      src={data.coverImage}
-                      alt="Tutorial cover"
-                      className="w-full h-full object-cover rounded-md"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setData({ ...data, coverImage: "" })}
-                      className="absolute top-2 right-2 bg-red-600 text-white p-1 rounded-full hover:bg-red-700 transition-colors"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
-                  </div>
-                ) : (
-                  <div className="text-center">
-                    <Upload className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-                    <p className="text-gray-500 mb-2">Upload a cover image</p>
-                    <p className="text-gray-400 text-sm mb-4">
-                      PNG, JPG, GIF up to 5MB
-                    </p>
-                    <label className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors cursor-pointer">
-                      <span>Select Image</span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={handleImageUpload}
-                      />
-                    </label>
-                  </div>
-                )}
+              <div>
+                <ImageUpload
+                  uploadData={uploadData}
+                  setUploadData={setUploadData}
+                  fileId={fileId}
+                  setFileId={setFileId}
+                  tutorial={true}
+                />
               </div>
             </div>
           </div>

@@ -64,6 +64,7 @@ export default function ImageUpload({
   fileId,
   setFileId,
   handleInputChange,
+  tutorial = false,
 }) {
   const inputRef = useRef(null);
   const [progress, setProgress] = useState(null);
@@ -72,7 +73,7 @@ export default function ImageUpload({
   useEffect(() => {
     // Whenever uploadData or fileId changes, we call handleInputChange
     // Only call if both are defined, or tweak the logic as needed
-    if (uploadData && fileId) {
+    if (uploadData && fileId && !tutorial) {
       handleInputChange("coverImage", {
         data: uploadData,
         fileId: fileId,
@@ -233,23 +234,19 @@ export default function ImageUpload({
                 Cover Image Preview
               </h4>
               <div className="overflow-hidden rounded-2xl border-2 border-dashed border-blue-300 dark:border-purple-600 shadow-lg hover:shadow-xl transition-shadow duration-300 max-w-md">
-                <Image
-                  src={uploadData.url}
-                  alt="Uploaded Cover"
-                  width={1000}
-                  height={400}
-                  className="object-fit w-full p-4 h-auto max-h-[400px] rounded-xl transition-transform duration-500 hover:scale-[1.03]"
-                />
+                {uploadData.url && (
+                  <Image
+                    src={uploadData.url}
+                    alt="Uploaded Cover"
+                    width={1000}
+                    height={400}
+                    className="object-fit w-full p-4 h-auto max-h-[400px] rounded-xl transition-transform duration-500 hover:scale-[1.03]"
+                  />
+                )}
               </div>
             </div>
           </div>
         </>
-      )}
-
-      {progress !== null && (
-        <div className="mt-4 text-blue-600 font-semibold">
-          Upload Progress: {progress}%
-        </div>
       )}
     </div>
   );

@@ -35,7 +35,8 @@ const defaultData = {
   tutorial: {
     title: "",
     description: "",
-    coverImage: "",
+    coverImage: null,
+    imageId: null,
     category: "",
     subcategory: "",
     tags: [],
@@ -66,7 +67,8 @@ const isDefaultLike = (data) => {
   const tutorialIsEmpty =
     tutorial?.title === "" &&
     tutorial?.description === "" &&
-    tutorial?.coverImage === "" &&
+    tutorial?.coverImage === null &&
+    tutorial?.imageId === null &&
     tutorial?.category === "" &&
     tutorial?.subcategory === "" &&
     Array.isArray(tutorial?.tags) &&
@@ -349,7 +351,8 @@ const TutorialCreator = () => {
       tutorial: {
         title: "",
         description: "",
-        coverImage: "",
+        coverImage: null,
+        imageId: null,
         category: "",
         subcategory: "",
         tags: [],
@@ -462,7 +465,8 @@ const TutorialCreator = () => {
             tutorial || {
               title: "",
               description: "",
-              coverImage: "",
+              coverImage: null,
+              imageId: null,
               category: "",
               subcategory: "",
               tags: [],

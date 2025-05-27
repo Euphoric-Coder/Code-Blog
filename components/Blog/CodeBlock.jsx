@@ -1,12 +1,9 @@
 import React, { useState, useCallback } from "react";
 import { Check, Copy } from "lucide-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import {
-  solarizedlight,
-  solarizedDarkAtom, 
-} from "react-syntax-highlighter/dist/esm/styles/prism";
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
+import { solarizedDarkAtom, solarizedlight } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 const CodeBlock = ({ language = "javascript", children }) => {
   const [copied, setCopied] = useState(false);
