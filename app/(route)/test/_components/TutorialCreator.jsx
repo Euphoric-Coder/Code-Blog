@@ -57,11 +57,43 @@ const defaultData = {
   activeSubsectionId: initialSubsectionId,
 };
 
-console.log(initialSectionId, initialSubsectionId);
+const isDefaultLike = (data) => {
+  if (!data) return true;
+
+  const { tutorial, sections, activeSectionId, activeSubsectionId } = JSON.parse(data);
+
+  // Check tutorial fields are empty
+  const tutorialIsEmpty =
+    tutorial?.title === "" &&
+    tutorial?.description === "" &&
+    tutorial?.coverImage === "" &&
+    tutorial?.category === "" &&
+    tutorial?.subcategory === "" &&
+    Array.isArray(tutorial?.tags) &&
+    tutorial.tags.length === 0;
+
+  // Check sections array matches default pattern
+  const defaultSection = sections?.[0];
+  const sectionsAreDefault =
+    Array.isArray(sections) &&
+    sections.length === 1 &&
+    defaultSection?.title === "Introduction" &&
+    defaultSection?.subsections?.length === 1 &&
+    defaultSection?.subsections?.[0]?.title === "Welcome" &&
+    defaultSection?.subsections?.[0]?.content ===
+      "<p>Welcome to this tutorial!</p>";
+
+  // Check IDs of section and subsection match default ones
+  const idsAreDefault =
+    activeSectionId === defaultSection?.id &&
+    activeSubsectionId === defaultSection?.subsections?.[0]?.id;
+
+  return tutorialIsEmpty && sectionsAreDefault && idsAreDefault;
+};
 
 const TutorialCreator = () => {
   const { user } = useUser();
-  const LOCAL_STORAGE_KEY = `tutorialCreatorData-${user?.id || "guest"}`;
+  const LOCAL_STORAGE_KEY = `tutorialCreatorData-${user?.id}`;
 
   const [initialData, setInitialData] = useState(null);
   const [tutorial, setTutorial] = useState(null);
@@ -78,7 +110,8 @@ const TutorialCreator = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
-      if (JSON.stringify(savedData) !== JSON.stringify(defaultData)) {
+      // console.log(!isDefaultLike(savedData));
+      if (!isDefaultLike(savedData)) {
         try {
           const parsed = JSON.parse(savedData);
           // console.log("Loaded tutorial data from localStorage:", parsed);
