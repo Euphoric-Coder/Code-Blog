@@ -28,7 +28,7 @@ export default function Page() {
     const convertMarkdownToHtml = () => {
       if (blogData) {
         // setHtmlContent(await markdownToHtml(blogData?.mdFormat));
-        setHtmlContent(processContent(blogData?.htmlFormat));
+        setHtmlContent(processContent(blogData?.content));
         // setHtmlContent(blogData?.htmlFormat);
       }
     };
@@ -71,8 +71,8 @@ export default function Page() {
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-3 sm:space-y-0 sm:space-x-6">
               <div className="flex items-center">
                 <Image
-                  src={blogData?.author.avatar}
-                  alt={blogData?.author.name}
+                  src={blogData?.author.avatar || "/default-avatar.png"}
+                  alt={blogData?.author.name || "Author"}
                   width={40}
                   height={40}
                   className="w-10 h-10 rounded-full mr-3"
@@ -124,8 +124,8 @@ export default function Page() {
           <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
             <div className="flex items-start space-x-4">
               <Image
-                src={blogData.author.avatar}
-                alt={blogData.author.name}
+                src={blogData.author.avatar || "/default-avatar.png"}
+                alt={blogData.author.name || "Author"}
                 width={64}
                 height={64}
                 className="w-16 h-16 rounded-full"
