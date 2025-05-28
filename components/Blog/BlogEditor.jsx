@@ -76,6 +76,7 @@ import { Blogs } from "@/lib/schema";
 import { getISTDate } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "../ImageUpload";
+import NextImage from "next/image";
 
 const MenuBar = ({ editor }) => {
   const [open, setOpen] = useState(false);
@@ -290,15 +291,37 @@ const MenuBar = ({ editor }) => {
   );
 };
 
-export default function BlogEditor({ initialContent = "", editing = false }) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+export default function BlogEditor({
+  initialTitle = "",
+  initialDescription = "",
+  initialCategory = "",
+  initialSubCategories = "",
+  initialContent = "",
+  initialCoverImageURL = null,
+  initialfileId = null,
+  editing = false,
+}) {
+  const [title, setTitle] = useState(editing ? initialTitle : "");
+  const [description, setDescription] = useState(
+    editing ? initialDescription : ""
+  );
   const [content, setContent] = useState("");
   const [uploadData, setUploadData] = useState(null);
   const [fileId, setFileId] = useState(null);
   const [unfinishedBlog, setUnfinishedBlog] = useState(false);
-  const [category, setCategory] = useState(blogCategories[0]);
-  const [selectedSubCategories, setSelectedSubCategories] = useState("");
+  const [editBlogCoverImageURL, setEditBlogCoverImageURL] = useState(
+    editing ? initialCoverImageURL : null
+  );
+  const [editBlogCoverImageId, setEditBlogCoverImageId] = useState(
+    editing ? initialfileId : null
+  );
+  const [editCoverImage, setEditCoverImage] = useState(editing ? true : false);
+  const [category, setCategory] = useState(
+    editing ? initialCategory : blogCategories[0]
+  );
+  const [selectedSubCategories, setSelectedSubCategories] = useState(
+    editing ? initialSubCategories : ""
+  );
   const selectedCount = selectedSubCategories
     ? selectedSubCategories.split(", ").length
     : 0;
@@ -310,13 +333,14 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
   useEffect(() => {
     const storedBlogData = JSON.parse(localStorage.getItem(storageKey) || "{}");
     if (
-      storedBlogData.title ||
-      storedBlogData.content ||
-      storedBlogData.fileId ||
-      storedBlogData.uploadData ||
-      storedBlogData.category ||
-      storedBlogData.subcategories ||
-      storedBlogData.description
+      (storedBlogData.title ||
+        storedBlogData.content ||
+        storedBlogData.fileId ||
+        storedBlogData.uploadData ||
+        storedBlogData.category ||
+        storedBlogData.subcategories ||
+        storedBlogData.description) &&
+      !editing
     ) {
       setTitle(storedBlogData.title || "");
       setDescription(storedBlogData.description || "");
@@ -580,7 +604,7 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
   return (
     <div className="p-8">
       {/* Pending Expense Alert */}
-      {unfinishedBlog && (
+      {unfinishedBlog && !editing && (
         <Alert
           variant="warning"
           className="mt-6 mb-5 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 border border-yellow-400 dark:border-gray-600 shadow-lg p-4 rounded-xl flex items-center hover:shadow-xl transition-transform transform hover:scale-[1.02]"
@@ -694,13 +718,35 @@ export default function BlogEditor({ initialContent = "", editing = false }) {
           }}
         />
       </div>
-      <ImageUpload
-        uploadData={uploadData}
-        setUploadData={setUploadData}
-        fileId={fileId}
-        setFileId={setFileId}
-        handleInputChange={handleInputChange}
-      />
+
+      {editCoverImage ? (
+        <div>
+          <Label
+            htmlFor="blog-cover-image"
+            className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
+          >
+            Blog Cover Image
+          </Label>
+          <div className="flex justify-between mt-3 mb-4">
+            <NextImage
+              src={editBlogCoverImageURL}
+              alt="Blog Cover"
+              width={500}
+              height={500}
+              className="w-full h-[400px] rounded-lg shadow-md object-cover"
+            />
+            <Button onClick={() => setEditCoverImage(false)}>Reupload</Button>
+          </div>
+        </div>
+      ) : (
+        <ImageUpload
+          uploadData={uploadData}
+          setUploadData={setUploadData}
+          fileId={fileId}
+          setFileId={setFileId}
+          handleInputChange={handleInputChange}
+        />
+      )}
 
       {/* Categories  */}
       <div className="mt-1 space-y-4 mb-10">

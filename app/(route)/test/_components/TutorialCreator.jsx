@@ -436,15 +436,15 @@ const TutorialCreator = () => {
       {pendingTutorial && (
         <Alert
           variant="warning"
-          className="mt-6 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 border border-yellow-400 dark:border-gray-600 shadow-lg p-4 rounded-xl flex items-center hover:shadow-xl transition-transform transform hover:scale-105"
+          className="mt-6 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 border border-yellow-400 dark:border-gray-600 shadow-md p-4 rounded-xl flex items-center hover:shadow-lg transition-transform transform"
         >
           <AlertCircle className="h-5 w-5 text-yellow-600 dark:text-yellow-400 mr-3" />
           <div>
             <AlertTitle className="text-yellow-700 dark:text-yellow-300 font-bold">
-              Pending Expense
+              Pending Tutorial
             </AlertTitle>
             <AlertDescription className="text-yellow-600 dark:text-yellow-400">
-              You have an unfinished expense: "<b>{name}</b>". Would you like to
+              You have an unfinished Tutorial: &quot;<b>{name === "" ? "Untitled" : name}</b>&quot;. Would you like to
               continue?
             </AlertDescription>
           </div>
