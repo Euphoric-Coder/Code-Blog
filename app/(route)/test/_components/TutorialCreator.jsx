@@ -2,11 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  Upload,
   ChevronRight,
   Save,
   Plus,
-  Image,
   Trash2,
   GripVertical,
   XCircle,
@@ -61,7 +59,8 @@ const defaultData = {
 const isDefaultLike = (data) => {
   if (!data) return true;
 
-  const { tutorial, sections, activeSectionId, activeSubsectionId } = JSON.parse(data);
+  const { tutorial, sections, activeSectionId, activeSubsectionId } =
+    JSON.parse(data);
 
   // Check tutorial fields are empty
   const tutorialIsEmpty =
@@ -407,7 +406,7 @@ const TutorialCreator = () => {
             </AlertDialogTitle>
             <AlertDialogDescription className="text-sm text-gray-600 dark:text-gray-300 mt-2">
               This action cannot be undone. This will permanently delete your
-              income <strong>""</strong> and all of its associated data.
+              income <strong>&quot;{tutorial.title}&quot;</strong> and all of its associated data.
             </AlertDialogDescription>
           </AlertDialogHeader>
 
@@ -444,7 +443,8 @@ const TutorialCreator = () => {
               Pending Tutorial
             </AlertTitle>
             <AlertDescription className="text-yellow-600 dark:text-yellow-400">
-              You have an unfinished Tutorial: &quot;<b>{name === "" ? "Untitled" : name}</b>&quot;. Would you like to
+              You have an unfinished Tutorial: &quot;
+              <b>{name === "" ? "Untitled" : name}</b>&quot;. Would you like to
               continue?
             </AlertDescription>
           </div>

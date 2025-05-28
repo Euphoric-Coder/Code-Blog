@@ -644,7 +644,7 @@ export default function BlogEditor({
               creative space.
             </p>
             <p className="text-xs mt-1 italic text-blue-500 dark:text-cyan-400">
-              &quote;Writing is the painting of the voice.&quote;
+              &quot;Writing is the painting of the voice&quot;
             </p>
           </div>
 
@@ -734,6 +734,7 @@ export default function BlogEditor({
               width={500}
               height={500}
               className="w-full h-[400px] rounded-lg shadow-md object-cover"
+              draggable={false}
             />
             <Button onClick={() => setEditCoverImage(false)}>Reupload</Button>
           </div>
