@@ -717,7 +717,7 @@ export default function BlogEditor({
           type="text"
           id="blog-title"
           placeholder="Blog Title"
-          className="w-full mt-3 p-2 mb-4 border rounded dark:bg-slate-800 dark:text-white dark:border-slate-600"
+          className="mt-3 mb-4 input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
           value={title}
           onChange={(e) => {
             setTitle(e.target.value);
@@ -736,7 +736,7 @@ export default function BlogEditor({
           type="text"
           id="blog-description"
           placeholder="Enter a brief description of your blog..."
-          className="w-full mt-3 p-2 mb-4 border rounded dark:bg-slate-800 dark:text-white dark:border-slate-600"
+          className="mt-3 mb-4 input-field h-[90px] focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
           value={description}
           onChange={(e) => {
             setDescription(e.target.value);
@@ -794,7 +794,7 @@ export default function BlogEditor({
         >
           <SelectTrigger
             id="blog-category"
-            className="blog-select-field focus:ring-cyan-400 dark:focus:ring-blue-400 focus:ring-[3px]"
+            className="blog-select-field"
           >
             <SelectValue />
           </SelectTrigger>
@@ -817,9 +817,9 @@ export default function BlogEditor({
         {category && blogSubCategoriesList[category.toLowerCase()] && (
           <div
             className="relative max-h-[200px] mt-2 overflow-y-auto 
-        p-3 shadow-sm rounded-xl border 
-        bg-gradient-to-r from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-900
-        border-blue-300 dark:border-blue-500 transition-all"
+        p-3 shadow-sm rounded-xl 
+        bg-gradient-to-r from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-900 border-[2px]
+        border-blue-500 dark:border-blue-900 transition-all"
           >
             <div className="flex items-center justify-between">
               {/* Title & Selected Badge */}
