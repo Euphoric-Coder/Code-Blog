@@ -28,6 +28,7 @@ const page = () => {
         initialSubCategories={data.subCategories}
         initialContent={data.htmlFormat}
         initialCoverImageURL={data.blogImage}
+        initialfileId={data.blogImageId}
         editing
       />
     </div>

@@ -528,8 +528,9 @@ export default function BlogEditor({
     console.log({
       id: `${slug}--${uuid()}`,
       title: title,
-      blogImage: uploadData?.url,
-      blogImageId: fileId,
+      blogImage:
+        editing && uploadData ? uploadData?.url : editBlogCoverImageURL,
+      blogImageId: editing && fileId ? fileId : editBlogCoverImageId,
       content: content,
       author: user?.fullName,
       categories: category,
@@ -537,10 +538,35 @@ export default function BlogEditor({
       date: new Date().toISOString(),
       createdBy: user?.primaryEmailAddress.emailAddress,
     });
+
+    if (editing && fileId && uploadData) {
+      await deleteFile(editBlogCoverImageId);
+    }
+
+    const editBlog = await db
+      .update(Blogs)
+      .set({
+        id: `${slug}--${uuid()}`,
+        title: title,
+        blogImage:
+          editing && uploadData ? uploadData?.url : editBlogCoverImageURL,
+        mdFormat: markdown,
+        content: content,
+        author: user?.fullName,
+        categories: category,
+        subCategories: selectedSubCategories,
+        date: getISTDate(),
+        createdBy: user?.primaryEmailAddress.emailAddress,
+      })
+      .where(eq(Blogs.id, blogId))
+      .returning({
+        id: Blogs.id,
+      });
   };
 
   const deleteFile = async (fileId) => {
     if (!fileId) return;
+    console.log("Deleting file with ID:", fileId);
     try {
       await fetch("/api/delete-image", {
         method: "POST",
@@ -637,7 +663,7 @@ export default function BlogEditor({
           {/* Title & subtitle */}
           <div>
             <h1 className="text-4xl p-1 font-extrabold tracking-tight bg-gradient-to-r from-blue-600 via-cyan-400 to-purple-500 bg-clip-text text-transparent">
-              Blog Editor
+              {editing ? "Edit Your Blog" : "Create a New Blog"}
             </h1>
             <p className="mt-1 text-sm text-gray-700 dark:text-gray-300 max-w-lg">
               Start writing your thoughts, stories, or tutorials. This is your
