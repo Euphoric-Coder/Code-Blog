@@ -53,10 +53,15 @@ import { useUser } from "@clerk/nextjs";
 import { v4 as uuid } from "uuid";
 import {
   AlertCircle,
+  Archive,
+  ChevronDownIcon,
+  Copy,
   PenBox,
+  PencilIcon,
   Send,
   Trash,
   Trash2,
+  TrashIcon,
   XCircle,
 } from "lucide-react";
 import { Label } from "@/components/ui/label";
@@ -68,6 +73,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Menu, MenuButton, MenuItem, MenuItems, MenuList } from "@headlessui/react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { blogCategories, blogSubCategoriesList } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
@@ -101,7 +107,7 @@ const MenuBar = ({ editor }) => {
 
   return (
     <div className="sticky top-0 flex flex-wrap items-center justify-between rounded-tr-2xl rounded-tl-2xl gap-2 border-r border-l border-2 p-4 backdrop-blur-md bg-white/60 dark:bg-slate-900/60">
-      <div className="flex gap-2 items-center">
+      <div className="hidden lg:flex gap-2 items-center">
         {[1, 2, 3].map((level) => (
           <TooltipProvider key={level}>
             <Tooltip>
@@ -232,7 +238,7 @@ const MenuBar = ({ editor }) => {
                     .run()
                 }
               >
-                <MdTableChart className="mr-1" /> Table
+                <MdTableChart className="mr-1" />
               </button>
             </TooltipTrigger>
             <TooltipContent>
@@ -256,6 +262,59 @@ const MenuBar = ({ editor }) => {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
+      </div>
+
+      <div className="lg:hidden flex">
+        <Menu>
+          <MenuButton className="inline-flex items-center gap-2 rounded-md bg-gray-800 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-gray-700 data-open:bg-gray-700">
+            Options
+            <ChevronDownIcon className="size-4 fill-white/60" />
+          </MenuButton>
+
+          <MenuItems
+            transition
+            anchor="bottom end"
+            className="w-52 origin-top-right rounded-xl border border-white/5 bg-white/5 p-1 text-sm/6 text-white transition duration-100 ease-out [--anchor-gap:--spacing(1)] focus:outline-none data-closed:scale-95 data-closed:opacity-0"
+          >
+            <MenuItem>
+              <button className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-white/10">
+                <PencilIcon className="size-4 fill-white/30" />
+                Edit
+                <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-focus:inline">
+                  ⌘E
+                </kbd>
+              </button>
+            </MenuItem>
+            <MenuItem>
+              <button className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-white/10">
+                <Copy className="size-4 fill-white/30" />
+                Duplicate
+                <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-focus:inline">
+                  ⌘D
+                </kbd>
+              </button>
+            </MenuItem>
+            <div className="my-1 h-px bg-white/5" />
+            <MenuItem>
+              <button className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-white/10">
+                <Archive className="size-4 fill-white/30" />
+                Archive
+                <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-focus:inline">
+                  ⌘A
+                </kbd>
+              </button>
+            </MenuItem>
+            <MenuItem>
+              <button className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-white/10">
+                <TrashIcon className="size-4 fill-white/30" />
+                Delete
+                <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-focus:inline">
+                  ⌘D
+                </kbd>
+              </button>
+            </MenuItem>
+          </MenuItems>
+        </Menu>
       </div>
 
       <button onClick={() => editor.commands.clearContent(true)}>
@@ -389,7 +448,7 @@ export default function BlogEditor({
     editorProps: {
       attributes: {
         class:
-          "prose dark:prose-invert max-w-none p-4 min-h-[750px] rounded-3xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 outline-none",
+          "prose dark:prose-invert max-w-none p-4 min-h-[100px] border-top-none border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 outline-none",
       },
     },
     onUpdate: ({ editor }) => {
@@ -746,23 +805,38 @@ export default function BlogEditor({
       </div>
 
       {editCoverImage ? (
-        <div>
+        <div className="mb-6">
           <Label
             htmlFor="blog-cover-image"
             className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
           >
             Blog Cover Image
           </Label>
-          <div className="flex justify-between mt-3 mb-4">
-            <NextImage
-              src={editBlogCoverImageURL}
-              alt="Blog Cover"
-              width={500}
-              height={500}
-              className="w-full h-[400px] rounded-lg shadow-md object-cover"
-              draggable={false}
-            />
-            <Button onClick={() => setEditCoverImage(false)}>Reupload</Button>
+          <div className="relative flex flex-col items-center gap-6 mt-4 p-6 border-2 border-dashed border-blue-300 rounded-2xl bg-gradient-to-br from-cyan-50 to-indigo-100 shadow-lg hover:shadow-xl transition-all duration-300">
+            {/* Image Block */}
+            <div className="flex-1 max-w-md overflow-hidden rounded-xl shadow-md transition-transform duration-300 hover:scale-105">
+              <NextImage
+                src={editBlogCoverImageURL}
+                alt="Blog Cover"
+                width={500}
+                height={500}
+                className="w-full h-[300px] object-cover rounded-xl"
+                draggable={false}
+              />
+            </div>
+
+            {/* Info and Actions - stacked below image for better alignment */}
+            <div className="flex flex-col gap-3 justify-center items-center w-full md:w-auto md:items-start text-center md:text-left">
+              <h3 className="text-lg font-bold text-gray-800 dark:text-white">
+                Cover Image Uploaded
+              </h3>
+              <Button
+                onClick={() => setEditCoverImage(false)}
+                className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white font-medium px-5 py-2 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300"
+              >
+                Reupload Image
+              </Button>
+            </div>
           </div>
         </div>
       ) : (
@@ -792,10 +866,7 @@ export default function BlogEditor({
             handleInputChange("subcategories", ""); // Reset subcategories too
           }}
         >
-          <SelectTrigger
-            id="blog-category"
-            className="blog-select-field"
-          >
+          <SelectTrigger id="blog-category" className="blog-select-field">
             <SelectValue />
           </SelectTrigger>
           <SelectContent className="blog-select-content mt-2">
@@ -911,7 +982,7 @@ export default function BlogEditor({
           <MenuBar editor={editor} />
           <EditorContent
             editor={editor}
-            className="overflow-y-auto max-h-[1000px]"
+            className="overflow-y-auto max-h-[500px]"
           />
         </div>
       </div>
