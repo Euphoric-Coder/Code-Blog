@@ -406,7 +406,8 @@ const TutorialCreator = () => {
             </AlertDialogTitle>
             <AlertDialogDescription className="text-sm text-gray-600 dark:text-gray-300 mt-2">
               This action cannot be undone. This will permanently delete your
-              income <strong>&quot;{tutorial.title}&quot;</strong> and all of its associated data.
+              income <strong>&quot;{tutorial.title}&quot;</strong> and all of
+              its associated data.
             </AlertDialogDescription>
           </AlertDialogHeader>
 
@@ -460,21 +461,23 @@ const TutorialCreator = () => {
         </Alert>
       )}
       {currentStep === "metadata" ? (
-        <TutorialMetadata
-          initialData={
-            tutorial || {
-              title: "",
-              description: "",
-              coverImage: null,
-              imageId: null,
-              category: "",
-              subcategory: "",
-              tags: [],
+        <div className="flex justify-center min-h-screen">
+          <TutorialMetadata
+            initialData={
+              tutorial || {
+                title: "",
+                description: "",
+                coverImage: null,
+                imageId: null,
+                category: "",
+                subcategory: "",
+                tags: [],
+              }
             }
-          }
-          onComplete={handleMetadataComplete}
-          onUpdateMetadata={(updatedMetadata) => setTutorial(updatedMetadata)} // ✅ Sync metadata updates
-        />
+            onComplete={handleMetadataComplete}
+            onUpdateMetadata={(updatedMetadata) => setTutorial(updatedMetadata)} // ✅ Sync metadata updates
+          />
+        </div>
       ) : (
         <div>
           <div className="mb-8 flex justify-between items-center">
