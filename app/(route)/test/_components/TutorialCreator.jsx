@@ -390,7 +390,7 @@ const TutorialCreator = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-tr from-[#e0f2ff] to-[#f8fbff] dark:from-[#0b1625] dark:to-[#112030] transition-colors duration-500 flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen w-full bg-gradient-to-tr from-[#e0f2ff] to-[#f8fbff] dark:from-[#0b1625] dark:to-[#112030] transition-colors duration-500 flex flex-col items-center justify-center px-4 py-10">
       <AlertDialog open={clearPendingAlert}>
         <AlertDialogContent className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-br from-white via-blue-50 to-cyan-200 dark:from-gray-800 dark:via-gray-900 dark:to-blue-800 p-8 rounded-3xl shadow-[0_0_40px_rgba(0,150,255,0.3)] dark:shadow-[0_0_40px_rgba(0,75,150,0.5)] w-[95%] max-w-lg">
           {/* Background Effects */}
@@ -436,7 +436,7 @@ const TutorialCreator = () => {
       {pendingTutorial && (
         <Alert
           variant="warning"
-          className="mt-6 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 border border-yellow-400 dark:border-gray-600 shadow-md p-4 rounded-xl flex items-center hover:shadow-lg transition-transform transform"
+          className="mb-6 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 border border-yellow-400 dark:border-gray-600 shadow-md p-4 rounded-xl flex items-center hover:shadow-lg transition-transform transform"
         >
           <AlertCircle className="h-5 w-5 text-yellow-600 dark:text-yellow-400 mr-3" />
           <div>

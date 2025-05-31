@@ -233,7 +233,7 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                     Tags
                   </label>
                   <div className="flex space-x-2">
-                    <input
+                    <Input
                       type="text"
                       value={tag}
                       onChange={(e) => setTag(e.target.value)}
