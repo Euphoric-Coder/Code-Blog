@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Upload, X, ChevronRight } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import ImageUpload from "@/components/ImageUpload";
+import { Input } from "@/components/ui/input";
+import FormBackgroundEffect from "@/components/Effect/FormBackgroundEffect";
 
 const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
   const { user } = useUser();
@@ -122,15 +124,17 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
   };
 
   return (
-    <div className="">
-      <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-md p-6 mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">
+    <div className="form-layout">
+      <FormBackgroundEffect />
+      <div className="flex justify-between items-start mb-4">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">
           Create New Tutorial
         </h1>
-
-        <form onSubmit={handleSubmit}>
+      </div>
+      <div className="flex items-center gap-2">
+        <form onSubmit={handleSubmit} className="w-full">
           <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="w-full flex flex-col gap-6">
               <div className="space-y-4">
                 <div>
                   <label
@@ -139,13 +143,13 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                   >
                     Title
                   </label>
-                  <input
+                  <Input
                     type="text"
                     id="title"
                     name="title"
                     value={data.title}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                    className="w-full px-4 py-2 input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
                     required
                     placeholder="Enter tutorial title"
                   />
@@ -164,7 +168,7 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                     value={data.description}
                     onChange={handleChange}
                     rows={4}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                    className="w-full px-4 py-2 input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
                     required
                     placeholder="Provide a brief description of your tutorial"
                   ></textarea>
@@ -182,12 +186,16 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                     name="category"
                     value={data.category}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                    className="w-full px-4 py-2 input-field"
                     required
                   >
                     <option value="">Select a category</option>
                     {categories.map((category) => (
-                      <option key={category} value={category}>
+                      <option
+                        key={category}
+                        value={category}
+                        className="select-content"
+                      >
                         {category}
                       </option>
                     ))}
@@ -207,7 +215,7 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                       name="subcategory"
                       value={data.subcategory}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      className="w-full px-4 py-2 select-content"
                       required
                     >
                       <option value="">Select a subcategory</option>
@@ -229,7 +237,7 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                       type="text"
                       value={tag}
                       onChange={(e) => setTag(e.target.value)}
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      className="flex-1 px-4 py-2 input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
                       placeholder="Add a tag"
                       onKeyDown={(e) => {
                         if (e.key === "Enter") {

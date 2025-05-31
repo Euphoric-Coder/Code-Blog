@@ -6,10 +6,10 @@ import Footer from "./Footer";
 export default function FooterWrapper() {
   const pathname = usePathname();
 
-  // Define routes where the footer should be hidden
-  const hiddenRoutes = ["/onboarding"];
+  // Shows the footer only on the landing page ("/")
+  const hiddenRoutes = ["/"];
 
-  if (hiddenRoutes.includes(pathname)) {
+  if (!hiddenRoutes.includes(pathname)) {
     return null; // Don't show footer
   }
 
