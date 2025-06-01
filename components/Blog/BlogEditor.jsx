@@ -20,7 +20,6 @@ import { common, createLowlight } from "lowlight";
 const lowlight = createLowlight(common);
 
 import { useEffect, useState } from "react";
-import CodeBlockComponent from "./CodeBlock";
 import {
   Tooltip,
   TooltipContent,
@@ -83,6 +82,7 @@ import { getISTDate } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "../ImageUpload";
 import NextImage from "next/image";
+import CodeBlockComponent from "./EditorCodeBlock";
 
 const MenuBar = ({ editor }) => {
   const [open, setOpen] = useState(false);
@@ -448,7 +448,7 @@ export default function BlogEditor({
     editorProps: {
       attributes: {
         class:
-          "prose dark:prose-invert max-w-none p-4 min-h-[100px] border-top-none border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 outline-none",
+          "prose dark:prose-invert max-w-none p-4 min-h-[300px] rounded-b-3xl border-top-none border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 outline-none",
       },
     },
     onUpdate: ({ editor }) => {
@@ -987,7 +987,7 @@ export default function BlogEditor({
         </div>
       </div>
 
-      {editing ? (
+      {/* {editing ? (
         <button
           className="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
           onClick={EditBlog}
@@ -1001,7 +1001,7 @@ export default function BlogEditor({
         >
           Save Blog
         </button>
-      )}
+      )} */}
     </div>
   );
 }

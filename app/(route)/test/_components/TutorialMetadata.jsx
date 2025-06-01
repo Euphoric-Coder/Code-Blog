@@ -3,7 +3,15 @@ import { Upload, X, ChevronRight } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import ImageUpload from "@/components/ImageUpload";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import FormBackgroundEffect from "@/components/Effect/FormBackgroundEffect";
+import { Textarea } from "@/components/ui/textarea";
 
 const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
   const { user } = useUser();
@@ -17,7 +25,7 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
   const [data, setData] = useState(initialData);
   const [uploadData, setUploadData] = useState(null);
   const [fileId, setFileId] = useState(null);
-
+  const [errors, setErrors] = useState({});
   const [tag, setTag] = useState("");
 
   useEffect(() => {
@@ -44,6 +52,7 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
+    setErrors((prev) => ({ ...prev, [name]: "" })); // Clear error for this field
   };
 
   const addTag = () => {
@@ -59,6 +68,21 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const newErrors = {};
+
+    console.log("working ");
+
+    if (!data.title) newErrors.title = "Title is required";
+    if (!data.description) newErrors.description = "Description is required";
+    if (!data.category) newErrors.category = "Category is required";
+    if (!data.subcategory) newErrors.subcategory = "Subcategory is required";
+
+    // You can also check if an image was uploaded
+    // if (!uploadData) newErrors.coverImage = "Cover image is required";
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) return; // Stop submission
     onComplete(data);
   };
 
@@ -149,8 +173,11 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                     name="title"
                     value={data.title}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
-                    required
+                    className={`w-full px-4 py-2 ${
+                      errors.title
+                        ? "input-error-field focus-visible:ring-red-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-red-400 focus-visible:ring-[4px]"
+                        : "input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
+                    }`}
                     placeholder="Enter tutorial title"
                   />
                 </div>
@@ -162,16 +189,19 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                   >
                     Description
                   </label>
-                  <textarea
+                  <Textarea
                     id="description"
                     name="description"
                     value={data.description}
                     onChange={handleChange}
                     rows={4}
-                    className="w-full px-4 py-2 input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
-                    required
+                    className={`w-full px-4 py-2 ${
+                      errors.description
+                        ? "input-error-field focus-visible:ring-red-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-red-400 focus-visible:ring-[4px]"
+                        : "input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
+                    }`}
                     placeholder="Provide a brief description of your tutorial"
-                  ></textarea>
+                  ></Textarea>
                 </div>
 
                 <div>
@@ -181,25 +211,30 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                   >
                     Category
                   </label>
-                  <select
-                    id="category"
-                    name="category"
+
+                  <Select
                     value={data.category}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 input-field"
-                    required
+                    onValueChange={(val) => setData({ ...data, category: val })}
                   >
-                    <option value="">Select a category</option>
-                    {categories.map((category) => (
-                      <option
-                        key={category}
-                        value={category}
-                        className="select-content"
-                      >
-                        {category}
-                      </option>
-                    ))}
-                  </select>
+                    <SelectTrigger
+                      id="category"
+                      className="w-full rounded-lg px-3 py-2 border input-field focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-[3px]"
+                    >
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+
+                    <SelectContent className="select-content mt-2">
+                      {categories.map((category) => (
+                        <SelectItem
+                          key={category}
+                          value={category}
+                          className="select-item"
+                        >
+                          {category}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 {data.category && (
@@ -210,21 +245,33 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                     >
                       Subcategory
                     </label>
-                    <select
-                      id="subcategory"
-                      name="subcategory"
+
+                    <Select
                       value={data.subcategory}
-                      onChange={handleChange}
-                      className="w-full px-4 py-2 select-content"
+                      onValueChange={(val) =>
+                        setData({ ...data, subcategory: val })
+                      }
                       required
                     >
-                      <option value="">Select a subcategory</option>
-                      {subcategories[data.category]?.map((subcategory) => (
-                        <option key={subcategory} value={subcategory}>
-                          {subcategory}
-                        </option>
-                      ))}
-                    </select>
+                      <SelectTrigger
+                        id="subcategory"
+                        className="w-full rounded-lg px-3 py-2 border input-field focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-[3px]"
+                      >
+                        <SelectValue placeholder="Select a subcategory" />
+                      </SelectTrigger>
+
+                      <SelectContent className="select-content mt-2">
+                        {subcategories[data.category]?.map((subcategory) => (
+                          <SelectItem
+                            key={subcategory}
+                            value={subcategory}
+                            className="select-item"
+                          >
+                            {subcategory}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 )}
 
@@ -276,18 +323,13 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Cover Image
-                </label>
-                <div>
-                  <ImageUpload
-                    uploadData={uploadData}
-                    setUploadData={setUploadData}
-                    fileId={fileId}
-                    setFileId={setFileId}
-                    tutorial={true}
-                  />
-                </div>
+                <ImageUpload
+                  uploadData={uploadData}
+                  setUploadData={setUploadData}
+                  fileId={fileId}
+                  setFileId={setFileId}
+                  tutorial={true}
+                />
               </div>
             </div>
 
