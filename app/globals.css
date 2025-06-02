@@ -220,7 +220,7 @@
 }
 
 .btn4 {
-  @apply bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 dark:from-blue-700 dark:via-indigo-800 dark:to-purple-800 hover:dark:from-blue-800 hover:dark:via-indigo-900 hover:dark:to-purple-900 text-white font-medium text-sm sm:text-base rounded-full shadow-lg hover:opacity-90 transition-transform transform hover:scale-105
+  @apply bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 dark:from-blue-700 dark:via-indigo-800 dark:to-purple-800 hover:dark:from-blue-800 hover:dark:via-indigo-900 hover:dark:to-purple-900 text-white font-medium text-sm sm:text-base rounded-full shadow-lg hover:opacity-90 transition-transform transform
 }
 
 .btn5 {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Upload, X, ChevronRight } from "lucide-react";
+import { Upload, X, ChevronRight, PlusCircle } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import ImageUpload from "@/components/ImageUpload";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import FormBackgroundEffect from "@/components/Effect/FormBackgroundEffect";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
   const { user } = useUser();
@@ -151,7 +152,7 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
     <div className="form-layout">
       <FormBackgroundEffect />
       <div className="flex justify-between items-start mb-4">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-extrabold text-blue-900 dark:text-blue-200">
           Create New Tutorial
         </h1>
       </div>
@@ -293,13 +294,10 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                         }
                       }}
                     />
-                    <button
-                      type="button"
-                      onClick={addTag}
-                      className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md transition-colors"
-                    >
+                    <Button onClick={addTag} className="btn4 [&_svg]:size-6">
+                      <PlusCircle />
                       Add
-                    </button>
+                    </Button>
                   </div>
 
                   <div className="flex flex-wrap gap-2 mt-2">
@@ -334,13 +332,10 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
             </div>
 
             <div className="flex justify-end">
-              <button
-                type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition-colors flex items-center"
-              >
-                Continue to Sections
-                <ChevronRight className="h-5 w-5 ml-2" />
-              </button>
+              <Button type="submit" className="btn3 [&_svg]:size-6">
+                Continue
+                <ChevronRight className="" />
+              </Button>
             </div>
           </div>
         </form>
