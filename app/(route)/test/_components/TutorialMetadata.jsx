@@ -165,12 +165,10 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
             <div className="w-full flex flex-col gap-6">
               <div className="space-y-4">
                 <div>
-                  <label
-                    htmlFor="title"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
+                  <label htmlFor="title" className="text">
                     Title
                   </label>
+                  <span className="text-red-500">&nbsp;*</span>
                   <Input
                     type="text"
                     id="title"
@@ -187,12 +185,10 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="description"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
+                  <label htmlFor="description" className="text">
                     Description
                   </label>
+                  <span className="text-red-500">&nbsp;*</span>
                   <Textarea
                     id="description"
                     name="description"
@@ -209,12 +205,10 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="category"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
+                  <label htmlFor="category" className="text">
                     Category
                   </label>
+                  <span className="text-red-500">&nbsp;*</span>
 
                   <Select
                     value={data.category}
@@ -253,12 +247,10 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
 
                 {data.category && (
                   <div>
-                    <label
-                      htmlFor="subcategory"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
+                    <label htmlFor="subcategory" className="text">
                       Subcategory
                     </label>
+                    <span className="text-red-500">&nbsp;*</span>
 
                     <Select
                       value={data.subcategory}
@@ -301,9 +293,7 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                 )}
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Tags
-                  </label>
+                  <label className="text">Tags</label>
                   <div className="flex space-x-2">
                     <Input
                       type="text"
