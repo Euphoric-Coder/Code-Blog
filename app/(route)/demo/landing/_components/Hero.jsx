@@ -1,7 +1,21 @@
+"use client";
+
 import React from "react";
+import { useTheme } from "next-themes";
 import { ArrowRight, Play, Code, Zap, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import dynamic from "next/dynamic";
+
+const Typewriter = dynamic(() => import("typewriter-effect"), { ssr: false });
 
 export const Hero = () => {
+  const { theme } = useTheme();
+
+  const buttonGradient =
+    theme === "dark"
+      ? "bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 hover:from-purple-700 hover:via-pink-600 hover:to-red-600"
+      : "bg-gradient-to-r from-blue-400 via-teal-400 to-green-400 hover:from-blue-500 hover:via-teal-500 hover:to-green-500";
+
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background Gradient */}
@@ -35,6 +49,24 @@ export const Hero = () => {
                   Tech & Innovation
                 </span>
               </h1>
+              {/* Typewriter Effect */}
+              <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-teal-500 to-green-500 dark:from-purple-500 dark:via-pink-500 dark:to-orange-400">
+                <Typewriter
+                  options={{
+                    strings: [
+                      "Full Stack Development",
+                      "Machine Learning",
+                      "Tech Innovations",
+                      "Cloud Computing",
+                      "Cybersecurity Trends",
+                      "Blockchain Technology",
+                      "DevOps Practices",
+                    ],
+                    autoStart: true,
+                    loop: true,
+                  }}
+                />
+              </div>
               <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
                 Explore the latest{" "}
                 <span className="font-semibold text-blue-600 dark:text-blue-400">
@@ -75,8 +107,8 @@ export const Hero = () => {
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-600 to-teal-500 text-white font-medium rounded-xl hover:shadow-lg hover:shadow-blue-500/25 transform hover:-translate-y-0.5 transition-all duration-200">
+            <div className="flex items-center flex-col sm:flex-row gap-4">
+              <button className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-600 to-teal-500 text-white font-medium rounded-full hover:shadow-lg hover:shadow-blue-500/25 transform hover:-translate-y-0.5 transition-all duration-200">
                 <span>Explore Blogs</span>
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </button>
