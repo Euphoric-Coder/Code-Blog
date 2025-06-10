@@ -515,7 +515,7 @@ export const SearchSection = () => {
               <div className="p-4">
                 <div className="flex items-center justify-between mb-4">
                   <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Found {searchResults.length} results for "{searchQuery}"
+                    Found {searchResults.length} results for &quot;{searchQuery}&quot;
                   </div>
                   <button
                     onClick={() => setShowResults(false)}
