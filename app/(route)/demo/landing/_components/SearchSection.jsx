@@ -28,7 +28,7 @@ export const SearchSection = () => {
             </span>
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-300">
-            Find exactly what you're looking for in seconds.
+            Find exactly what you&apos;re looking for in seconds.
           </p>
         </div>
 
