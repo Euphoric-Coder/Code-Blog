@@ -19,33 +19,33 @@ export const Header = ({ darkMode, setDarkMode }) => {
     {
       name: "Home",
       href: "#home",
-      active: window.location.hash === "#home" || window.location.hash === "",
+      active: "",
     },
-    { name: "Blog", href: "#blog", active: window.location.hash === "#blog" },
+    { name: "Blog", href: "#blog", active: "" },
     {
       name: "Tutorial",
       href: "#tutorial",
-      active: window.location.hash === "#tutorial",
+      active: "",
     },
     {
       name: "Snippets",
       href: "#snippets",
-      active: window.location.hash === "#snippets",
+      active: "",
     },
     {
       name: "Playground",
       href: "#playground",
-      active: window.location.hash === "#playground",
+      active: "",
     },
     {
       name: "About",
       href: "#about",
-      active: window.location.hash === "#about",
+      active: "",
     },
     {
       name: "Contact",
       href: "#contact",
-      active: window.location.hash === "#contact",
+      active: "",
     },
   ];
 
