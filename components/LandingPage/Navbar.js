@@ -16,7 +16,7 @@ import { Button } from "../ui/button";
 const Navbar = () => {
   const [progress, setProgress] = useState(0);
   const pathname = usePathname();
-  const { isSignedIn, user } = useUser();
+  const { isSignedIn } = useUser();
 
   // Loading bar progress
   useEffect(() => {

@@ -109,7 +109,7 @@ export const Hero = () => {
             {/* CTA Buttons */}
             <div className="flex items-center flex-col sm:flex-row gap-4">
               <button className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-600 to-teal-500 text-white font-medium rounded-full hover:shadow-lg hover:shadow-blue-500/25 transform hover:-translate-y-0.5 transition-all duration-200">
-                <span>Explore Blogs</span>
+                <span className="font-extrabold">Explore Blogs</span>
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </button>
 

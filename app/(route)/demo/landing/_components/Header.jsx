@@ -2,9 +2,17 @@
 
 import React, { useState, useEffect } from "react";
 import { Code, Menu, X, Sun, Moon, Search } from "lucide-react";
+import {
+  SignInButton,
+  SignOutButton,
+  UserButton,
+  useUser,
+} from "@clerk/nextjs";
 import { ModeToggle } from "@/components/theme-btn";
+import { Button } from "@/components/ui/button";
 
 export const Header = ({ darkMode, setDarkMode }) => {
+  const { isSignedIn } = useUser();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -99,9 +107,18 @@ export const Header = ({ darkMode, setDarkMode }) => {
             <ModeToggle />
 
             {/* Sign In Button */}
-            <button className="hidden sm:block bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors">
-              Sign In
-            </button>
+            {isSignedIn ? (
+              <div className="flex items-center gap-3" suppressHydrationWarning>
+                <UserButton />
+                <Button asChild>
+                  <SignOutButton />
+                </Button>
+              </div>
+            ) : (
+              <Button asChild>
+                <SignInButton />
+              </Button>
+            )}
 
             {/* Mobile Menu Button */}
             <button
