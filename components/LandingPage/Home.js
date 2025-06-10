@@ -8,6 +8,8 @@ import FeaturedBlogsSection from "./FeaturedBlogsSection";
 import FeaturedTutorialSection from "./FeaturedTutorialsSection";
 
 export default function HomeClient({ initialPosts, tutorialPosts }) {
+  console.log("Initial Posts:", initialPosts);
+  console.log("Tutorial Posts:", tutorialPosts);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [featuredPosts, setFeaturedPosts] = useState([]);
