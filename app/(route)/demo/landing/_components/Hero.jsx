@@ -8,12 +8,6 @@ import dynamic from "next/dynamic";
 const Typewriter = dynamic(() => import("typewriter-effect"), { ssr: false });
 
 export const Hero = () => {
-  const { theme } = useTheme();
-
-  const buttonGradient =
-    theme === "dark"
-      ? "bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 hover:from-purple-700 hover:via-pink-600 hover:to-red-600"
-      : "bg-gradient-to-r from-blue-400 via-teal-400 to-green-400 hover:from-blue-500 hover:via-teal-500 hover:to-green-500";
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
