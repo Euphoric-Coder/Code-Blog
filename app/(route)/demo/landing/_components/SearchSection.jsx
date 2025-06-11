@@ -14,6 +14,7 @@ import {
   Heart,
   BookOpen,
   Star,
+  X,
 } from "lucide-react";
 
 export const SearchSection = () => {
@@ -22,6 +23,12 @@ export const SearchSection = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [filters, setFilters] = useState({
+    type: "All",
+    category: "All",
+    level: "All",
+    language: "All",
+  });
   const searchRef = useRef(null);
 
   const trendingTopics = [
@@ -33,7 +40,40 @@ export const SearchSection = () => {
     "Blockchain",
   ];
 
-  // Dummy data for search results
+  const filterOptions = {
+    types: ["All", "Blogs", "Tutorials", "Snippets"],
+    categories: [
+      "All",
+      "Web Development",
+      "AI/ML",
+      "Data Science",
+      "DevOps",
+      "Cloud Computing",
+      "Blockchain",
+      "Mobile Development",
+    ],
+    levels: ["All", "Beginner", "Intermediate", "Advanced"],
+    languages: [
+      "All",
+      "JavaScript",
+      "TypeScript",
+      "Python",
+      "Java",
+      "C++",
+      "C",
+      "Go",
+      "Rust",
+      "PHP",
+      "Ruby",
+      "Swift",
+      "Kotlin",
+      "C#",
+      "CSS",
+      "Solidity",
+    ],
+  };
+
+  // Dummy data for search results with subcategories
   const allContent = [
     // Blogs
     {
@@ -44,7 +84,8 @@ export const SearchSection = () => {
         "Explore the evolution of web development and understand when to choose static or dynamic approaches.",
       author: "Sagnik Dey",
       category: "Web Development",
-      tags: ["React", "JavaScript", "Web Development"],
+      subcategory: "Frontend Architecture",
+      tags: ["React", "JavaScript", "Web Development", "SSG", "SSR"],
       readTime: "8 min read",
       views: 12500,
       likes: 890,
@@ -59,7 +100,8 @@ export const SearchSection = () => {
         "A comprehensive look at how AI assistants have evolved and their impact on modern technology.",
       author: "Sarah Chen",
       category: "AI/ML",
-      tags: ["AI", "Machine Learning", "Technology"],
+      subcategory: "Natural Language Processing",
+      tags: ["AI", "Machine Learning", "Technology", "NLP", "ChatGPT"],
       readTime: "12 min read",
       views: 18900,
       likes: 1250,
@@ -74,7 +116,8 @@ export const SearchSection = () => {
         "Deep dive into React Hooks with practical examples and best practices for modern React development.",
       author: "Mike Rodriguez",
       category: "Web Development",
-      tags: ["React", "JavaScript", "Frontend"],
+      subcategory: "React Development",
+      tags: ["React", "JavaScript", "Frontend", "Hooks", "useState"],
       readTime: "15 min read",
       views: 9800,
       likes: 720,
@@ -89,7 +132,8 @@ export const SearchSection = () => {
         "Learn how to effectively use Docker and Kubernetes for scalable application deployment.",
       author: "Alex Thompson",
       category: "DevOps",
-      tags: ["Docker", "Kubernetes", "DevOps"],
+      subcategory: "Container Orchestration",
+      tags: ["Docker", "Kubernetes", "DevOps", "Containers", "Microservices"],
       readTime: "20 min read",
       views: 7600,
       likes: 540,
@@ -104,7 +148,8 @@ export const SearchSection = () => {
         "Comprehensive guide to Python libraries essential for data science including Pandas and NumPy.",
       author: "Dr. Emily Watson",
       category: "Data Science",
-      tags: ["Python", "Data Science", "Machine Learning"],
+      subcategory: "Data Analysis",
+      tags: ["Python", "Data Science", "Machine Learning", "Pandas", "NumPy"],
       readTime: "18 min read",
       views: 11200,
       likes: 890,
@@ -118,25 +163,59 @@ export const SearchSection = () => {
       description:
         "Learn best practices for creating robust, scalable APIs using Node.js and Express framework.",
       author: "Lisa Park",
-      category: "Backend",
-      tags: ["Node.js", "Express", "API"],
+      category: "Web Development",
+      subcategory: "Backend Development",
+      tags: ["Node.js", "Express", "API", "REST", "Backend"],
       readTime: "14 min read",
       views: 8900,
       likes: 650,
       image:
         "https://images.pexels.com/photos/943096/pexels-photo-943096.jpeg?auto=compress&cs=tinysrgb&w=300",
     },
+    {
+      id: 7,
+      type: "blog",
+      title: "Blockchain Technology: Beyond Cryptocurrency",
+      description:
+        "Exploring blockchain applications in supply chain, healthcare, and digital identity management.",
+      author: "David Kim",
+      category: "Blockchain",
+      subcategory: "Enterprise Applications",
+      tags: ["Blockchain", "Cryptocurrency", "Smart Contracts", "DeFi", "Web3"],
+      readTime: "16 min read",
+      views: 6800,
+      likes: 480,
+      image:
+        "https://images.pexels.com/photos/844124/pexels-photo-844124.jpeg?auto=compress&cs=tinysrgb&w=300",
+    },
+    {
+      id: 8,
+      type: "blog",
+      title: "Cloud Computing Security: Best Practices for 2024",
+      description:
+        "Essential security measures and compliance strategies for cloud-based applications and infrastructure.",
+      author: "Jennifer Liu",
+      category: "Cloud Computing",
+      subcategory: "Security & Compliance",
+      tags: ["Cloud Security", "AWS", "Azure", "Compliance", "Infrastructure"],
+      readTime: "22 min read",
+      views: 9500,
+      likes: 720,
+      image:
+        "https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=300",
+    },
 
     // Tutorials
     {
-      id: 7,
+      id: 9,
       type: "tutorial",
       title: "Complete React Hooks Masterclass",
       description:
         "Master React Hooks from basics to advanced patterns with real-world examples and best practices.",
       author: "Sarah Chen",
       category: "Web Development",
-      tags: ["React", "Hooks", "Frontend"],
+      subcategory: "React Development",
+      tags: ["React", "Hooks", "Frontend", "useState", "useEffect"],
       duration: "4.5 hours",
       views: 12500,
       likes: 890,
@@ -145,14 +224,15 @@ export const SearchSection = () => {
         "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=300",
     },
     {
-      id: 8,
+      id: 10,
       type: "tutorial",
       title: "Node.js Backend Development",
       description:
         "Build scalable backend applications with Node.js, Express, and MongoDB from scratch.",
       author: "Mike Rodriguez",
-      category: "Backend",
-      tags: ["Node.js", "Express", "MongoDB"],
+      category: "Web Development",
+      subcategory: "Backend Development",
+      tags: ["Node.js", "Express", "MongoDB", "REST API", "Authentication"],
       duration: "6 hours",
       views: 18900,
       likes: 1250,
@@ -161,14 +241,15 @@ export const SearchSection = () => {
         "https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&cs=tinysrgb&w=300",
     },
     {
-      id: 9,
+      id: 11,
       type: "tutorial",
       title: "Python Data Science Bootcamp",
       description:
         "Learn data analysis, visualization, and machine learning with Python, Pandas, and Scikit-learn.",
       author: "Dr. Emily Watson",
       category: "Data Science",
-      tags: ["Python", "Data Science", "ML"],
+      subcategory: "Machine Learning",
+      tags: ["Python", "Data Science", "ML", "Pandas", "Scikit-learn"],
       duration: "8 hours",
       views: 9800,
       likes: 720,
@@ -177,14 +258,15 @@ export const SearchSection = () => {
         "https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=300",
     },
     {
-      id: 10,
+      id: 12,
       type: "tutorial",
       title: "DevOps with Docker & Kubernetes",
       description:
         "Master containerization and orchestration with Docker and Kubernetes for modern deployments.",
       author: "Alex Thompson",
       category: "DevOps",
-      tags: ["Docker", "Kubernetes", "DevOps"],
+      subcategory: "Container Orchestration",
+      tags: ["Docker", "Kubernetes", "DevOps", "CI/CD", "Deployment"],
       duration: "5.5 hours",
       views: 7600,
       likes: 540,
@@ -193,14 +275,21 @@ export const SearchSection = () => {
         "https://images.pexels.com/photos/577585/pexels-photo-577585.jpeg?auto=compress&cs=tinysrgb&w=300",
     },
     {
-      id: 11,
+      id: 13,
       type: "tutorial",
       title: "Machine Learning Fundamentals",
       description:
         "Introduction to machine learning concepts, algorithms, and practical implementation with Python.",
       author: "Dr. James Liu",
       category: "AI/ML",
-      tags: ["Machine Learning", "Python", "AI"],
+      subcategory: "Machine Learning Basics",
+      tags: [
+        "Machine Learning",
+        "Python",
+        "AI",
+        "Algorithms",
+        "Neural Networks",
+      ],
       duration: "7 hours",
       views: 11200,
       likes: 890,
@@ -209,14 +298,15 @@ export const SearchSection = () => {
         "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=300",
     },
     {
-      id: 12,
+      id: 14,
       type: "tutorial",
       title: "React Native Mobile Development",
       description:
         "Build cross-platform mobile apps with React Native, from setup to app store deployment.",
       author: "Lisa Park",
-      category: "Mobile",
-      tags: ["React Native", "Mobile", "JavaScript"],
+      category: "Mobile Development",
+      subcategory: "Cross-Platform Development",
+      tags: ["React Native", "Mobile", "JavaScript", "iOS", "Android"],
       duration: "6.5 hours",
       views: 8900,
       likes: 650,
@@ -224,91 +314,208 @@ export const SearchSection = () => {
       image:
         "https://images.pexels.com/photos/943096/pexels-photo-943096.jpeg?auto=compress&cs=tinysrgb&w=300",
     },
+    {
+      id: 15,
+      type: "tutorial",
+      title: "AWS Cloud Architecture Fundamentals",
+      description:
+        "Design and deploy scalable cloud solutions using AWS services and best practices.",
+      author: "Robert Chen",
+      category: "Cloud Computing",
+      subcategory: "AWS Architecture",
+      tags: ["AWS", "Cloud Architecture", "EC2", "S3", "Lambda"],
+      duration: "9 hours",
+      views: 13400,
+      likes: 980,
+      rating: 4.8,
+      image:
+        "https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=300",
+    },
+    {
+      id: 16,
+      type: "tutorial",
+      title: "Blockchain Development with Solidity",
+      description:
+        "Learn to build smart contracts and decentralized applications on the Ethereum blockchain.",
+      author: "Maria Garcia",
+      category: "Blockchain",
+      subcategory: "Smart Contract Development",
+      tags: ["Blockchain", "Solidity", "Ethereum", "Smart Contracts", "DApps"],
+      duration: "7.5 hours",
+      views: 5600,
+      likes: 420,
+      rating: 4.7,
+      image:
+        "https://images.pexels.com/photos/844124/pexels-photo-844124.jpeg?auto=compress&cs=tinysrgb&w=300",
+    },
 
     // Code Snippets
     {
-      id: 13,
+      id: 17,
       type: "snippet",
       title: "React Custom Hook for API Calls",
       description:
         "A reusable custom hook for handling API requests with loading states and error handling.",
       author: "Alex Chen",
-      category: "Utilities",
-      tags: ["React", "Hooks", "API"],
+      category: "Web Development",
+      subcategory: "React Utilities",
+      tags: ["React", "Hooks", "API", "Custom Hook", "TypeScript"],
       language: "TypeScript",
       views: 8900,
       likes: 1250,
     },
     {
-      id: 14,
+      id: 18,
       type: "snippet",
       title: "Python Data Validator",
       description:
         "Elegant data validation utility with custom error messages and type checking.",
       author: "Maria Rodriguez",
-      category: "Utilities",
-      tags: ["Python", "Validation", "Utils"],
+      category: "Data Science",
+      subcategory: "Data Validation",
+      tags: [
+        "Python",
+        "Validation",
+        "Utils",
+        "Data Processing",
+        "Error Handling",
+      ],
       language: "Python",
       views: 5600,
       likes: 890,
     },
     {
-      id: 15,
+      id: 19,
       type: "snippet",
       title: "CSS Grid Auto-Fit Layout",
       description:
         "Responsive grid layout that automatically adjusts columns based on container width.",
       author: "David Kim",
-      category: "UI/UX",
-      tags: ["CSS", "Grid", "Responsive"],
+      category: "Web Development",
+      subcategory: "CSS Layouts",
+      tags: ["CSS", "Grid", "Responsive", "Layout", "Frontend"],
       language: "CSS",
       views: 12400,
       likes: 2100,
     },
     {
-      id: 16,
+      id: 20,
       type: "snippet",
       title: "Node.js Rate Limiter Middleware",
       description:
         "Express middleware for rate limiting with Redis backend and customizable rules.",
       author: "Sarah Johnson",
-      category: "Security",
-      tags: ["Node.js", "Express", "Security"],
+      category: "Web Development",
+      subcategory: "Backend Security",
+      tags: ["Node.js", "Express", "Security", "Middleware", "Rate Limiting"],
       language: "JavaScript",
       views: 9200,
       likes: 1580,
     },
     {
-      id: 17,
+      id: 21,
       type: "snippet",
       title: "Vue 3 Composable for Local Storage",
       description:
         "Reactive composable for managing localStorage with automatic JSON serialization.",
       author: "Emma Wilson",
-      category: "Utilities",
-      tags: ["Vue", "Composables", "Storage"],
+      category: "Web Development",
+      subcategory: "Vue.js Utilities",
+      tags: ["Vue", "Composables", "Storage", "Reactivity", "TypeScript"],
       language: "TypeScript",
       views: 4300,
       likes: 750,
     },
     {
-      id: 18,
+      id: 22,
       type: "snippet",
       title: "Go HTTP Client with Retry Logic",
       description:
         "Robust HTTP client with exponential backoff retry mechanism and timeout handling.",
       author: "Michael Chang",
-      category: "Utilities",
-      tags: ["Go", "HTTP", "Resilience"],
+      category: "Web Development",
+      subcategory: "Backend Utilities",
+      tags: ["Go", "HTTP", "Resilience", "Client", "Error Handling"],
       language: "Go",
       views: 6100,
       likes: 920,
     },
+    {
+      id: 23,
+      type: "snippet",
+      title: "Docker Multi-Stage Build Template",
+      description:
+        "Optimized Docker multi-stage build configuration for Node.js applications.",
+      author: "Tom Wilson",
+      category: "DevOps",
+      subcategory: "Docker Configuration",
+      tags: ["Docker", "DevOps", "Build Optimization", "Node.js", "Containers"],
+      language: "Dockerfile",
+      views: 7800,
+      likes: 650,
+    },
+    {
+      id: 24,
+      type: "snippet",
+      title: "AWS Lambda Function Template",
+      description:
+        "Serverless function template with error handling, logging, and environment configuration.",
+      author: "Jessica Brown",
+      category: "Cloud Computing",
+      subcategory: "Serverless Functions",
+      tags: ["AWS", "Lambda", "Serverless", "Cloud", "JavaScript"],
+      language: "JavaScript",
+      views: 9600,
+      likes: 780,
+    },
+    {
+      id: 25,
+      type: "snippet",
+      title: "Python Machine Learning Pipeline",
+      description:
+        "Complete ML pipeline with data preprocessing, model training, and evaluation metrics.",
+      author: "Dr. Kevin Park",
+      category: "AI/ML",
+      subcategory: "ML Pipelines",
+      tags: [
+        "Python",
+        "Machine Learning",
+        "Pipeline",
+        "Scikit-learn",
+        "Data Science",
+      ],
+      language: "Python",
+      views: 11500,
+      likes: 1340,
+    },
+    {
+      id: 26,
+      type: "snippet",
+      title: "Solidity Smart Contract Template",
+      description:
+        "Secure smart contract template with access control, events, and gas optimization.",
+      author: "Carlos Rodriguez",
+      category: "Blockchain",
+      subcategory: "Smart Contracts",
+      tags: [
+        "Solidity",
+        "Blockchain",
+        "Smart Contracts",
+        "Ethereum",
+        "Security",
+      ],
+      language: "Solidity",
+      views: 4200,
+      likes: 380,
+    },
   ];
 
-  // Search function
-  const performSearch = (query) => {
-    if (!query.trim()) {
+  // Search function with filters
+  const performSearch = (query, currentFilters = filters) => {
+    if (
+      !query.trim() &&
+      Object.values(currentFilters).every((filter) => filter === "All")
+    ) {
       setSearchResults([]);
       setShowResults(false);
       return;
@@ -318,25 +525,63 @@ export const SearchSection = () => {
 
     // Simulate API delay
     setTimeout(() => {
-      const filtered = allContent.filter(
-        (item) =>
-          item.title.toLowerCase().includes(query.toLowerCase()) ||
-          item.description.toLowerCase().includes(query.toLowerCase()) ||
-          item.tags.some((tag) =>
-            tag.toLowerCase().includes(query.toLowerCase())
-          ) ||
-          item.category.toLowerCase().includes(query.toLowerCase()) ||
-          item.author.toLowerCase().includes(query.toLowerCase()) ||
-          (item.language &&
-            item.language.toLowerCase().includes(query.toLowerCase()))
-      );
+      let filtered = allContent;
+
+      // Apply text search
+      if (query.trim()) {
+        filtered = filtered.filter(
+          (item) =>
+            item.title.toLowerCase().includes(query.toLowerCase()) ||
+            item.description.toLowerCase().includes(query.toLowerCase()) ||
+            item.tags.some((tag) =>
+              tag.toLowerCase().includes(query.toLowerCase())
+            ) ||
+            item.category.toLowerCase().includes(query.toLowerCase()) ||
+            item.subcategory.toLowerCase().includes(query.toLowerCase()) ||
+            item.author.toLowerCase().includes(query.toLowerCase()) ||
+            (item.language &&
+              item.language.toLowerCase().includes(query.toLowerCase()))
+        );
+      }
+
+      // Apply filters
+      if (currentFilters.type !== "All") {
+        const typeMap = {
+          Blogs: "blog",
+          Tutorials: "tutorial",
+          Snippets: "snippet",
+        };
+        filtered = filtered.filter(
+          (item) => item.type === typeMap[currentFilters.type]
+        );
+      }
+
+      if (currentFilters.category !== "All") {
+        filtered = filtered.filter(
+          (item) => item.category === currentFilters.category
+        );
+      }
+
+      if (currentFilters.language !== "All") {
+        filtered = filtered.filter(
+          (item) => item.language === currentFilters.language
+        );
+      }
 
       // Sort by relevance (title matches first, then description, then tags)
       const sorted = filtered.sort((a, b) => {
+        if (!query.trim()) return 0;
+
         const aTitle = a.title.toLowerCase().includes(query.toLowerCase())
-          ? 3
+          ? 4
           : 0;
         const bTitle = b.title.toLowerCase().includes(query.toLowerCase())
+          ? 4
+          : 0;
+        const aCategory = a.category.toLowerCase().includes(query.toLowerCase())
+          ? 3
+          : 0;
+        const bCategory = b.category.toLowerCase().includes(query.toLowerCase())
           ? 3
           : 0;
         const aDesc = a.description.toLowerCase().includes(query.toLowerCase())
@@ -356,10 +601,16 @@ export const SearchSection = () => {
           ? 1
           : 0;
 
-        return bTitle + bDesc + bTags - (aTitle + aDesc + aTags);
+        return (
+          bTitle +
+          bCategory +
+          bDesc +
+          bTags -
+          (aTitle + aCategory + aDesc + aTags)
+        );
       });
 
-      setSearchResults(sorted.slice(0, 8)); // Limit to 8 results
+      setSearchResults(sorted.slice(0, 10)); // Limit to 10 results
       setShowResults(true);
       setIsSearching(false);
     }, 300);
@@ -368,11 +619,11 @@ export const SearchSection = () => {
   // Handle search input change
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      performSearch(searchQuery);
+      performSearch(searchQuery, filters);
     }, 300);
 
     return () => clearTimeout(timeoutId);
-  }, [searchQuery]);
+  }, [searchQuery, filters]);
 
   // Handle click outside to close results
   useEffect(() => {
@@ -412,6 +663,27 @@ export const SearchSection = () => {
     }
   };
 
+  const getLanguageColor = (language) => {
+    const colors = {
+      TypeScript:
+        "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400",
+      JavaScript:
+        "bg-yellow-50 text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400",
+      Python:
+        "bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400",
+      CSS: "bg-pink-50 text-pink-600 dark:bg-pink-900/20 dark:text-pink-400",
+      Go: "bg-cyan-50 text-cyan-600 dark:bg-cyan-900/20 dark:text-cyan-400",
+      Dockerfile:
+        "bg-indigo-50 text-indigo-600 dark:bg-indigo-900/20 dark:text-indigo-400",
+      Solidity:
+        "bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400",
+    };
+    return (
+      colors[language] ||
+      "bg-gray-50 text-gray-600 dark:bg-gray-900/20 dark:text-gray-400"
+    );
+  };
+
   const handleResultClick = (result) => {
     // Navigate to the appropriate page based on type
     const routes = {
@@ -429,6 +701,32 @@ export const SearchSection = () => {
     setShowResults(true);
   };
 
+  const handleFilterChange = (filterType, value) => {
+    const newFilters = { ...filters, [filterType]: value };
+    setFilters(newFilters);
+    performSearch(searchQuery, newFilters);
+  };
+
+  const clearSearch = () => {
+    setSearchQuery("");
+    setShowResults(false);
+  };
+
+  const clearAllFilters = () => {
+    const resetFilters = {
+      type: "All",
+      category: "All",
+      level: "All",
+      language: "All",
+    };
+    setFilters(resetFilters);
+    performSearch(searchQuery, resetFilters);
+  };
+
+  const hasActiveFilters = Object.values(filters).some(
+    (filter) => filter !== "All"
+  );
+
   return (
     <section className="py-20 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -441,7 +739,8 @@ export const SearchSection = () => {
             </span>
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-300">
-            Find blogs, tutorials, and code snippets in seconds.
+            Find blogs, tutorials, and code snippets across {allContent.length}{" "}
+            curated resources.
           </p>
         </div>
 
@@ -464,6 +763,17 @@ export const SearchSection = () => {
                 onFocus={() => searchQuery && setShowResults(true)}
               />
 
+              {/* Clear Button */}
+              {searchQuery && (
+                <button
+                  onClick={clearSearch}
+                  className="flex items-center justify-center w-10 h-10 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                  title="Clear search"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+
               {/* Loading indicator */}
               {isSearching && (
                 <div className="flex items-center justify-center w-12 h-12">
@@ -474,18 +784,21 @@ export const SearchSection = () => {
               {/* Filter Button */}
               <button
                 onClick={() => setIsFilterOpen(!isFilterOpen)}
-                className={`flex items-center justify-center w-12 h-12 transition-colors ${
+                className={`flex items-center justify-center w-12 h-12 transition-colors relative ${
                   isFilterOpen
                     ? "text-blue-600 dark:text-blue-400"
                     : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                 }`}
               >
                 <Filter className="h-5 w-5" />
+                {hasActiveFilters && (
+                  <div className="absolute top-2 right-2 w-2 h-2 bg-blue-600 rounded-full"></div>
+                )}
               </button>
 
               {/* Search Button */}
               <button
-                onClick={() => performSearch(searchQuery)}
+                onClick={() => performSearch(searchQuery, filters)}
                 className="m-2 px-6 py-2 bg-gradient-to-r from-blue-600 to-teal-500 text-white font-medium rounded-xl hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-200"
               >
                 Search
@@ -494,17 +807,130 @@ export const SearchSection = () => {
 
             {/* Filter Dropdown */}
             {isFilterOpen && (
-              <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-750">
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  {["All", "Blogs", "Tutorials", "Snippets"].map((filter) => (
+              <div className="border-t border-gray-200 dark:border-gray-700 p-6 bg-gray-50 dark:bg-gray-750">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                    Filters
+                  </h3>
+                  {hasActiveFilters && (
                     <button
-                      key={filter}
-                      className="px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-white dark:hover:bg-gray-800 transition-colors"
+                      onClick={clearAllFilters}
+                      className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium"
                     >
-                      {filter}
+                      Clear all
                     </button>
-                  ))}
+                  )}
                 </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {/* Type Filter */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">
+                      Content Type
+                    </label>
+                    <select
+                      value={filters.type}
+                      onChange={(e) =>
+                        handleFilterChange("type", e.target.value)
+                      }
+                      className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      {filterOptions.types.map((type) => (
+                        <option key={type} value={type}>
+                          {type}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Category Filter */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">
+                      Category
+                    </label>
+                    <select
+                      value={filters.category}
+                      onChange={(e) =>
+                        handleFilterChange("category", e.target.value)
+                      }
+                      className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      {filterOptions.categories.map((category) => (
+                        <option key={category} value={category}>
+                          {category}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Level Filter */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">
+                      Difficulty Level
+                    </label>
+                    <select
+                      value={filters.level}
+                      onChange={(e) =>
+                        handleFilterChange("level", e.target.value)
+                      }
+                      className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      {filterOptions.levels.map((level) => (
+                        <option key={level} value={level}>
+                          {level}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Language Filter */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">
+                      Programming Language
+                    </label>
+                    <select
+                      value={filters.language}
+                      onChange={(e) =>
+                        handleFilterChange("language", e.target.value)
+                      }
+                      className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      {filterOptions.languages.map((language) => (
+                        <option key={language} value={language}>
+                          {language}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {/* Active Filters Display */}
+                {hasActiveFilters && (
+                  <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-600">
+                    <div className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">
+                      Active Filters:
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {Object.entries(filters).map(([key, value]) => {
+                        if (value === "All") return null;
+                        return (
+                          <span
+                            key={key}
+                            className="inline-flex items-center px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs rounded-full"
+                          >
+                            {key}: {value}
+                            <button
+                              onClick={() => handleFilterChange(key, "All")}
+                              className="ml-1 hover:text-blue-900 dark:hover:text-blue-100"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </span>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -515,13 +941,15 @@ export const SearchSection = () => {
               <div className="p-4">
                 <div className="flex items-center justify-between mb-4">
                   <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Found {searchResults.length} results for &quot;{searchQuery}&quot;
+                    Found {searchResults.length} results
+                    {searchQuery && ` for "${searchQuery}"`}
+                    {hasActiveFilters && " with filters applied"}
                   </div>
                   <button
                     onClick={() => setShowResults(false)}
                     className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                   >
-                    ×
+                    <X className="h-4 w-4" />
                   </button>
                 </div>
 
@@ -548,7 +976,7 @@ export const SearchSection = () => {
 
                         {/* Content */}
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center space-x-2 mb-2">
+                          <div className="flex items-center space-x-2 mb-2 flex-wrap">
                             <span
                               className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(result.type)}`}
                             >
@@ -559,13 +987,19 @@ export const SearchSection = () => {
                             </span>
 
                             {result.language && (
-                              <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded-full">
+                              <span
+                                className={`px-2 py-1 text-xs rounded-full font-medium ${getLanguageColor(result.language)}`}
+                              >
                                 {result.language}
                               </span>
                             )}
 
                             <span className="text-xs text-gray-500 dark:text-gray-400">
                               {result.category}
+                            </span>
+
+                            <span className="text-xs text-gray-400 dark:text-gray-500">
+                              • {result.subcategory}
                             </span>
                           </div>
 
@@ -576,6 +1010,24 @@ export const SearchSection = () => {
                           <p className="text-xs text-gray-600 dark:text-gray-300 line-clamp-2 mb-2">
                             {result.description}
                           </p>
+
+                          {/* Tags */}
+                          <div className="flex flex-wrap gap-1 mb-2">
+                            {result.tags.slice(0, 4).map((tag) => (
+                              <span
+                                key={tag}
+                                className="inline-flex items-center px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded"
+                              >
+                                <Tag className="h-2.5 w-2.5 mr-1" />
+                                {tag}
+                              </span>
+                            ))}
+                            {result.tags.length > 4 && (
+                              <span className="text-xs text-gray-400 dark:text-gray-500">
+                                +{result.tags.length - 4} more
+                              </span>
+                            )}
+                          </div>
 
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
@@ -623,7 +1075,7 @@ export const SearchSection = () => {
                   ))}
                 </div>
 
-                {searchResults.length === 8 && (
+                {searchResults.length === 10 && (
                   <div className="mt-4 text-center">
                     <button className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium">
                       View all results →
@@ -637,7 +1089,7 @@ export const SearchSection = () => {
           {/* No Results */}
           {showResults &&
             searchResults.length === 0 &&
-            searchQuery &&
+            (searchQuery || hasActiveFilters) &&
             !isSearching && (
               <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
                 <div className="p-6 text-center">
@@ -646,19 +1098,29 @@ export const SearchSection = () => {
                     No results found
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300 mb-4">
-                    Try searching for something else or browse our trending
-                    topics below.
+                    {hasActiveFilters
+                      ? "Try adjusting your filters or search terms."
+                      : "Try searching for something else or browse our trending topics below."}
                   </p>
                   <div className="flex flex-wrap justify-center gap-2">
-                    {trendingTopics.slice(0, 3).map((topic) => (
+                    {hasActiveFilters ? (
                       <button
-                        key={topic}
-                        onClick={() => handleTrendingClick(topic)}
-                        className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm rounded-full hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
+                        onClick={clearAllFilters}
+                        className="px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
                       >
-                        {topic}
+                        Clear all filters
                       </button>
-                    ))}
+                    ) : (
+                      trendingTopics.slice(0, 3).map((topic) => (
+                        <button
+                          key={topic}
+                          onClick={() => handleTrendingClick(topic)}
+                          className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm rounded-full hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
+                        >
+                          {topic}
+                        </button>
+                      ))
+                    )}
                   </div>
                 </div>
               </div>
