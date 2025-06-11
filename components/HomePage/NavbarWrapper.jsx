@@ -7,7 +7,7 @@ export default function NavbarWrapper() {
   const pathname = usePathname();
 
   // List of routes where Navbar should NOT be shown
-  const hiddenRoutes = ["/onboarding", "/demo", "/demo/landing"];
+  const hiddenRoutes = ["/onboarding"];
 
   if (hiddenRoutes.includes(pathname)) {
     return null; // Hide navbar
