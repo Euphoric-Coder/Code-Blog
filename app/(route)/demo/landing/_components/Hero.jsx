@@ -2,8 +2,7 @@
 
 import React from "react";
 import { useTheme } from "next-themes";
-import { ArrowRight, Play, Code, Zap, Users } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowRight, Play, Code, Zap } from "lucide-react";
 import dynamic from "next/dynamic";
 
 const Typewriter = dynamic(() => import("typewriter-effect"), { ssr: false });
@@ -108,12 +107,12 @@ export const Hero = () => {
             </p>
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-600 to-teal-500 text-white font-medium rounded-xl hover:shadow-lg hover:shadow-blue-500/25 transform hover:-translate-y-0.5 transition-all duration-200">
-                <span>Explore Blogs</span>
+              <button className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-600 to-teal-500 text-white font-medium rounded-full hover:shadow-lg hover:shadow-blue-500/25 transform hover:-translate-y-0.5 transition-all duration-200">
+                <span className="font-extrabold">Explore Blogs</span>
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </button>
 
-              <button className="group inline-flex items-center justify-center px-8 py-4 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200">
+              <button className="group inline-flex items-center justify-center px-8 py-4 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-200">
                 <Play className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
                 <span>Watch Demo</span>
               </button>
