@@ -10,6 +10,7 @@ import {
 } from "@clerk/nextjs";
 import { ModeToggle } from "@/components/theme-btn";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 export const Header = ({ darkMode, setDarkMode }) => {
   const { isSignedIn } = useUser();
@@ -70,13 +71,14 @@ export const Header = ({ darkMode, setDarkMode }) => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <a href="#home" className="flex items-center space-x-2 group">
-            <div className="relative">
+            {/* <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-teal-500 rounded-lg blur opacity-75 group-hover:opacity-100 transition-opacity"></div>
               <div className="relative bg-gradient-to-r from-blue-500 to-teal-500 p-2 rounded-lg">
                 <Code className="h-6 w-6 text-white" />
               </div>
-            </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
+            </div> */}
+            <Image src={"/codeblog.png"} alt="Logo" width={40} height={40} />
+            <span className="text-xl font-extrabold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
               Code Blog
             </span>
           </a>
