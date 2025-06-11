@@ -10,6 +10,7 @@ import {
 } from "@clerk/nextjs";
 import { ModeToggle } from "@/components/theme-btn";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export const Header = ({ darkMode, setDarkMode }) => {
   const { isSignedIn } = useUser();
@@ -27,33 +28,23 @@ export const Header = ({ darkMode, setDarkMode }) => {
   const navItems = [
     {
       name: "Home",
-      href: "#home",
+      href: "/",
       active: "",
     },
-    { name: "Blog", href: "#blog", active: "" },
+    { name: "Blog", href: "/blog", active: "" },
     {
       name: "Tutorial",
-      href: "#tutorial",
+      href: "/tutorial",
       active: "",
     },
     {
       name: "Snippets",
-      href: "#snippets",
+      href: "/snippets",
       active: "",
     },
     {
       name: "Playground",
-      href: "#playground",
-      active: "",
-    },
-    {
-      name: "About",
-      href: "#about",
-      active: "",
-    },
-    {
-      name: "Contact",
-      href: "#contact",
+      href: "/playground",
       active: "",
     },
   ];
@@ -69,7 +60,7 @@ export const Header = ({ darkMode, setDarkMode }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <a href="#home" className="flex items-center space-x-2 group">
+          <Link href="/" className="flex items-center space-x-2 group">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-teal-500 rounded-lg blur opacity-75 group-hover:opacity-100 transition-opacity"></div>
               <div className="relative bg-gradient-to-r from-blue-500 to-teal-500 p-2 rounded-lg">
@@ -79,12 +70,12 @@ export const Header = ({ darkMode, setDarkMode }) => {
             <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
               Code Blog
             </span>
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.name}
                 href={item.href}
                 className={`relative px-3 py-2 text-sm font-medium transition-all duration-200 ${
@@ -97,7 +88,7 @@ export const Header = ({ darkMode, setDarkMode }) => {
                 {item.active && (
                   <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-teal-500 rounded-full"></div>
                 )}
-              </a>
+              </Link>
             ))}
           </nav>
 

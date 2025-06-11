@@ -3,11 +3,11 @@
 import React from "react";
 import { ArrowRight, Play, Code, Zap } from "lucide-react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 
 const Typewriter = dynamic(() => import("typewriter-effect"), { ssr: false });
 
 export const Hero = () => {
-
   return (
     <div className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background Gradient */}
@@ -105,10 +105,12 @@ export const Hero = () => {
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </button>
 
-              <button className="group inline-flex items-center justify-center px-8 py-4 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-200">
-                <Play className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
-                <span>Watch Demo</span>
-              </button>
+              <Link href={"/demo"}>
+                <button className="group inline-flex items-center justify-center px-8 py-4 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-200">
+                  <Play className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
+                  <span>Watch Demo</span>
+                </button>
+              </Link>
             </div>
             {/* Stats */}
             <div className="flex items-center space-x-8 pt-8">
