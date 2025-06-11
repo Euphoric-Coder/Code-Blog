@@ -1,10 +1,7 @@
 "use client";
 
 import React from "react";
-import { useTheme } from "next-themes";
 import { Hero } from "./_components/Hero";
-import { Header } from "./_components/Header";
-import { Footer } from "./_components/Footer";
 import { SearchSection } from "./_components/SearchSection";
 import { FeaturedBlogs } from "./_components/FeaturedBlogs";
 import { FeaturedTutorials } from "./_components/FeaturedTutorials";
@@ -18,7 +15,6 @@ const page = () => {
       <FeaturedBlogs />
       <FeaturedTutorials />
       <TopCodeSnippets />
-      <Footer />
     </main>
   );
 };

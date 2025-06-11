@@ -4,7 +4,7 @@ import { ThemeProvider } from "../components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import ThemedNotification from "@/components/ThemedNotification";
 import NavbarWrapper from "@/components/HomePage/NavbarWrapper";
-import FooterWrapper from "@/components/LandingPage/FooterWrapper";
+import FooterWrapper from "@/components/HomePage/FooterWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
