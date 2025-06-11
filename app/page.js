@@ -1,9 +1,22 @@
-import HomeClient from "@/components/LandingPage/Home";
-import { getAllPosts, getallTutorials } from "@/lib/posts";
-// Server Component
-export default async function Home() {
-  const blogposts = await getAllPosts(); // Fetch posts server-side
-  const tutorialposts = await getallTutorials();
+"use client";
 
-  return <HomeClient initialPosts={blogposts} tutorialPosts={tutorialposts}/>;
-}
+import React from "react";
+import { FeaturedBlogs } from "@/components/HomePage/FeaturedBlogs";
+import { FeaturedTutorials } from "@/components/HomePage/FeaturedTutorials";
+import { Hero } from "@/components/HomePage/Hero";
+import { SearchSection } from "@/components/HomePage/SearchSection";
+import { TopCodeSnippets } from "@/components/HomePage/TopCodeSnippets";
+
+const page = () => {
+  return (
+    <main>
+      <Hero />
+      <SearchSection />
+      <FeaturedBlogs />
+      <FeaturedTutorials />
+      <TopCodeSnippets />
+    </main>
+  );
+};
+
+export default page;
