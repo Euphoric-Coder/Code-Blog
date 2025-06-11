@@ -53,7 +53,7 @@ export const Header = ({ darkMode, setDarkMode }) => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200/20 dark:border-gray-700/20"
+          ? "bg-blue-50/90 dark:bg-gray-900/80 backdrop-blur-lg border-b border-blue-300 dark:border-gray-700/20"
           : "bg-transparent"
       }`}
     >
