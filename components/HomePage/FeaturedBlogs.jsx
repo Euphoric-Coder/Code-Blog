@@ -50,7 +50,7 @@ export const FeaturedBlogs = () => {
   ];
 
   return (
-    <section className="py-20 bg-white dark:bg-gray-900">
+    <section className="py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center space-y-4 mb-16">
@@ -71,7 +71,7 @@ export const FeaturedBlogs = () => {
             >
               {/* Blog Image */}
               <div className="relative h-48 overflow-hidden">
-                <div className={`absolute inset-0 bg-gradient-to-br ${blog.gradient} opacity-90`}></div>
+                <div className={`absolute inset-0 bg-gradient-to-br ${blog.gradient} opacity-60`}></div>
                 <img 
                   src={blog.image}
                   alt={blog.title}
