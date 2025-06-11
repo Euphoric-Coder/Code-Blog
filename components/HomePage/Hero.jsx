@@ -106,7 +106,7 @@ export const Hero = () => {
               </button>
 
               <Link href={"/demo"}>
-                <button className="group inline-flex items-center justify-center px-8 py-4 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-200">
+                <button className="group w-full inline-flex items-center justify-center px-8 py-4 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-200">
                   <Play className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
                   <span>Watch Demo</span>
                 </button>
