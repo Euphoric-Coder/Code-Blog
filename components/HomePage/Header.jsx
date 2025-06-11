@@ -78,16 +78,9 @@ export const Header = ({ darkMode, setDarkMode }) => {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`relative px-3 py-2 text-sm font-medium transition-all duration-200 ${
-                  item.active
-                    ? "text-blue-600 dark:text-blue-400"
-                    : "text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
-                }`}
+                className={`group relative px-3 py-2 text-sm font-medium transition-all duration-200 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400`}
               >
-                {item.name}
-                {item.active && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-teal-500 rounded-full"></div>
-                )}
+                <span className="nav-underline">{item.name}</span>
               </Link>
             ))}
           </nav>
@@ -98,18 +91,23 @@ export const Header = ({ darkMode, setDarkMode }) => {
             <ModeToggle />
 
             {/* Sign In Button */}
-            {isSignedIn ? (
-              <div className="flex items-center gap-3" suppressHydrationWarning>
-                <UserButton />
+            <div className="hidden md:flex items-center gap-3">
+              {isSignedIn ? (
+                <div
+                  className="flex items-center gap-3"
+                  suppressHydrationWarning
+                >
+                  <UserButton />
+                  <Button asChild>
+                    <SignOutButton />
+                  </Button>
+                </div>
+              ) : (
                 <Button asChild>
-                  <SignOutButton />
+                  <SignInButton />
                 </Button>
-              </div>
-            ) : (
-              <Button asChild>
-                <SignInButton />
-              </Button>
-            )}
+              )}
+            </div>
 
             {/* Mobile Menu Button */}
             <button
@@ -127,25 +125,40 @@ export const Header = ({ darkMode, setDarkMode }) => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden border-t border-gray-200/20 dark:border-gray-700/20">
-            <div className="py-4 space-y-2">
+          <div className="md:hidden border-t border-gray-200/20 dark:border-gray-700/20 bg-white dark:bg-gray-900 shadow-md transition-colors duration-300">
+            <div className="py-4 space-y-2 px-4">
               {navItems.map((item) => (
                 <a
                   key={item.name}
                   href={item.href}
-                  className={`block px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                  className={`block w-full px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                     item.active
-                      ? "text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-900/20"
-                      : "text-gray-600 hover:text-blue-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-blue-400 dark:hover:bg-gray-800/50"
+                      ? "text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30"
+                      : "text-gray-700 hover:text-blue-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-blue-400 dark:hover:bg-gray-800"
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}
                 </a>
               ))}
-              <button className="w-full mt-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors">
-                Sign In
-              </button>
+              {isSignedIn ? (
+                <div className="pt-4 flex items-center justify-between">
+                  {/* <UserButton /> */}
+                  <Button
+                    asChild
+                    className="w-full mt-4 bg-gradient-to-r from-blue-600 to-teal-500 dark:from-blue-500 dark:to-teal-400 text-white dark:text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-blue-700 hover:to-teal-600 dark:hover:from-blue-600 dark:hover:to-teal-500 transition-all"
+                  >
+                    <SignOutButton />
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  asChild
+                  className="w-full mt-4 bg-gradient-to-r from-blue-600 to-teal-500 dark:from-blue-500 dark:to-teal-400 text-white dark:text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-blue-700 hover:to-teal-600 dark:hover:from-blue-600 dark:hover:to-teal-500 transition-all"
+                >
+                  <SignInButton />
+                </Button>
+              )}
             </div>
           </div>
         )}

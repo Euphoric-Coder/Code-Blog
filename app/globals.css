@@ -281,6 +281,24 @@
   }
 }
 
+.nav-underline::after {
+  content: '';
+  position: absolute;
+  bottom: 0.25rem;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-image: linear-gradient(to right, #3b82f6, #14b8a6); /* blue to teal */
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+  border-radius: 9999px;
+}
+
+.group:hover .nav-underline::after {
+  transform: scaleX(1);
+}
+
 
 code[data-line-numbers] {
   counter-reset: line;
