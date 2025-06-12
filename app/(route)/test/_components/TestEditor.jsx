@@ -1,5 +1,89 @@
-import React, { useState } from "react";
-import { Upload, Code, Image, PanelRight, Save } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Upload, Code, PanelRight, Save, ImageIcon } from "lucide-react";
+
+// TipTap Editor imports
+import { useEditor, EditorContent, ReactNodeViewRenderer } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Link from "@tiptap/extension-link";
+import Image from "@tiptap/extension-image";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import Table from "@tiptap/extension-table";
+import TableRow from "@tiptap/extension-table-row";
+import TableHeader from "@tiptap/extension-table-header";
+import TableCell from "@tiptap/extension-table-cell";
+import Document from "@tiptap/extension-document";
+import Paragraph from "@tiptap/extension-paragraph";
+import Text from "@tiptap/extension-text";
+import Placeholder from "@tiptap/extension-placeholder";
+import TurndownService from "turndown";
+
+// Highlight + Lowlight
+import { common, createLowlight } from "lowlight";
+const lowlight = createLowlight(common);
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  MdFormatBold,
+  MdFormatItalic,
+  MdFormatQuote,
+  MdCode,
+  MdFormatListBulleted,
+  MdFormatListNumbered,
+  MdLink,
+  MdTableChart,
+} from "react-icons/md";
+import {
+  Dialog,
+  DialogClose,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { useUser } from "@clerk/nextjs";
+import { v4 as uuid } from "uuid";
+import {
+  AlertCircle,
+  Archive,
+  ChevronDownIcon,
+  Copy,
+  PenBox,
+  PencilIcon,
+  Send,
+  Trash,
+  Trash2,
+  TrashIcon,
+  XCircle,
+} from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Menu, MenuButton, MenuItem, MenuItems, MenuList } from "@headlessui/react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { blogCategories, blogSubCategoriesList } from "@/lib/data";
+import { Badge } from "@/components/ui/badge";
+import { db } from "@/lib/dbConfig";
+import { Blogs } from "@/lib/schema";
+import { getISTDate } from "@/lib/utils";
+import { Textarea } from "@/components/ui/textarea";
+import ImageUpload from "@/components/ImageUpload";
+import NextImage from "next/image";
+import CodeBlockComponent from "@/components/Blog/EditorCodeBlock";
 
 const TestEditor = ({
   section,
@@ -130,7 +214,7 @@ const TestEditor = ({
               onClick={insertImagePlaceholder}
               className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-1.5 rounded-md transition-colors flex items-center"
             >
-              <Image className="h-4 w-4 mr-2" />
+              <ImageIcon className="h-4 w-4 mr-2" />
               Insert Image
             </button>
 
