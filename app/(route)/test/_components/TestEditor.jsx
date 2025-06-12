@@ -73,7 +73,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Menu, MenuButton, MenuItem, MenuItems, MenuList } from "@headlessui/react";
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  MenuList,
+} from "@headlessui/react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { blogCategories, blogSubCategoriesList } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
@@ -84,6 +90,272 @@ import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "@/components/ImageUpload";
 import NextImage from "next/image";
 import CodeBlockComponent from "@/components/Blog/EditorCodeBlock";
+
+const MenuBar = ({ editor }) => {
+  const [open, setOpen] = useState(false);
+  const [url, setUrl] = useState("");
+
+  if (!editor) return null;
+
+  const insertLink = () => {
+    if (url) {
+      editor.chain().focus().setLink({ href: url }).run();
+      setOpen(false);
+      setUrl("");
+    }
+  };
+
+  const buttonStyle = (isActive) =>
+    `text-md px-3 py-1 rounded-xl transition ${
+      isActive
+        ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white dark:from-blue-600 dark:to-purple-700"
+        : "text-foreground hover:bg-muted/80 dark:hover:bg-slate-700"
+    }`;
+
+  return (
+    <div className="sticky top-0 flex flex-wrap items-center justify-between rounded-tr-2xl rounded-tl-2xl gap-2 border-r border-l border-2 p-4 backdrop-blur-md bg-white/60 dark:bg-slate-900/60">
+      <div className="hidden lg:flex gap-2 items-center">
+        {[1, 2, 3].map((level) => (
+          <TooltipProvider key={level}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  key={level}
+                  className={buttonStyle(editor.isActive("heading", { level }))}
+                  onClick={() =>
+                    editor.chain().focus().toggleHeading({ level }).run()
+                  }
+                >
+                  H{level}
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Heading {level}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ))}
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className={buttonStyle(editor.isActive("bulletList"))}
+                onClick={() => editor.chain().focus().toggleBulletList().run()}
+              >
+                <MdFormatListBulleted size={30} className="mr-1" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Bullet List</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className={buttonStyle(editor.isActive("orderedList"))}
+                onClick={() => editor.chain().focus().toggleOrderedList().run()}
+              >
+                <MdFormatListNumbered size={30} className="mr-1" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Numbered List</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className={buttonStyle(editor.isActive("bold"))}
+                onClick={() => editor.chain().focus().toggleBold().run()}
+              >
+                <MdFormatBold size={30} className="mr-1" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Bold</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className={buttonStyle(editor.isActive("italic"))}
+                onClick={() => editor.chain().focus().toggleItalic().run()}
+              >
+                <MdFormatItalic size={30} className="mr-1" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Italics</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className={buttonStyle(editor.isActive("blockquote"))}
+                onClick={() => editor.chain().focus().toggleBlockquote().run()}
+              >
+                <MdFormatQuote size={30} className="mr-1" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Quote</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className={buttonStyle(editor.isActive("codeBlock"))}
+                onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+              >
+                <MdCode size={30} className="mr-1" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Code Block</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className={buttonStyle(editor.isActive("table"))}
+                onClick={() =>
+                  editor
+                    .chain()
+                    .focus()
+                    .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+                    .run()
+                }
+              >
+                <MdTableChart className="mr-1" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Table</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className={buttonStyle(editor.isActive("link"))}
+                onClick={() => setOpen(true)}
+              >
+                <MdLink className="mr-1" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Link</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
+
+      <div className="lg:hidden flex">
+        <Menu>
+          <MenuButton className="inline-flex items-center gap-2 rounded-md bg-gray-800 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-gray-700 data-open:bg-gray-700">
+            Options
+            <ChevronDownIcon className="size-4 fill-white/60" />
+          </MenuButton>
+
+          <MenuItems
+            transition
+            anchor="bottom end"
+            className="w-52 origin-top-right rounded-xl border border-white/5 bg-white/5 p-1 text-sm/6 text-white transition duration-100 ease-out [--anchor-gap:--spacing(1)] focus:outline-none data-closed:scale-95 data-closed:opacity-0"
+          >
+            <MenuItem>
+              <button className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-white/10">
+                <PencilIcon className="size-4 fill-white/30" />
+                Edit
+                <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-focus:inline">
+                  ⌘E
+                </kbd>
+              </button>
+            </MenuItem>
+            <MenuItem>
+              <button className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-white/10">
+                <Copy className="size-4 fill-white/30" />
+                Duplicate
+                <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-focus:inline">
+                  ⌘D
+                </kbd>
+              </button>
+            </MenuItem>
+            <div className="my-1 h-px bg-white/5" />
+            <MenuItem>
+              <button className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-white/10">
+                <Archive className="size-4 fill-white/30" />
+                Archive
+                <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-focus:inline">
+                  ⌘A
+                </kbd>
+              </button>
+            </MenuItem>
+            <MenuItem>
+              <button className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-white/10">
+                <TrashIcon className="size-4 fill-white/30" />
+                Delete
+                <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-focus:inline">
+                  ⌘D
+                </kbd>
+              </button>
+            </MenuItem>
+          </MenuItems>
+        </Menu>
+      </div>
+
+      <button onClick={() => editor.commands.clearContent(true)}>
+        <Trash />
+      </button>
+
+      <Dialog
+        open={open}
+        onOpenChange={() => {
+          setOpen(false);
+          setUrl("");
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Insert Link</DialogTitle>
+          </DialogHeader>
+          <Input
+            type="url"
+            placeholder="https://example.com"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+          />
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button>Cancel</Button>
+            </DialogClose>
+            <Button onClick={insertLink}>Insert</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
 
 const TestEditor = ({
   section,
@@ -135,6 +407,43 @@ const TestEditor = ({
         '\n<pre><code class="language-javascript">\n// Your code here\nconsole.log("Hello World");\n</code></pre>'
     );
   };
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit.configure({ codeBlock: false }),
+      Placeholder.configure({ placeholder: "Start writing your blog here..." }),
+      Document,
+      Paragraph,
+      Text,
+      Link,
+      Image,
+      Table.configure({ resizable: true }),
+      TableRow,
+      TableHeader,
+      TableCell,
+      CodeBlockLowlight.extend({
+        addNodeView() {
+          return ReactNodeViewRenderer(CodeBlockComponent);
+        },
+      }).configure({ lowlight }),
+    ],
+    content: activeSubsection.content || "",
+    onCreate({ editor }) {
+      // The editor is ready.
+      if (activeSubsection.content) {
+        editor.commands.setContent(activeSubsection.content, false); // false = no history entry
+      }
+    },
+    editorProps: {
+      attributes: {
+        class:
+          "prose dark:prose-invert max-w-none p-4 min-h-[300px] rounded-b-3xl border-top-none border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 outline-none",
+      },
+    },
+    onUpdate: ({ editor }) => {
+      onUpdateSubsectionContent(editor.getHTML());
+    },
+  });
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -233,6 +542,12 @@ const TestEditor = ({
             className="w-full h-96 px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-mono text-sm"
             placeholder="Enter your content in HTML format or upload a markdown file..."
           ></textarea>
+
+          <MenuBar editor={editor} />
+          <EditorContent
+            editor={editor}
+            className="overflow-y-auto max-h-[500px]"
+          />
 
           <p className="mt-2 text-sm text-gray-500">
             You can write HTML directly or upload a Markdown file. Use the
