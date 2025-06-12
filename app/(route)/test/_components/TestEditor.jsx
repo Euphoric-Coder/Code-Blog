@@ -93,7 +93,10 @@ import CodeBlockComponent from "@/components/Blog/EditorCodeBlock";
 
 const MenuBar = ({ editor }) => {
   const [open, setOpen] = useState(false);
+  const [addImage, setAddImage] = useState(false);
+
   const [url, setUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   if (!editor) return null;
 
@@ -102,6 +105,14 @@ const MenuBar = ({ editor }) => {
       editor.chain().focus().setLink({ href: url }).run();
       setOpen(false);
       setUrl("");
+    }
+  };
+
+  const insertImage = () => {
+    if (imageUrl) {
+      editor.chain().focus().setImage({ src: url }).run();
+      setAddImage(false);
+      setImageUrl("");
     }
   };
 
@@ -344,6 +355,32 @@ const MenuBar = ({ editor }) => {
             placeholder="https://example.com"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
+          />
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button>Cancel</Button>
+            </DialogClose>
+            <Button onClick={insertLink}>Insert</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={addImage}
+        onOpenChange={() => {
+          setAddImage(false);
+          setImageUrl("");
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Insert Image</DialogTitle>
+          </DialogHeader>
+          <Input
+            type="url"
+            placeholder="https://example.com"
+            value={url}
+            onChange={(e) => setImageUrl(e.target.value)}
           />
           <DialogFooter>
             <DialogClose asChild>
