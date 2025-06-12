@@ -436,10 +436,9 @@ const TutorialCreator = () => {
       {/* Pending Expense Alert */}
       {pendingTutorial && (
         <Alert
-          variant="warning"
-          className="mb-6 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 border border-yellow-400 dark:border-gray-600 shadow-md p-4 rounded-xl flex items-center hover:shadow-lg transition-transform transform"
+          className="mt-10 mb-8 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 border border-yellow-400 dark:border-gray-600 shadow-md p-4 rounded-xl flex items-center hover:shadow-lg transition-transform transform"
         >
-          <AlertCircle className="h-5 w-5 text-yellow-600 dark:text-yellow-400 mr-3" />
+          <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 mr-3" />
           <div>
             <AlertTitle className="text-yellow-700 dark:text-yellow-300 font-bold">
               Pending Tutorial

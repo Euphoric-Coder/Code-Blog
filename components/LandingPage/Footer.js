@@ -11,13 +11,13 @@ const Footer = () => {
         {/* Logo and Brand */}
         <div className="flex items-center mb-4 lg:mb-0 gap-4">
           {/* Logo Icon */}
-          <Image src="/codeblog.png" alt="Logo" width={48} height={48}/>
-          <span className="text-2xl font-bold text-purple-500">Code Blog</span>
+          <Image src="/codeblog.png" alt="Logo" width={48} height={48} />
+          <span className="text-2xl font-bold text-purple-500">Dev Block</span>
         </div>
 
         {/* Copyright */}
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          © 2024 Code Blog. All rights reserved. | Created by Sagnik Dey
+          © 2024 Dev Block. All rights reserved. | Created by Sagnik Dey
         </p>
 
         {/* Social Links */}

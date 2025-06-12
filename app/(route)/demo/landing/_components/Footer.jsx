@@ -52,7 +52,7 @@ export const Footer = () => {
                   </div>
                 </div>
                 <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
-                  Code Blog
+                  Dev Block
                 </span>
               </div>
 
@@ -133,7 +133,7 @@ export const Footer = () => {
         <div className="py-6 border-t border-gray-200 dark:border-gray-800">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
             <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-300">
-              <span>© 2024 Code Blog. All rights reserved.</span>
+              <span>© 2024 Dev Block. All rights reserved.</span>
               <span>|</span>
               <span>Created by Sagnik Dey</span>
             </div>

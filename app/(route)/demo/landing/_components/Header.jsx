@@ -77,7 +77,7 @@ export const Header = ({ darkMode, setDarkMode }) => {
               </div>
             </div>
             <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
-              Code Blog
+              Dev Block
             </span>
           </a>
 

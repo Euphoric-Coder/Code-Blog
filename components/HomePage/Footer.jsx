@@ -41,7 +41,7 @@ export const Footer = () => {
                 </div>
               </div>
               <span className="text-lg font-bold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
-                Code Blog
+                Dev Block
               </span>
             </div>
 
@@ -110,7 +110,7 @@ export const Footer = () => {
         {/* Bottom */}
         <div className="py-4 border-t border-gray-200 dark:border-gray-800 text-center">
           <p className="text-gray-600 dark:text-gray-400">
-            © {new Date().getFullYear()} Code Blog. All rights reserved.
+            © {new Date().getFullYear()} Dev Block. All rights reserved.
           </p>
         </div>
       </div>
