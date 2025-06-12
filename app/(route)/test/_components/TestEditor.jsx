@@ -110,7 +110,7 @@ const MenuBar = ({ editor }) => {
 
   const insertImage = () => {
     if (imageUrl) {
-      editor.chain().focus().setImage({ src: url }).run();
+      editor.chain().focus().setImage({ src: imageUrl }).run();
       setAddImage(false);
       setImageUrl("");
     }
@@ -269,7 +269,7 @@ const MenuBar = ({ editor }) => {
           <Tooltip>
             <TooltipTrigger asChild>
               <button
-                className={buttonStyle(editor.isActive("link"))}
+                className={buttonStyle(editor.isActive("image"))}
                 onClick={() => setOpen(true)}
               >
                 <MdLink className="mr-1" />
@@ -277,6 +277,22 @@ const MenuBar = ({ editor }) => {
             </TooltipTrigger>
             <TooltipContent>
               <p>Link</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className={buttonStyle(editor.isActive("link"))}
+                onClick={() => setAddImage(true)}
+              >
+                <ImageIcon className="mr-1" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Image</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -377,16 +393,16 @@ const MenuBar = ({ editor }) => {
             <DialogTitle>Insert Image</DialogTitle>
           </DialogHeader>
           <Input
-            type="url"
+            type="text"
             placeholder="https://example.com"
-            value={url}
+            value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
           />
           <DialogFooter>
             <DialogClose asChild>
               <Button>Cancel</Button>
             </DialogClose>
-            <Button onClick={insertLink}>Insert</Button>
+            <Button onClick={insertImage}>Insert</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
