@@ -142,7 +142,7 @@ export const Hero = () => {
           </div>
 
           {/* Right Content - Vector Illustration */}
-          <div className="relative lg:h-96 flex items-center justify-center">
+          <div className="relative mb-10 lg:mb-0 lg:h-96 flex items-center justify-center">
             {/* Main Container */}
             <div className="relative w-full max-w-lg">
               {/* Background Elements */}
