@@ -50,6 +50,9 @@ export const Header = ({ darkMode, setDarkMode }) => {
     },
   ];
 
+  const hoverEffect =
+    "hover:scale-110 hover:font-extrabold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r dark:hover:text-transparent dark:hover:bg-clip-text dark:hover:bg-gradient-to-r hover:from-blue-500 hover:via-teal-500 hover:to-green-500 dark:hover:from-blue-600 dark:hover:via-teal-600 dark:hover:to-green-600";
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -67,20 +70,23 @@ export const Header = ({ darkMode, setDarkMode }) => {
               Dev Block
             </span>
           </Link>
-
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
             {navItems.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className={`group relative px-3 py-2 text-sm font-medium transition-all duration-200 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400`}
+                className={`group relative px-3 py-2 text-sm font-medium transition-all duration-200 text-gray-600 dark:text-gray-300 ${hoverEffect}`}
               >
                 <span className="nav-underline">{item.name}</span>
               </Link>
             ))}
           </nav>
-
+          {/* className="hover:scale-110 font-bold transition-transform duration-300
+          text-lg hover:text-transparent hover:bg-clip-text bg-gradient-to-r hover:from-blue-500
+          hover:via-teal-500 hover:to-green-500  
+           dark:hover:bg-gradient-to-r dark:hover:from-blue-700
+          dark:hover:to-teal-700" */}
           {/* Right Side Actions */}
           <div className="flex items-center space-x-4">
             {/* Theme Toggle */}
