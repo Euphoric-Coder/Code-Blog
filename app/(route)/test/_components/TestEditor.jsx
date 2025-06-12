@@ -536,13 +536,6 @@ const TestEditor = ({
             </button>
           </div>
 
-          <textarea
-            value={activeSubsection.content}
-            onChange={handleContentChange}
-            className="w-full h-96 px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-mono text-sm"
-            placeholder="Enter your content in HTML format or upload a markdown file..."
-          ></textarea>
-
           <MenuBar editor={editor} />
           <EditorContent
             editor={editor}
