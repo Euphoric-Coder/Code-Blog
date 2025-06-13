@@ -435,9 +435,7 @@ const TutorialCreator = () => {
 
       {/* Pending Expense Alert */}
       {pendingTutorial && (
-        <Alert
-          className="mt-10 mb-8 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 border border-yellow-400 dark:border-gray-600 shadow-md p-4 rounded-xl flex items-center hover:shadow-lg transition-transform transform"
-        >
+        <Alert className="mt-10 mb-8 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 border border-yellow-400 dark:border-gray-600 shadow-md p-4 rounded-xl flex items-center hover:shadow-lg transition-transform transform">
           <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 mr-3" />
           <div>
             <AlertTitle className="text-yellow-700 dark:text-yellow-300 font-bold">
@@ -647,51 +645,51 @@ const TutorialCreator = () => {
                 // />
                 <div>
                   <SectionEditor
-                  section={sections.find((s) => s.id === activeSectionId)}
-                  activeSubsection={sections
-                    .find((s) => s.id === activeSectionId)
-                    .subsections.find((sub) => sub.id === activeSubsectionId)}
-                  onUpdateSectionTitle={(title) =>
-                    updateSectionTitle(activeSectionId, title)
-                  }
-                  onUpdateSubsectionTitle={(title) =>
-                    updateSubsectionTitle(
-                      activeSectionId,
-                      activeSubsectionId,
-                      title
-                    )
-                  }
-                  onUpdateSubsectionContent={(content) =>
-                    updateSubsectionContent(
-                      activeSectionId,
-                      activeSubsectionId,
-                      content
-                    )
-                  }
-                />
-                <TestEditor
-                  section={sections.find((s) => s.id === activeSectionId)}
-                  activeSubsection={sections
-                    .find((s) => s.id === activeSectionId)
-                    .subsections.find((sub) => sub.id === activeSubsectionId)}
-                  onUpdateSectionTitle={(title) =>
-                    updateSectionTitle(activeSectionId, title)
-                  }
-                  onUpdateSubsectionTitle={(title) =>
-                    updateSubsectionTitle(
-                      activeSectionId,
-                      activeSubsectionId,
-                      title
-                    )
-                  }
-                  onUpdateSubsectionContent={(content) =>
-                    updateSubsectionContent(
-                      activeSectionId,
-                      activeSubsectionId,
-                      content
-                    )
-                  }
-                />
+                    section={sections.find((s) => s.id === activeSectionId)}
+                    activeSubsection={sections
+                      .find((s) => s.id === activeSectionId)
+                      .subsections.find((sub) => sub.id === activeSubsectionId)}
+                    onUpdateSectionTitle={(title) =>
+                      updateSectionTitle(activeSectionId, title)
+                    }
+                    onUpdateSubsectionTitle={(title) =>
+                      updateSubsectionTitle(
+                        activeSectionId,
+                        activeSubsectionId,
+                        title
+                      )
+                    }
+                    onUpdateSubsectionContent={(content) =>
+                      updateSubsectionContent(
+                        activeSectionId,
+                        activeSubsectionId,
+                        content
+                      )
+                    }
+                  />
+                  <TestEditor
+                    section={sections.find((s) => s.id === activeSectionId)}
+                    activeSubsection={sections
+                      .find((s) => s.id === activeSectionId)
+                      .subsections.find((sub) => sub.id === activeSubsectionId)}
+                    onUpdateSectionTitle={(title) =>
+                      updateSectionTitle(activeSectionId, title)
+                    }
+                    onUpdateSubsectionTitle={(title) =>
+                      updateSubsectionTitle(
+                        activeSectionId,
+                        activeSubsectionId,
+                        title
+                      )
+                    }
+                    onUpdateSubsectionContent={(content) =>
+                      updateSubsectionContent(
+                        activeSectionId,
+                        activeSubsectionId,
+                        content
+                      )
+                    }
+                  />
                 </div>
               )}
             </div>
