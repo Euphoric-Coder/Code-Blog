@@ -477,7 +477,7 @@ const TutorialCreator = () => {
           />
         </div>
       ) : (
-        <div>
+        <div className="w-full p-4">
           <div className="mb-8 flex justify-between items-center">
             <h1 className="text-3xl font-bold text-gray-900">
               Creating: {tutorial.title}
@@ -499,8 +499,8 @@ const TutorialCreator = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <div className="lg:col-span-1 bg-white rounded-lg shadow-md p-4 h-fit">
+          <div className="flex gap-8">
+            <div className="w-1/3 lg:col-span-1 bg-white rounded-lg shadow-md p-4 h-fit">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold text-gray-900">
                   Sections
@@ -618,7 +618,7 @@ const TutorialCreator = () => {
               </div>
             </div>
 
-            <div className="lg:col-span-3">
+            <div className="w-full lg:col-span-3">
               {activeSectionId && activeSubsectionId && (
                 // <SectionEditor
                 //   section={sections.find((s) => s.id === activeSectionId)}
