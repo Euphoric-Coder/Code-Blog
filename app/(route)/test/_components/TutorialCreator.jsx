@@ -26,7 +26,6 @@ import { v4 as uuidv4 } from "uuid";
 import { useUser } from "@clerk/nextjs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import TestEditor from "./TestEditor";
 
 const initialSectionId = uuidv4();
 const initialSubsectionId = uuidv4();
