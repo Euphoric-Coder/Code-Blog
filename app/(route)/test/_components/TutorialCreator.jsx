@@ -187,17 +187,18 @@ const TutorialCreator = () => {
   };
 
   const addNewSubsection = (sectionId) => {
+    console.log(sectionId)
+    console.log(sections)
+    const newSubId = uuidv4(); // generate first
+    const newSubsection = {
+      id: newSubId,
+      title: "New Subsection",
+      content: "<p>Add your content here...</p>",
+    };
+
     setSections((prev) =>
       prev.map((section) => {
         if (section.id === sectionId) {
-          const newSubId = uuidv4();
-          const newSubsection = {
-            id: newSubId,
-            title: "New Subsection",
-            content: "<p>Add your content here...</p>",
-          };
-
-          setActiveSubsectionId(newSubId);
           return {
             ...section,
             subsections: [...section.subsections, newSubsection],
@@ -206,7 +207,10 @@ const TutorialCreator = () => {
         return section;
       })
     );
+
+    setActiveSubsectionId(newSubId); // safely done after setSections
   };
+  
 
   const updateSectionTitle = (sectionId, title) => {
     setSections((prev) =>
@@ -645,29 +649,6 @@ const TutorialCreator = () => {
                 // />
                 <div>
                   <SectionEditor
-                    section={sections.find((s) => s.id === activeSectionId)}
-                    activeSubsection={sections
-                      .find((s) => s.id === activeSectionId)
-                      .subsections.find((sub) => sub.id === activeSubsectionId)}
-                    onUpdateSectionTitle={(title) =>
-                      updateSectionTitle(activeSectionId, title)
-                    }
-                    onUpdateSubsectionTitle={(title) =>
-                      updateSubsectionTitle(
-                        activeSectionId,
-                        activeSubsectionId,
-                        title
-                      )
-                    }
-                    onUpdateSubsectionContent={(content) =>
-                      updateSubsectionContent(
-                        activeSectionId,
-                        activeSubsectionId,
-                        content
-                      )
-                    }
-                  />
-                  <TestEditor
                     section={sections.find((s) => s.id === activeSectionId)}
                     activeSubsection={sections
                       .find((s) => s.id === activeSectionId)

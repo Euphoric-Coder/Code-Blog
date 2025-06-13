@@ -410,7 +410,7 @@ const MenuBar = ({ editor }) => {
   );
 };
 
-const TestEditor = ({
+const TutorialEditor = ({
   section,
   activeSubsection,
   onUpdateSectionTitle,
@@ -419,6 +419,12 @@ const TestEditor = ({
 }) => {
   const [previewMode, setPreviewMode] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+
+  useEffect(() => {
+    if (editor && activeSubsection?.content !== editor.getHTML()) {
+      editor.commands.setContent(activeSubsection.content || "");
+    }
+  }, [activeSubsection?.id]);
 
   const handleSectionTitleChange = (e) => {
     onUpdateSectionTitle(e.target.value);
@@ -611,4 +617,4 @@ const TestEditor = ({
   );
 };
 
-export default TestEditor;
+export default TutorialEditor;
