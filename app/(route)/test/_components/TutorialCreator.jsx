@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   ChevronRight,
   Save,
@@ -94,7 +94,10 @@ const isDefaultLike = (data) => {
 
 const TutorialCreator = () => {
   const { user } = useUser();
-  const LOCAL_STORAGE_KEY = `tutorialCreatorData-${user?.id}`;
+  const LOCAL_STORAGE_KEY = useMemo(() => {
+    return user?.id ? `tutorialCreatorData-${user.id}` : null;
+  }, [user?.id]);
+  
 
   const [initialData, setInitialData] = useState(null);
   const [tutorial, setTutorial] = useState(null);
@@ -109,9 +112,9 @@ const TutorialCreator = () => {
 
   // ✅ Load initial data from localStorage after mount
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && LOCAL_STORAGE_KEY) {
       const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
-      // console.log(!isDefaultLike(savedData));
+      console.log(!isDefaultLike(savedData));
       if (!isDefaultLike(savedData)) {
         try {
           const parsed = JSON.parse(savedData);
@@ -130,12 +133,13 @@ const TutorialCreator = () => {
 
       // Fallback default data
       setInitialData(defaultData);
+      console.log("Fallback in action");
       setTutorial(defaultData.tutorial);
       setSections(defaultData.sections);
       setActiveSectionId(defaultData.activeSectionId);
       setActiveSubsectionId(defaultData.activeSubsectionId);
     }
-  }, [user?.id]);
+  }, [LOCAL_STORAGE_KEY]);
 
   // ✅ Save changes to localStorage
   useEffect(() => {
@@ -149,7 +153,13 @@ const TutorialCreator = () => {
       // console.log("Saving tutorial data to localStorage:", dataToSave);
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataToSave));
     }
-  }, [tutorial, sections, activeSectionId, activeSubsectionId]);
+  }, [
+    tutorial,
+    sections,
+    activeSectionId,
+    activeSubsectionId,
+    LOCAL_STORAGE_KEY,
+  ]);
 
   // ✅ Avoid rendering until initial data is loaded
   if (!initialData) return <div>Loading tutorial data...</div>;
@@ -186,8 +196,8 @@ const TutorialCreator = () => {
   };
 
   const addNewSubsection = (sectionId) => {
-    console.log(sectionId)
-    console.log(sections)
+    console.log(sectionId);
+    console.log(sections);
     const newSubId = uuidv4(); // generate first
     const newSubsection = {
       id: newSubId,
@@ -209,7 +219,6 @@ const TutorialCreator = () => {
 
     setActiveSubsectionId(newSubId); // safely done after setSections
   };
-  
 
   const updateSectionTitle = (sectionId, title) => {
     setSections((prev) =>
@@ -446,7 +455,7 @@ const TutorialCreator = () => {
             </AlertTitle>
             <AlertDescription className="text-yellow-600 dark:text-yellow-400">
               You have an unfinished Tutorial: &quot;
-              <b>{name === "" ? "Untitled" : name}</b>&quot;. Would you like to
+              <b>{tutorial.title === "" ? "Untitled" : tutorial.title}</b>&quot;. Would you like to
               continue?
             </AlertDescription>
           </div>

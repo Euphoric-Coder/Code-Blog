@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { Code, Github, Twitter, Linkedin, Mail } from "lucide-react";
+import Image from "next/image";
 
 export const Footer = () => {
   const productLinks = [
@@ -35,10 +36,7 @@ export const Footer = () => {
           <div className="space-y-3">
             <div className="flex items-center space-x-2">
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-teal-500 rounded-lg blur opacity-75"></div>
-                <div className="relative bg-gradient-to-r from-blue-500 to-teal-500 p-2 rounded-lg">
-                  <Code className="h-5 w-5 text-white" />
-                </div>
+                <Image src={"/codeblog.png"} alt="Logo" width={48} height={48}/>
               </div>
               <span className="text-lg font-bold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
                 Dev Block
