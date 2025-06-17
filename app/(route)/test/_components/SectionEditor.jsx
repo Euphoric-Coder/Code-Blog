@@ -413,7 +413,6 @@ const TutorialEditor = ({
   onUpdateSubsectionContent,
   onUpdateUsedMarkdown,
 }) => {
-  const [previewMode, setPreviewMode] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
@@ -528,20 +527,6 @@ const TutorialEditor = ({
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               />
             </div>
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={() => setPreviewMode(!previewMode)}
-              className={`px-4 py-2 rounded-md transition-colors flex items-center ${
-                previewMode
-                  ? "bg-blue-100 text-blue-800 hover:bg-blue-200"
-                  : "bg-gray-100 text-gray-800 hover:bg-gray-200"
-              }`}
-            >
-              <PanelRight className="h-5 w-5 mr-2" />
-              {previewMode ? "Edit Mode" : "Preview"}
-            </button>
           </div>
         </div>
       </div>
