@@ -545,9 +545,7 @@ const TutorialEditor = ({
           </div>
         </div>
       </div>
-      {!activeSubsection.usedMarkdown ? (
-        <div></div>
-      ) : (
+      {activeSubsection.usedMarkdown && (
         <Button
           onClick={() => {
             onUpdateUsedMarkdown(false);
