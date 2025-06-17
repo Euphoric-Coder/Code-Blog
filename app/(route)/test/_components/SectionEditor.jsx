@@ -411,10 +411,10 @@ const TutorialEditor = ({
   onUpdateSectionTitle,
   onUpdateSubsectionTitle,
   onUpdateSubsectionContent,
+  onUpdateUsedMarkdown,
 }) => {
   const [previewMode, setPreviewMode] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [markdownUploaded, setMarkdownUploaded] = useState(false);
 
   useEffect(() => {
     if (editor && activeSubsection?.content !== editor.getHTML()) {
@@ -446,7 +446,7 @@ const TutorialEditor = ({
           const html = await markdownToHtml(markdown);
           onUpdateSubsectionContent(html);
           editor?.commands.setContent(html, false);
-          setMarkdownUploaded(true);
+          onUpdateUsedMarkdown(true);
         }
         setIsUploading(false);
       };
@@ -545,12 +545,12 @@ const TutorialEditor = ({
           </div>
         </div>
       </div>
-      {!markdownUploaded ? (
+      {!activeSubsection.usedMarkdown ? (
         <div></div>
       ) : (
         <Button
           onClick={() => {
-            setMarkdownUploaded(false);
+            onUpdateUsedMarkdown(false);
             onUpdateSubsectionContent("");
           }}
         >
@@ -558,7 +558,7 @@ const TutorialEditor = ({
         </Button>
       )}
 
-      {markdownUploaded ? (
+      {activeSubsection.usedMarkdown ? (
         <div className="p-6 border-t border-gray-200 prose max-w-none">
           <div
             dangerouslySetInnerHTML={{ __html: activeSubsection.content }}
@@ -578,7 +578,7 @@ const TutorialEditor = ({
 
             <Button
               onClick={() => window.markdownUploadInput?.click()}
-              disabled={markdownUploaded}
+              disabled={activeSubsection.usedMarkdown}
               className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5"
             >
               <Upload className="h-4 w-4 mr-2" />
