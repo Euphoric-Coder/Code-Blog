@@ -47,7 +47,8 @@ const defaultData = {
         {
           id: initialSubsectionId,
           title: "Welcome",
-          content: "<p>Welcome to this tutorial!</p>",
+          content: "",
+          usedMarkdown: false,
         },
       ],
     },
@@ -97,7 +98,6 @@ const TutorialCreator = () => {
   const LOCAL_STORAGE_KEY = useMemo(() => {
     return user?.id ? `tutorialCreatorData-${user.id}` : null;
   }, [user?.id]);
-  
 
   const [initialData, setInitialData] = useState(null);
   const [tutorial, setTutorial] = useState(null);
@@ -131,9 +131,8 @@ const TutorialCreator = () => {
         }
       }
 
-      // Fallback default data
+      // Fallback default data on empty or invalid data from localStorage
       setInitialData(defaultData);
-      console.log("Fallback in action");
       setTutorial(defaultData.tutorial);
       setSections(defaultData.sections);
       setActiveSectionId(defaultData.activeSectionId);
@@ -196,13 +195,12 @@ const TutorialCreator = () => {
   };
 
   const addNewSubsection = (sectionId) => {
-    console.log(sectionId);
-    console.log(sections);
     const newSubId = uuidv4(); // generate first
     const newSubsection = {
       id: newSubId,
       title: "New Subsection",
-      content: "<p>Add your content here...</p>",
+      content: "",
+      usedMarkdown: false,
     };
 
     setSections((prev) =>
@@ -255,6 +253,28 @@ const TutorialCreator = () => {
             subsections: section.subsections.map((subsection) =>
               subsection.id === subsectionId
                 ? { ...subsection, content }
+                : subsection
+            ),
+          };
+        }
+        return section;
+      })
+    );
+  };
+
+  const updateSubsectionUsedMarkdown = (
+    sectionId,
+    subsectionId,
+    usedMarkdown
+  ) => {
+    setSections((prev) =>
+      prev.map((section) => {
+        if (section.id === sectionId) {
+          return {
+            ...section,
+            subsections: section.subsections.map((subsection) =>
+              subsection.id === subsectionId
+                ? { ...subsection, usedMarkdown }
                 : subsection
             ),
           };
@@ -455,8 +475,8 @@ const TutorialCreator = () => {
             </AlertTitle>
             <AlertDescription className="text-yellow-600 dark:text-yellow-400">
               You have an unfinished Tutorial: &quot;
-              <b>{tutorial.title === "" ? "Untitled" : tutorial.title}</b>&quot;. Would you like to
-              continue?
+              <b>{tutorial.title === "" ? "Untitled" : tutorial.title}</b>
+              &quot;. Would you like to continue?
             </AlertDescription>
           </div>
           <Button
@@ -676,6 +696,13 @@ const TutorialCreator = () => {
                         activeSectionId,
                         activeSubsectionId,
                         content
+                      )
+                    }
+                    onUpdateUsedMarkdown={(isMarkdown) =>
+                      updateSubsectionUsedMarkdown(
+                        activeSectionId,
+                        activeSubsectionId,
+                        isMarkdown
                       )
                     }
                   />

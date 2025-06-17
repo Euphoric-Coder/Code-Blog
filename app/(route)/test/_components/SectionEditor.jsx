@@ -80,16 +80,11 @@ import {
   MenuItems,
   MenuList,
 } from "@headlessui/react";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { blogCategories, blogSubCategoriesList } from "@/lib/data";
-import { Badge } from "@/components/ui/badge";
-import { db } from "@/lib/dbConfig";
-import { Blogs } from "@/lib/schema";
-import { getISTDate } from "@/lib/utils";
-import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "@/components/ImageUpload";
 import NextImage from "next/image";
 import CodeBlockComponent from "@/components/Blog/EditorCodeBlock";
+import { markdownToHtml } from "@/components/MarkdownProcessor";
+import { set } from "date-fns";
 
 const MenuBar = ({ editor }) => {
   const [open, setOpen] = useState(false);
@@ -419,12 +414,13 @@ const TutorialEditor = ({
 }) => {
   const [previewMode, setPreviewMode] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [markdownUploaded, setMarkdownUploaded] = useState(false);
 
   useEffect(() => {
     if (editor && activeSubsection?.content !== editor.getHTML()) {
       editor.commands.setContent(activeSubsection.content || "");
     }
-  }, [activeSubsection?.id]);
+  }, [activeSubsection?.id, activeSubsection?.content]);
 
   const handleSectionTitleChange = (e) => {
     onUpdateSectionTitle(e.target.value);
@@ -438,33 +434,25 @@ const TutorialEditor = ({
     onUpdateSubsectionContent(e.target.value);
   };
 
-  const handleMarkdownUpload = (e) => {
+  const handleMarkdownUpload = async (e) => {
     const file = e.target.files?.[0];
     if (file) {
       setIsUploading(true);
+
       const reader = new FileReader();
-      reader.onload = (event) => {
-        if (event.target?.result) {
-          onUpdateSubsectionContent(event.target.result);
-          setIsUploading(false);
+      reader.onload = async (event) => {
+        const markdown = event.target?.result;
+        if (markdown) {
+          const html = await markdownToHtml(markdown);
+          onUpdateSubsectionContent(html);
+          editor?.commands.setContent(html, false);
+          setMarkdownUploaded(true);
         }
+        setIsUploading(false);
       };
+
       reader.readAsText(file);
     }
-  };
-
-  const insertImagePlaceholder = () => {
-    onUpdateSubsectionContent(
-      activeSubsection.content +
-        '\n<img src="https://via.placeholder.com/800x400" alt="Image description" />'
-    );
-  };
-
-  const insertCodeBlock = () => {
-    onUpdateSubsectionContent(
-      activeSubsection.content +
-        '\n<pre><code class="language-javascript">\n// Your code here\nconsole.log("Hello World");\n</code></pre>'
-    );
   };
 
   const editor = useEditor({
@@ -554,47 +542,49 @@ const TutorialEditor = ({
               <PanelRight className="h-5 w-5 mr-2" />
               {previewMode ? "Edit Mode" : "Preview"}
             </button>
-
-            <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition-colors flex items-center">
-              <Save className="h-5 w-5 mr-2" />
-              Save
-            </button>
           </div>
         </div>
       </div>
+      {!markdownUploaded ? (
+        <div></div>
+      ) : (
+        <Button
+          onClick={() => {
+            setMarkdownUploaded(false);
+            onUpdateSubsectionContent("");
+          }}
+        >
+          Clear Markdown Clear
+        </Button>
+      )}
 
-      {!previewMode ? (
+      {markdownUploaded ? (
+        <div className="p-6 border-t border-gray-200 prose max-w-none">
+          <div
+            dangerouslySetInnerHTML={{ __html: activeSubsection.content }}
+          ></div>
+        </div>
+      ) : (
         <div className="p-4">
-          <div className="mb-4 flex flex-wrap gap-2">
-            <label className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md transition-colors cursor-pointer flex items-center">
+          <div>
+            <Input
+              id="markdown-file"
+              type="file"
+              accept=".md,.markdown,.txt"
+              onChange={handleMarkdownUpload}
+              ref={(ref) => (window.markdownUploadInput = ref)} // Expose for triggering
+              className="hidden"
+            />
+
+            <Button
+              onClick={() => window.markdownUploadInput?.click()}
+              disabled={markdownUploaded}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5"
+            >
               <Upload className="h-4 w-4 mr-2" />
               {isUploading ? "Uploading..." : "Upload Markdown"}
-              <input
-                type="file"
-                accept=".md,.markdown,.txt"
-                className="hidden"
-                onChange={handleMarkdownUpload}
-                disabled={isUploading}
-              />
-            </label>
-
-            <button
-              onClick={insertImagePlaceholder}
-              className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-1.5 rounded-md transition-colors flex items-center"
-            >
-              <ImageIcon className="h-4 w-4 mr-2" />
-              Insert Image
-            </button>
-
-            <button
-              onClick={insertCodeBlock}
-              className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-1.5 rounded-md transition-colors flex items-center"
-            >
-              <Code className="h-4 w-4 mr-2" />
-              Insert Code Block
-            </button>
+            </Button>
           </div>
-
           <MenuBar editor={editor} />
           <EditorContent
             editor={editor}
@@ -605,12 +595,6 @@ const TutorialEditor = ({
             You can write HTML directly or upload a Markdown file. Use the
             buttons above to insert common elements.
           </p>
-        </div>
-      ) : (
-        <div className="p-6 border-t border-gray-200 prose max-w-none">
-          <div
-            dangerouslySetInnerHTML={{ __html: activeSubsection.content }}
-          ></div>
         </div>
       )}
     </div>
