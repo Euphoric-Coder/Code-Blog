@@ -26,6 +26,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useUser } from "@clerk/nextjs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import FormBackgroundEffect from "@/components/Effect/FormBackgroundEffect";
 
 const initialSectionId = uuidv4();
 const initialSubsectionId = uuidv4();
@@ -533,7 +534,8 @@ const TutorialCreator = () => {
           </div>
 
           <div className="flex flex-col lg:flex-row gap-8">
-            <div className="lg:w-1/3 bg-white rounded-lg shadow-md p-4 h-fit">
+            <div className="form-layout lg:w-1/3 bg-white rounded-lg shadow-md p-4 h-fit">
+            <FormBackgroundEffect />
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold text-gray-900">
                   Sections
