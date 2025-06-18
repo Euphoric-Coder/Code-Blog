@@ -534,7 +534,7 @@ const TutorialCreator = () => {
           </div>
 
           <div className="flex flex-col lg:flex-row gap-8">
-            <div className="form-layout lg:w-1/3 h-fit">
+            <div className="form-layout bg-white lg:w-1/3 h-fit">
               <FormBackgroundEffect />
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold text-blue-900 dark:text-blue-200 tracking-wide">
@@ -561,7 +561,7 @@ const TutorialCreator = () => {
                     onDrop={(e) => handleSectionDrop(e, section)}
                   >
                     <div
-                      className={`group tutorial-section rounded-[20px] p-3 px-4 flex justify-between items-center border backdrop-blur-md transition-all duration-500 cursor-pointer shadow-md
+                      className={`group tutorial-section rounded-[20px] flex justify-between cursor-pointer
                         ${
                           section.id === activeSectionId
                             ? "border-blue-600 rounded-b-none"
@@ -601,7 +601,7 @@ const TutorialCreator = () => {
                     </div>
 
                     {section.id === activeSectionId && (
-                      <div className="pl-4 pr-2 py-2 border-t">
+                      <div className="pl-4 pr-2 py-2 border-[3px] border-t-0 border-blue-600 bg-white/40 backdrop-blur-md rounded-b-[20px]">
                         <div className="space-y-2">
                           {section.subsections.map((subsection) => (
                             <div
@@ -644,7 +644,6 @@ const TutorialCreator = () => {
                             </div>
                           ))}
                         </div>
-
                         <button
                           onClick={() => addNewSubsection(section.id)}
                           className="mt-3 w-full text-sm bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-1 rounded transition-colors flex items-center justify-center"
