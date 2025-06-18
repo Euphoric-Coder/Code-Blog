@@ -534,7 +534,7 @@ const TutorialCreator = () => {
           </div>
 
           <div className="flex flex-col lg:flex-row gap-8">
-            <div className="form-layout lg:w-1/3 bg-white rounded-lg shadow-md p-4 h-fit">
+            <div className="form-layout lg:w-1/3 h-fit">
               <FormBackgroundEffect />
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold text-blue-900 dark:text-blue-200 tracking-wide">
@@ -560,13 +560,12 @@ const TutorialCreator = () => {
                     onDragOver={handleSectionDragOver}
                     onDrop={(e) => handleSectionDrop(e, section)}
                   >
-                    {/* <FormBackgroundEffect /> */}
                     <div
-                      className={`group form-layout p-3 px-4 flex justify-between items-center border backdrop-blur-md transition-all cursor-pointer shadow-md
+                      className={`group tutorial-section rounded-[20px] p-3 px-4 flex justify-between items-center border backdrop-blur-md transition-all duration-500 cursor-pointer shadow-md
                         ${
                           section.id === activeSectionId
-                            ? "border-red-100"
-                            : ""
+                            ? "border-blue-600 rounded-b-none"
+                            : "border-blue-400"
                         }`}
                       onClick={() => {
                         setActiveSectionId(section.id);
@@ -602,7 +601,7 @@ const TutorialCreator = () => {
                     </div>
 
                     {section.id === activeSectionId && (
-                      <div className="pl-4 pr-2 py-2 bg-white border-t">
+                      <div className="pl-4 pr-2 py-2 border-t">
                         <div className="space-y-2">
                           {section.subsections.map((subsection) => (
                             <div

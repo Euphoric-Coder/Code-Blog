@@ -173,6 +173,10 @@
   @apply border-[3px] border-blue-500 dark:border-blue-400 p-5 rounded-[20px] bg-gradient-to-b from-cyan-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 shadow-xl relative overflow-hidden
 }
 
+.tutorial-section {
+  @apply border-[3px] p-5 bg-gradient-to-b from-cyan-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 shadow-xl relative overflow-hidden
+}
+
 .input-field {
   @apply w-full border-[2px] border-blue-100 dark:border-indigo-900 rounded-xl shadow-lg bg-gradient-to-br from-cyan-50 to-blue-100 dark:from-gray-800 dark:to-gray-700 text-gray-800 dark:text-gray-200 transition-all duration-500 ring-2 ring-blue-400 dark:ring-blue-600;
 }
