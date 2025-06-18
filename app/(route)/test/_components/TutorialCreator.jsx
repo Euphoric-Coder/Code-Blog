@@ -425,7 +425,7 @@ const TutorialCreator = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-tr from-[#e0f2ff] to-[#f8fbff] dark:from-[#0b1625] dark:to-[#112030] transition-colors duration-500 flex flex-col items-center justify-center px-4 py-10">
+    <div className="min-h-screen w-full bg-gradient-to-tr from-[#f6fbff] to-[#ffffff] dark:from-[#0b1625] dark:to-[#112030] transition-colors duration-500 flex flex-col items-center justify-center px-4 py-10">
       <AlertDialog open={clearPendingAlert}>
         <AlertDialogContent className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-br from-white via-blue-50 to-cyan-200 dark:from-gray-800 dark:via-gray-900 dark:to-blue-800 p-8 rounded-3xl shadow-[0_0_40px_rgba(0,150,255,0.3)] dark:shadow-[0_0_40px_rgba(0,75,150,0.5)] w-[95%] max-w-lg">
           {/* Background Effects */}
@@ -511,9 +511,9 @@ const TutorialCreator = () => {
           />
         </div>
       ) : (
-        <div className="w-full p-4">
+        <div className="w-full bg-[#e8f4ff]/60 dark:bg-[#1e2e44]/60 backdrop-blur-xl border border-blue-200 dark:border-blue-800 rounded-3xl shadow-2xl p-8 md:p-12">
           <div className="mb-8 flex flex-col lg:flex-row space-y-4 lg:space-y-0 justify-between items-center">
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-extrabold text-blue-900 dark:text-blue-200">
               Creating: {tutorial.title}
             </h1>
             <div className="flex space-x-4">
@@ -535,35 +535,39 @@ const TutorialCreator = () => {
 
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="form-layout lg:w-1/3 bg-white rounded-lg shadow-md p-4 h-fit">
-            <FormBackgroundEffect />
+              <FormBackgroundEffect />
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold text-gray-900">
-                  Sections
+                <h2 className="text-xl font-semibold text-blue-900 dark:text-blue-200 tracking-wide">
+                  Sections({sections.length})
                 </h2>
+
                 <button
                   onClick={addNewSection}
-                  className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-md transition-colors"
+                  className="group btn9 flex gap-2 items-center"
                 >
-                  <Plus className="h-5 w-5" />
+                  <Plus className="h-5 w-5 group-hover:rotate-90 transition-transform duration-700" />
+                  Add
                 </button>
               </div>
 
-              <div className="space-y-3">
+              <div className="max-h-[500px] space-y-3 overflow-auto">
                 {sections.map((section) => (
                   <div
                     key={section.id}
-                    className="border rounded-md overflow-hidden"
+                    className="overflow-hidden"
                     draggable
                     onDragStart={() => handleSectionDragStart(section)}
                     onDragOver={handleSectionDragOver}
                     onDrop={(e) => handleSectionDrop(e, section)}
                   >
+                    {/* <FormBackgroundEffect /> */}
                     <div
-                      className={`p-3 flex justify-between items-center cursor-move ${
-                        section.id === activeSectionId
-                          ? "bg-blue-50 border-l-4 border-blue-600"
-                          : "bg-gray-50"
-                      }`}
+                      className={`group form-layout p-3 px-4 flex justify-between items-center border backdrop-blur-md transition-all cursor-pointer shadow-md
+                        ${
+                          section.id === activeSectionId
+                            ? "border-red-100"
+                            : ""
+                        }`}
                       onClick={() => {
                         setActiveSectionId(section.id);
                         setActiveSubsectionId(
@@ -572,8 +576,10 @@ const TutorialCreator = () => {
                       }}
                     >
                       <div className="flex items-center">
-                        <GripVertical className="h-4 w-4 mr-2 text-gray-400" />
-                        <span className="font-medium">{section.title}</span>
+                        <GripVertical className="h-4 w-4 mr-2 text-gray-400 group-hover:cursor-move" />
+                        <span className="text-sm text-gray-700 dark:text-gray-200">
+                          {section.title}
+                        </span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <button
@@ -601,11 +607,12 @@ const TutorialCreator = () => {
                           {section.subsections.map((subsection) => (
                             <div
                               key={subsection.id}
-                              className={`px-3 py-2 rounded-md cursor-move flex justify-between items-center ${
-                                subsection.id === activeSubsectionId
-                                  ? "bg-blue-100"
-                                  : "hover:bg-gray-100"
-                              }`}
+                              className={`px-3 py-2 rounded-md flex justify-between items-center transition-all border-l-4 cursor-pointer
+                                ${
+                                  subsection.id === activeSubsectionId
+                                    ? "bg-gradient-to-r from-blue-200 to-indigo-200 border-blue-500 text-blue-900 shadow-inner"
+                                    : "bg-white hover:bg-blue-50 border-transparent text-gray-800"
+                                }`}
                               draggable
                               onDragStart={() =>
                                 handleSubsectionDragStart(subsection)
@@ -620,7 +627,7 @@ const TutorialCreator = () => {
                             >
                               <div className="flex items-center">
                                 <GripVertical className="h-4 w-4 mr-2 text-gray-400" />
-                                <span className="text-sm">
+                                <span className="text-sm text-gray-700 dark:text-gray-200">
                                   {subsection.title}
                                 </span>
                               </div>
