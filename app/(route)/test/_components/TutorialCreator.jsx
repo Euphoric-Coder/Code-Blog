@@ -644,13 +644,13 @@ const TutorialCreator = () => {
                             </div>
                           ))}
                         </div>
-                        <button
+                        <Button
                           onClick={() => addNewSubsection(section.id)}
-                          className="mt-3 w-full text-sm bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-1 rounded transition-colors flex items-center justify-center"
+                          className="w-full btn4 hover:scale-[1.01]"
                         >
                           <Plus className="h-4 w-4 mr-1" />
                           Add Subsection
-                        </button>
+                        </Button>
                       </div>
                     )}
                   </div>
