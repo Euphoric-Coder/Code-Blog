@@ -577,7 +577,7 @@ const TutorialCreator = () => {
                       <div className="flex items-center">
                         <GripVertical className="h-4 w-4 mr-2 text-gray-400 group-hover:cursor-move" />
                         <span className="text-sm text-gray-700 dark:text-gray-200">
-                          {section.title}
+                          {section.title}{" "}({section.subsections.length} Subsections)
                         </span>
                       </div>
                       <div className="flex items-center space-x-2">
