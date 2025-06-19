@@ -601,16 +601,16 @@ const TutorialCreator = () => {
                     </div>
 
                     {section.id === activeSectionId && (
-                      <div className="pl-4 pr-2 py-2 border-[3px] border-t-0 border-blue-600 bg-white/40 backdrop-blur-md rounded-b-[20px]">
+                      <div className="pl-4 pr-2 py-2 border-[3px] border-t-0 border-blue-600 bg-gradient-to-b from-cyan-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 backdrop-blur-md rounded-b-[20px]">
                         <div className="space-y-2">
                           {section.subsections.map((subsection) => (
                             <div
                               key={subsection.id}
-                              className={`px-3 py-2 rounded-md flex justify-between items-center transition-all border-l-4 cursor-pointer
+                              className={`group px-3 py-2 rounded-xl flex justify-between items-center transition-colors duration-300 cursor-pointer backdrop-blur-sm border border-transparent border-l-8
                                 ${
                                   subsection.id === activeSubsectionId
-                                    ? "bg-gradient-to-r from-blue-200 to-indigo-200 border-blue-500 text-blue-900 shadow-inner"
-                                    : "bg-white hover:bg-blue-50 border-transparent text-gray-800"
+                                    ? "bg-gradient-to-r from-blue-300 to-indigo-300 border-l-blue-600 text-blue-900 shadow-inner dark:from-blue-800 dark:to-indigo-800"
+                                    : "bg-gradient-to-br from-blue-100 via-blue-100 to-indigo-100 hover:from-blue-200 hover:via-blue-300 hover:to-indigo-300 border-l-blue-300 text-gray-900 dark:from-gray-800/50 dark:via-gray-700 dark:to-gray-600 dark:hover:from-gray-700 dark:hover:via-gray-600 dark:hover:to-gray-500 dark:border-l-gray-500"
                                 }`}
                               draggable
                               onDragStart={() =>
@@ -625,7 +625,7 @@ const TutorialCreator = () => {
                               }
                             >
                               <div className="flex items-center">
-                                <GripVertical className="h-4 w-4 mr-2 text-gray-400" />
+                                <GripVertical className="h-4 w-4 mr-2 text-gray-400 group-hover:cursor-move" />
                                 <span className="text-sm text-gray-700 dark:text-gray-200">
                                   {subsection.title}
                                 </span>
@@ -646,7 +646,7 @@ const TutorialCreator = () => {
                         </div>
                         <Button
                           onClick={() => addNewSubsection(section.id)}
-                          className="w-full btn4 hover:scale-[1.01]"
+                          className="mt-3 w-full btn4 hover:scale-[1.01]"
                         >
                           <Plus className="h-4 w-4 mr-1" />
                           Add Subsection
