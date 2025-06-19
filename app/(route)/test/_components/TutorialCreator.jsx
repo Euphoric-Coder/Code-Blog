@@ -606,11 +606,11 @@ const TutorialCreator = () => {
                           {section.subsections.map((subsection) => (
                             <div
                               key={subsection.id}
-                              className={`group px-3 py-2 rounded-xl flex justify-between items-center transition-colors duration-300 cursor-pointer backdrop-blur-sm border border-transparent border-l-8
+                              className={`group px-3 py-2 rounded-xl flex justify-between items-center transition-colors duration-300 cursor-pointer backdrop-blur-sm border-[2.5px] border-l-8
                                 ${
                                   subsection.id === activeSubsectionId
-                                    ? "bg-gradient-to-r from-blue-300 to-indigo-300 border-l-blue-600 text-blue-900 shadow-inner dark:from-blue-800 dark:to-indigo-800"
-                                    : "bg-gradient-to-br from-blue-100 via-blue-100 to-indigo-100 hover:from-blue-200 hover:via-blue-300 hover:to-indigo-300 border-l-blue-300 text-gray-900 dark:from-gray-800/50 dark:via-gray-700 dark:to-gray-600 dark:hover:from-gray-700 dark:hover:via-gray-600 dark:hover:to-gray-500 dark:border-l-gray-500"
+                                    ? "bg-gradient-to-r from-blue-300 to-indigo-300 border-l-blue-600 text-blue-900 shadow-inner dark:from-blue-800 dark:to-indigo-800 dark:border-l-blue-400 border-blue-600 dark:border-blue-400"
+                                    : "bg-gradient-to-br from-blue-100 via-blue-100 to-indigo-100 hover:from-blue-200 hover:via-blue-200 hover:to-indigo-200 border-l-blue-400 text-gray-900 dark:from-gray-800/50 dark:via-gray-700 dark:to-gray-600 dark:hover:from-gray-700 dark:hover:via-gray-600 dark:hover:to-gray-500 dark:border-l-gray-400 border-blue-400 dark:border-gray-400 hover:scale-[1.02] transition-all duration-700"
                                 }`}
                               draggable
                               onDragStart={() =>
