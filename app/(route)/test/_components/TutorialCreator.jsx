@@ -660,29 +660,6 @@ const TutorialCreator = () => {
 
             <div className="lg:w-full lg:col-span-3">
               {activeSectionId && activeSubsectionId && (
-                // <SectionEditor
-                //   section={sections.find((s) => s.id === activeSectionId)}
-                //   activeSubsection={sections
-                //     .find((s) => s.id === activeSectionId)
-                //     .subsections.find((sub) => sub.id === activeSubsectionId)}
-                //   onUpdateSectionTitle={(title) =>
-                //     updateSectionTitle(activeSectionId, title)
-                //   }
-                //   onUpdateSubsectionTitle={(title) =>
-                //     updateSubsectionTitle(
-                //       activeSectionId,
-                //       activeSubsectionId,
-                //       title
-                //     )
-                //   }
-                //   onUpdateSubsectionContent={(content) =>
-                //     updateSubsectionContent(
-                //       activeSectionId,
-                //       activeSubsectionId,
-                //       content
-                //     )
-                //   }
-                // />
                 <div>
                   <SectionEditor
                     section={sections.find((s) => s.id === activeSectionId)}
