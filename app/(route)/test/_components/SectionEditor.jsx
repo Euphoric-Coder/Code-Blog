@@ -85,6 +85,7 @@ import NextImage from "next/image";
 import CodeBlockComponent from "@/components/Blog/EditorCodeBlock";
 import { markdownToHtml } from "@/components/MarkdownProcessor";
 import { set } from "date-fns";
+import FormBackgroundEffect from "@/components/Effect/FormBackgroundEffect";
 
 const MenuBar = ({ editor }) => {
   const [open, setOpen] = useState(false);
@@ -492,7 +493,8 @@ const TutorialEditor = ({
   });
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="form-layout overflow-hidden">
+      <FormBackgroundEffect />
       <div className="p-4 border-b border-gray-200">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex-1 space-y-3">
@@ -503,12 +505,12 @@ const TutorialEditor = ({
               >
                 Section Title
               </label>
-              <input
+              <Input
                 type="text"
                 id="sectionTitle"
                 value={section.title}
                 onChange={handleSectionTitleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                className="input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
               />
             </div>
 
@@ -519,12 +521,12 @@ const TutorialEditor = ({
               >
                 Subsection Title
               </label>
-              <input
+              <Input
                 type="text"
                 id="subsectionTitle"
                 value={activeSubsection.title}
                 onChange={handleSubsectionTitleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                className="input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
               />
             </div>
           </div>
