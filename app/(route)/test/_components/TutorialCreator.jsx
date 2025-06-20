@@ -577,7 +577,8 @@ const TutorialCreator = () => {
                       <div className="flex items-center">
                         <GripVertical className="h-4 w-4 mr-2 text-gray-400 group-hover:cursor-move" />
                         <span className="text-sm text-gray-700 dark:text-gray-200">
-                          {section.title}{" "}({section.subsections.length} Subsections)
+                          {section.title} ({section.subsections.length}{" "}
+                          Subsections)
                         </span>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -586,9 +587,9 @@ const TutorialCreator = () => {
                             e.stopPropagation();
                             deleteSection(section.id);
                           }}
-                          className="text-red-600 hover:text-red-800 transition-colors p-1"
+                          className="text-red-600 hover:text-red-800 transition-all duration-500 p-1"
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-5 w-5 hover:scale-[1.03]" />
                         </button>
                         <ChevronRight
                           className={`h-5 w-5 transition-transform ${
@@ -636,9 +637,9 @@ const TutorialCreator = () => {
                                     e.stopPropagation();
                                     deleteSubsection(section.id, subsection.id);
                                   }}
-                                  className="text-red-600 hover:text-red-800 transition-colors p-1"
+                                  className="text-red-600 hover:text-red-800 transition-all duration-500 p-1"
                                 >
-                                  <Trash2 className="h-3 w-3" />
+                                  <Trash2 className="h-5 w-5 hover:scale-[1.03]" />
                                 </button>
                               )}
                             </div>
