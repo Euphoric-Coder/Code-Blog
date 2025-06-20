@@ -493,6 +493,25 @@ const TutorialEditor = ({
       <FormBackgroundEffect />
 
       <div className="flex justify-end">
+        <div>
+          <Input
+            id="markdown-file"
+            type="file"
+            accept=".md,.markdown,.txt"
+            onChange={handleMarkdownUpload}
+            ref={(ref) => (window.markdownUploadInput = ref)} // Expose for triggering
+            className="hidden"
+          />
+
+          <Button
+            onClick={() => window.markdownUploadInput?.click()}
+            disabled={activeSubsection.usedMarkdown}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5"
+          >
+            <Upload className="h-4 w-4 mr-2" />
+            {isUploading ? "Uploading..." : "Upload Markdown"}
+          </Button>
+        </div>
         {activeSubsection.usedMarkdown && (
           <Button
             onClick={() => {
@@ -545,25 +564,6 @@ const TutorialEditor = ({
         </div>
       ) : (
         <div className="p-4">
-          <div>
-            <Input
-              id="markdown-file"
-              type="file"
-              accept=".md,.markdown,.txt"
-              onChange={handleMarkdownUpload}
-              ref={(ref) => (window.markdownUploadInput = ref)} // Expose for triggering
-              className="hidden"
-            />
-
-            <Button
-              onClick={() => window.markdownUploadInput?.click()}
-              disabled={activeSubsection.usedMarkdown}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5"
-            >
-              <Upload className="h-4 w-4 mr-2" />
-              {isUploading ? "Uploading..." : "Upload Markdown"}
-            </Button>
-          </div>
           <MenuBar editor={editor} />
           <EditorContent
             editor={editor}
