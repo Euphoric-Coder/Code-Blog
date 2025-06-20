@@ -1,12 +1,12 @@
-import TutorialEditor from '@/components/TutorialEditor'
-import React from 'react'
+import React from "react";
+import TutorialCreator from "./_components/TutorialCreator";
 
 const page = () => {
   return (
     <div>
-        <TutorialEditor />
+      <TutorialCreator />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;
