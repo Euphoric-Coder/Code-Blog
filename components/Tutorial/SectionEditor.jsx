@@ -520,7 +520,7 @@ const TutorialEditor = ({
             }}
             className="del3 hover:bg-red-200 dark:hover:bg-red-700"
           >
-            Clear Markdown Clear
+            Clear Markdown Content
           </Button>
         )}
       </div>
