@@ -430,10 +430,6 @@ const TutorialEditor = ({
     onUpdateSubsectionTitle(e.target.value);
   };
 
-  const handleContentChange = (e) => {
-    onUpdateSubsectionContent(e.target.value);
-  };
-
   const handleMarkdownUpload = async (e) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -501,7 +497,7 @@ const TutorialEditor = ({
             <div>
               <label
                 htmlFor="sectionTitle"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="text"
               >
                 Section Title
               </label>
@@ -510,14 +506,14 @@ const TutorialEditor = ({
                 id="sectionTitle"
                 value={section.title}
                 onChange={handleSectionTitleChange}
-                className="input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
+                className="mt-1 input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
               />
             </div>
 
             <div>
               <label
                 htmlFor="subsectionTitle"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="text"
               >
                 Subsection Title
               </label>
@@ -526,7 +522,7 @@ const TutorialEditor = ({
                 id="subsectionTitle"
                 value={activeSubsection.title}
                 onChange={handleSubsectionTitleChange}
-                className="input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
+                className="mt-1 input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
               />
             </div>
           </div>
