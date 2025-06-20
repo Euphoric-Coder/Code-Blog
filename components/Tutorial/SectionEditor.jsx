@@ -491,7 +491,7 @@ const TutorialEditor = ({
   return (
     <div className="form-layout overflow-hidden">
       <FormBackgroundEffect />
-      <div className="p-4 border-b border-gray-200">
+      <div className="p-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex-1 space-y-3">
             <div>
