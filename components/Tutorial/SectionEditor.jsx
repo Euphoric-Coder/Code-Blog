@@ -120,7 +120,7 @@ const MenuBar = ({ editor }) => {
     }`;
 
   return (
-    <div className="sticky top-0 flex flex-wrap items-center justify-between rounded-tr-2xl rounded-tl-2xl gap-2 border-r border-l border-2 p-4 backdrop-blur-md bg-white/60 dark:bg-slate-900/60">
+    <div className="sticky top-0 flex flex-wrap items-center justify-between rounded-tr-2xl rounded-tl-2xl gap-2 border-r border-l border-2 border-blue-600 dark:border-blue-400 p-4 backdrop-blur-md bg-white/60 dark:bg-slate-900/60">
       <div className="hidden lg:flex gap-2 items-center">
         {[1, 2, 3].map((level) => (
           <TooltipProvider key={level}>
@@ -480,7 +480,7 @@ const TutorialEditor = ({
     editorProps: {
       attributes: {
         class:
-          "prose dark:prose-invert max-w-none p-4 min-h-[300px] rounded-b-3xl border-top-none border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 outline-none",
+          "prose dark:prose-invert max-w-none p-4 min-h-[300px] rounded-b-3xl border-top-none border border-blue-600 dark:border-blue-400 bg-white dark:bg-slate-900 outline-none",
       },
     },
     onUpdate: ({ editor }) => {
