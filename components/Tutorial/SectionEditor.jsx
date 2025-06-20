@@ -491,14 +491,25 @@ const TutorialEditor = ({
   return (
     <div className="form-layout overflow-hidden">
       <FormBackgroundEffect />
+
+      <div className="flex justify-end">
+        {activeSubsection.usedMarkdown && (
+          <Button
+            onClick={() => {
+              onUpdateUsedMarkdown(false);
+              onUpdateSubsectionContent("");
+            }}
+            className="del3 hover:bg-red-200 dark:hover:bg-red-700"
+          >
+            Clear Markdown Clear
+          </Button>
+        )}
+      </div>
       <div className="p-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex-1 space-y-3">
             <div>
-              <label
-                htmlFor="sectionTitle"
-                className="text"
-              >
+              <label htmlFor="sectionTitle" className="text">
                 Section Title
               </label>
               <Input
@@ -511,10 +522,7 @@ const TutorialEditor = ({
             </div>
 
             <div>
-              <label
-                htmlFor="subsectionTitle"
-                className="text"
-              >
+              <label htmlFor="subsectionTitle" className="text">
                 Subsection Title
               </label>
               <Input
@@ -528,19 +536,9 @@ const TutorialEditor = ({
           </div>
         </div>
       </div>
-      {activeSubsection.usedMarkdown && (
-        <Button
-          onClick={() => {
-            onUpdateUsedMarkdown(false);
-            onUpdateSubsectionContent("");
-          }}
-        >
-          Clear Markdown Clear
-        </Button>
-      )}
 
       {activeSubsection.usedMarkdown ? (
-        <div className="p-6 border-t border-gray-200 prose max-w-none">
+        <div className="p-6 prose max-w-none">
           <div
             dangerouslySetInnerHTML={{ __html: activeSubsection.content }}
           ></div>
