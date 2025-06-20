@@ -492,7 +492,7 @@ const TutorialEditor = ({
     <div className="form-layout overflow-hidden">
       <FormBackgroundEffect />
 
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-3">
         <div>
           <Input
             id="markdown-file"
@@ -506,7 +506,7 @@ const TutorialEditor = ({
           <Button
             onClick={() => window.markdownUploadInput?.click()}
             disabled={activeSubsection.usedMarkdown}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5"
+            className="btn9"
           >
             <Upload className="h-4 w-4 mr-2" />
             {isUploading ? "Uploading..." : "Upload Markdown"}
@@ -557,7 +557,7 @@ const TutorialEditor = ({
       </div>
 
       {activeSubsection.usedMarkdown ? (
-        <div className="p-6 prose max-w-none">
+        <div className="p-6 prose [&_*]:border-0 max-w-none">
           <div
             dangerouslySetInnerHTML={{ __html: activeSubsection.content }}
           ></div>
