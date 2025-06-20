@@ -185,7 +185,7 @@ const TutorialCreator = () => {
         {
           id: uuidv4(),
           title: "New Subsection",
-          content: "<p>Add your content here...</p>",
+          content: "",
           usedMarkdown: false,
         },
       ],

@@ -454,7 +454,7 @@ const TutorialEditor = ({
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ codeBlock: false }),
-      Placeholder.configure({ placeholder: "Start writing your blog here..." }),
+      Placeholder.configure({ placeholder: "Start writing your content here..." }),
       Document,
       Paragraph,
       Text,
