@@ -1,5 +1,5 @@
 import React from "react";
-import TutorialCreator from "./_components/TutorialCreator";
+import TutorialCreator from "@/components/Tutorial/TutorialCreator";
 
 const page = () => {
   return (
