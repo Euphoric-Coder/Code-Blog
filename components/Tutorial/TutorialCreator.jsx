@@ -517,19 +517,19 @@ const TutorialCreator = () => {
               Creating: {tutorial.title}
             </h1>
             <div className="flex space-x-4">
-              <button
+              <Button
                 onClick={() => setCurrentStep("metadata")}
-                className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md transition-colors"
+                className="btn8 hover:bg-purple-500"
               >
                 Back to Metadata
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={saveTutorial}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors flex items-center"
+                className="btn9 flex [&_svg]:size-6"
               >
-                <Save className="h-5 w-5 mr-2" />
+                <Save className="text-white" />
                 Save Tutorial
-              </button>
+              </Button>
             </div>
           </div>
 
