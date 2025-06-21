@@ -71,7 +71,7 @@ const isDefaultLike = (data) => {
     tutorial?.coverImage === null &&
     tutorial?.imageId === null &&
     tutorial?.category === "" &&
-    tutorial?.subcategory === "" &&
+    Array.isArray(tutorial?.subcategory) &&
     Array.isArray(tutorial?.tags) &&
     tutorial.tags.length === 0;
 
@@ -83,13 +83,14 @@ const isDefaultLike = (data) => {
     defaultSection?.title === "Introduction" &&
     defaultSection?.subsections?.length === 1 &&
     defaultSection?.subsections?.[0]?.title === "Welcome" &&
-    defaultSection?.subsections?.[0]?.content ===
-      "<p>Welcome to this tutorial!</p>";
+    defaultSection?.subsections?.[0]?.content === "";
 
   // Check IDs of section and subsection match default ones
   const idsAreDefault =
     activeSectionId === defaultSection?.id &&
     activeSubsectionId === defaultSection?.subsections?.[0]?.id;
+
+  console.log(tutorialIsEmpty, sectionsAreDefault, idsAreDefault);
 
   return tutorialIsEmpty && sectionsAreDefault && idsAreDefault;
 };
@@ -388,7 +389,7 @@ const TutorialCreator = () => {
         coverImage: null,
         imageId: null,
         category: "",
-        subcategory: "",
+        subcategory: [],
         tags: [],
       },
       sections: [
@@ -399,7 +400,7 @@ const TutorialCreator = () => {
             {
               id: initialSubsectionId,
               title: "Welcome",
-              content: "<p>Welcome to this tutorial!</p>",
+              content: "",
             },
           ],
         },
