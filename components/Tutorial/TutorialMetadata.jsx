@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Upload, X, ChevronRight, PlusCircle } from "lucide-react";
-import { useUser } from "@clerk/nextjs";
 import ImageUpload from "@/components/ImageUpload";
 import { Input } from "@/components/ui/input";
 import {
