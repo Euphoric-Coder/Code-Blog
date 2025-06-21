@@ -416,11 +416,20 @@ const TutorialCreator = () => {
   };
 
   const saveTutorial = () => {
-    const fullTutorial = {
-      ...tutorial,
-      sections,
-    };
-    console.log("Saving tutorial:", fullTutorial);
+
+    // Arranging the data for DB inclusion
+    console.log(tutorial);
+    console.log(tutorial.title);
+    console.log(tutorial.subcategory);
+    console.log(tutorial.category);
+    console.log(tutorial.coverImage);
+    console.log(tutorial.imageId);
+    console.log(tutorial.description);
+    console.log(tutorial.tags);
+    console.log("Content: ", sections);
+    console.log("Author: ", user?.fullName);
+    console.log("Date: ", new Date().getDate());
+    console.log("Created By: ", user?.primaryEmailAddress?.emailAddress);
     alert("Tutorial saved successfully!");
   };
 
@@ -516,7 +525,7 @@ const TutorialCreator = () => {
             <h1 className="text-3xl font-extrabold text-blue-900 dark:text-blue-200">
               Creating: {tutorial.title}
             </h1>
-            <div className="flex space-x-4">
+            <div className="flex gap-5">
               <Button
                 onClick={() => setCurrentStep("metadata")}
                 className="btn8 hover:bg-purple-500"
