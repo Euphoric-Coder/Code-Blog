@@ -62,6 +62,7 @@ const MultiSelect = ({
       } else if (allowCustom) {
         handleOptionSelect(inputValue);
       }
+      setInputValue("");
     } else if (
       e.key === "Backspace" &&
       inputValue === "" &&
@@ -155,7 +156,7 @@ const MultiSelect = ({
       </div>
       {isOpen && !disabled && (
         <div className="mt-3 select-content max-h-60 overflow-auto">
-        {/* <div className="mt-1 max-h-60 overflow-auto rounded-md bg-white shadow-lg z-10 dark:bg-gray-800 border border-gray-200 dark:border-gray-700"> */}
+          {/* <div className="mt-1 max-h-60 overflow-auto rounded-md bg-white shadow-lg z-10 dark:bg-gray-800 border border-gray-200 dark:border-gray-700"> */}
           {filteredOptions.length > 0 ? (
             <ul className="py-2">
               {filteredOptions.map((option) => (

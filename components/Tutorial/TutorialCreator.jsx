@@ -37,7 +37,7 @@ const defaultData = {
     coverImage: null,
     imageId: null,
     category: "",
-    subcategory: "",
+    subcategory: [],
     tags: [],
   },
   sections: [
@@ -416,7 +416,6 @@ const TutorialCreator = () => {
   };
 
   const saveTutorial = () => {
-
     // Arranging the data for DB inclusion
     console.log(tutorial);
     console.log(tutorial.title);

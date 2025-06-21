@@ -13,6 +13,7 @@ import {
 import FormBackgroundEffect from "@/components/Effect/FormBackgroundEffect";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import MultiSelect from "../Form/UI/MultiSelect";
 
 const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
 
@@ -53,6 +54,20 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
     setErrors((prev) => ({ ...prev, [name]: "" })); // Clear error for this field
+  };
+
+  const handleMultiSelectChange = (field, values) => {
+    setData((prev) => ({
+      ...prev,
+      [field]: values,
+    }));
+
+    if (errors[field]) {
+      setErrors((prev) => ({
+        ...prev,
+        [field]: undefined,
+      }));
+    }
   };
 
   const addTag = () => {
@@ -111,44 +126,45 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
   ];
   const subcategories = {
     Programming: [
-      "JavaScript",
-      "Python",
-      "Java",
-      "C/C++",
-      "Ruby",
-      "PHP",
-      "Go",
-      "Rust",
+      { value: "javascript", label: "JavaScript" },
+      { value: "python", label: "Python" },
+      { value: "java", label: "Java" },
+      { value: "c-cpp", label: "C/C++" },
+      { value: "ruby", label: "Ruby" },
+      { value: "php", label: "PHP" },
+      { value: "go", label: "Go" },
+      { value: "rust", label: "Rust" },
     ],
     Design: [
-      "UI/UX",
-      "Graphic Design",
-      "Web Design",
-      "Logo Design",
-      "Illustration",
+      { value: "ui-ux", label: "UI/UX" },
+      { value: "graphic-design", label: "Graphic Design" },
+      { value: "web-design", label: "Web Design" },
+      { value: "logo-design", label: "Logo Design" },
+      { value: "illustration", label: "Illustration" },
     ],
     Marketing: [
-      "Digital Marketing",
-      "Content Marketing",
-      "SEO",
-      "Social Media",
-      "Email Marketing",
+      { value: "digital-marketing", label: "Digital Marketing" },
+      { value: "content-marketing", label: "Content Marketing" },
+      { value: "seo", label: "SEO" },
+      { value: "social-media", label: "Social Media" },
+      { value: "email-marketing", label: "Email Marketing" },
     ],
     Business: [
-      "Entrepreneurship",
-      "Management",
-      "Finance",
-      "Sales",
-      "Strategy",
+      { value: "entrepreneurship", label: "Entrepreneurship" },
+      { value: "management", label: "Management" },
+      { value: "finance", label: "Finance" },
+      { value: "sales", label: "Sales" },
+      { value: "strategy", label: "Strategy" },
     ],
     "Personal Development": [
-      "Productivity",
-      "Leadership",
-      "Communication",
-      "Mindfulness",
-      "Creativity",
+      { value: "productivity", label: "Productivity" },
+      { value: "leadership", label: "Leadership" },
+      { value: "communication", label: "Communication" },
+      { value: "mindfulness", label: "Mindfulness" },
+      { value: "creativity", label: "Creativity" },
     ],
   };
+  
 
   return (
     <div className="form-layout">
@@ -251,7 +267,20 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                     </label>
                     <span className="text-red-500">&nbsp;*</span>
 
-                    <Select
+                    <MultiSelect
+                      id="subcategory"
+                      label="Sub-Categories"
+                      selectedOptions={data.subcategory}
+                      onChange={(values) =>
+                        handleMultiSelectChange("subcategory", values)
+                      }
+                      options={subcategories["Programming"]}
+                      error={errors.subcategory}
+                      required
+                      placeholder="Add the Sub-Categories"
+                      allowCustom
+                    />
+                    {/* <Select
                       value={data.subcategory}
                       onValueChange={(val) => {
                         setData({ ...data, subcategory: val });
@@ -287,7 +316,7 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                           </SelectItem>
                         ))}
                       </SelectContent>
-                    </Select>
+                    </Select> */}
                   </div>
                 )}
 
