@@ -15,7 +15,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
 const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
-  const { user } = useUser();
 
   // Initialize metadata from initialData
   useEffect(() => {
