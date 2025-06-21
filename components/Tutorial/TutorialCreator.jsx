@@ -401,6 +401,7 @@ const TutorialCreator = () => {
               id: initialSubsectionId,
               title: "Welcome",
               content: "",
+              usedMarkdown: false,
             },
           ],
         },
@@ -408,6 +409,7 @@ const TutorialCreator = () => {
       activeSectionId: initialSectionId,
       activeSubsectionId: initialSubsectionId,
     };
+    
     setTutorial(defaultData.tutorial);
     setSections(defaultData.sections);
     setActiveSectionId(initialSectionId);
