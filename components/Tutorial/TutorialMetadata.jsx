@@ -15,7 +15,6 @@ import { Button } from "@/components/ui/button";
 import MultiSelect from "../Form/UI/MultiSelect";
 
 const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
-
   // Initialize metadata from initialData
   useEffect(() => {
     setData(initialData);
@@ -163,7 +162,6 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
       { value: "creativity", label: "Creativity" },
     ],
   };
-  
 
   return (
     <div className="form-layout">
@@ -261,11 +259,6 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
 
                 {data.category && (
                   <div>
-                    <label htmlFor="subcategory" className="text">
-                      Subcategory
-                    </label>
-                    <span className="text-red-500">&nbsp;*</span>
-
                     <MultiSelect
                       id="subcategory"
                       label="Sub-Categories"

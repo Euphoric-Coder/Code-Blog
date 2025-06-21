@@ -94,7 +94,7 @@ const MultiSelect = ({
     <div className={`mb-4 ${className}`} ref={containerRef}>
       <label
         htmlFor={id}
-        className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-200"
+        className="text"
       >
         {label}
         {required && <span className="text-red-500 ml-1">*</span>}
