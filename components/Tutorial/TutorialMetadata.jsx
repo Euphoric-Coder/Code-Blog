@@ -88,7 +88,8 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
     if (!data.title) newErrors.title = "Title is required";
     if (!data.description) newErrors.description = "Description is required";
     if (!data.category) newErrors.category = "Category is required";
-    if (!data.subcategory) newErrors.subcategory = "Subcategory is required";
+    if (data.subcategory.length === 0)
+      newErrors.subcategory = "Subcategory is required";
 
     console.log(newErrors.category);
     console.log(newErrors.subcategory);
