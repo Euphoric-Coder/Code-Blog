@@ -564,7 +564,7 @@ class Program
   };
 
   const runCode = async () => {
-    const currentCode = editorRef.current?.getValue(); // <-- Get latest from editor directly
+    const currentCode = editorRef.current?.getValue(); // Gets latest from editor directly
     setIsRunning(true);
     setOutput("Running code...\n");
 
