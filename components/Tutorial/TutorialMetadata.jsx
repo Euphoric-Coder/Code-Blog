@@ -189,7 +189,7 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                     name="title"
                     value={data.title}
                     onChange={handleChange}
-                    className={`w-full px-4 py-2 ${
+                    className={`mt-1 w-full px-4 py-2 ${
                       errors.title
                         ? "input-error-field focus-visible:ring-red-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-red-400 focus-visible:ring-[4px]"
                         : "input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
@@ -209,7 +209,7 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                     value={data.description}
                     onChange={handleChange}
                     rows={4}
-                    className={`w-full px-4 py-2 ${
+                    className={`mt-1 w-full px-4 py-2 ${
                       errors.description
                         ? "input-error-field focus-visible:ring-red-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-red-400 focus-visible:ring-[4px]"
                         : "input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
@@ -234,7 +234,7 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                     <SelectTrigger
                       id="category"
                       className={`
-                        w-full rounded-lg px-3 py-2 border transition-colors
+                        mt-1 w-full rounded-lg px-3 py-2 border transition-colors
                         ${
                           errors.category
                             ? "input-error-field focus-visible:ring-red-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-red-400 focus-visible:ring-[4px]"
@@ -321,7 +321,7 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                       type="text"
                       value={tag}
                       onChange={(e) => setTag(e.target.value)}
-                      className="flex-1 px-4 py-2 input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
+                      className="mt-1 flex-1 px-4 py-2 input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
                       placeholder="Add a tag"
                       onKeyDown={(e) => {
                         if (e.key === "Enter") {

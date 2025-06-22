@@ -101,7 +101,7 @@ const MultiSelect = ({
       </label>
       <div
         className={`
-          flex flex-wrap gap-2 p-2 border rounded-3xl min-h-[42px] focus-within:ring-2 transition-colors
+          mt-1 flex flex-wrap gap-2 p-2 border rounded-3xl min-h-[42px] focus-within:ring-2 transition-colors
           ${
             error
               ? "border-red-300 focus-within:border-red-500 focus-within:ring-red-200 dark:focus-within:ring-red-700/30"
