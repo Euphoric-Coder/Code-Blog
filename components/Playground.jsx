@@ -471,63 +471,6 @@ numbers.each_with_index do |num, index|
 end`
     },
     {
-      id: 'swift',
-      name: 'Swift',
-      version: '5.3.3',
-      extension: 'swift',
-      monacoLanguage: 'swift',
-      defaultCode: `// Swift Playground
-import Foundation
-
-print("Swift Code Execution")
-
-// Array operations
-let numbers = [1, 2, 3, 4, 5]
-print("Original numbers: " + String(describing: numbers))
-
-// Calculate squares
-let squares = numbers.map { $0 * $0 }
-print("Squared numbers: " + String(describing: squares))
-
-// String operations
-let message = "Hello, Swift World!"
-print("Message: " + message)
-print("Length: " + String(message.count))
-print("Uppercase: " + message.uppercased())
-
-// Mathematical operations
-print("Pi: " + String(format: "%.2f", Double.pi))
-print("Square root of 16: " + String(sqrt(16.0)))
-
-// Sum calculation
-let sum = numbers.reduce(0, +)
-print("Sum of numbers: " + String(sum))
-
-// Dictionary example
-let wordCount = [
-    "Swift": 1,
-    "Programming": 2,
-    "Code": 3
-]
-print("Word count: " + String(describing: wordCount))
-
-// Current time
-let formatter = DateFormatter()
-formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-let currentTime = formatter.string(from: Date())
-print("Current time: " + currentTime)
-
-// Filter even numbers
-let evenNumbers = numbers.filter { $0 % 2 == 0 }
-print("Even numbers: " + String(describing: evenNumbers))
-
-// Higher-order functions
-print("Number analysis:")
-numbers.enumerated().forEach { index, num in
-    print("  Index " + String(index) + ": " + String(num) + " is " + (num % 2 == 0 ? "even" : "odd"))
-}`
-    },
-    {
       id: 'csharp',
       name: 'C#',
       version: '.NET 6.0',
