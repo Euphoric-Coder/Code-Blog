@@ -564,6 +564,7 @@ class Program
   };
 
   const runCode = async () => {
+    const currentCode = editorRef.current?.getValue(); // <-- Get latest from editor directly
     setIsRunning(true);
     setOutput("Running code...\n");
 
@@ -579,7 +580,7 @@ class Program
           files: [
             {
               name: `main.${getCurrentLanguage().extension}`,
-              content: code,
+              content: currentCode || code, // fallback to state value
             },
           ],
           stdin: input,
@@ -611,6 +612,7 @@ class Program
       setIsRunning(false);
     }
   };
+  
 
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
