@@ -660,7 +660,7 @@ class Program
           <div className="space-y-4">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold">
               <span className="block text-gray-900 dark:text-white">Code</span>
-              <span className="block bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r p-2 from-indigo-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
                 Playground
               </span>
             </h1>
