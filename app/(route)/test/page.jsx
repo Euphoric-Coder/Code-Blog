@@ -1,12 +1,12 @@
-import React from 'react'
-import TutorialCreator from './_components/TutorialCreator'
+import { PlaygroundPage } from "@/components/Playground";
+import React from "react";
 
 const page = () => {
   return (
     <div>
-        <TutorialCreator />
+      <PlaygroundPage />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;
