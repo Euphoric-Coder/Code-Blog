@@ -185,6 +185,15 @@
   @apply w-full border-[2px] border-red-300 dark:border-red-700 rounded-3xl shadow-lg bg-gradient-to-br from-red-50 to-red-100 dark:from-gray-800 dark:to-gray-700 text-gray-800 dark:text-gray-200 transition-all duration-500 ring-2 ring-red-400 dark:ring-red-500;
 }
 
+.multiinput-error-field {
+  @apply w-full border-[2px] border-red-300 dark:border-red-700 rounded-3xl shadow-lg bg-gradient-to-br from-red-50 to-red-100 dark:from-gray-800 dark:to-gray-700 text-gray-800 dark:text-gray-200 transition-all duration-500 ring-2 ring-red-400 dark:ring-red-500;
+}
+
+.multiinput-error-field:focus-within {
+  @apply ring-[4px] ring-red-500;
+}
+
+
 .select-field {
   @apply w-full border-[2px] border-sky-300 dark:border-blue-900 rounded-xl shadow-lg p-2 bg-gradient-to-br from-cyan-50 via-blue-100 to-indigo-100 dark:from-gray-900 dark:to-gray-950 text-gray-800 dark:text-gray-100 transition-transform transform hover:scale-105 duration-200
 }

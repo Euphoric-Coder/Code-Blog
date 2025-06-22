@@ -115,7 +115,7 @@ const MultiSelect = ({
          mt-1 w-full relative
           ${
             error
-              ? "input-error-field focus-visible:ring-red-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-red-400 focus-visible:ring-[4px]"
+              ? "multiinput-error-field"
               : "input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
           }
           ${
