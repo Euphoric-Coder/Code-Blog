@@ -13,6 +13,8 @@ import FormBackgroundEffect from "@/components/Effect/FormBackgroundEffect";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import MultiSelect from "../Form/UI/MultiSelect";
+import { Badge } from "../ui/badge";
+import { toast } from "sonner";
 
 const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
   // Initialize metadata from initialData
@@ -72,6 +74,8 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
     if (tag && !data.tags.includes(tag)) {
       setData({ ...data, tags: [...data.tags, tag] });
       setTag("");
+    } else {
+      toast.error("Please Avoid Using Duplicate Value!")
     }
   };
 
@@ -338,19 +342,19 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
 
                   <div className="flex flex-wrap gap-2 mt-2">
                     {data.tags.map((t) => (
-                      <span
+                      <Badge
                         key={t}
-                        className="inline-flex items-center bg-blue-100 text-blue-800 px-2 py-1 rounded-md text-sm"
+                        className="inline-flex items-center gap-1 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 px-2 py-1 rounded-3xl text-sm dark:bg-indigo-900 hover:dark:bg-indigo-700 dark:text-indigo-100 cursor-pointer"
                       >
                         {t}
                         <button
                           type="button"
                           onClick={() => removeTag(t)}
-                          className="ml-1 text-blue-600 hover:text-blue-800 transition-colors"
+                          className="text-indigo-500 hover:text-red-600 focus:outline-none dark:text-indigo-300 dark:hover:text-red-600"
                         >
                           <X className="h-3 w-3" />
                         </button>
-                      </span>
+                      </Badge>
                     ))}
                   </div>
                 </div>
