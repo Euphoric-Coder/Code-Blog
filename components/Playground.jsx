@@ -11,7 +11,7 @@ export const PlaygroundPage = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [isEditorReady, setIsEditorReady] = useState(false);
   const [theme, setTheme] = useState('vs-dark');
-  const editorRef = useRef<any>(null);
+  const editorRef = useRef(null);
 
   const languages = [
     {
@@ -858,7 +858,7 @@ class Program
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {languages.map((language) => (
               <button
                 key={language.id}

@@ -1,3 +1,5 @@
+"use client";
+
 import { PlaygroundPage } from "@/components/Playground";
 import React from "react";
 
