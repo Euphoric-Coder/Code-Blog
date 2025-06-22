@@ -116,7 +116,7 @@ const MultiSelect = ({
           ${
             error
               ? "multiinput-error-field"
-              : "input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
+              : "input-field focus-within:ring-blue-500 dark:focus-within:ring-offset-gray-800 dark:focus-within:ring-blue-400 focus-within:ring-[4px]"
           }
           ${
             disabled
