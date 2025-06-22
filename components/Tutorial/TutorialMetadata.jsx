@@ -75,7 +75,7 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
       setData({ ...data, tags: [...data.tags, tag] });
       setTag("");
     } else {
-      toast.error("Please Avoid Using Duplicate Value!")
+      toast.error("Please Avoid Using Duplicate Value!");
     }
   };
 
@@ -97,7 +97,6 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
 
     console.log(newErrors.category);
     console.log(newErrors.subcategory);
-    
 
     // You can also check if an image was uploaded
     // if (!uploadData) newErrors.coverImage = "Cover image is required";
@@ -334,7 +333,13 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                         }
                       }}
                     />
-                    <Button onClick={addTag} className="btn4 [&_svg]:size-6">
+                    <Button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        addTag();
+                      }}
+                      className="btn4 [&_svg]:size-6"
+                    >
                       <PlusCircle />
                       Add
                     </Button>
