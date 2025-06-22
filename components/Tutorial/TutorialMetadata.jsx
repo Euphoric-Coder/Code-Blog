@@ -277,43 +277,6 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                       placeholder="Add the Sub-Categories"
                       allowCustom
                     />
-                    {/* <Select
-                      value={data.subcategory}
-                      onValueChange={(val) => {
-                        setData({ ...data, subcategory: val });
-                        setErrors((prev) => ({
-                          ...prev,
-                          subcategory: null, // clear error
-                        }));
-                      }}
-                      required
-                    >
-                      <SelectTrigger
-                        id="subcategory"
-                        className={`
-                          w-full rounded-lg px-3 py-2 border transition-colors
-                          ${
-                            errors.subcategory
-                              ? "input-error-field focus-visible:ring-red-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-red-400 focus-visible:ring-[4px]"
-                              : "input-field focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-[3px]"
-                          }
-                        `}
-                      >
-                        <SelectValue placeholder="Select a subcategory" />
-                      </SelectTrigger>
-
-                      <SelectContent className="select-content mt-2">
-                        {subcategories[data.category]?.map((subcategory) => (
-                          <SelectItem
-                            key={subcategory}
-                            value={subcategory}
-                            className="select-item"
-                          >
-                            {subcategory}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select> */}
                   </div>
                 )}
 

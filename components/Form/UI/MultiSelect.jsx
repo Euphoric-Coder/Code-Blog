@@ -5,6 +5,7 @@ import { X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const MultiSelect = ({
   id,
@@ -111,18 +112,18 @@ const MultiSelect = ({
       </label>
       <div
         className={`
-    mt-1 relative flex items-start border-[2px] rounded-3xl min-h-[42px] focus-within:ring-2 transition-colors
-    ${
-      error
-        ? "border-red-300 focus-within:border-red-500 focus-within:ring-red-200 dark:focus-within:ring-red-700/30"
-        : "input-field"
-    }
-    ${
-      disabled
-        ? "bg-gray-100 cursor-not-allowed dark:bg-gray-800"
-        : "bg-white dark:bg-gray-800"
-    }
-  `}
+         mt-1 w-full relative
+          ${
+            error
+              ? "input-error-field focus-visible:ring-red-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-red-400 focus-visible:ring-[4px]"
+              : "input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
+          }
+          ${
+            disabled
+              ? "bg-gray-100 cursor-not-allowed dark:bg-gray-800"
+              : "bg-white dark:bg-gray-800"
+          }
+        `}
         onClick={() => inputRef.current?.focus()}
       >
         {/* Left: Wrapping content */}
