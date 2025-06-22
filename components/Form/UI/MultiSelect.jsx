@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 const MultiSelect = ({
   id,
@@ -48,6 +49,11 @@ const MultiSelect = ({
 
   const handleRemoveOption = (valueToRemove) => {
     onChange(selectedOptions.filter((value) => value !== valueToRemove));
+  };
+
+  const handleClearAll = () => {
+    onChange([]);
+    setInputValue("");
   };
 
   const handleKeyDown = (e) => {
@@ -105,59 +111,79 @@ const MultiSelect = ({
       </label>
       <div
         className={`
-          mt-1 flex flex-wrap gap-2 p-2 border rounded-3xl min-h-[42px] focus-within:ring-2 transition-colors
-          ${
-            error
-              ? "border-red-300 focus-within:border-red-500 focus-within:ring-red-200 dark:focus-within:ring-red-700/30"
-              : // : "border-gray-300 focus-within:border-indigo-500 focus-within:ring-indigo-200 dark:border-gray-600 dark:focus-within:border-indigo-400 dark:focus-within:ring-indigo-700/30"
-                "input-field"
-          }
-          ${
-            disabled
-              ? "bg-gray-100 cursor-not-allowed dark:bg-gray-800"
-              : "bg-white dark:bg-gray-800"
-          }
-        `}
+    mt-1 relative flex items-start border-[2px] rounded-3xl min-h-[42px] focus-within:ring-2 transition-colors
+    ${
+      error
+        ? "border-red-300 focus-within:border-red-500 focus-within:ring-red-200 dark:focus-within:ring-red-700/30"
+        : "input-field"
+    }
+    ${
+      disabled
+        ? "bg-gray-100 cursor-not-allowed dark:bg-gray-800"
+        : "bg-white dark:bg-gray-800"
+    }
+  `}
         onClick={() => inputRef.current?.focus()}
       >
-        {selectedOptions.map((value) => {
-          const option = options.find((o) => o.value === value);
-          const label = option ? option.label : value;
+        {/* Left: Wrapping content */}
+        <div className="flex flex-wrap gap-2 flex-grow p-2 pr-20">
+          {" "}
+          {/* reserve space for button */}
+          {selectedOptions.map((value) => {
+            const option = options.find((o) => o.value === value);
+            const label = option ? option.label : value;
 
-          return (
-            <Badge
-              key={value}
-              className="flex items-center gap-1 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 px-2 py-1 rounded-3xl text-sm dark:bg-indigo-900 hover:dark:bg-indigo-700 dark:text-indigo-100 cursor-pointer"
-            >
-              <span>{label}</span>
-              {!disabled && (
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleRemoveOption(value);
-                  }}
-                  className="text-indigo-500 hover:text-red-600 focus:outline-none dark:text-indigo-300 dark:hover:text-red-600"
-                >
-                  <X size={14} />
-                </button>
-              )}
-            </Badge>
-          );
-        })}
-        <input
-          ref={inputRef}
-          id={id}
-          type="text"
-          className="flex-grow bg-transparent border-none outline-none p-1 text-gray-700 dark:text-white"
-          value={inputValue}
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-          onFocus={() => setIsOpen(true)}
-          placeholder={selectedOptions.length === 0 ? placeholder : ""}
-          disabled={disabled}
-        />
+            return (
+              <Badge
+                key={value}
+                className="flex items-center gap-1 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 px-2 py-1 rounded-3xl text-sm dark:bg-indigo-900 hover:dark:bg-indigo-700 dark:text-indigo-100 cursor-pointer"
+              >
+                <span>{label}</span>
+                {!disabled && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemoveOption(value);
+                    }}
+                    className="text-indigo-500 hover:text-red-600 focus:outline-none dark:text-indigo-300 dark:hover:text-red-600"
+                  >
+                    <X size={14} />
+                  </button>
+                )}
+              </Badge>
+            );
+          })}
+          <input
+            ref={inputRef}
+            id={id}
+            type="text"
+            className="flex-grow bg-transparent border-none outline-none p-1 text-gray-700 dark:text-white min-w-[150px]"
+            value={inputValue}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            onFocus={() => setIsOpen(true)}
+            placeholder={selectedOptions.length === 0 ? placeholder : ""}
+            disabled={disabled}
+          />
+        </div>
+
+        {/* Right: Fixed Clear Button */}
+        {selectedOptions.length > 0 && !disabled && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClearAll();
+            }}
+            className="absolute right-3 top-1/2 -translate-y-1/2 del3"
+            title="Clear all"
+          >
+            Clear
+          </button>
+        )}
       </div>
+
       {isOpen && !disabled && (
         <div className="mt-3 select-content max-h-60 overflow-auto">
           {/* <div className="mt-1 max-h-60 overflow-auto rounded-md bg-white shadow-lg z-10 dark:bg-gray-800 border border-gray-200 dark:border-gray-700"> */}
