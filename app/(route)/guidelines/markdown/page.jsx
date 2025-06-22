@@ -47,7 +47,7 @@ const page = () => {
             <div className="text-gray-700 leading-relaxed space-y-4">
               <p>
                 The Markdown Upload feature is your gateway to creating
-                professional content effortlessly. Whether you're publishing
+                professional content effortlessly. Whether you&apos;re publishing
                 blog posts, detailed tutorials, or comprehensive technical
                 documentation, this tool transforms your Markdown-formatted text
                 into beautifully rendered content.
