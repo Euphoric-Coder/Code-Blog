@@ -93,6 +93,7 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
 
     console.log(newErrors.category);
     console.log(newErrors.subcategory);
+    
 
     // You can also check if an image was uploaded
     // if (!uploadData) newErrors.coverImage = "Cover image is required";
