@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
 
 const MultiSelect = ({
   id,
@@ -51,16 +52,22 @@ const MultiSelect = ({
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && inputValue.trim() !== "") {
+      console.log("Pressed the enter button");
       e.preventDefault();
       const existing = options.find(
         (option) => option.label.toLowerCase() === inputValue.toLowerCase()
       );
       if (existing) {
         if (!selectedOptions.includes(existing.value)) {
+          console.log("Don't exist the same value");
           handleOptionSelect(existing.value);
         }
       } else if (allowCustom) {
-        handleOptionSelect(inputValue);
+        if (!selectedOptions.includes(inputValue.trim())) {
+          handleOptionSelect(inputValue.trim());
+        } else {
+          toast.error("Please Avoid Entering Duplicate Value");
+        }
       }
       setInputValue("");
     } else if (
@@ -92,10 +99,7 @@ const MultiSelect = ({
 
   return (
     <div className={`mb-4 ${className}`} ref={containerRef}>
-      <label
-        htmlFor={id}
-        className="text"
-      >
+      <label htmlFor={id} className="text">
         {label}
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>
