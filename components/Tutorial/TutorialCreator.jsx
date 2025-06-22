@@ -90,8 +90,6 @@ const isDefaultLike = (data) => {
     activeSectionId === defaultSection?.id &&
     activeSubsectionId === defaultSection?.subsections?.[0]?.id;
 
-  console.log(tutorialIsEmpty, sectionsAreDefault, idsAreDefault);
-
   return tutorialIsEmpty && sectionsAreDefault && idsAreDefault;
 };
 
