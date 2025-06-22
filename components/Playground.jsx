@@ -528,68 +528,6 @@ numbers.enumerated().forEach { index, num in
 }`
     },
     {
-      id: 'kotlin',
-      name: 'Kotlin',
-      version: '1.8.20',
-      extension: 'kt',
-      monacoLanguage: 'kotlin',
-      defaultCode: `// Kotlin Playground
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-
-fun main() {
-    println("Kotlin Code Execution")
-    
-    // List operations
-    val numbers = listOf(1, 2, 3, 4, 5)
-    println("Original numbers: $numbers")
-    
-    // Calculate squares
-    val squares = numbers.map { it * it }
-    println("Squared numbers: $squares")
-    
-    // String operations
-    val message = "Hello, Kotlin World!"
-    println("Message: $message")
-    println("Length: " + message.length)
-    println("Uppercase: " + message.uppercase())
-    
-    // Mathematical operations
-    println("Pi: " + "%.2f".format(kotlin.math.PI))
-    println("Square root of 16: " + kotlin.math.sqrt(16.0))
-    
-    // Sum calculation
-    val sum = numbers.sum()
-    println("Sum of numbers: $sum")
-    
-    // Map example
-    val wordCount = mapOf(
-        "Kotlin" to 1,
-        "Programming" to 2,
-        "Code" to 3
-    )
-    println("Word count: $wordCount")
-    
-    // Current time
-    val now = LocalDateTime.now()
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-    println("Current time: " + now.format(formatter))
-    
-    // Filter even numbers
-    val evenNumbers = numbers.filter { it % 2 == 0 }
-    println("Even numbers: $evenNumbers")
-    
-    // When expression
-    numbers.forEach { num ->
-        val type = when {
-            num % 2 == 0 -> "even"
-            else -> "odd"
-        }
-        println("$num is $type")
-    }
-}`
-    },
-    {
       id: 'csharp',
       name: 'C#',
       version: '.NET 6.0',
