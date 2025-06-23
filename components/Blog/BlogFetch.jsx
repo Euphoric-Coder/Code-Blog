@@ -19,8 +19,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { ArrowRight, Bookmark, CalendarIcon, Clock, Eye, Filter, Grid, Heart, List, Search, Share2, TrendingUp, User } from "lucide-react";
+import { ArrowRight, Bookmark, Calendar, CalendarIcon, Clock, Eye, Filter, Grid, Heart, List, Search, Share2, TrendingUp, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { blogCategories, blogSubCategoriesList } from "@/lib/data";
 import { Badge } from "../ui/badge";
