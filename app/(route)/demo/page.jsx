@@ -1,7 +1,14 @@
+"use client";
+
 import React from "react";
+import { BlogPage } from "./_components/BlogPage";
 
 const page = () => {
-  return <div className="pt-20">page</div>;
+  return (
+    <div className="mt-20">
+      <BlogPage />
+    </div>
+  );
 };
 
 export default page;
