@@ -57,10 +57,12 @@ import {
   Copy,
   PenBox,
   PencilIcon,
+  PlusCircle,
   Send,
   Trash,
   Trash2,
   TrashIcon,
+  X,
   XCircle,
 } from "lucide-react";
 import { Label } from "@/components/ui/label";
@@ -72,7 +74,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Menu, MenuButton, MenuItem, MenuItems, MenuList } from "@headlessui/react";
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  MenuList,
+} from "@headlessui/react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { blogCategories, blogSubCategoriesList } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
@@ -384,6 +392,9 @@ export default function BlogEditor({
   const selectedCount = selectedSubCategories
     ? selectedSubCategories.length
     : 0;
+
+  const [tags, setTags] = useState([]);
+  const [tag, setTag] = useState("");
   const { user } = useUser();
 
   // Generate a unique key for current blog's pending content
@@ -410,6 +421,7 @@ export default function BlogEditor({
       );
       setCategory(storedBlogData.category || blogCategories[0]);
       setSelectedSubCategories(storedBlogData.subcategories || "");
+      setTags(storedBlogData.tags || []);
       // console.log(
       //   "Unfinished blog data found in local storage:",
       //   storedBlogData
@@ -646,6 +658,7 @@ export default function BlogEditor({
       content: field === "content" ? value : content,
       category: field === "category" ? value : category,
       subcategories: field === "subcategories" ? value : selectedSubCategories,
+      tags: field === "tags" ? value : tags,
     };
 
     console.log("Updated blog data:", updatedBlogData);
@@ -685,6 +698,21 @@ export default function BlogEditor({
     setFileId(null);
     setUnfinishedBlog(false);
     editor.commands.clearContent();
+  };
+
+  const addTag = () => {
+    if (tag && !tags.includes(tag)) {
+      setTags([...tags, tag]);
+      handleInputChange("tags", [...tags, tag]);
+      setTag("");
+    } else {
+      toast.error("Please Avoid Using Duplicate Value!");
+    }
+  };
+
+  const removeTag = (tagToRemove) => {
+    setTags((prev) => prev.filter((t) => t !== tagToRemove));
+    handleInputChange("tags", (prev) => prev.filter((t) => t !== tagToRemove));
   };
 
   return (
@@ -856,7 +884,7 @@ export default function BlogEditor({
           htmlFor="blog-category"
           className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
         >
-          Blog Title
+          Blog Category
         </Label>
         <Select
           value={category.toLowerCase()}
@@ -939,7 +967,6 @@ export default function BlogEditor({
                   ? selectedSubCategories.includes(subCategory)
                   : selectedSubCategories?.split(", ").includes(subCategory);
 
-
                 return (
                   <Badge
                     key={subCategory}
@@ -979,7 +1006,64 @@ export default function BlogEditor({
         )}
       </div>
 
-      <div className="space-y-5">
+      <div>
+        <label htmlFor="tag-input" className="text">
+          Tags
+        </label>
+
+        {/* Input container with badges inside */}
+        <div
+          className="mt-1 w-full relative flex items-start border rounded-3xl min-h-[42px] input-field focus-within:ring-blue-500 dark:focus-within:ring-offset-gray-800 dark:focus-within:ring-blue-400 focus-within:ring-[4px]"
+          onClick={() => document.getElementById("tag-input")?.focus()}
+        >
+          {/* Badges inside input field */}
+          <div className="flex flex-wrap gap-2 flex-grow p-2 pr-20">
+            {tags.map((t) => (
+              <Badge
+                key={t}
+                className="inline-flex items-center gap-1 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 px-2 py-1 rounded-3xl text-sm dark:bg-indigo-900 hover:dark:bg-indigo-700 dark:text-indigo-100 cursor-pointer"
+              >
+                {t}
+                <button
+                  type="button"
+                  onClick={() => removeTag(t)}
+                  className="text-indigo-500 hover:text-red-600 focus:outline-none dark:text-indigo-300 dark:hover:text-red-600"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </Badge>
+            ))}
+
+            {/* Input field */}
+            <input
+              id="tag-input"
+              type="text"
+              value={tag}
+              onChange={(e) => setTag(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  addTag();
+                }
+              }}
+              placeholder={tags.length === 0 ? "Add a tag" : ""}
+              className="flex-grow bg-transparent border-none outline-none p-1 text-gray-700 dark:text-white min-w-[120px]"
+            />
+          </div>
+
+          {/* Right: Clear Button */}
+          {tags.length > 0 && (
+            <Button
+              onClick={() => setTags([])}
+              className="absolute right-3 top-1/2 -translate-y-1/2 del3"
+            >
+              Clear
+            </Button>
+          )}
+        </div>
+      </div>
+
+      <div className="mt-5 space-y-5">
         <Label className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105">
           Blog Editor
         </Label>
