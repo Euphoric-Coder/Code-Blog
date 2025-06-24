@@ -65,7 +65,7 @@ const Blogs = [
     author: "Sagnik Dey",
     publishDate: "2024-04-17",
     readTime: "8 min read",
-    image:
+    blogImage:
       "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=800",
     views: 12500,
     likes: 890,
@@ -90,7 +90,7 @@ const Blogs = [
     author: "Sagnik Dey",
     publishDate: "2024-04-17",
     readTime: "12 min read",
-    image:
+    blogImage:
       "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800",
     views: 18900,
     likes: 1250,
@@ -109,7 +109,7 @@ const Blogs = [
     author: "Sarah Johnson",
     publishDate: "2024-04-15",
     readTime: "15 min read",
-    image:
+    blogImage:
       "https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&cs=tinysrgb&w=800",
     views: 9800,
     likes: 720,
@@ -133,7 +133,7 @@ const Blogs = [
     author: "Mike Chen",
     publishDate: "2024-04-14",
     readTime: "20 min read",
-    image:
+    blogImage:
       "https://images.pexels.com/photos/577585/pexels-photo-577585.jpeg?auto=compress&cs=tinysrgb&w=800",
     views: 7600,
     likes: 540,
@@ -158,7 +158,7 @@ const Blogs = [
     author: "Dr. Emily Watson",
     publishDate: "2024-04-12",
     readTime: "18 min read",
-    image:
+    blogImage:
       "https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=800",
     views: 11200,
     likes: 890,
@@ -177,7 +177,7 @@ const Blogs = [
     author: "Alex Rodriguez",
     publishDate: "2024-04-10",
     readTime: "14 min read",
-    image:
+    blogImage:
       "https://images.pexels.com/photos/943096/pexels-photo-943096.jpeg?auto=compress&cs=tinysrgb&w=800",
     views: 8900,
     likes: 650,
@@ -199,7 +199,7 @@ const BlogCard = ({ blog, isListView = false }) => {
           {/* Image */}
           <div className="relative lg:w-80 h-48 lg:h-auto overflow-hidden">
             <img
-              src={blog.image}
+              src={blog.blogImage}
               alt={blog.title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
@@ -309,7 +309,7 @@ const BlogCard = ({ blog, isListView = false }) => {
       {/* Image */}
       <div className="relative h-48 overflow-hidden">
         <img
-          src={blog.image}
+          src={blog.blogImage}
           alt={blog.title}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />

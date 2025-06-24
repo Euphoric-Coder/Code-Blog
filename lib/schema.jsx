@@ -24,10 +24,12 @@ export const Blogs = pgTable("blogs", {
   blogImageId: varchar("blogImageId"),
   content: varchar("content").notNull(),
   categories: varchar("categories").notNull().default("Programming"),
-  subCategories: varchar("subCategories"),
+  subCategories: jsonb("subCategories"),
+  tags: jsonb("tags"),
   author: varchar("author").notNull(),
   date: varchar("date").notNull(),
   featured: boolean("featured").notNull().default(false),
+  trending: boolean("trending").notNull().default(false),
   createdBy: varchar("createdBy").notNull(),
 });
 
