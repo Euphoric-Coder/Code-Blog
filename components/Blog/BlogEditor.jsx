@@ -362,7 +362,8 @@ export default function BlogEditor({
   initialTitle = "",
   initialDescription = "",
   initialCategory = "",
-  initialSubCategories = "",
+  initialSubCategories = [],
+  initialTags = [],
   initialContent = "",
   initialCoverImageURL = null,
   initialfileId = null,
@@ -387,13 +388,13 @@ export default function BlogEditor({
     editing ? initialCategory : blogCategories[0]
   );
   const [selectedSubCategories, setSelectedSubCategories] = useState(
-    editing ? initialSubCategories : ""
+    editing ? initialSubCategories : []
   );
   const selectedCount = selectedSubCategories
     ? selectedSubCategories.length
     : 0;
 
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState(editing ? initialTags : []);
   const [tag, setTag] = useState("");
   const { user } = useUser();
 
@@ -420,7 +421,7 @@ export default function BlogEditor({
         storedBlogData.content === "<p></p>" ? "" : storedBlogData.content || ""
       );
       setCategory(storedBlogData.category || blogCategories[0]);
-      setSelectedSubCategories(storedBlogData.subcategories || "");
+      setSelectedSubCategories(storedBlogData.subcategories || []);
       setTags(storedBlogData.tags || []);
       // console.log(
       //   "Unfinished blog data found in local storage:",
@@ -890,9 +891,9 @@ export default function BlogEditor({
           value={category.toLowerCase()}
           onValueChange={(e) => {
             setCategory(e);
-            setSelectedSubCategories("");
+            setSelectedSubCategories([]);
             handleInputChange("category", e); // <- Add this
-            handleInputChange("subcategories", ""); // Reset subcategories too
+            handleInputChange("subcategories", []); // Reset subcategories too
           }}
         >
           <SelectTrigger
@@ -949,8 +950,8 @@ export default function BlogEditor({
                   <Button
                     variant="outline"
                     onClick={() => {
-                      setSelectedSubCategories("");
-                      handleInputChange("subcategories", ""); // <- Clear in localStorage too
+                      setSelectedSubCategories([]);
+                      handleInputChange("subcategories", []); // <- Clear in localStorage too
                     }}
                     className="text-sm rounded-full text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-500 dark:border-gray-300"
                     size="sm"
