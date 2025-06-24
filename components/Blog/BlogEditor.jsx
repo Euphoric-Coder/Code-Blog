@@ -895,7 +895,10 @@ export default function BlogEditor({
             handleInputChange("subcategories", ""); // Reset subcategories too
           }}
         >
-          <SelectTrigger id="blog-category" className="blog-select-field">
+          <SelectTrigger
+            id="blog-category"
+            className="blog-select-field ring-0 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+          >
             <SelectValue />
           </SelectTrigger>
           <SelectContent className="blog-select-content mt-2">
