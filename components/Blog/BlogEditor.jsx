@@ -536,35 +536,36 @@ export default function BlogEditor({
       author: user?.fullName,
       categories: category,
       subCategories: selectedSubCategories,
+      tags: tags,
       date: new Date().toISOString(),
       createdBy: user?.primaryEmailAddress.emailAddress,
     });
 
-    const addBlog = await db
-      .insert(Blogs)
-      .values({
-        id: `${slug}--${uuid()}`,
-        title: title,
-        blogImage: uploadData?.url,
-        mdFormat: markdown,
-        content: content,
-        author: user?.fullName,
-        categories: category,
-        subCategories: selectedSubCategories,
-        date: getISTDate(),
-        createdBy: user?.primaryEmailAddress.emailAddress,
-      })
-      .returning({
-        id: Blogs.id,
-      });
-    console.log("Blog added successfully:", addBlog);
-    if (!addBlog) {
-      toast.error("Failed to add blog");
-      return;
-    } else {
-      clearDataAfterAdding();
-      toast.success("Blog added successfully!");
-    }
+    // const addBlog = await db
+    //   .insert(Blogs)
+    //   .values({
+    //     id: `${slug}--${uuid()}`,
+    //     title: title,
+    //     blogImage: uploadData?.url,
+    //     mdFormat: markdown,
+    //     content: content,
+    //     author: user?.fullName,
+    //     categories: category,
+    //     subCategories: selectedSubCategories,
+    //     date: getISTDate(),
+    //     createdBy: user?.primaryEmailAddress.emailAddress,
+    //   })
+    //   .returning({
+    //     id: Blogs.id,
+    //   });
+    // console.log("Blog added successfully:", addBlog);
+    // if (!addBlog) {
+    //   toast.error("Failed to add blog");
+    //   return;
+    // } else {
+    //   clearDataAfterAdding();
+    //   toast.success("Blog added successfully!");
+    // }
   };
 
   const EditBlog = async () => {
@@ -615,25 +616,39 @@ export default function BlogEditor({
       await deleteFile(editBlogCoverImageId);
     }
 
-    const editBlog = await db
-      .update(Blogs)
-      .set({
-        id: `${slug}--${uuid()}`,
-        title: title,
-        blogImage:
-          editing && uploadData ? uploadData?.url : editBlogCoverImageURL,
-        mdFormat: markdown,
-        content: content,
-        author: user?.fullName,
-        categories: category,
-        subCategories: selectedSubCategories,
-        date: getISTDate(),
-        createdBy: user?.primaryEmailAddress.emailAddress,
-      })
-      .where(eq(Blogs.id, blogId))
-      .returning({
-        id: Blogs.id,
-      });
+    // const editBlog = await db
+    //   .update(Blogs)
+    //   .set({
+    //     id: `${slug}--${uuid()}`,
+    //     title: title,
+    //     blogImage:
+    //       editing && uploadData ? uploadData?.url : editBlogCoverImageURL,
+    //     mdFormat: markdown,
+    //     content: content,
+    //     author: user?.fullName,
+    //     categories: category,
+    //     subCategories: selectedSubCategories,
+    //     date: getISTDate(),
+    //     createdBy: user?.primaryEmailAddress.emailAddress,
+    //   })
+    //   .where(eq(Blogs.id, blogId))
+    //   .returning({
+    //     id: Blogs.id,
+    //   });
+
+    console.log({
+      id: `${slug}--${uuid()}`,
+      title: title,
+      blogImage:
+        editing && uploadData ? uploadData?.url : editBlogCoverImageURL,
+      mdFormat: markdown,
+      content: content,
+      author: user?.fullName,
+      categories: category,
+      subCategories: selectedSubCategories,
+      date: getISTDate(),
+      createdBy: user?.primaryEmailAddress.emailAddress,
+    });
   };
 
   const deleteFile = async (fileId) => {
@@ -674,6 +689,8 @@ export default function BlogEditor({
     setUploadData(null);
     setFileId(null);
     setUnfinishedBlog(false);
+    setTags([]);
+    setTag("");
     editor.commands.clearContent();
   };
 
