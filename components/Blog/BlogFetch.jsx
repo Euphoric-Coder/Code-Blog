@@ -63,7 +63,7 @@ const Blogs = [
     ],
     tags: ["React", "JavaScript", "Web Development"],
     author: "Sagnik Dey",
-    publishDate: "2024-04-17",
+    date: "2024-04-17",
     readTime: "8 min read",
     blogImage:
       "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=800",
@@ -88,7 +88,7 @@ const Blogs = [
     ],
     tags: ["AI", "Machine Learning", "Technology"],
     author: "Sagnik Dey",
-    publishDate: "2024-04-17",
+    date: "2024-04-17",
     readTime: "12 min read",
     blogImage:
       "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800",
@@ -107,7 +107,7 @@ const Blogs = [
     subcategories: ["React Development", "Frontend Patterns"],
     tags: ["React", "JavaScript", "Frontend"],
     author: "Sarah Johnson",
-    publishDate: "2024-04-15",
+    date: "2024-04-15",
     readTime: "15 min read",
     blogImage:
       "https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&cs=tinysrgb&w=800",
@@ -131,7 +131,7 @@ const Blogs = [
     ],
     tags: ["Docker", "Kubernetes", "DevOps"],
     author: "Mike Chen",
-    publishDate: "2024-04-14",
+    date: "2024-04-14",
     readTime: "20 min read",
     blogImage:
       "https://images.pexels.com/photos/577585/pexels-photo-577585.jpeg?auto=compress&cs=tinysrgb&w=800",
@@ -156,7 +156,7 @@ const Blogs = [
     ],
     tags: ["Python", "Data Science", "Machine Learning"],
     author: "Dr. Emily Watson",
-    publishDate: "2024-04-12",
+    date: "2024-04-12",
     readTime: "18 min read",
     blogImage:
       "https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=800",
@@ -175,7 +175,7 @@ const Blogs = [
     subcategories: ["Backend Development", "API Design"],
     tags: ["Node.js", "Express", "API"],
     author: "Alex Rodriguez",
-    publishDate: "2024-04-10",
+    date: "2024-04-10",
     readTime: "14 min read",
     blogImage:
       "https://images.pexels.com/photos/943096/pexels-photo-943096.jpeg?auto=compress&cs=tinysrgb&w=800",
@@ -265,11 +265,22 @@ const BlogCard = ({ blog, isListView = false }) => {
               <div className="flex items-center space-x-4 text-sm text-gray-700 dark:text-gray-200">
                 <div className="flex items-center space-x-1">
                   <User className="h-4 w-4" />
-                  <span className="font-semibold">{blog.author}</span>
+                  <span className="font-semibold">
+                    {/* Full version for medium+ screens */}
+                    <span className="hidden sm:inline">
+                      {blog.author.split(" ")[0]}{" "}
+                      {blog.author.split(" ")[1]?.charAt(0).toUpperCase() + "."}
+                    </span>
+
+                    {/* Short version for small screens */}
+                    <span className="inline sm:hidden">
+                      {blog.author.split(" ")[0]}
+                    </span>
+                  </span>
                 </div>
                 <div className="flex items-center space-x-1">
                   <Calendar className="h-4 w-4" />
-                  <span>{formatDate(blog.publishDate)}</span>
+                  <span>{formatDate(blog.date)}</span>
                 </div>
                 <div className="flex items-center space-x-1">
                   <Clock className="h-4 w-4" />
@@ -397,12 +408,22 @@ const BlogCard = ({ blog, isListView = false }) => {
         <div className="flex items-center justify-between pt-4 border-t border-gray-300/50 dark:border-gray-500/50">
           <div className="flex items-center space-x-2">
             <User className="h-4 w-4 text-gray-600 dark:text-gray-300" />
-            <span className="text-sm text-gray-700 dark:text-gray-200 font-semibold">
-              {blog.author}
+            <span className="font-semibold">
+              {/* Full version for medium+ screens */}
+              <span className="hidden sm:inline">
+                {blog.author.split(" ")[0]}{" "}
+                {blog.author.split(" ")[1]?.charAt(0).toUpperCase() + "."}
+              </span>
+
+              {/* Short version for small screens */}
+              <span className="inline sm:hidden">
+                {blog.author.split(" ")[0]}
+              </span>
             </span>
+
             <span className="text-gray-400 dark:text-gray-500">•</span>
             <span className="text-sm text-gray-700 dark:text-gray-200">
-              {formatDate(blog.publishDate)}
+              {formatDate(blog.date)}
             </span>
           </div>
 
