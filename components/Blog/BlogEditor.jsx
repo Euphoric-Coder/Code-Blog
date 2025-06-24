@@ -686,6 +686,8 @@ export default function BlogEditor({
     setUploadData(null);
     setFileId(null);
     setUnfinishedBlog(false);
+    setTags([]);
+    setTag("");
     editor.commands.clearContent();
   };
 
@@ -698,6 +700,8 @@ export default function BlogEditor({
     setUploadData(null);
     setFileId(null);
     setUnfinishedBlog(false);
+    setTags([]);
+    setTag("");
     editor.commands.clearContent();
   };
 
