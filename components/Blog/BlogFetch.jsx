@@ -481,7 +481,7 @@ const BlogFetch = ({ blogs }) => {
         filtersToApply.categories.includes(bg.categories.toLowerCase());
 
       const blogSubCategories = bg.subCategories
-        ? bg.subCategories.split(",").map((sub) => sub.trim()) // Convert to array and trim spaces
+        ? bg.subCategories.map((sub) => sub.trim()) // Convert to array and trim spaces
         : [];
 
       const matchesSubCategory =
@@ -524,7 +524,7 @@ const BlogFetch = ({ blogs }) => {
         tempFilters.categories.includes(bg.categories.toLowerCase());
 
       const blogSubCategories = bg.subCategories
-        ? bg.subCategories.split(",").map((sub) => sub.trim())
+        ? bg.subCategories.map((sub) => sub.trim())
         : [];
 
       const matchesSubCategory =
@@ -1126,7 +1126,7 @@ const BlogFetch = ({ blogs }) => {
 
                 {/* Subcategories */}
                 <div className="flex flex-wrap gap-2 pt-2">
-                  {blog.subCategories.split(",").map((cat, index) => (
+                  {blog.subCategories.map((cat, index) => (
                     <span
                       key={index}
                       className="inline-block px-3 py-1 bg-gradient-to-r from-sky-600 to-teal-500 dark:from-pink-500 dark:to-yellow-400 text-white rounded-full text-xs md:text-sm font-semibold shadow-sm hover:scale-105 transition-transform duration-300"
