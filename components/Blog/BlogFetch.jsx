@@ -27,13 +27,6 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 
 
-const formatDate = (dateString) => {
-  return new Date(dateString).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-};
 
 const tags = [
   "All",
@@ -280,7 +273,7 @@ const BlogCard = ({ blog, isListView = false }) => {
                 </div>
                 <div className="flex items-center space-x-1">
                   <Calendar className="h-4 w-4" />
-                  <span>{formatDate(blog.date)}</span>
+                  <span>{format(blog.date, "PPP")}</span>
                 </div>
                 <div className="flex items-center space-x-1">
                   <Clock className="h-4 w-4" />
@@ -423,7 +416,7 @@ const BlogCard = ({ blog, isListView = false }) => {
 
             <span className="text-gray-400 dark:text-gray-500">•</span>
             <span className="text-sm text-gray-700 dark:text-gray-200">
-              {formatDate(blog.date)}
+              {format(blog.date, "PPP")}
             </span>
           </div>
 
@@ -1125,7 +1118,7 @@ const BlogFetch = ({ blogs }) => {
                       >
                         <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
-                      {formatDate(blog.date)}
+                      {format(blog.date, "PPP")}
                     </span>
                   </div>
 
