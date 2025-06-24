@@ -382,7 +382,7 @@ export default function BlogEditor({
     editing ? initialSubCategories : ""
   );
   const selectedCount = selectedSubCategories
-    ? selectedSubCategories.split(", ").length
+    ? selectedSubCategories.length
     : 0;
   const { user } = useUser();
 
@@ -647,7 +647,8 @@ export default function BlogEditor({
       category: field === "category" ? value : category,
       subcategories: field === "subcategories" ? value : selectedSubCategories,
     };
-    // console.log("Updated blog data:", updatedBlogData);
+
+    console.log("Updated blog data:", updatedBlogData);
     localStorage.setItem(storageKey, JSON.stringify(updatedBlogData));
   };
 
@@ -934,28 +935,32 @@ export default function BlogEditor({
               {[
                 ...new Set(blogSubCategoriesList[category.toLowerCase()] || []),
               ].map((subCategory) => {
-                const lowerSubCategory = subCategory.toLowerCase();
-                const isSelected =
-                  selectedSubCategories.includes(lowerSubCategory);
+                const isSelected = Array.isArray(selectedSubCategories)
+                  ? selectedSubCategories.includes(subCategory)
+                  : selectedSubCategories?.split(", ").includes(subCategory);
+
 
                 return (
                   <Badge
                     key={subCategory}
                     onClick={() => {
                       setSelectedSubCategories((prev) => {
-                        let subCategoriesArray = prev ? prev.split(", ") : [];
+                        let subCategoriesArray = Array.isArray(prev)
+                          ? [...prev]
+                          : prev
+                            ? prev.split(", ")
+                            : [];
 
                         if (isSelected) {
                           subCategoriesArray = subCategoriesArray.filter(
-                            (c) => c !== lowerSubCategory
+                            (c) => c !== subCategory
                           );
                         } else {
-                          subCategoriesArray.push(lowerSubCategory);
+                          subCategoriesArray.push(subCategory);
                         }
 
-                        const updatedValue = subCategoriesArray.join(", ");
-                        handleInputChange("subcategories", updatedValue); // <- Track this change
-                        return updatedValue;
+                        handleInputChange("subcategories", subCategoriesArray); // pass array directly
+                        return subCategoriesArray;
                       });
                     }}
                     className={`border-0 rounded-full text-sm cursor-pointer px-3 py-1 transition-all
