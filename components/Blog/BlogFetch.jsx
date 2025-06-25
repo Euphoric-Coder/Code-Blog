@@ -19,14 +19,27 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ArrowRight, Bookmark, Calendar, CalendarIcon, Clock, Eye, Filter, Grid, Heart, List, Search, Share2, TrendingUp, User } from "lucide-react";
+import {
+  ArrowRight,
+  Bookmark,
+  Calendar,
+  CalendarIcon,
+  Clock,
+  Eye,
+  Filter,
+  Grid,
+  Heart,
+  List,
+  Search,
+  Share2,
+  TrendingUp,
+  User,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { blogCategories, blogSubCategoriesList } from "@/lib/data";
 import { Badge } from "../ui/badge";
 import { toast } from "sonner";
 import { format } from "date-fns";
-
-
 
 const tags = [
   "All",
@@ -178,8 +191,6 @@ const Blogs = [
     trending: false,
   },
 ];
-
-
 
 const BlogCard = ({ blog, isListView = false }) => {
   if (isListView) {
@@ -1181,35 +1192,37 @@ const BlogFetch = ({ blogs }) => {
           <List className="h-5 w-5" />
         </button>
       </div>
-      {Blogs.length > 0 ? (
-        <div
-          className={`${
-            viewMode === "grid"
-              ? "grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-              : "space-y-8"
-          }`}
-        >
-          {Blogs.map((blog) => (
-            <BlogCard
-              key={blog.id}
-              blog={blog}
-              isListView={viewMode === "list"}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-20">
-          <div className="text-gray-400 mb-4">
-            <Search className="h-16 w-16 mx-auto" />
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+        {Blogs.length > 0 ? (
+          <div
+            className={`${
+              viewMode === "grid"
+                ? "grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+                : "space-y-8"
+            }`}
+          >
+            {Blogs.map((blog) => (
+              <BlogCard
+                key={blog.id}
+                blog={blog}
+                isListView={viewMode === "list"}
+              />
+            ))}
           </div>
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-            No blogs found
-          </h3>
-          <p className="text-gray-600 dark:text-gray-400">
-            Try adjusting your search criteria or filters
-          </p>
-        </div>
-      )}
+        ) : (
+          <div className="text-center py-20">
+            <div className="text-gray-400 mb-4">
+              <Search className="h-16 w-16 mx-auto" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              No blogs found
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400">
+              Try adjusting your search criteria or filters
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
