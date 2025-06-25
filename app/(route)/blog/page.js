@@ -29,7 +29,7 @@ const Page = () => {
             <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-extrabold leading-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-blue-500 to-teal-400 dark:from-teal-300 dark:via-blue-400 dark:to-indigo-500 mb-6 drop-shadow-md">
               Stay Ahead in Tech & Innovation
             </h1>
-            <p className="text-lg sm:text-xl lg:text-lg xl:text-xl font-mono leading-relaxed mb-8 text-gray-800 font-extrabold dark:text-gray-300 max-w-2xl lg:max-w-full">
+            <p className="text-lg sm:text-xl lg:text-lg xl:text-xl font-serif leading-relaxed mb-8 text-gray-800 dark:text-gray-300 max-w-2xl lg:max-w-full">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900 dark:from-gray-200 dark:to-gray-400">
                 Explore expert-led blogs on{" "}
               </span>
