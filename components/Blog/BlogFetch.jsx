@@ -271,13 +271,13 @@ const BlogCard = ({ blog, isListView = false }) => {
                   <User className="h-4 w-4" />
                   <span className="font-semibold">
                     {/* Full version for medium+ screens */}
-                    <span className="hidden sm:inline">
+                    <span className="hidden xl:inline">
                       {blog.author.split(" ")[0]}{" "}
                       {blog.author.split(" ")[1]?.charAt(0).toUpperCase() + "."}
                     </span>
 
                     {/* Short version for small screens */}
-                    <span className="inline sm:hidden">
+                    <span className="inline xl:hidden">
                       {blog.author.split(" ")[0]}
                     </span>
                   </span>
@@ -414,13 +414,13 @@ const BlogCard = ({ blog, isListView = false }) => {
             <User className="h-4 w-4 text-gray-600 dark:text-gray-300" />
             <span className="font-semibold">
               {/* Full version for medium+ screens */}
-              <span className="hidden sm:inline">
+              <span className="hidden xl:inline">
                 {blog.author.split(" ")[0]}{" "}
                 {blog.author.split(" ")[1]?.charAt(0).toUpperCase() + "."}
               </span>
 
               {/* Short version for small screens */}
-              <span className="inline sm:hidden">
+              <span className="inline xl:hidden">
                 {blog.author.split(" ")[0]}
               </span>
             </span>
