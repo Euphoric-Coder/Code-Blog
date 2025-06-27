@@ -26,6 +26,7 @@ export const Blogs = pgTable("blogs", {
   categories: varchar("categories").notNull().default("Programming"),
   subCategories: jsonb("subCategories").notNull().default([]),
   tags: jsonb("tags").default([]),
+  readTime: varchar("readTime").default("0 min read"),
   author: varchar("author").notNull(),
   date: varchar("date").notNull(),
   featured: boolean("featured").notNull().default(false),

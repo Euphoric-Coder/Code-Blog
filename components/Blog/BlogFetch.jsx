@@ -15,6 +15,11 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -30,6 +35,7 @@ import {
   Grid,
   Heart,
   List,
+  MoreHorizontal,
   Search,
   Share2,
   TrendingUp,
@@ -41,407 +47,461 @@ import { Badge } from "../ui/badge";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
-const tags = [
-  "All",
-  "React",
-  "JavaScript",
-  "Python",
-  "TypeScript",
-  "Node.js",
-  "Docker",
-  "AWS",
-  "Machine Learning",
-  "CSS",
-];
+const BlogFetch = ({ blogs }) => {
+  const tags = [
+    "All",
+    "React",
+    "JavaScript",
+    "Python",
+    "TypeScript",
+    "Node.js",
+    "Docker",
+    "AWS",
+    "Machine Learning",
+    "CSS",
+  ];
 
-const Blogs = [
-  {
-    id: 1,
-    title: "The Future of Web Development: Static vs Dynamic Websites",
-    description:
-      "Explore the evolution of web development and understand when to choose static or dynamic approaches for your next project.",
-    content: "Full blog content here...",
-    category: "Web Development",
-    subcategories: [
-      "Frontend Architecture",
-      "Performance Optimization",
-      "SEO Best Practices",
-    ],
-    tags: ["React", "JavaScript", "Web Development"],
-    author: "Sagnik Dey",
-    date: "2024-04-17",
-    readTime: "8 min read",
-    blogImage:
-      "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=800",
-    views: 12500,
-    likes: 890,
-    featured: true,
-    trending: true,
-  },
-  {
-    id: 2,
-    title: "The Rise of AI Assistants: From Siri to ChatGPT",
-    description:
-      "A comprehensive look at how AI assistants have evolved and their impact on modern technology and daily life.",
-    content: "Full blog content here...",
-    category: "AI/ML",
-    subcategories: [
-      "Natural Language Processing",
-      "Machine Learning",
-      "Deep Learning",
-      "Computer Vision",
-      "Neural Networks",
-    ],
-    tags: ["AI", "Machine Learning", "Technology"],
-    author: "Sagnik Dey",
-    date: "2024-04-17",
-    readTime: "12 min read",
-    blogImage:
-      "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800",
-    views: 18900,
-    likes: 1250,
-    featured: true,
-    trending: true,
-  },
-  {
-    id: 3,
-    title: "Mastering React Hooks: A Complete Guide",
-    description:
-      "Deep dive into React Hooks with practical examples and best practices for modern React development.",
-    content: "Full blog content here...",
-    category: "Web Development",
-    subcategories: ["React Development", "Frontend Patterns"],
-    tags: ["React", "JavaScript", "Frontend"],
-    author: "Sarah Johnson",
-    date: "2024-04-15",
-    readTime: "15 min read",
-    blogImage:
-      "https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&cs=tinysrgb&w=800",
-    views: 9800,
-    likes: 720,
-    featured: false,
-    trending: true,
-  },
-  {
-    id: 4,
-    title: "Docker and Kubernetes: Container Orchestration Mastery",
-    description:
-      "Learn how to effectively use Docker and Kubernetes for scalable application deployment and management.",
-    content: "Full blog content here...",
-    category: "DevOps",
-    subcategories: [
-      "Container Orchestration",
-      "Infrastructure",
-      "Deployment Strategies",
-      "Monitoring",
-    ],
-    tags: ["Docker", "Kubernetes", "DevOps"],
-    author: "Mike Chen",
-    date: "2024-04-14",
-    readTime: "20 min read",
-    blogImage:
-      "https://images.pexels.com/photos/577585/pexels-photo-577585.jpeg?auto=compress&cs=tinysrgb&w=800",
-    views: 7600,
-    likes: 540,
-    featured: false,
-    trending: false,
-  },
-  {
-    id: 5,
-    title: "Python for Data Science: Essential Libraries and Tools",
-    description:
-      "Comprehensive guide to Python libraries essential for data science including Pandas, NumPy, and Scikit-learn.",
-    content: "Full blog content here...",
-    category: "Data Science",
-    subcategories: [
-      "Data Analysis",
-      "Machine Learning",
-      "Data Visualization",
-      "Statistical Computing",
-      "Big Data",
-    ],
-    tags: ["Python", "Data Science", "Machine Learning"],
-    author: "Dr. Emily Watson",
-    date: "2024-04-12",
-    readTime: "18 min read",
-    blogImage:
-      "https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=800",
-    views: 11200,
-    likes: 890,
-    featured: false,
-    trending: true,
-  },
-  {
-    id: 6,
-    title: "Building Scalable APIs with Node.js and Express",
-    description:
-      "Learn best practices for creating robust, scalable APIs using Node.js and Express framework.",
-    content: "Full blog content here...",
-    category: "Web Development",
-    subcategories: ["Backend Development", "API Design"],
-    tags: ["Node.js", "Express", "API"],
-    author: "Alex Rodriguez",
-    date: "2024-04-10",
-    readTime: "14 min read",
-    blogImage:
-      "https://images.pexels.com/photos/943096/pexels-photo-943096.jpeg?auto=compress&cs=tinysrgb&w=800",
-    views: 8900,
-    likes: 650,
-    featured: false,
-    trending: false,
-  },
-];
+  const Blogs = [
+    {
+      id: 1,
+      title: "The Future of Web Development: Static vs Dynamic Websites",
+      description:
+        "Explore the evolution of web development and understand when to choose static or dynamic approaches for your next project.",
+      content: "Full blog content here...",
+      category: "Web Development",
+      subcategories: [
+        "Frontend Architecture",
+        "Performance Optimization",
+        "SEO Best Practices",
+      ],
+      tags: ["React", "JavaScript", "Web Development"],
+      author: "Sagnik Dey",
+      date: "2024-04-17",
+      readTime: "8 min read",
+      blogImage:
+        "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=800",
+      views: 12500,
+      likes: 890,
+      featured: true,
+      trending: true,
+    },
+    {
+      id: 2,
+      title: "The Rise of AI Assistants: From Siri to ChatGPT",
+      description:
+        "A comprehensive look at how AI assistants have evolved and their impact on modern technology and daily life.",
+      content: "Full blog content here...",
+      category: "AI/ML",
+      subcategories: [
+        "Natural Language Processing",
+        "Machine Learning",
+        "Deep Learning",
+        "Computer Vision",
+        "Neural Networks",
+      ],
+      tags: ["AI", "Machine Learning", "Technology"],
+      author: "Sagnik Dey",
+      date: "2024-04-17",
+      readTime: "12 min read",
+      blogImage:
+        "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800",
+      views: 18900,
+      likes: 1250,
+      featured: true,
+      trending: true,
+    },
+    {
+      id: 3,
+      title: "Mastering React Hooks: A Complete Guide",
+      description:
+        "Deep dive into React Hooks with practical examples and best practices for modern React development.",
+      content: "Full blog content here...",
+      category: "Web Development",
+      subcategories: ["React Development", "Frontend Patterns"],
+      tags: ["React", "JavaScript", "Frontend"],
+      author: "Sarah Johnson",
+      date: "2024-04-15",
+      readTime: "15 min read",
+      blogImage:
+        "https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&cs=tinysrgb&w=800",
+      views: 9800,
+      likes: 720,
+      featured: false,
+      trending: true,
+    },
+    {
+      id: 4,
+      title: "Docker and Kubernetes: Container Orchestration Mastery",
+      description:
+        "Learn how to effectively use Docker and Kubernetes for scalable application deployment and management.",
+      content: "Full blog content here...",
+      category: "DevOps",
+      subcategories: [
+        "Container Orchestration",
+        "Infrastructure",
+        "Deployment Strategies",
+        "Monitoring",
+      ],
+      tags: ["Docker", "Kubernetes", "DevOps"],
+      author: "Mike Chen",
+      date: "2024-04-14",
+      readTime: "20 min read",
+      blogImage:
+        "https://images.pexels.com/photos/577585/pexels-photo-577585.jpeg?auto=compress&cs=tinysrgb&w=800",
+      views: 7600,
+      likes: 540,
+      featured: false,
+      trending: false,
+    },
+    {
+      id: 5,
+      title: "Python for Data Science: Essential Libraries and Tools",
+      description:
+        "Comprehensive guide to Python libraries essential for data science including Pandas, NumPy, and Scikit-learn.",
+      content: "Full blog content here...",
+      category: "Data Science",
+      subcategories: [
+        "Data Analysis",
+        "Machine Learning",
+        "Data Visualization",
+        "Statistical Computing",
+        "Big Data",
+      ],
+      tags: ["Python", "Data Science", "Machine Learning"],
+      author: "Dr. Emily Watson",
+      date: "2024-04-12",
+      readTime: "18 min read",
+      blogImage:
+        "https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=800",
+      views: 11200,
+      likes: 890,
+      featured: false,
+      trending: true,
+    },
+    {
+      id: 6,
+      title: "Building Scalable APIs with Node.js and Express",
+      description:
+        "Learn best practices for creating robust, scalable APIs using Node.js and Express framework.",
+      content: "Full blog content here...",
+      category: "Web Development",
+      subcategories: ["Backend Development", "API Design"],
+      tags: ["Node.js", "Express", "API"],
+      author: "Alex Rodriguez",
+      date: "2024-04-10",
+      readTime: "14 min read",
+      blogImage:
+        "https://images.pexels.com/photos/943096/pexels-photo-943096.jpeg?auto=compress&cs=tinysrgb&w=800",
+      views: 8900,
+      likes: 650,
+      featured: false,
+      trending: false,
+    },
+  ];
 
-const BlogCard = ({ blog, isListView = false }) => {
-  if (isListView) {
+  // Subcategory display component
+  const SubcategoryDisplay = ({ blog }) => {
+    const maxVisible = 2;
+    const visibleSubcategories = Array.isArray(blog.subcategories)
+      ? blog.subcategories.slice(0, maxVisible)
+      : [];
+    const remainingCount = Array.isArray(blog.subcategories)
+      ? blog.subcategories.length - maxVisible
+      : 0;
+
     return (
-      <article className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl border border-gray-200/50 dark:border-gray-700/50 transition-all duration-300 hover:-translate-y-1">
+      <div className="flex flex-wrap gap-2 items-center">
+        {visibleSubcategories.map((subcategory) => (
+          <span
+            key={subcategory}
+            className="px-2 py-1 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-600/60 dark:to-gray-500/60 text-gray-800 dark:text-gray-100 text-xs rounded-md shadow-sm font-medium"
+          >
+            {subcategory}
+          </span>
+        ))}
+
+        {remainingCount > 0 && (
+          <HoverCard>
+            <HoverCardTrigger>
+              <button className="flex items-center px-2 py-1 bg-gradient-to-r from-blue-200 to-blue-300 dark:from-blue-800/60 dark:to-blue-700/60 text-blue-800 dark:text-blue-200 text-xs rounded-md shadow-sm font-medium hover:from-blue-300 hover:to-blue-400 dark:hover:from-blue-700/60 dark:hover:to-blue-600/60 transition-all duration-200">
+                <MoreHorizontal className="h-3 w-3 mr-1" />+{remainingCount}{" "}
+                more
+              </button>
+            </HoverCardTrigger>
+
+            <HoverCardContent side="top">
+              <div className="">
+                <div className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  All Subcategories ({blog.subcategories.length})
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {blog.subcategories.map((subcategory) => (
+                    <span
+                      key={subcategory}
+                      className="px-2 py-1 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700/60 dark:to-gray-600/60 text-gray-700 dark:text-gray-200 text-xs rounded-md font-medium"
+                    >
+                      {subcategory}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        )}
+      </div>
+    );
+  };
+
+  const BlogCard = ({ blog, isListView = false }) => {
+    if (isListView) {
+      return (
+        <article className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl border border-gray-200/50 dark:border-gray-700/50 transition-all duration-300 hover:-translate-y-1">
+          {/* Enhanced gradient background overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-100/70 via-white/85 to-teal-100/70 dark:from-gray-800/95 dark:via-gray-700/90 dark:to-gray-800/95"></div>
+
+          <div className="relative flex flex-col lg:flex-row">
+            {/* Image */}
+            <div className="relative lg:w-80 h-48 lg:h-auto overflow-hidden">
+              <img
+                src={blog.blogImage}
+                alt={blog.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+
+              {/* Badges */}
+              <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+                {blog.featured && (
+                  <span className="px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-semibold rounded-full shadow-lg">
+                    Featured
+                  </span>
+                )}
+                {blog.trending && (
+                  <span className="px-3 py-1 bg-gradient-to-r from-red-400 to-pink-500 text-white text-xs font-semibold rounded-full flex items-center shadow-lg">
+                    <TrendingUp className="h-3 w-3 mr-1" />
+                    Trending
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 p-6 flex flex-col justify-between relative">
+              <div className="space-y-4">
+                {/* Category */}
+                <span className="inline-block px-3 py-1 bg-gradient-to-r from-blue-200 to-blue-300 dark:from-blue-800/60 dark:to-blue-700/60 text-blue-800 dark:text-blue-200 text-sm font-semibold rounded-full shadow-sm">
+                  {blog.category}
+                </span>
+
+                {/* Title */}
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 drop-shadow-sm">
+                  {blog.title}
+                </h3>
+
+                {/* Description */}
+                <p className="text-gray-700 dark:text-gray-200 leading-relaxed line-clamp-3 drop-shadow-sm font-medium">
+                  {blog.description}
+                </p>
+
+                {/* Subcategories */}
+                <div className="space-y-2">
+                  <div className="text-xs font-medium text-gray-600 dark:text-gray-400">
+                    Subcategories:
+                  </div>
+                  <SubcategoryDisplay blog={blog} />
+                </div>
+
+                {/* Tags */}
+                <div className="flex flex-wrap gap-2">
+                  {blog.tags.slice(0, 3).map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-2 py-1 bg-gradient-to-r from-teal-200 to-teal-300 dark:from-teal-800/60 dark:to-teal-700/60 text-teal-800 dark:text-teal-200 text-xs rounded-md shadow-sm font-medium"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="flex items-center justify-between pt-4 border-t border-gray-300/50 dark:border-gray-500/50">
+                <div className="flex items-center space-x-4 text-sm text-gray-700 dark:text-gray-200">
+                  <div className="flex items-center space-x-1">
+                    <User className="h-4 w-4" />
+                    <span className="font-semibold">
+                      {/* Full version for medium+ screens */}
+                      <span className="hidden xl:inline">
+                        {blog.author.split(" ")[0]}{" "}
+                        {blog.author.split(" ")[1]?.charAt(0).toUpperCase() +
+                          "."}
+                      </span>
+
+                      {/* Short version for small screens */}
+                      <span className="inline xl:hidden">
+                        {blog.author.split(" ")[0]}
+                      </span>
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <Calendar className="h-4 w-4" />
+                    <span>{format(blog.date, "PPP")}</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <Clock className="h-4 w-4" />
+                    <span>{blog.readTime}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-3 text-sm text-gray-700 dark:text-gray-200">
+                    <div className="flex items-center space-x-1">
+                      <Eye className="h-4 w-4" />
+                      <span>{blog.views.toLocaleString()}</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <Heart className="h-4 w-4" />
+                      <span>{blog.likes}</span>
+                    </div>
+                  </div>
+
+                  <button className="group/btn inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold transition-colors">
+                    Read More
+                    <ArrowRight className="ml-1 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      );
+    }
+
+    return (
+      <article className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl border border-gray-200/50 dark:border-gray-700/50 transition-all duration-300 hover:-translate-y-2">
         {/* Enhanced gradient background overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-100/70 via-white/85 to-teal-100/70 dark:from-gray-800/95 dark:via-gray-700/90 dark:to-gray-800/95"></div>
 
-        <div className="relative flex flex-col lg:flex-row">
-          {/* Image */}
-          <div className="relative lg:w-80 h-48 lg:h-auto overflow-hidden">
-            <img
-              src={blog.blogImage}
-              alt={blog.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+        {/* Image */}
+        <div className="relative h-48 overflow-hidden">
+          <img
+            src={blog.blogImage}
+            alt={blog.title}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
 
-            {/* Badges */}
-            <div className="absolute top-4 left-4 flex flex-wrap gap-2">
-              {blog.featured && (
-                <span className="px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-semibold rounded-full shadow-lg">
-                  Featured
-                </span>
-              )}
-              {blog.trending && (
-                <span className="px-3 py-1 bg-gradient-to-r from-red-400 to-pink-500 text-white text-xs font-semibold rounded-full flex items-center shadow-lg">
-                  <TrendingUp className="h-3 w-3 mr-1" />
-                  Trending
-                </span>
-              )}
-            </div>
+          {/* Badges */}
+          <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+            {blog.featured && (
+              <span className="px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-semibold rounded-full shadow-lg">
+                Featured
+              </span>
+            )}
+            {blog.trending && (
+              <span className="px-3 py-1 bg-gradient-to-r from-red-400 to-pink-500 text-white text-xs font-semibold rounded-full flex items-center shadow-lg">
+                <TrendingUp className="h-3 w-3 mr-1" />
+                Trending
+              </span>
+            )}
           </div>
 
-          {/* Content */}
-          <div className="flex-1 p-6 flex flex-col justify-between relative">
-            <div className="space-y-4">
-              {/* Category */}
-              <span className="inline-block px-3 py-1 bg-gradient-to-r from-blue-200 to-blue-300 dark:from-blue-800/60 dark:to-blue-700/60 text-blue-800 dark:text-blue-200 text-sm font-semibold rounded-full shadow-sm">
-                {blog.category}
+          {/* Quick Actions */}
+          <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button className="p-2 bg-white/30 backdrop-blur-sm rounded-full text-white hover:bg-white/40 transition-colors shadow-lg">
+              <Bookmark className="h-4 w-4" />
+            </button>
+            <button className="p-2 bg-white/30 backdrop-blur-sm rounded-full text-white hover:bg-white/40 transition-colors shadow-lg">
+              <Share2 className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="relative p-6 space-y-4">
+          {/* Category */}
+          <span className="inline-block px-3 py-1 bg-gradient-to-r from-blue-200 to-blue-300 dark:from-blue-800/60 dark:to-blue-700/60 text-blue-800 dark:text-blue-200 text-sm font-semibold rounded-full shadow-sm">
+            {blog.category}
+          </span>
+
+          {/* Title */}
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 drop-shadow-sm">
+            {blog.title}
+          </h3>
+
+          {/* Description */}
+          <p className="text-gray-700 dark:text-gray-200 leading-relaxed line-clamp-3 drop-shadow-sm font-medium">
+            {blog.description}
+          </p>
+
+          {/* Subcategories */}
+          <div className="space-y-2">
+            <div className="text-xs font-medium text-gray-600 dark:text-gray-400">
+              Subcategories:
+            </div>
+            <SubcategoryDisplay blog={blog} />
+          </div>
+
+          {/* Tags */}
+          <div className="flex flex-wrap gap-2">
+            {blog.tags.slice(0, 3).map((tag) => (
+              <span
+                key={tag}
+                className="px-2 py-1 bg-gradient-to-r from-teal-200 to-teal-300 dark:from-teal-800/60 dark:to-teal-700/60 text-teal-800 dark:text-teal-200 text-xs rounded-md shadow-sm font-medium"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          {/* Stats */}
+          <div className="flex items-center justify-between text-sm text-gray-700 dark:text-gray-200">
+            <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-1">
+                <Eye className="h-4 w-4" />
+                <span>{blog.views.toLocaleString()}</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Heart className="h-4 w-4" />
+                <span>{blog.likes}</span>
+              </div>
+            </div>
+            <span className="font-semibold">{blog.readTime}</span>
+          </div>
+
+          {/* Footer */}
+          <div className="flex items-center justify-between pt-4 border-t border-gray-300/50 dark:border-gray-500/50">
+            <div className="flex items-center space-x-2">
+              <User className="h-4 w-4 text-gray-600 dark:text-gray-300" />
+              <span className="font-semibold">
+                {/* Full version for medium+ screens */}
+                <span className="hidden xl:inline">
+                  {blog.author.split(" ")[0]}{" "}
+                  {blog.author.split(" ")[1]?.charAt(0).toUpperCase() + "."}
+                </span>
+
+                {/* Short version for small screens */}
+                <span className="inline xl:hidden">
+                  {blog.author.split(" ")[0]}
+                </span>
               </span>
 
-              {/* Title */}
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 drop-shadow-sm">
-                {blog.title}
-              </h3>
-
-              {/* Description */}
-              <p className="text-gray-700 dark:text-gray-200 leading-relaxed line-clamp-3 drop-shadow-sm font-medium">
-                {blog.description}
-              </p>
-
-              {/* Subcategories */}
-              <div className="space-y-2">
-                <div className="text-xs font-medium text-gray-600 dark:text-gray-400">
-                  Subcategories:
-                </div>
-                {/* <SubcategoryDisplay blog={blog} /> */}
-              </div>
-
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2">
-                {blog.tags.slice(0, 3).map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-2 py-1 bg-gradient-to-r from-teal-200 to-teal-300 dark:from-teal-800/60 dark:to-teal-700/60 text-teal-800 dark:text-teal-200 text-xs rounded-md shadow-sm font-medium"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+              <span className="text-gray-400 dark:text-gray-500">•</span>
+              <span className="text-sm text-gray-700 dark:text-gray-200">
+                {format(blog.date, "PPP")}
+              </span>
             </div>
 
-            {/* Footer */}
-            <div className="flex items-center justify-between pt-4 border-t border-gray-300/50 dark:border-gray-500/50">
-              <div className="flex items-center space-x-4 text-sm text-gray-700 dark:text-gray-200">
-                <div className="flex items-center space-x-1">
-                  <User className="h-4 w-4" />
-                  <span className="font-semibold">
-                    {/* Full version for medium+ screens */}
-                    <span className="hidden xl:inline">
-                      {blog.author.split(" ")[0]}{" "}
-                      {blog.author.split(" ")[1]?.charAt(0).toUpperCase() + "."}
-                    </span>
-
-                    {/* Short version for small screens */}
-                    <span className="inline xl:hidden">
-                      {blog.author.split(" ")[0]}
-                    </span>
-                  </span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Calendar className="h-4 w-4" />
-                  <span>{format(blog.date, "PPP")}</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Clock className="h-4 w-4" />
-                  <span>{blog.readTime}</span>
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-3 text-sm text-gray-700 dark:text-gray-200">
-                  <div className="flex items-center space-x-1">
-                    <Eye className="h-4 w-4" />
-                    <span>{blog.views.toLocaleString()}</span>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <Heart className="h-4 w-4" />
-                    <span>{blog.likes}</span>
-                  </div>
-                </div>
-
-                <button className="group/btn inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold transition-colors">
-                  Read More
-                  <ArrowRight className="ml-1 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-                </button>
-              </div>
-            </div>
+            <button className="group/btn inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold transition-colors">
+              Read More
+              <ArrowRight className="ml-1 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+            </button>
           </div>
         </div>
       </article>
     );
-  }
+  };
 
-  return (
-    <article className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl border border-gray-200/50 dark:border-gray-700/50 transition-all duration-300 hover:-translate-y-2">
-      {/* Enhanced gradient background overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-100/70 via-white/85 to-teal-100/70 dark:from-gray-800/95 dark:via-gray-700/90 dark:to-gray-800/95"></div>
-
-      {/* Image */}
-      <div className="relative h-48 overflow-hidden">
-        <img
-          src={blog.blogImage}
-          alt={blog.title}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-
-        {/* Badges */}
-        <div className="absolute top-4 left-4 flex flex-wrap gap-2">
-          {blog.featured && (
-            <span className="px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-semibold rounded-full shadow-lg">
-              Featured
-            </span>
-          )}
-          {blog.trending && (
-            <span className="px-3 py-1 bg-gradient-to-r from-red-400 to-pink-500 text-white text-xs font-semibold rounded-full flex items-center shadow-lg">
-              <TrendingUp className="h-3 w-3 mr-1" />
-              Trending
-            </span>
-          )}
-        </div>
-
-        {/* Quick Actions */}
-        <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button className="p-2 bg-white/30 backdrop-blur-sm rounded-full text-white hover:bg-white/40 transition-colors shadow-lg">
-            <Bookmark className="h-4 w-4" />
-          </button>
-          <button className="p-2 bg-white/30 backdrop-blur-sm rounded-full text-white hover:bg-white/40 transition-colors shadow-lg">
-            <Share2 className="h-4 w-4" />
-          </button>
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="relative p-6 space-y-4">
-        {/* Category */}
-        <span className="inline-block px-3 py-1 bg-gradient-to-r from-blue-200 to-blue-300 dark:from-blue-800/60 dark:to-blue-700/60 text-blue-800 dark:text-blue-200 text-sm font-semibold rounded-full shadow-sm">
-          {blog.category}
-        </span>
-
-        {/* Title */}
-        <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 drop-shadow-sm">
-          {blog.title}
-        </h3>
-
-        {/* Description */}
-        <p className="text-gray-700 dark:text-gray-200 leading-relaxed line-clamp-3 drop-shadow-sm font-medium">
-          {blog.description}
-        </p>
-
-        {/* Subcategories */}
-        <div className="space-y-2">
-          <div className="text-xs font-medium text-gray-600 dark:text-gray-400">
-            Subcategories:
-          </div>
-          {/* <SubcategoryDisplay blog={blog} /> */}
-        </div>
-
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2">
-          {blog.tags.slice(0, 3).map((tag) => (
-            <span
-              key={tag}
-              className="px-2 py-1 bg-gradient-to-r from-teal-200 to-teal-300 dark:from-teal-800/60 dark:to-teal-700/60 text-teal-800 dark:text-teal-200 text-xs rounded-md shadow-sm font-medium"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        {/* Stats */}
-        <div className="flex items-center justify-between text-sm text-gray-700 dark:text-gray-200">
-          <div className="flex items-center space-x-3">
-            <div className="flex items-center space-x-1">
-              <Eye className="h-4 w-4" />
-              <span>{blog.views.toLocaleString()}</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <Heart className="h-4 w-4" />
-              <span>{blog.likes}</span>
-            </div>
-          </div>
-          <span className="font-semibold">{blog.readTime}</span>
-        </div>
-
-        {/* Footer */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-300/50 dark:border-gray-500/50">
-          <div className="flex items-center space-x-2">
-            <User className="h-4 w-4 text-gray-600 dark:text-gray-300" />
-            <span className="font-semibold">
-              {/* Full version for medium+ screens */}
-              <span className="hidden xl:inline">
-                {blog.author.split(" ")[0]}{" "}
-                {blog.author.split(" ")[1]?.charAt(0).toUpperCase() + "."}
-              </span>
-
-              {/* Short version for small screens */}
-              <span className="inline xl:hidden">
-                {blog.author.split(" ")[0]}
-              </span>
-            </span>
-
-            <span className="text-gray-400 dark:text-gray-500">•</span>
-            <span className="text-sm text-gray-700 dark:text-gray-200">
-              {format(blog.date, "PPP")}
-            </span>
-          </div>
-
-          <button className="group/btn inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold transition-colors">
-            Read More
-            <ArrowRight className="ml-1 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-          </button>
-        </div>
-      </div>
-    </article>
-  );
-};
-
-const BlogFetch = ({ blogs }) => {
   // Function to format date consistently using Intl.DateTimeFormat with error handling
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -455,6 +515,7 @@ const BlogFetch = ({ blogs }) => {
     }).format(date);
   };
 
+  const [hoveredBlogId, setHoveredBlogId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState("grid");
   const [tempFilters, setTempFilters] = useState({
