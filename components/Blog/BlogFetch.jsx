@@ -520,13 +520,13 @@ const BlogFetch = ({ blogs }) => {
   const [viewMode, setViewMode] = useState("grid");
   const [tempFilters, setTempFilters] = useState({
     authors: [],
-    categories: [],
+    category: [],
     subCategories: [],
     dateRange: { from: "", to: "" },
     oldestBlog: false,
   });
-  const selectedCategoryCount = tempFilters.categories
-    ? tempFilters.categories.length
+  const selectedCategoryCount = tempFilters.category
+    ? tempFilters.category.length
     : 0;
   const selectedSubCategoryCount = tempFilters.subCategories
     ? tempFilters.subCategories.length
@@ -543,7 +543,7 @@ const BlogFetch = ({ blogs }) => {
   const filterCount = useMemo(() => {
     let count = 0;
     count += tempFilters.authors.length;
-    count += tempFilters.categories.length;
+    count += tempFilters.category.length;
     count += tempFilters.subCategories.length;
     if (tempFilters.dateRange.from) count += 1;
     if (tempFilters.dateRange.to) count += 1;
@@ -559,12 +559,12 @@ const BlogFetch = ({ blogs }) => {
         bg.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         bg.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         bg.subCategories?.toString().includes(searchTerm.toLowerCase()) ||
-        bg.categories.includes(searchTerm.toLowerCase()) ||
+        bg.category.includes(searchTerm.toLowerCase()) ||
         bg.author.toLowerCase().includes(searchTerm.toLowerCase());
 
       const matchesCategory =
-        filtersToApply.categories.length === 0 ||
-        filtersToApply.categories.includes(bg.categories.toLowerCase());
+        filtersToApply.category.length === 0 ||
+        filtersToApply.category.includes(bg.category.toLowerCase());
 
       const blogSubCategories = bg.subCategories
         ? bg.subCategories.map((sub) => sub.trim()) // Convert to array and trim spaces
@@ -606,8 +606,8 @@ const BlogFetch = ({ blogs }) => {
   const previewedBlogs = useMemo(() => {
     let filtered = blogs.filter((bg) => {
       const matchesCategory =
-        tempFilters.categories.length === 0 ||
-        tempFilters.categories.includes(bg.categories.toLowerCase());
+        tempFilters.category.length === 0 ||
+        tempFilters.category.includes(bg.category.toLowerCase());
 
       const blogSubCategories = bg.subCategories
         ? bg.subCategories.map((sub) => sub.trim())
@@ -658,14 +658,14 @@ const BlogFetch = ({ blogs }) => {
   const resetFilters = () => {
     setAppliedFilters({
       authors: [],
-      categories: [],
+      category: [],
       subCategories: [],
       dateRange: { from: "", to: "" },
       oldestBlog: false,
     });
     setTempFilters({
       authors: [],
-      categories: [],
+      category: [],
       subCategories: [],
       dateRange: { from: "", to: "" },
       oldestBlog: false,
@@ -685,7 +685,7 @@ const BlogFetch = ({ blogs }) => {
 
   const hasActiveFilters =
     appliedFilters.authors.length > 0 ||
-    appliedFilters.categories.length > 0 ||
+    appliedFilters.category.length > 0 ||
     (appliedFilters.dateRange.from &&
       appliedFilters.dateRange.from.trim() !== "") ||
     (appliedFilters.dateRange.to &&
@@ -915,7 +915,7 @@ const BlogFetch = ({ blogs }) => {
                           onClick={() =>
                             setTempFilters({
                               ...tempFilters,
-                              categories: [],
+                              category: [],
                             })
                           }
                           className="del2"
@@ -933,17 +933,17 @@ const BlogFetch = ({ blogs }) => {
                         onClick={() => {
                           setTempFilters((prev) => ({
                             ...prev,
-                            categories: prev.categories.includes(
+                            category: prev.category.includes(
                               category.toLowerCase()
                             )
-                              ? prev.categories.filter(
+                              ? prev.category.filter(
                                   (c) => c !== category.toLowerCase()
                                 )
-                              : [...prev.categories, category.toLowerCase()],
+                              : [...prev.category, category.toLowerCase()],
                           }));
                         }}
                         className={`border-0 rounded-full text-sm cursor-pointer px-3 py-1 transition-all font-bold ${
-                          tempFilters.categories.includes(
+                          tempFilters.category.includes(
                             category.toLowerCase()
                           )
                             ? "bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800"
@@ -957,7 +957,7 @@ const BlogFetch = ({ blogs }) => {
                 </div>
 
                 {/* Sub-Categories (Only Show When Categories Are Selected) */}
-                {tempFilters.categories.length > 0 && (
+                {tempFilters.category.length > 0 && (
                   <div
                     className="relative max-h-[200px] overflow-y-auto 
                     p-3 shadow-sm rounded-xl border-2 
@@ -970,7 +970,7 @@ const BlogFetch = ({ blogs }) => {
                           Sub-Categories (
                           {
                             new Set(
-                              tempFilters.categories.flatMap(
+                              tempFilters.category.flatMap(
                                 (category) =>
                                   blogSubCategoriesList[category] || []
                               )
@@ -1009,7 +1009,7 @@ const BlogFetch = ({ blogs }) => {
                     <div className="mt-3 flex flex-wrap gap-3">
                       {[
                         ...new Set(
-                          tempFilters.categories.flatMap(
+                          tempFilters.category.flatMap(
                             (category) => blogSubCategoriesList[category] || []
                           )
                         ),
@@ -1096,7 +1096,7 @@ const BlogFetch = ({ blogs }) => {
                               ? prev.authors.filter(
                                   (c) => c !== author.toLowerCase()
                                 )
-                              : [...prev.categories, author.toLowerCase()],
+                              : [...prev.category, author.toLowerCase()],
                           }));
                         }}
                         className={`border-0 rounded-full text-sm cursor-pointer px-3 py-1 transition-all font-bold ${
@@ -1197,7 +1197,7 @@ const BlogFetch = ({ blogs }) => {
                   {/* Right: Category */}
                   <div className="mt-1 md:mt-0 max-w-full md:max-w-xs px-2">
                     <span className="inline-block px-3 py-1 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full text-xs font-medium shadow-sm truncate whitespace-nowrap">
-                      {blog.categories}
+                      {blog.category}
                     </span>
                   </div>
                 </div>
