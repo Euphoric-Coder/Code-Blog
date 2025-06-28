@@ -694,7 +694,7 @@ const BlogFetch = ({ blogs }) => {
     appliedFilters.oldestBlog;
 
   return (
-    <div>
+    <div className="pb-16">
       {/* Search Bar & Filter Button */}
       <div className="flex justify-center mb-6 gap-4 items-center pt-3 px-6">
         <div className="relative max-w-3xl w-full">
