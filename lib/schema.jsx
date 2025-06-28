@@ -34,6 +34,15 @@ export const Blogs = pgTable("blogs", {
   createdBy: varchar("createdBy").notNull(),
 });
 
+export const blogViews = pgTable("blogViews", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  blogId: varchar("blogId", { length: 255 })
+    .notNull()
+    .references(() => Blogs.id, { onDelete: "cascade" }),
+  viewers: jsonb("viewers").default([]).notNull(), // example: [{ email: "a@b.com", viewedAt: "2024-06-27T12:00:00Z" }]
+  totalViews: varchar("totalViews").default(0).notNull(),
+});
+
 export const Tutorials = pgTable("tutorials", {
   id: uuid("id").defaultRandom().primaryKey(),
   title: varchar("title").notNull(),
