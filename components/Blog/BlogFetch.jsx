@@ -333,8 +333,10 @@ const BlogFetch = ({ blogs }) => {
                       {/* Full version for medium+ screens */}
                       <span className="hidden xl:inline">
                         {blog.author.split(" ")[0]}{" "}
-                        {blog.author.split(" ")[1]?.charAt(0).toUpperCase() +
-                          "."}
+                        {blog.author.split(" ")[1]
+                          ? blog.author.split(" ")[1]?.charAt(0).toUpperCase() +
+                            "."
+                          : ""}
                       </span>
 
                       {/* Short version for small screens */}
@@ -477,7 +479,9 @@ const BlogFetch = ({ blogs }) => {
                 {/* Full version for medium+ screens */}
                 <span className="hidden xl:inline">
                   {blog.author.split(" ")[0]}{" "}
-                  {blog.author.split(" ")[1]?.charAt(0).toUpperCase() + "."}
+                  {blog.author.split(" ")[1]
+                    ? blog.author.split(" ")[1]?.charAt(0).toUpperCase() + "."
+                    : ""}
                 </span>
 
                 {/* Short version for small screens */}
@@ -694,9 +698,9 @@ const BlogFetch = ({ blogs }) => {
     appliedFilters.oldestBlog;
 
   return (
-    <div className="pb-16">
+    <div>
       {/* Search Bar & Filter Button */}
-      <div className="flex justify-center mb-6 gap-4 items-center pt-3 px-6">
+      <div className="flex justify-center mb-16 gap-4 items-center pt-3 px-6">
         <div className="relative max-w-3xl w-full">
           <Input
             type="text"

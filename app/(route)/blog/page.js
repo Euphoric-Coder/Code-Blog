@@ -20,7 +20,7 @@ const Page = () => {
   };
 
   return (
-    <main className="relative w-full min-h-screen bg-gradient-to-b from-blue-100 via-white to-blue-100 dark:from-gray-800 dark:via-gray-800 dark:to-blue-950 text-gray-900 dark:text-gray-100 transition-all duration-700">
+    <main className="relative w-full min-h-screen bg-gradient-to-b from-blue-50 via-white to-white dark:from-gray-800 dark:via-gray-800 dark:to-blue-950 text-gray-900 dark:text-gray-100 transition-all duration-700">
       {/* Hero Section Heading */}
       <section className="py-20 bg-gradient-to-b from-blue-100 via-blue-50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800">
         <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between">
