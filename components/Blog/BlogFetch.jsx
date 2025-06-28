@@ -69,7 +69,7 @@ const BlogFetch = ({ blogs }) => {
         "Explore the evolution of web development and understand when to choose static or dynamic approaches for your next project.",
       content: "Full blog content here...",
       category: "Web Development",
-      subcategories: [
+      subCategories: [
         "Frontend Architecture",
         "Performance Optimization",
         "SEO Best Practices",
@@ -92,7 +92,7 @@ const BlogFetch = ({ blogs }) => {
         "A comprehensive look at how AI assistants have evolved and their impact on modern technology and daily life.",
       content: "Full blog content here...",
       category: "AI/ML",
-      subcategories: [
+      subCategories: [
         "Natural Language Processing",
         "Machine Learning",
         "Deep Learning",
@@ -117,7 +117,7 @@ const BlogFetch = ({ blogs }) => {
         "Deep dive into React Hooks with practical examples and best practices for modern React development.",
       content: "Full blog content here...",
       category: "Web Development",
-      subcategories: ["React Development", "Frontend Patterns"],
+      subCategories: ["React Development", "Frontend Patterns"],
       tags: ["React", "JavaScript", "Frontend"],
       author: "Sarah Johnson",
       date: "2024-04-15",
@@ -136,7 +136,7 @@ const BlogFetch = ({ blogs }) => {
         "Learn how to effectively use Docker and Kubernetes for scalable application deployment and management.",
       content: "Full blog content here...",
       category: "DevOps",
-      subcategories: [
+      subCategories: [
         "Container Orchestration",
         "Infrastructure",
         "Deployment Strategies",
@@ -160,7 +160,7 @@ const BlogFetch = ({ blogs }) => {
         "Comprehensive guide to Python libraries essential for data science including Pandas, NumPy, and Scikit-learn.",
       content: "Full blog content here...",
       category: "Data Science",
-      subcategories: [
+      subCategories: [
         "Data Analysis",
         "Machine Learning",
         "Data Visualization",
@@ -185,7 +185,7 @@ const BlogFetch = ({ blogs }) => {
         "Learn best practices for creating robust, scalable APIs using Node.js and Express framework.",
       content: "Full blog content here...",
       category: "Web Development",
-      subcategories: ["Backend Development", "API Design"],
+      subCategories: ["Backend Development", "API Design"],
       tags: ["Node.js", "Express", "API"],
       author: "Alex Rodriguez",
       date: "2024-04-10",
@@ -202,11 +202,11 @@ const BlogFetch = ({ blogs }) => {
   // Subcategory display component
   const SubcategoryDisplay = ({ blog }) => {
     const maxVisible = 2;
-    const visibleSubcategories = Array.isArray(blog.subcategories)
-      ? blog.subcategories.slice(0, maxVisible)
+    const visibleSubcategories = Array.isArray(blog.subCategories)
+      ? blog.subCategories.slice(0, maxVisible)
       : [];
-    const remainingCount = Array.isArray(blog.subcategories)
-      ? blog.subcategories.length - maxVisible
+    const remainingCount = Array.isArray(blog.subCategories)
+      ? blog.subCategories.length - maxVisible
       : 0;
 
     return (
@@ -232,10 +232,10 @@ const BlogFetch = ({ blogs }) => {
             <HoverCardContent side="top">
               <div className="">
                 <div className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  All Subcategories ({blog.subcategories.length})
+                  All Subcategories ({blog.subCategories.length})
                 </div>
                 <div className="flex flex-wrap gap-1.5">
-                  {blog.subcategories.map((subcategory) => (
+                  {blog.subCategories.map((subcategory) => (
                     <span
                       key={subcategory}
                       className="px-2 py-1 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700/60 dark:to-gray-600/60 text-gray-700 dark:text-gray-200 text-xs rounded-md font-medium"
@@ -263,7 +263,7 @@ const BlogFetch = ({ blogs }) => {
             {/* Image */}
             <div className="relative lg:w-80 h-48 lg:h-auto overflow-hidden">
               <img
-                src={blog.blogImage}
+                src={blog.blogImage || "/placeholder.png"}
                 alt={blog.title}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
@@ -385,7 +385,7 @@ const BlogFetch = ({ blogs }) => {
         {/* Image */}
         <div className="relative h-48 overflow-hidden">
           <img
-            src={blog.blogImage}
+            src={blog.blogImage || "/placeholder.png"}
             alt={blog.title}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
           />
@@ -459,11 +459,11 @@ const BlogFetch = ({ blogs }) => {
             <div className="flex items-center space-x-3">
               <div className="flex items-center space-x-1">
                 <Eye className="h-4 w-4" />
-                <span>{blog.views.toLocaleString()}</span>
+                <span>{blog.views ?? "0"}</span>
               </div>
               <div className="flex items-center space-x-1">
                 <Heart className="h-4 w-4" />
-                <span>{blog.likes}</span>
+                <span>{blog.likes ?? "0"}</span>
               </div>
             </div>
             <span className="font-semibold">{blog.readTime}</span>
@@ -492,10 +492,12 @@ const BlogFetch = ({ blogs }) => {
               </span>
             </div>
 
-            <button className="group/btn inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold transition-colors">
-              Read More
-              <ArrowRight className="ml-1 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-            </button>
+            <Link href={`/blogpost/${blog.id}`}>
+              <button className="group/btn inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold transition-colors">
+                Read More
+                <ArrowRight className="ml-1 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+              </button>
+            </Link>
           </div>
         </div>
       </article>
@@ -1141,96 +1143,6 @@ const BlogFetch = ({ blogs }) => {
           )}
         </div>
       </div>
-
-      {/* Blog Cards */}
-      <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 px-4 py-10">
-        {displayedBlogs.map((blog, index) => (
-          <Link href={`/blogpost/${blog.id}`} key={index}>
-            <div className="relative max-w-sm mx-auto lg:max-w-md rounded-3xl shadow-xl hover:shadow-2xl transform transition-all duration-500 hover:scale-[1.03] bg-gradient-to-br from-blue-400 via-white to-blue-200 dark:from-gray-800 dark:via-gray-900 dark:to-black text-gray-900 dark:text-gray-100 cursor-pointer overflow-hidden">
-              {/* Image Section */}
-              <div className="relative w-full h-56 sm:h-64 md:h-72 lg:h-64 xl:h-72 overflow-hidden rounded-t-3xl">
-                <Image
-                  src={blog.blogImage || "/placeholder.png"}
-                  alt={blog.title}
-                  fill
-                  className="object-cover transition-transform duration-300 hover:scale-105 rounded-t-3xl"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
-              </div>
-
-              {/* Blog Content */}
-              <div className="p-5 md:p-6 lg:p-7 space-y-4">
-                {/* Title */}
-                <h3 className="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-teal-500 to-emerald-400 dark:from-pink-400 dark:via-orange-300 dark:to-yellow-400 transition-all duration-300 leading-tight">
-                  {blog.title.slice(0, 40) +
-                    (blog.title.length > 40 ? "..." : "")}
-                </h3>
-
-                {/* Author, Date, and Category */}
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-y-2 text-sm md:text-base text-gray-700 dark:text-gray-300 mt-2">
-                  {/* Left: Author + Date */}
-                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                    <span className="flex items-center gap-1.5">
-                      <svg
-                        className="w-4 h-4 text-blue-600 dark:text-pink-400"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M12 12c2.7 0 5.5 1.3 5.5 3.8V18H6.5v-2.2C6.5 13.3 9.3 12 12 12zm0-2a3 3 0 100-6 3 3 0 000 6z" />
-                      </svg>
-                      {blog.author}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <svg
-                        className="w-4 h-4 text-blue-600 dark:text-pink-400"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      {format(blog.date, "PPP")}
-                    </span>
-                  </div>
-
-                  {/* Right: Category */}
-                  <div className="mt-1 md:mt-0 max-w-full md:max-w-xs px-2">
-                    <span className="inline-block px-3 py-1 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full text-xs font-medium shadow-sm truncate whitespace-nowrap">
-                      {blog.category}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Description */}
-                <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed line-clamp-3">
-                  {blog.description
-                    ? blog.description?.slice(0, 100) +
-                      (blog.description?.length > 100 ? "..." : "")
-                    : "No description available."}
-                </p>
-
-                {/* Subcategories */}
-                <div className="flex flex-wrap gap-2 pt-2">
-                  {blog.subCategories.map((cat, index) => (
-                    <span
-                      key={index}
-                      className="inline-block px-3 py-1 bg-gradient-to-r from-sky-600 to-teal-500 dark:from-pink-500 dark:to-yellow-400 text-white rounded-full text-xs md:text-sm font-semibold shadow-sm hover:scale-105 transition-transform duration-300"
-                    >
-                      {cat.trim()}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Read More Link */}
-                <p className="mt-4 text-blue-700 dark:text-pink-500 font-semibold underline underline-offset-2 hover:text-blue-900 dark:hover:text-pink-300 text-sm md:text-base">
-                  Read More →
-                </p>
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
       <div className="flex items-center space-x-2">
         <button
           onClick={() => setViewMode("grid")}
@@ -1254,7 +1166,7 @@ const BlogFetch = ({ blogs }) => {
         </button>
       </div>
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
-        {Blogs.length > 0 ? (
+        {displayedBlogs.length > 0 ? (
           <div
             className={`${
               viewMode === "grid"
@@ -1262,7 +1174,7 @@ const BlogFetch = ({ blogs }) => {
                 : "space-y-8"
             }`}
           >
-            {Blogs.map((blog) => (
+            {displayedBlogs.map((blog) => (
               <BlogCard
                 key={blog.id}
                 blog={blog}
