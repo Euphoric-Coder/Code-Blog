@@ -357,11 +357,11 @@ const BlogFetch = ({ blogs }) => {
                   <div className="flex items-center space-x-3 text-sm text-gray-700 dark:text-gray-200">
                     <div className="flex items-center space-x-1">
                       <Eye className="h-4 w-4" />
-                      <span>{blog.views.toLocaleString()}</span>
+                      <span>{blog.views ?? "0"}</span>
                     </div>
                     <div className="flex items-center space-x-1">
                       <Heart className="h-4 w-4" />
-                      <span>{blog.likes}</span>
+                      <span>{blog.likes ?? "0"}</span>
                     </div>
                   </div>
 
@@ -431,13 +431,13 @@ const BlogFetch = ({ blogs }) => {
 
           {/* Description */}
           <p className="text-gray-700 dark:text-gray-200 leading-relaxed line-clamp-3 drop-shadow-sm font-medium">
-            {blog.description}
+            {blog.description ?? "No Description Available"}
           </p>
 
           {/* Subcategories */}
           <div className="space-y-2">
             <div className="text-xs font-medium text-gray-600 dark:text-gray-400">
-              Subcategories:
+              Subcategories: {blog.subCategories.length === 0 && "NA"}
             </div>
             <SubcategoryDisplay blog={blog} />
           </div>
@@ -517,7 +517,6 @@ const BlogFetch = ({ blogs }) => {
     }).format(date);
   };
 
-  const [hoveredBlogId, setHoveredBlogId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState("grid");
   const [tempFilters, setTempFilters] = useState({
@@ -945,9 +944,7 @@ const BlogFetch = ({ blogs }) => {
                           }));
                         }}
                         className={`border-0 rounded-full text-sm cursor-pointer px-3 py-1 transition-all font-bold ${
-                          tempFilters.category.includes(
-                            category.toLowerCase()
-                          )
+                          tempFilters.category.includes(category.toLowerCase())
                             ? "bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800"
                             : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
                         }`}
@@ -1142,28 +1139,28 @@ const BlogFetch = ({ blogs }) => {
             </button>
           )}
         </div>
-      </div>
-      <div className="flex items-center space-x-2">
-        <button
-          onClick={() => setViewMode("grid")}
-          className={`p-2 rounded-lg transition-colors ${
-            viewMode === "grid"
-              ? "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
-              : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-          }`}
-        >
-          <Grid className="h-5 w-5" />
-        </button>
-        <button
-          onClick={() => setViewMode("list")}
-          className={`p-2 rounded-lg transition-colors ${
-            viewMode === "list"
-              ? "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
-              : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-          }`}
-        >
-          <List className="h-5 w-5" />
-        </button>
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => setViewMode("grid")}
+            className={`p-2 rounded-lg transition-colors ${
+              viewMode === "grid"
+                ? "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
+                : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            }`}
+          >
+            <Grid className="h-5 w-5" />
+          </button>
+          <button
+            onClick={() => setViewMode("list")}
+            className={`p-2 rounded-lg transition-colors ${
+              viewMode === "list"
+                ? "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
+                : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            }`}
+          >
+            <List className="h-5 w-5" />
+          </button>
+        </div>
       </div>
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
         {displayedBlogs.length > 0 ? (
