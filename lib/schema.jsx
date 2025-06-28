@@ -27,6 +27,8 @@ export const Blogs = pgTable("blogs", {
   subCategories: jsonb("subCategories").notNull().default([]),
   tags: jsonb("tags").default([]),
   readTime: varchar("readTime").default("0 min read"),
+  views: varchar("views"),
+  likes: varchar("likes"),
   author: varchar("author").notNull(),
   date: varchar("date").notNull(),
   featured: boolean("featured").notNull().default(false),
@@ -36,11 +38,20 @@ export const Blogs = pgTable("blogs", {
 
 export const blogViews = pgTable("blogViews", {
   id: uuid("id").defaultRandom().primaryKey(),
-  blogId: varchar("blogId", { length: 255 })
+  blogId: varchar("blogId")
     .notNull()
     .references(() => Blogs.id, { onDelete: "cascade" }),
   viewers: jsonb("viewers").default([]).notNull(), // example: [{ email: "a@b.com", viewedAt: "2024-06-27T12:00:00Z" }]
   totalViews: varchar("totalViews").default(0).notNull(),
+});
+
+export const blogLikes = pgTable("blogLikes", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  blogId: varchar("blogId")
+    .notNull()
+    .references(() => Blogs.id, { onDelete: "cascade" }),
+  likes: jsonb("likes").default([]).notNull(), // example: [{ email: "a@b.com", viewedAt: "2024-06-27T12:00:00Z" }]
+  totalLikes: varchar("totalLikes").default(0).notNull(),
 });
 
 export const Tutorials = pgTable("tutorials", {
