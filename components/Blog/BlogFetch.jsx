@@ -48,18 +48,6 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 
 const BlogFetch = ({ blogs }) => {
-  const tags = [
-    "All",
-    "React",
-    "JavaScript",
-    "Python",
-    "TypeScript",
-    "Node.js",
-    "Docker",
-    "AWS",
-    "Machine Learning",
-    "CSS",
-  ];
 
   const Blogs = [
     {
@@ -257,7 +245,7 @@ const BlogFetch = ({ blogs }) => {
       return (
         <article className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl border border-gray-200/50 dark:border-gray-700/50 transition-all duration-300 hover:-translate-y-1">
           {/* Enhanced gradient background overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-100/70 via-white/85 to-teal-100/70 dark:from-gray-800/95 dark:via-gray-700/90 dark:to-gray-800/95"></div>
+          <div className="absolute inset-0 bg-gradient-to-tr from-blue-400 via-blue-50 to-blue-200 dark:from-gray-800 dark:via-gray-900 dark:to-black text-gray-900 dark:text-gray-100"></div>
 
           <div className="relative flex flex-col lg:flex-row">
             {/* Image */}
@@ -265,7 +253,7 @@ const BlogFetch = ({ blogs }) => {
               <img
                 src={blog.blogImage || "/placeholder.png"}
                 alt={blog.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
 
@@ -382,14 +370,14 @@ const BlogFetch = ({ blogs }) => {
     return (
       <article className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl border border-gray-200/50 dark:border-gray-700/50 transition-all duration-300 hover:-translate-y-2">
         {/* Enhanced gradient background overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-100/70 via-white/85 to-teal-100/70 dark:from-gray-800/95 dark:via-gray-700/90 dark:to-gray-800/95"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-400 via-blue-50 to-blue-200 dark:from-gray-800 dark:via-gray-900 dark:to-black text-gray-900 dark:text-gray-100"></div>
 
         {/* Image */}
         <div className="relative h-48 overflow-hidden">
           <img
             src={blog.blogImage || "/placeholder.png"}
             alt={blog.title}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            className="w-full h-full object-fill group-hover:scale-110 transition-transform duration-500"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
 
