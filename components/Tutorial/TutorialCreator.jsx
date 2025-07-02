@@ -447,6 +447,21 @@ const TutorialCreator = () => {
     } catch (error) {
       toast.error("Some Error occurred!", error);
     }
+
+    // for Demo Purpose
+    // console.log({
+    //   title: tutorial.title,
+    //   coverImage: tutorial.coverImage,
+    //   imageId: tutorial.imageId,
+    //   description: tutorial.description,
+    //   category: tutorial.category,
+    //   subCategories: tutorial.subcategory,
+    //   tags: tutorial.tags,
+    //   content: sections,
+    //   author: user?.fullName ?? "Anonymous",
+    //   date: getISTDate(),
+    //   createdBy: user?.primaryEmailAddress?.emailAddress,
+    // });
   };
 
   return (

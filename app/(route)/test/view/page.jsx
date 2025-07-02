@@ -3,165 +3,138 @@ import TutorialViewer from "../_components/TutorialViewer";
 
 const TutorialViewPage = () => {
   const mockTutorial = {
-    id: "1",
-    title: "Introduction to JavaScript",
+    id: "e7db08b7-7339-4d10-a472-fd782d98fb6f",
+    title: "Beginner’s Guide to APIs (Application Programming Interfaces)",
+    coverImage: null,
     description:
-      "Learn the basics of JavaScript programming language, from variables and functions to advanced concepts like closures and promises.",
-    coverImage:
-      "https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      "APIs power nearly every digital experience — from social media apps and e-commerce platforms to weather dashboards and payment gateways. This guide offers an in-depth introduction to APIs, how they work, their types, practical use cases, data formats, and authentication strategies.",
     category: "Programming",
-    subcategory: "JavaScript",
-    tags: ["beginner", "web development", "coding"],
-    sections: [
+    subCategories: [
+      "javascript",
+      "python",
+      "java",
+      "c-cpp",
+      "ruby",
+      "php",
+      "go",
+      "RESTAPIs",
+      "API",
+    ],
+    tags: ["api", "restfull api", "new age tech"],
+    content: [
       {
-        id: "1",
-        title: "Getting Started",
+        id: "c1aa6ac4-b8d1-4183-b8b0-7c429370660f",
+        title: "What is an API",
         subsections: [
           {
-            id: "1-1",
-            title: "Introduction",
-            content: `
-              <h2>Welcome to JavaScript Fundamentals</h2>
-              <p>This tutorial will guide you through the basics of JavaScript, one of the most popular programming languages in the world.</p>
-              <p>JavaScript is primarily known as the scripting language for Web pages, but it's also used in many non-browser environments.</p>
-              <img src="https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="JavaScript Code" class="w-full rounded-md my-4">
-              <p>By the end of this tutorial, you'll have a solid understanding of JavaScript fundamentals and be able to write your own scripts.</p>
-            `,
+            id: "0737d004-93b9-4505-999e-281995f9e8d7",
+            title: "API in Simple Terms",
+            content:
+              "<p>An&nbsp;<strong>API</strong>&nbsp;is a&nbsp;<strong>set of rules</strong>&nbsp;that allows one software program to interact with another. It defines&nbsp;<strong>how requests should be made</strong>,&nbsp;<strong>what data is required</strong>, and&nbsp;<strong>what format responses should be in</strong>.</p><ul><li><p>You don’t need to know how a server is built, just like you don’t need to know how a car engine works to drive. Similarly, an API hides the internal details and gives you just the controls you need.</p></li></ul><blockquote><p><strong>Analogy:</strong>&nbsp;Think of an API like a&nbsp;<strong>restaurant menu</strong>. The menu lists items you can order, along with a description. When you specify what you want, the kitchen (backend system) prepares it and returns it. The waiter (API) is the intermediary.</p></blockquote>",
+            usedMarkdown: false,
           },
           {
-            id: "1-2",
-            title: "Setting Up Your Environment",
-            content: `
-              <h2>Setting Up Your Development Environment</h2>
-              <p>To get started with JavaScript, you don't need much:</p>
-              <ul class="list-disc pl-6 my-4">
-                <li>A text editor (VS Code, Sublime Text, or even Notepad)</li>
-                <li>A modern web browser (Chrome, Firefox, Edge, etc.)</li>
-              </ul>
-              <h3 class="text-xl font-semibold mt-6 mb-3">Using the Browser Console</h3>
-              <p>The easiest way to start experimenting with JavaScript is through your browser's developer console:</p>
-              <ol class="list-decimal pl-6 my-4">
-                <li>Open your web browser</li>
-                <li>Right-click anywhere on a webpage and select "Inspect" or "Inspect Element"</li>
-                <li>Navigate to the "Console" tab</li>
-                <li>Type JavaScript code directly and press Enter to execute it</li>
-              </ol>
-              <p>Try typing <code>console.log("Hello, World!");</code> and pressing Enter.</p>
-            `,
+            id: "fbdcfed8-718f-4f75-b6ca-2907aaf8b460",
+            title: "What APIs Are NOT",
+            content:
+              "<ul><li><p>APIs are&nbsp;<strong>not the database</strong>, but they&nbsp;<strong>communicate with it</strong>.</p></li><li><p>APIs are&nbsp;<strong>not the frontend</strong>, but they&nbsp;<strong>feed it data</strong>.</p></li><li><p>APIs are&nbsp;<strong>not magic</strong>, but they&nbsp;<strong>abstract complexity</strong>.</p></li></ul>",
+            usedMarkdown: false,
           },
         ],
       },
       {
-        id: "2",
-        title: "JavaScript Basics",
+        id: "77b9b9fa-e954-4026-bdea-b57288172aa9",
+        title: "Why Are APIs So Important?",
         subsections: [
           {
-            id: "2-1",
-            title: "Variables and Data Types",
-            content: `
-              <h2>Variables and Data Types in JavaScript</h2>
-              <p>Variables are containers for storing data values. In JavaScript, there are several ways to declare variables:</p>
-              <pre><code class="language-javascript">
-var name = "John";
-let age = 25;
-const PI = 3.14159;
-              </code></pre>
-              <h3 class="text-xl font-semibold mt-6 mb-3">Common Data Types</h3>
-              <p>JavaScript has several built-in data types:</p>
-              <ul class="list-disc pl-6 my-4">
-                <li><strong>String</strong>: <code>"Hello"</code></li>
-                <li><strong>Number</strong>: <code>42</code></li>
-                <li><strong>Boolean</strong>: <code>true</code></li>
-                <li><strong>Null</strong>: <code>null</code></li>
-                <li><strong>Undefined</strong>: <code>undefined</code></li>
-                <li><strong>Object</strong>: <code>{ name: "John", age: 25 }</code></li>
-                <li><strong>Array</strong>: <code>[1, 2, 3, 4]</code></li>
-              </ul>
-              <h3 class="text-xl font-semibold mt-6 mb-3">Type Checking</h3>
-              <p>You can check the type of a variable using the <code>typeof</code> operator:</p>
-              <pre><code class="language-javascript">
-let name = "John";
-console.log(typeof name);
-              </code></pre>
-            `,
+            id: "9e827208-d5cf-4460-af3d-0cc33eba8d71",
+            title: "The Request-Response Cycle",
+            content:
+              '<ol><li><p><strong>Client</strong>&nbsp;makes a request (e.g., your app asks for weather in Mumbai).</p></li><li><p><strong>Server/API</strong>&nbsp;processes the request.</p></li><li><p><strong>Response</strong>&nbsp;is sent back (e.g., temperature is 32°C, status is “Sunny”).</p></li></ol><p><strong>Data Format:</strong>&nbsp;Most APIs respond with data in JSON format.<br>Example:</p><pre><code class="language-json">{ "city": "Mumbai", "temperature": "32°C", "condition": "Sunny" }</code></pre><p></p>',
+            usedMarkdown: false,
           },
           {
-            id: "2-2",
-            title: "Operators",
-            content: `
-              <h2>JavaScript Operators</h2>
-              <h3 class="text-xl font-semibold mt-6 mb-3">Arithmetic Operators</h3>
-              <pre><code class="language-javascript">
-let a = 10;
-let b = 5;
-let sum = a + b;
-let difference = a - b;
-              </code></pre>
-              <h3 class="text-xl font-semibold mt-6 mb-3">Comparison Operators</h3>
-              <pre><code class="language-javascript">
-let x = 5;
-let y = "5";
-console.log(x == y);
-              </code></pre>
-              <h3 class="text-xl font-semibold mt-6 mb-3">Logical Operators</h3>
-              <pre><code class="language-javascript">
-let isAdult = true;
-let hasLicense = false;
-console.log(isAdult && hasLicense);
-              </code></pre>
-            `,
+            id: "fd88403d-4c05-4c07-94ed-a9ef1079b21b",
+            title: "Real-Life Examples of APIs",
+            content:
+              "<ul><li><p>Instagram API: Used to fetch user posts or stories.</p></li><li><p>Spotify API: Fetches user playlists or song data.</p></li><li><p>GitHub API: Retrieves repositories, issues, and commits.</p></li></ul>",
+            usedMarkdown: false,
           },
         ],
       },
       {
-        id: "3",
-        title: "Control Structures",
+        id: "16326a51-9c5b-4edc-bb16-b54f9d9239d0",
+        title: "API Authentication",
         subsections: [
           {
-            id: "3-1",
-            title: "Conditional Statements",
-            content: `
-              <h2>Conditional Statements</h2>
-              <pre><code class="language-javascript">
-let age = 18;
-if (age >= 18) {
-  console.log("You are an adult.");
-}
-              </code></pre>
-              <h3 class="text-xl font-semibold mt-6 mb-3">Switch Statement</h3>
-              <pre><code class="language-javascript">
-let day = 3;
-switch (day) {
-  case 1:
-    console.log("Monday");
-    break;
-}
-              </code></pre>
-            `,
+            id: "fc392b1d-b7fd-4dda-84aa-8d68c991f5d8",
+            title: "API Keys",
+            content:
+              "<ul><li><p>A unique identifier used to authenticate a user or app.</p></li><li><p>Common for public APIs like news APIs or movie databases.</p></li></ul><blockquote><p>Example:&nbsp;<code>apiKey=123456abcdef</code></p></blockquote>",
+            usedMarkdown: false,
           },
           {
-            id: "3-2",
-            title: "Loops",
-            content: `
-              <h2>Loops</h2>
-              <pre><code class="language-javascript">
-for (let i = 0; i < 5; i++) {
-  console.log(i);
-}
-              </code></pre>
-              <h3 class="text-xl font-semibold mt-6 mb-3">While Loop</h3>
-              <pre><code class="language-javascript">
-let i = 0;
-while (i < 5) {
-  console.log(i);
-  i++;
-}
-              </code></pre>
-            `,
+            id: "36ad8d50-6727-4aaa-aafe-3f44609923dd",
+            title: "OAuth",
+            content:
+              "<ul><li><p>Used for&nbsp;<strong>secure user-based access</strong>.</p></li><li><p>Common in services like Google, GitHub, Facebook.</p></li><li><p>Requires permission from the user and returns a token for access.</p></li></ul>",
+            usedMarkdown: false,
+          },
+        ],
+      },
+      {
+        id: "6ced8c98-a9a7-4fe6-8d84-70983521e11a",
+        title: "Types of APIs",
+        subsections: [
+          {
+            id: "60db956c-a788-4155-b678-fbce22a6c630",
+            title: "Open vs Private APIs",
+            content:
+              "<ul><li><p><strong>Open APIs</strong>: Publicly accessible, often with limited usage.</p></li><li><p><strong>Private APIs</strong>: Used within a company or organization.</p></li><li><p><strong>Partner APIs</strong>: Shared with specific business partners.</p></li></ul>",
+            usedMarkdown: false,
+          },
+          {
+            id: "0634eabe-256d-4182-b41a-935c6da368d8",
+            title: "REST, SOAP, and GraphQL",
+            content:
+              "<ul><li><p><strong>REST (most common)</strong>: Uses HTTP methods like GET, POST.</p></li><li><p><strong>SOAP</strong>: Protocol-heavy, used in legacy systems.</p></li><li><p><strong>GraphQL</strong>: Flexible querying, lets clients ask for only the data they need.</p></li></ul>",
+            usedMarkdown: false,
+          },
+        ],
+      },
+      {
+        id: "f72d79ad-87d0-4f90-ad06-fd98e31290c0",
+        title: "Common Use Cases of APIs",
+        subsections: [
+          {
+            id: "00a24df0-fc99-424f-98d2-ce03a38bf795",
+            title: "Social Media Integration",
+            content:
+              "<p>Apps fetch user profile photos, names, and posts from platforms like Instagram or LinkedIn using APIs.</p>",
+            usedMarkdown: false,
+          },
+          {
+            id: "c76d4606-73d8-442a-a626-e2ce6fb5f3cd",
+            title: "Payments and E-commerce",
+            content:
+              "<p>Payment gateways like Razorpay or Stripe offer APIs to handle transactions, refunds, and billing.</p>",
+            usedMarkdown: false,
+          },
+          {
+            id: "4719756e-c9c5-4a10-8381-22c98b62fd85",
+            title: "Real-time Data",
+            content:
+              "<ul><li><p>Stock market apps (e.g., NSE/BSE APIs)</p></li><li><p>Weather forecasting</p></li><li><p>Live sports scores</p></li></ul><p></p>",
+            usedMarkdown: false,
           },
         ],
       },
     ],
+    author: "Sagnik Dey",
+    date: "2025-07-03",
+    featured: false,
+    createdBy: "2023ebcs536@online.bits-pilani.ac.in",
+    imageId: null,
   };
 
   return (
