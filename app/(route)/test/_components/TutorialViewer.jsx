@@ -229,7 +229,12 @@ const TutorialViewer = ({ tutorial }) => {
                     key={tag}
                     className="bg-blue-100 text-blue-800 px-2 py-1 rounded-md text-sm"
                   >
-                    {tag}
+                    {tag
+                      .split(" ")
+                      .map(
+                        (word) => word.charAt(0).toUpperCase() + word.slice(1)
+                      )
+                      .join(" ")}
                   </span>
                 ))}
               </div>

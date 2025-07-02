@@ -31,6 +31,7 @@ import { toast } from "sonner";
 import { db } from "@/lib/dbConfig";
 import { Tutorials } from "@/lib/schema";
 import { getISTDate } from "@/lib/utils";
+import { redirect } from "next/navigation";
 
 const initialSectionId = uuidv4();
 const initialSubsectionId = uuidv4();
@@ -443,6 +444,11 @@ const TutorialCreator = () => {
       if (result) {
         toast.success("Tutorial saved successfully!");
         clearData();
+
+        // Redirects to the Tutorial Page
+        setTimeout(() => {
+          redirect(`/tutorialpost/${result.insertedId}`);
+        }, 4000);
       }
     } catch (error) {
       toast.error("Some Error occurred!", error);

@@ -11,8 +11,8 @@ const TutorialViewer = ({ tutorial }) => {
   const [completedSubsections, setCompletedSubsections] = useState([]);
 
   useEffect(() => {
-    if (tutorial.sections.length > 0) {
-      const firstSection = tutorial.sections[0];
+    if (tutorial.content.length > 0) {
+      const firstSection = tutorial.content[0];
       setActiveSection(firstSection.id);
 
       if (firstSection.subsections.length > 0) {
@@ -33,7 +33,7 @@ const TutorialViewer = ({ tutorial }) => {
   }, [completedSubsections, tutorial]);
 
   const updateProgress = () => {
-    const totalSubsections = tutorial.sections.reduce(
+    const totalSubsections = tutorial.content.reduce(
       (total, section) => total + section.subsections.length,
       0
     );
@@ -62,7 +62,7 @@ const TutorialViewer = ({ tutorial }) => {
   const getActiveSubsectionContent = () => {
     if (!activeSection || !activeSubsection) return null;
 
-    const section = tutorial.sections.find((s) => s.id === activeSection);
+    const section = tutorial.content.find((s) => s.id === activeSection);
     if (!section) return null;
 
     const subsection = section.subsections.find(
@@ -74,10 +74,10 @@ const TutorialViewer = ({ tutorial }) => {
   const getPreviousSubsection = () => {
     if (!activeSection || !activeSubsection) return null;
 
-    const currentSectionIndex = tutorial.sections.findIndex(
+    const currentSectionIndex = tutorial.content.findIndex(
       (s) => s.id === activeSection
     );
-    const currentSubsectionIndex = tutorial.sections[
+    const currentSubsectionIndex = tutorial.content[
       currentSectionIndex
     ].subsections.findIndex((sub) => sub.id === activeSubsection);
 
@@ -85,14 +85,14 @@ const TutorialViewer = ({ tutorial }) => {
       return {
         sectionId: activeSection,
         subsectionId:
-          tutorial.sections[currentSectionIndex].subsections[
+          tutorial.content[currentSectionIndex].subsections[
             currentSubsectionIndex - 1
           ].id,
       };
     }
 
     if (currentSectionIndex > 0) {
-      const prevSection = tutorial.sections[currentSectionIndex - 1];
+      const prevSection = tutorial.content[currentSectionIndex - 1];
       return {
         sectionId: prevSection.id,
         subsectionId:
@@ -106,14 +106,14 @@ const TutorialViewer = ({ tutorial }) => {
   const getNextSubsection = () => {
     if (!activeSection || !activeSubsection) return null;
 
-    const currentSectionIndex = tutorial.sections.findIndex(
+    const currentSectionIndex = tutorial.content.findIndex(
       (s) => s.id === activeSection
     );
-    const currentSubsectionIndex = tutorial.sections[
+    const currentSubsectionIndex = tutorial.content[
       currentSectionIndex
     ].subsections.findIndex((sub) => sub.id === activeSubsection);
 
-    const currentSection = tutorial.sections[currentSectionIndex];
+    const currentSection = tutorial.content[currentSectionIndex];
 
     if (currentSubsectionIndex < currentSection.subsections.length - 1) {
       return {
@@ -122,8 +122,8 @@ const TutorialViewer = ({ tutorial }) => {
       };
     }
 
-    if (currentSectionIndex < tutorial.sections.length - 1) {
-      const nextSection = tutorial.sections[currentSectionIndex + 1];
+    if (currentSectionIndex < tutorial.content.length - 1) {
+      const nextSection = tutorial.content[currentSectionIndex + 1];
       return {
         sectionId: nextSection.id,
         subsectionId: nextSection.subsections[0].id,
@@ -148,7 +148,7 @@ const TutorialViewer = ({ tutorial }) => {
             <span>{Math.round(progress)}% complete</span>
             <span>
               {completedSubsections.length} /{" "}
-              {tutorial.sections.reduce(
+              {tutorial.content.reduce(
                 (total, section) => total + section.subsections.length,
                 0
               )}{" "}
@@ -158,7 +158,7 @@ const TutorialViewer = ({ tutorial }) => {
         </div>
 
         <div className="p-2">
-          {tutorial.sections.map((section) => (
+          {tutorial.content.map((section) => (
             <div key={section.id} className="mb-2">
               <div
                 className={`p-3 flex items-center justify-between rounded-md cursor-pointer transition-colors ${
@@ -208,8 +208,8 @@ const TutorialViewer = ({ tutorial }) => {
       </div>
 
       <div className="flex-1 p-6 lg:p-8">
-        {activeSection === tutorial.sections[0]?.id &&
-          activeSubsection === tutorial.sections[0]?.subsections[0]?.id && (
+        {activeSection === tutorial.content[0]?.id &&
+          activeSubsection === tutorial.content[0]?.subsections[0]?.id && (
             <div className="mb-8">
               {tutorial.coverImage && (
                 <img
@@ -229,7 +229,12 @@ const TutorialViewer = ({ tutorial }) => {
                     key={tag}
                     className="bg-blue-100 text-blue-800 px-2 py-1 rounded-md text-sm"
                   >
-                    {tag}
+                    {tag
+                      .split(" ")
+                      .map(
+                        (word) => word.charAt(0).toUpperCase() + word.slice(1)
+                      )
+                      .join(" ")}
                   </span>
                 ))}
               </div>
@@ -239,7 +244,7 @@ const TutorialViewer = ({ tutorial }) => {
               <div className="flex items-center text-gray-600 mb-8">
                 <BookOpen className="h-5 w-5 mr-2" />
                 <span>
-                  {tutorial.sections.reduce(
+                  {tutorial.content.reduce(
                     (total, section) => total + section.subsections.length,
                     0
                   )}{" "}
@@ -254,11 +259,11 @@ const TutorialViewer = ({ tutorial }) => {
             <div className="p-4 border-b border-gray-200 flex justify-between items-center">
               <div>
                 <h2 className="text-xl font-semibold text-gray-900">
-                  {tutorial.sections.find((s) => s.id === activeSection)?.title}
+                  {tutorial.content.find((s) => s.id === activeSection)?.title}
                 </h2>
                 <h3 className="text-lg text-gray-700">
                   {
-                    tutorial.sections
+                    tutorial.content
                       .find((s) => s.id === activeSection)
                       ?.subsections.find((sub) => sub.id === activeSubsection)
                       ?.title
