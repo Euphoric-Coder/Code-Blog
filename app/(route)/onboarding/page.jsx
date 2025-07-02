@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useUser } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import BasicInfoSection from "@/components/Form/BasicInfoSection";
 import CommonFieldsSection from "@/components/Form/CommonFieldsSection";
@@ -17,6 +17,7 @@ import BlogPreferencesSection from "@/components/Blog/BlogPreferencesSection";
 
 const Page = () => {
   const { user, isSignedIn } = useUser();
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -142,9 +143,7 @@ const Page = () => {
         <header className="flex justify-between items-start mb-10">
           <div>
             <h1 className="text-3xl font-extrabold text-blue-900 dark:text-blue-200">
-              {currentPage === 1
-                ? "Let Us Know You"
-                : "Choose Your Interests"}
+              {currentPage === 1 ? "Let Us Know You" : "Choose Your Interests"}
             </h1>
             <p className="text-gray-700 dark:text-gray-300 mt-2 text-sm md:text-base">
               {currentPage === 1

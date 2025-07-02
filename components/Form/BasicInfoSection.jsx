@@ -11,6 +11,7 @@ import { Label } from "../ui/label";
 import Image from "next/image";
 
 const BasicInfoSection = ({ fullName, email, profileImage, user }) => {
+
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(fullName || "");
   const [preview, setPreview] = useState(profileImage);
@@ -83,10 +84,16 @@ const BasicInfoSection = ({ fullName, email, profileImage, user }) => {
           </Button>
         ) : (
           <div className="flex gap-2">
-            <Button variant="ghost" onClick={handleCancel} className="rounded-3xl">
+            <Button
+              variant="ghost"
+              onClick={handleCancel}
+              className="rounded-3xl"
+            >
               Cancel
             </Button>
-            <Button onClick={handleSave} className="btn9">Save</Button>
+            <Button onClick={handleSave} className="btn9">
+              Save
+            </Button>
           </div>
         )}
       </div>

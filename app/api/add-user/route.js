@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { currentUser } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { Users } from "@/lib/schema";
 import { db } from "@/lib/dbConfig";
@@ -8,6 +8,17 @@ import { db } from "@/lib/dbConfig";
 export async function GET() {
   try {
     const user = await currentUser();
+
+    // Test for the pricing feature
+    // const { has } = await auth();
+
+    // const hasPro = has({ plan: "pro" });
+
+    // console.log(
+    //   hasPro
+    //     ? "yes the user has the pro subcriptions"
+    //     : "No the user does not have any subcriptions"
+    // );
 
     const email = user.emailAddresses[0]?.emailAddress;
     const fullName = user.firstName + " " + (user.lastName || "");

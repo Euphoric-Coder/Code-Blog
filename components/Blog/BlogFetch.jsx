@@ -277,7 +277,7 @@ const BlogFetch = ({ blogs }) => {
             <div className="flex-1 p-6 flex flex-col justify-between relative">
               <div className="space-y-4">
                 {/* Category */}
-                <span className="inline-block px-3 py-1 bg-gradient-to-r from-blue-200 to-blue-300 dark:from-blue-800/60 dark:to-blue-700/60 text-blue-800 dark:text-blue-200 text-sm font-semibold rounded-full shadow-sm">
+                <span className="inline-block px-3 py-1 bg-gradient-to-br from-purple-200 via-purple-100 to-purple-300 dark:from-purple-800/60 dark:via-purple-800 dark:to-purple-700/60 text-purple-800 dark:text-purple-200 text-sm font-semibold rounded-full shadow-sm">
                   {blog.category}
                 </span>
 
@@ -410,7 +410,19 @@ const BlogFetch = ({ blogs }) => {
         {/* Content */}
         <div className="relative p-6 space-y-4">
           {/* Category */}
-          <span className="inline-block px-3 py-1 bg-gradient-to-r from-blue-200 to-blue-300 dark:from-blue-800/60 dark:to-blue-700/60 text-blue-800 dark:text-blue-200 text-sm font-semibold rounded-full shadow-sm">
+          <span className="inline-block px-3 py-1 bg-gradient-to-r from-fuchsia-300 to-pink-400 dark:from-fuchsia-700 dark:to-pink-600 text-white text-sm font-semibold rounded-full shadow-md">
+            {blog.category}
+          </span>
+          <span className="inline-block px-3 py-1 bg-gradient-to-r from-amber-300 to-orange-400 dark:from-amber-700 dark:to-orange-600 text-white text-sm font-semibold rounded-full shadow-md">
+            {blog.category}
+          </span>
+          <span className="inline-block px-3 py-1 bg-gradient-to-r from-lime-300 to-teal-400 dark:from-lime-700 dark:to-teal-600 text-white text-sm font-semibold rounded-full shadow-md">
+            {blog.category}
+          </span>
+          <span className="inline-block px-3 py-1 bg-gradient-to-r from-indigo-400 to-violet-500 dark:from-indigo-700 dark:to-violet-600 text-white text-sm font-semibold rounded-full shadow-md">
+            {blog.category}
+          </span>
+          <span className="inline-block px-3 py-1 bg-gradient-to-br from-cyan-400 via-sky-300 to-sky-400 dark:from-cyan-700 dark:to-sky-600 text-white text-sm font-semibold rounded-full shadow-md">
             {blog.category}
           </span>
 

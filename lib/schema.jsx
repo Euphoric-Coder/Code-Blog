@@ -60,7 +60,7 @@ export const Tutorials = pgTable("tutorials", {
   coverImage: varchar("coverImage"),
   imageId: varchar("imageId"),
   description: varchar("description").notNull(),
-  categories: varchar("categories").notNull().default("Programming"),
+  category: varchar("category").notNull().default("Programming"),
   subCategories: jsonb("subCategories"),
   tags: jsonb("tags").notNull(),
   content: jsonb("content").notNull(),

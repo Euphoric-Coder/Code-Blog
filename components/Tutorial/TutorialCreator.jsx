@@ -27,6 +27,10 @@ import { useUser } from "@clerk/nextjs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import FormBackgroundEffect from "@/components/Effect/FormBackgroundEffect";
+import { toast } from "sonner";
+import { db } from "@/lib/dbConfig";
+import { Tutorials } from "@/lib/schema";
+import { getISTDate } from "@/lib/utils";
 
 const initialSectionId = uuidv4();
 const initialSubsectionId = uuidv4();
@@ -407,7 +411,7 @@ const TutorialCreator = () => {
       activeSectionId: initialSectionId,
       activeSubsectionId: initialSubsectionId,
     };
-    
+
     setTutorial(defaultData.tutorial);
     setSections(defaultData.sections);
     setActiveSectionId(initialSectionId);
@@ -416,21 +420,33 @@ const TutorialCreator = () => {
     console.log("Tutorial data fully reset.");
   };
 
-  const saveTutorial = () => {
-    // Arranging the data for DB inclusion
-    console.log(tutorial);
-    console.log(tutorial.title);
-    console.log(tutorial.subcategory);
-    console.log(tutorial.category);
-    console.log(tutorial.coverImage);
-    console.log(tutorial.imageId);
-    console.log(tutorial.description);
-    console.log(tutorial.tags);
-    console.log("Content: ", sections);
-    console.log("Author: ", user?.fullName);
-    console.log("Date: ", new Date().getDate());
-    console.log("Created By: ", user?.primaryEmailAddress?.emailAddress);
-    alert("Tutorial saved successfully!");
+  const saveTutorial = async () => {
+    try {
+      // Inserts the tutorial into the DB
+      const result = await db
+        .insert(Tutorials)
+        .values({
+          title: tutorial.title,
+          coverImage: tutorial.coverImage,
+          imageId: tutorial.imageId,
+          description: tutorial.description,
+          category: tutorial.category,
+          subCategories: tutorial.subcategory,
+          tags: tutorial.tags,
+          content: sections,
+          author: user?.fullName ?? "Anonymous",
+          date: getISTDate(),
+          createdBy: user?.primaryEmailAddress?.emailAddress,
+        })
+        .returning({ insertedId: Tutorials.id });
+
+      if (result) {
+        toast.success("Tutorial saved successfully!");
+        clearData();
+      }
+    } catch (error) {
+      toast.error("Some Error occurred!", error);
+    }
   };
 
   return (
