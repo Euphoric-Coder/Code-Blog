@@ -476,7 +476,7 @@ export default function BlogClient({ blogs }) {
       {/* Blog Posts Grid */}
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 px-4 py-8">
         {paginatedBlogs.map((blog, index) => (
-          <Link href={`/tutorialpost/${blog.slug}`} key={index}>
+          <Link href={`/tutorialpost/${blog.id}`} key={index}>
             <div className="relative overflow-hidden max-w-sm mx-auto lg:max-w-md rounded-3xl shadow-2xl transform transition-all duration-500 hover:scale-105 bg-gradient-to-br from-blue-400 via-white to-blue-200 dark:from-gray-800 dark:via-gray-900 dark:to-black text-gray-900 dark:text-gray-100 cursor-pointer">
               {/* Image section */}
               <div className="relative overflow-hidden rounded-t-3xl">

@@ -7,7 +7,7 @@ import { eq } from "drizzle-orm";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-const page = () => {
+const Page = () => {
   const { id } = useParams();
   const [tutorialData, setTutorialData] = useState(null);
 
@@ -40,4 +40,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
