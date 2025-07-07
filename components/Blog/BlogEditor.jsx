@@ -476,7 +476,12 @@ export default function BlogEditor({
       return;
     }
 
-    const slug = title.toLowerCase().replace(/ /g, "-");
+    const slug = title
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, "") // remove all non-alphanumeric characters except space/hyphen
+      .replace(/\s+/g, "-") // replace spaces with hyphens
+      .replace(/-+/g, "-"); // collapse multiple hyphens
 
     const turndownService = new TurndownService({ headingStyle: "atx" });
 
@@ -882,7 +887,12 @@ export default function BlogEditor({
                 Cover Image Uploaded
               </h3>
               <Button
-                onClick={() => setEditCoverImage(false)}
+                onClick={() => {
+                  setEditCoverImage(false);
+                  deleteFile(editBlogCoverImageId);
+                  setEditBlogCoverImageURL(null);
+                  setEditBlogCoverImageId(null);
+                }}
                 className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white font-medium px-5 py-2 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300"
               >
                 Reupload Image
