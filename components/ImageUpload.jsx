@@ -172,19 +172,23 @@ export default function ImageUpload({
               setIsDragging(true);
             }}
             onDragLeave={() => setIsDragging(false)}
-            className={`relative mt-5 flex flex-col items-center justify-center p-8 border-2 rounded-xl cursor-pointer transition-all ${
-              isDragging
-                ? "border-blue-600 bg-gradient-to-br from-cyan-100 to-indigo-200"
-                : "border-blue-300 bg-gradient-to-br from-cyan-50 to-indigo-100"
-            } shadow-md hover:shadow-lg`}
+            className={`relative mt-5 flex flex-col items-center justify-center p-8 border-[3px] rounded-xl cursor-pointer transition-all shadow-md hover:shadow-lg
+              ${
+                isDragging
+                  ? "border-blue-600 bg-gradient-to-br from-cyan-100 to-indigo-200 dark:from-[#0f172a] dark:to-[#1e3a8a]"
+                  : "border-blue-300 bg-gradient-to-br from-cyan-50 to-indigo-100 dark:from-[#1c1c1c] dark:to-[#0f172a]"
+              }`}
           >
-            <FiUploadCloud className="text-blue-600 text-6xl mb-4" />
+            <FiUploadCloud className="text-blue-600 dark:text-blue-400 text-6xl mb-4" />
             <div className="text-center">
-              <p className="text-blue-800 text-lg font-semibold">
+              <p className="text-blue-800 dark:text-blue-300 text-lg font-semibold">
                 Drag & Drop your image here
               </p>
-              <p className="text-md text-indigo-500 mt-1">
+              <p className="text-md text-indigo-500 dark:text-indigo-300 mt-1">
                 or click to browse files
+              </p>
+              <p className="text-sm text-red-500 dark:text-red-400 mt-1 font-medium">
+                Only image files (.jpg, .jpeg, .png, .gif, .webp) are allowed
               </p>
             </div>
             <input
@@ -200,9 +204,7 @@ export default function ImageUpload({
       ) : (
         <>
           <div className="p-6 rounded-2xl border border-gray-200 dark:border-gray-800 bg-gradient-to-br from-white via-gray-50 to-gray-100 dark:from-[#1b1b1b] dark:via-[#121212] dark:to-black shadow-xl space-y-6 transition-all duration-300">
-            {/* File Details + Actions */}
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-              {/* File Info */}
               <div className="space-y-1">
                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
                   File Uploaded Successfully
@@ -215,34 +217,6 @@ export default function ImageUpload({
                 <p className="text-sm text-gray-500 dark:text-gray-500">
                   {(uploadData.size / 1024).toFixed(2)} KB
                 </p>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex gap-3">
-                <Button
-                  onClick={handleReset}
-                  className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 dark:from-blue-600 dark:via-purple-700 dark:to-pink-600 text-white font-medium px-5 py-2 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform"
-                >
-                  Reupload
-                </Button>
-              </div>
-            </div>
-
-            {/* Image Preview */}
-            <div>
-              <h4 className="text-md font-medium text-gray-900 dark:text-gray-100 mb-3">
-                Cover Image Preview
-              </h4>
-              <div className="overflow-hidden rounded-2xl border-2 border-dashed border-blue-300 dark:border-purple-600 shadow-lg hover:shadow-xl transition-shadow duration-300 max-w-md">
-                {uploadData.url && (
-                  <Image
-                    src={uploadData.url}
-                    alt="Uploaded Cover"
-                    width={1000}
-                    height={400}
-                    className="object-fit w-full p-4 h-auto max-h-[400px] rounded-xl transition-transform duration-500 hover:scale-[1.03]"
-                  />
-                )}
               </div>
             </div>
           </div>
