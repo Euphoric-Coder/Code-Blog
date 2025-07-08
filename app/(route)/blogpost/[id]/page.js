@@ -25,6 +25,14 @@ export default function Page() {
       setBlogData(data);
     };
 
+    const viewBlog = async () => {
+      const res = await fetch("/api/view-blogs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ blogId }),
+      });
+    }
+
     const convertMarkdownToHtml = () => {
       if (blogData) {
         // setHtmlContent(await markdownToHtml(blogData?.mdFormat));
@@ -34,6 +42,7 @@ export default function Page() {
     };
 
     loadBlog();
+    viewBlog();
     convertMarkdownToHtml();
   }, [blogId, blogData]);
 

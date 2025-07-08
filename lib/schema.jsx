@@ -1,4 +1,4 @@
-import { pgTable, varchar, uuid, boolean, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, varchar, uuid, boolean, jsonb, integer } from "drizzle-orm/pg-core";
 
 export const Users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -28,8 +28,8 @@ export const Blogs = pgTable("blogs", {
   subCategories: jsonb("subCategories").notNull().default([]),
   tags: jsonb("tags").default([]),
   readTime: varchar("readTime").default("0 min read"),
-  views: varchar("views").default("0"),
-  likes: varchar("likes").default("0"),
+  views: integer("views").default(0),
+  likes: integer("likes").default(0),
   author: varchar("author").notNull(),
   date: varchar("date").notNull(),
   featured: boolean("featured").notNull().default(false),
@@ -76,7 +76,7 @@ export const Comments = pgTable("comments", {
   blogId: varchar("blogId")
     .notNull()
     .references(() => Blogs.id),
-  userId: uuid("userId").references(() => Users.id),
+  // userId: uuid("userId").references(() => Users.id),
   name: varchar("name").notNull(),
   createdBy: varchar("createdBy").notNull(),
   text: varchar("text").notNull(),

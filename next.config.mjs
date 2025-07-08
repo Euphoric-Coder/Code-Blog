@@ -12,6 +12,11 @@ const nextConfig = {
         hostname: "img.clerk.com",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "dummyimage.com",
+        port: "",
+      },
     ],
   },
 };

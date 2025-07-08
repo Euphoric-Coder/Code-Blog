@@ -142,7 +142,6 @@ const Comment = ({ blogId }) => {
       createdBy: user.primaryEmailAddress.emailAddress,
       text: comment,
       time: getISTDateTime(),
-      userId: user.id,
     });
     setComment("");
     toast.success("Comment posted!");
