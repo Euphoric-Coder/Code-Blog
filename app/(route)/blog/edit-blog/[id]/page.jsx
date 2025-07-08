@@ -17,6 +17,7 @@ const Page = () => {
 
     const fetchBlog = async () => {
       const result = await db.select().from(Blogs).where(eq(id, Blogs.id));
+      console.log(result[0]);
       setBlogData(result[0]);
     };
 
@@ -30,11 +31,12 @@ const Page = () => {
       <BlogEditor
         initialTitle={blogData.title}
         initialDescription={blogData.description}
-        initialCategory={blogData.categories}
+        initialCategory={blogData.category}
         initialSubCategories={blogData.subCategories}
-        initialContent={blogData.htmlFormat}
+        initialContent={blogData.content}
         initialCoverImageURL={blogData.blogImage}
         initialfileId={blogData.blogImageId}
+        initialTags={blogData.tags}
         editing
       />
     </div>

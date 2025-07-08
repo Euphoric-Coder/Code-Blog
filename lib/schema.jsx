@@ -23,6 +23,7 @@ export const Blogs = pgTable("blogs", {
   blogImage: varchar("blogImage"),
   blogImageId: varchar("blogImageId"),
   content: varchar("content").notNull(),
+  description: varchar("description").notNull(),
   category: varchar("category").notNull().default("Programming"),
   subCategories: jsonb("subCategories").notNull().default([]),
   tags: jsonb("tags").default([]),

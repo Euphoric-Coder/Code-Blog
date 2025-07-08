@@ -385,7 +385,7 @@ export default function BlogEditor({
   );
   const [editCoverImage, setEditCoverImage] = useState(editing ? true : false);
   const [category, setCategory] = useState(
-    editing ? initialCategory : blogCategories[0]
+    editing ? initialCategory.toLowerCase() : blogCategories[0]
   );
   const [selectedSubCategories, setSelectedSubCategories] = useState(
     editing ? initialSubCategories : []
@@ -889,9 +889,6 @@ export default function BlogEditor({
               <Button
                 onClick={() => {
                   setEditCoverImage(false);
-                  deleteFile(editBlogCoverImageId);
-                  setEditBlogCoverImageURL(null);
-                  setEditBlogCoverImageId(null);
                 }}
                 className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white font-medium px-5 py-2 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300"
               >
