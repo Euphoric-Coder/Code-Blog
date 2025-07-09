@@ -1,22 +1,17 @@
 import { NextResponse } from "next/server";
-import { currentUser } from "@clerk/nextjs/server";
 import { db } from "@/lib/dbConfig";
+import { currentUser } from "@clerk/nextjs/server";
 import { blogViews, Blogs } from "@/lib/schema";
 import { eq } from "drizzle-orm";
 
 export async function POST(req) {
   try {
     const { blogId } = await req.json();
-
     const user = await currentUser();
-
     const email = user.emailAddresses[0]?.emailAddress;
 
     if (!blogId || !email) {
-      return NextResponse.json(
-        { error: "Missing blogId or email" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Missing blogId or email" }, { status: 400 });
     }
 
     const [existingViewEntry] = await db
@@ -30,10 +25,7 @@ export async function POST(req) {
       );
 
       if (hasViewed) {
-        return NextResponse.json(
-          { message: "Already viewed" },
-          { status: 200 }
-        );
+        return NextResponse.json({ message: "Already viewed" }, { status: 200 });
       }
 
       const updatedViewers = [
@@ -76,9 +68,6 @@ export async function POST(req) {
     return NextResponse.json({ message: "View registered" }, { status: 200 });
   } catch (error) {
     console.error("View registration error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

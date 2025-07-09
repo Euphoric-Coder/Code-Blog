@@ -25,14 +25,6 @@ export default function Page() {
       setBlogData(data);
     };
 
-    const viewBlog = async () => {
-      const res = await fetch("/api/view-blogs", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ blogId }),
-      });
-    }
-
     const convertMarkdownToHtml = () => {
       if (blogData) {
         // setHtmlContent(await markdownToHtml(blogData?.mdFormat));
@@ -42,9 +34,26 @@ export default function Page() {
     };
 
     loadBlog();
-    viewBlog();
     convertMarkdownToHtml();
   }, [blogId, blogData]);
+
+  useEffect(() => {
+    const viewBlog = async () => {
+      try {
+        const res = await fetch("/api/view-blogs", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ blogId: blogId }),
+        });
+
+        console.log(res);
+      } catch (error) {
+        console.error("Error logging blog view:", error);
+      }
+    };
+
+    viewBlog();
+  }, [blogId]); // ✅ this is the correct dependency
 
   const redirectBlogEditor = () => {
     router.push(`/blog/edit-blog/${blogId}`);
