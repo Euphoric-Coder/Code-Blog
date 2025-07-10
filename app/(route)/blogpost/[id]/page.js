@@ -13,7 +13,7 @@ import Image from "next/image";
 export default function Page() {
   const blogId = useParams().id;
   const router = useRouter();
-  const { user } = useUser();
+  const { user, isSignedIn } = useUser();
   const [blogData, setBlogData] = useState(null);
 
   const [htmlContent, setHtmlContent] = useState("");
@@ -38,6 +38,8 @@ export default function Page() {
   }, [blogId, blogData]);
 
   useEffect(() => {
+    if(!isSignedIn) return;
+    
     const viewBlog = async () => {
       try {
         const res = await fetch("/api/view-blogs", {
@@ -53,7 +55,7 @@ export default function Page() {
     };
 
     viewBlog();
-  }, [blogId]); // ✅ this is the correct dependency
+  }, [blogId]);
 
   const redirectBlogEditor = () => {
     router.push(`/blog/edit-blog/${blogId}`);
@@ -63,13 +65,15 @@ export default function Page() {
     return <BlogLoader />;
   }
 
+  const placeholderImage = "/placeholder.png"; // Fallback image
+
   return (
     <div className="animate-fadeIn">
       {/* Hero Section */}
       <div
         className="relative h-[50vh] md:h-[60vh] w-full bg-[length:100%_100%] bg-no-repeat bg-center"
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(${blogData.blogImage})`,
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(${blogData?.blogImage || placeholderImage})`,
         }}
       >
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-4 sm:p-6 md:p-10 text-white">
@@ -89,18 +93,18 @@ export default function Page() {
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-3 sm:space-y-0 sm:space-x-6">
               <div className="flex items-center">
                 <Image
-                  src={blogData?.author.avatar || "/default-avatar.png"}
+                  src={blogData?.author.avatar || "/default-avatar.jpg"}
                   alt={blogData?.author.name || "Author"}
                   width={40}
                   height={40}
                   className="w-10 h-10 rounded-full mr-3"
                 />
-                <span>{blogData?.author.name}</span>
+                <span>{blogData?.author.name || "Anonymous"}</span>
               </div>
 
               <div className="flex items-center">
                 <Clock className="w-5 h-5 mr-2" />
-                <span>{blogData?.readingTime} min read</span>
+                <span>{blogData?.readingTime || 0} min read</span>
               </div>
 
               <div className="flex items-center">
@@ -129,7 +133,7 @@ export default function Page() {
             </div>
             <button className="flex items-center text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">
               <Bookmark className="w-5 h-5 mr-2" />
-              <span>Save</span>
+              <span>Bookmark</span>
             </button>
           </div>
 
@@ -142,7 +146,7 @@ export default function Page() {
           <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
             <div className="flex items-start space-x-4">
               <Image
-                src={blogData.author.avatar || "/default-avatar.png"}
+                src={blogData.author.avatar || "/default-avatar.jpg"}
                 alt={blogData.author.name || "Author"}
                 width={64}
                 height={64}

@@ -59,7 +59,7 @@ const truncateText = (text, limit) => {
 };
 
 const Comment = ({ blogId }) => {
-  const { user } = useUser();
+  const { user, isSignedIn } = useUser();
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
   const [reply, setReply] = useState("");
@@ -88,6 +88,8 @@ const Comment = ({ blogId }) => {
 
       // Helper function to fetch image URL by email
       const getImgURL = async (email) => {
+        if (!isSignedIn) return;
+
         try {
           const imgRes = await fetch("/api/get-imgurl", {
             method: "POST",
@@ -206,7 +208,7 @@ const Comment = ({ blogId }) => {
       <div className="flex items-start gap-4 mb-6">
         <Avatar className="h-10 w-10">
           <AvatarImage src={user?.imageUrl} />
-          <AvatarFallback>{user?.fullName?.[0]}</AvatarFallback>
+          <AvatarFallback>{user?.fullName?.[0] || "T"}</AvatarFallback>
         </Avatar>
         <div className="w-full">
           <textarea
@@ -245,7 +247,7 @@ const Comment = ({ blogId }) => {
           <div key={c.id} className="flex items-start gap-4">
             <Avatar>
               <AvatarImage src={c.imgURL} />
-              <AvatarFallback>{c.name?.[0]}</AvatarFallback>
+              <AvatarFallback>{c.name?.[0] || "T"}</AvatarFallback>
             </Avatar>
             <div className="flex-1">
               <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
@@ -378,7 +380,7 @@ const Comment = ({ blogId }) => {
                 </p>
                 {c.text.split(" ").length > 25 && (
                   <Button
-                  variant="ghost"
+                    variant="ghost"
                     className="text-xs text-indigo-600 hover:underline mt-1"
                     onClick={() =>
                       setShowFullComment((prev) => ({
