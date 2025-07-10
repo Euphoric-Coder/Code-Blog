@@ -51,6 +51,8 @@ import {
   MdOutlineKeyboardArrowUp,
 } from "react-icons/md";
 import { Input } from "../ui/input";
+import { useRouter } from "next/navigation";
+import NotSignedIn from "../Miscellaneous/NotSignedIn";
 
 // Word truncation
 const truncateText = (text, limit) => {
@@ -72,6 +74,8 @@ const Comment = ({ blogId }) => {
   const [editText, setEditText] = useState("");
   const [editReplyId, setEditReplyId] = useState(null);
   const [editReplyText, setReplyEditText] = useState("");
+  const [showSignInModal, setShowSignInModal] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     fetchComments(blogId);
@@ -137,6 +141,7 @@ const Comment = ({ blogId }) => {
   const refreshData = async () => fetchComments(blogId);
 
   const handlePostComment = async () => {
+    if (!isSignedIn) return setShowSignInModal(true);
     if (!comment.trim()) return toast.error("Comment cannot be empty!");
     await db.insert(Comments).values({
       blogId: blogId,
@@ -151,6 +156,7 @@ const Comment = ({ blogId }) => {
   };
 
   const handlePostReply = async () => {
+    if (!isSignedIn) return setShowSignInModal(true);
     if (!reply.trim() || !replyingTo)
       return toast.error("Reply cannot be empty!");
     await db.insert(Replies).values({
@@ -458,7 +464,7 @@ const Comment = ({ blogId }) => {
                 <div>
                   <div className="flex items-start gap-2 mt-4">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={user?.imageUrl} />
+                      <AvatarImage src={user?.imageUrl ?? "/default-avatar.jpg"} draggable={false} />
                       <AvatarFallback>{user?.fullName?.[0]}</AvatarFallback>
                     </Avatar>
                     <input
@@ -681,6 +687,12 @@ const Comment = ({ blogId }) => {
                   </div>
                 </div>
               )}
+
+              <NotSignedIn
+                isOpen={showSignInModal}
+                onClose={() => setShowSignInModal(false)}
+                onSignIn={() => router.push("/sign-in")}
+              />
             </div>
           </div>
         ))}

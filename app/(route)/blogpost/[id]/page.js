@@ -38,8 +38,8 @@ export default function Page() {
   }, [blogId, blogData]);
 
   useEffect(() => {
-    if(!isSignedIn) return;
-    
+    if (!isSignedIn) return;
+
     const viewBlog = async () => {
       try {
         const res = await fetch("/api/view-blogs", {
@@ -151,6 +151,7 @@ export default function Page() {
                 width={64}
                 height={64}
                 className="w-16 h-16 rounded-full"
+                draggable={false}
               />
               <div>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
