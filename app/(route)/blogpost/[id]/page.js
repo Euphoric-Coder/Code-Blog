@@ -10,6 +10,7 @@ import BlogLoader from "@/components/Blog/BlogLoader";
 import Comment from "@/components/Blog/Comments";
 import Image from "next/image";
 import BlogShare from "@/components/Miscellaneous/BlogShare";
+import NotSignedIn from "@/components/Miscellaneous/NotSignedIn";
 
 export default function Page() {
   const blogId = useParams().id;
@@ -20,6 +21,7 @@ export default function Page() {
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [showSignInModal, setShowSignInModal] = useState(false);
 
   const [htmlContent, setHtmlContent] = useState("");
 
@@ -125,7 +127,10 @@ export default function Page() {
   }
 
   const handleLikeToggle = async () => {
-    if (!isSignedIn) return;
+    if (!isSignedIn) {
+      setShowSignInModal(true);
+      return;
+    };
 
     try {
       const res = await fetch("/api/toggle-blog-like", {
@@ -157,7 +162,10 @@ export default function Page() {
   };
 
   const handleBookmarkToggle = async () => {
-    if (!isSignedIn) return;
+    if (!isSignedIn) {
+      setShowSignInModal(true);
+      return;
+    }
 
     try {
       const res = await fetch("/api/toggle-blog-bookmark", {
@@ -313,6 +321,12 @@ export default function Page() {
             description={blogData.description}
             url={`https://yourdomain.com/blogpost/${blogId}`} // replace with your actual domain
             // url={"https://www.google.com"} // placeholder URL, replace with actual blog URL
+          />
+
+          <NotSignedIn
+            isOpen={showSignInModal}
+            onClose={() => setShowSignInModal(false)}
+            onSignIn={() => router.push("/sign-in")}
           />
 
           <Comment blogId={blogId} />

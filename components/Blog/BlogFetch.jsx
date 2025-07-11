@@ -1214,6 +1214,7 @@ const BlogFetch = ({ blogs, refreshData }) => {
           </div>
         )}
       </div>
+      
       {/* Blog Share Modal */}
       {individualBlog && (
         <BlogShare
