@@ -49,6 +49,7 @@ import { format } from "date-fns";
 import BlogShare from "../Miscellaneous/BlogShare";
 import { useUser } from "@clerk/nextjs";
 import BlogLike from "../Miscellaneous/BlogLikeButton";
+import BlogBookmark from "../Miscellaneous/BlogBookmarkButton";
 
 const BlogFetch = ({ blogs, refreshData }) => {
   const Blogs = [
@@ -405,9 +406,7 @@ const BlogFetch = ({ blogs, refreshData }) => {
 
           {/* Quick Actions */}
           <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button className="p-2 bg-white/30 backdrop-blur-sm rounded-full text-white hover:bg-white/40 transition-colors shadow-lg">
-              <Bookmark className="h-4 w-4" />
-            </button>
+            <BlogBookmark blogId={blog.id} showIconOnly={true} />
             <BlogLike
               blogId={blog.id}
               initialLikes={likesMap[blog.id] ?? blog.likes ?? 0}
