@@ -27,6 +27,7 @@ export default function Page() {
       const response = await fetch(`/api/fetch-blogs/${blogId}`);
       const data = await response.json();
       setBlogData(data);
+      setLikesCount(data.likes || 0);
     };
 
     const convertMarkdownToHtml = () => {
@@ -85,6 +86,25 @@ export default function Page() {
     return <BlogLoader />;
   }
 
+  const handleLikeToggle = async () => {
+    if (!isSignedIn) return;
+
+    const res = await fetch("/api/toggle-like", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        blogId,
+        email: user.primaryEmailAddress.emailAddress,
+        time: new Date().toISOString(),
+      }),
+    });
+
+    const data = await res.json();
+    setIsLiked(data.liked);
+    setLikesCount((prev) => (data.liked ? prev + 1 : prev - 1));
+  };
+  
+
   const placeholderImage = "/placeholder.png"; // Fallback image
 
   return (
@@ -142,10 +162,20 @@ export default function Page() {
           {/* Share and Save Buttons */}
           <div className="flex justify-between items-center mb-8 pb-6 border-b border-gray-200 dark:border-gray-700">
             <div className="flex space-x-4">
-              <button className="flex items-center text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">
-                <Heart className="w-5 h-5 mr-2" />
-                <span>Like</span>
+              <button
+                onClick={handleLikeToggle}
+                className={`flex items-center transition-colors ${
+                  isLiked
+                    ? "text-red-600 dark:text-red-400"
+                    : "text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400"
+                }`}
+              >
+                <Heart className="w-5 h-5 mr-2 fill-current" />
+                <span>
+                  {isLiked ? "Liked" : "Like"} ({likesCount})
+                </span>
               </button>
+
               <button
                 onClick={() => setIsShareOpen(true)}
                 className="flex items-center text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors"
