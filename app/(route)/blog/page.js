@@ -19,6 +19,10 @@ const Page = () => {
     setblogData(data);
   };
 
+  const refreshData = () => {
+    loadBlogs();
+  };
+
   return (
     <main className="relative w-full min-h-screen bg-gradient-to-b from-blue-50 via-white to-white dark:from-gray-800 dark:via-gray-800 dark:to-blue-950 text-gray-900 dark:text-gray-100 transition-all duration-700">
       {/* Hero Section Heading */}
@@ -127,7 +131,7 @@ const Page = () => {
       </section>
 
       <section>
-        <BlogFetch blogs={blogData} />
+        <BlogFetch blogs={blogData} refreshData={refreshData}/>
       </section>
     </main>
   );

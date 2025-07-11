@@ -46,9 +46,9 @@ import { blogCategories, blogSubCategoriesList } from "@/lib/data";
 import { Badge } from "../ui/badge";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import BlogShare from "../Miscellaneous/BlogShare";
 
-const BlogFetch = ({ blogs }) => {
-
+const BlogFetch = ({ blogs, refreshData }) => {
   const Blogs = [
     {
       id: 1,
@@ -240,6 +240,10 @@ const BlogFetch = ({ blogs }) => {
     );
   };
 
+  const fetchIndividualBlog = (id) => {
+    return blogs.find((blog) => blog.id === id);
+  };
+
   const BlogCard = ({ blog, isListView = false }) => {
     if (isListView) {
       return (
@@ -402,6 +406,17 @@ const BlogFetch = ({ blogs }) => {
               <Bookmark className="h-4 w-4" />
             </button>
             <button className="p-2 bg-white/30 backdrop-blur-sm rounded-full text-white hover:bg-white/40 transition-colors shadow-lg">
+              <Heart className="h-4 w-4" />
+            </button>
+            <button
+              className="p-2 bg-white/30 backdrop-blur-sm rounded-full text-white hover:bg-white/40 transition-colors shadow-lg"
+              onClick={() => {
+                console.log("Share button clicked");
+                console.log(fetchIndividualBlog(blog.id));
+                setIndividualBlog(fetchIndividualBlog(blog.id));
+                setIsShareOpen(true);
+              }}
+            >
               <Share2 className="h-4 w-4" />
             </button>
           </div>
@@ -504,6 +519,18 @@ const BlogFetch = ({ blogs }) => {
             </Link>
           </div>
         </div>
+
+        {/* Blog Share Modal */}
+        {individualBlog && (
+          <BlogShare
+            isOpen={isShareOpen}
+            onClose={() => setIsShareOpen(false)}
+            title={individualBlog.title}
+            description={individualBlog.description}
+            url={`https://yourdomain.com/blogpost/${individualBlog.id}`} // replace with your actual domain
+            // url={"https://www.google.com"} // placeholder URL, replace with actual blog URL
+          />
+        )}
       </article>
     );
   };
@@ -522,6 +549,8 @@ const BlogFetch = ({ blogs }) => {
   };
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [individualBlog, setIndividualBlog] = useState(null);
+  const [isShareOpen, setIsShareOpen] = useState(false);
   const [viewMode, setViewMode] = useState("grid");
   const [tempFilters, setTempFilters] = useState({
     authors: [],
