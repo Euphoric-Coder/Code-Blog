@@ -19,6 +19,7 @@ export default function Page() {
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
   const [htmlContent, setHtmlContent] = useState("");
 
@@ -69,6 +70,31 @@ export default function Page() {
 
     checkIfLiked();
   }, [blogId, isSignedIn, user?.primaryEmailAddress?.emailAddress]);
+
+  useEffect(() => {
+    const checkIfBookmarked = async () => {
+      if (!isSignedIn || !user?.primaryEmailAddress?.emailAddress) return;
+
+      try {
+        const res = await fetch("/api/check-bookmark", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            blogId,
+            email: user.primaryEmailAddress.emailAddress,
+          }),
+        });
+
+        const data = await res.json();
+        setIsBookmarked(data.bookmarked);
+      } catch (err) {
+        console.error("Error checking bookmark:", err);
+      }
+    };
+
+    checkIfBookmarked();
+  }, [blogId, isSignedIn, user?.primaryEmailAddress?.emailAddress]);
+  
 
   useEffect(() => {
     if (!isSignedIn) return;
@@ -129,6 +155,28 @@ export default function Page() {
       console.error("Error toggling like:", error);
     }
   };
+
+  const handleBookmarkToggle = async () => {
+    if (!isSignedIn) return;
+
+    try {
+      const res = await fetch("/api/toggle-bookmark", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          blogId,
+          email: user.primaryEmailAddress.emailAddress,
+          time: new Date().toISOString(),
+        }),
+      });
+
+      const data = await res.json();
+      setIsBookmarked(data.bookmarked);
+    } catch (error) {
+      console.error("Error toggling bookmark:", error);
+    }
+  };
+  
   
 
   const placeholderImage = "/placeholder.png"; // Fallback image
@@ -210,9 +258,16 @@ export default function Page() {
                 <span>Share</span>
               </button>
             </div>
-            <button className="flex items-center text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">
-              <Bookmark className="w-5 h-5 mr-2" />
-              <span>Bookmark</span>
+            <button
+              onClick={handleBookmarkToggle}
+              className={`flex items-center transition-colors ${
+                isBookmarked
+                  ? "text-yellow-500 dark:text-yellow-400"
+                  : "text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400"
+              }`}
+            >
+              <Bookmark className="w-5 h-5 mr-2 fill-current" />
+              <span>{isBookmarked ? "Bookmarked" : "Bookmark"}</span>
             </button>
           </div>
 

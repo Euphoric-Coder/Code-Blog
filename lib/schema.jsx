@@ -56,6 +56,16 @@ export const blogLikes = pgTable("blogLikes", {
   totalLikes: varchar("totalLikes").default(0).notNull(),
 });
 
+export const blogBookmarks = pgTable("blogBookmarks", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  blogId: varchar("blogId")
+    .notNull()
+    .references(() => Blogs.id, { onDelete: "cascade" }),
+  bookmarkedBy: varchar("bookmarkedBy").notNull(),
+  bookmarkedAt: varchar("bookmarkedAt").notNull(),
+});
+
+
 export const Tutorials = pgTable("tutorials", {
   id: uuid("id").defaultRandom().primaryKey(),
   title: varchar("title").notNull(),
