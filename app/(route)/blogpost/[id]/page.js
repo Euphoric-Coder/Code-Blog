@@ -22,41 +22,55 @@ export default function Page() {
 
   const [htmlContent, setHtmlContent] = useState("");
 
+  // Load blog data when blogId changes
   useEffect(() => {
     const loadBlog = async () => {
-      const response = await fetch(`/api/fetch-blogs/${blogId}`);
-      const data = await response.json();
-      setBlogData(data);
-      setLikesCount(data.likes || 0);
-    };
-
-    const convertMarkdownToHtml = () => {
-      if (blogData) {
-        // setHtmlContent(await markdownToHtml(blogData?.mdFormat));
-        setHtmlContent(processContent(blogData?.content));
-        // setHtmlContent(blogData?.htmlFormat);
+      try {
+        const response = await fetch(`/api/fetch-blogs/${blogId}`);
+        const data = await response.json();
+        console.log("Blog data fetched:", data);
+        setBlogData(data);
+        setLikesCount(data.likes || 0);
+      } catch (err) {
+        console.error("Failed to load blog:", err);
       }
     };
 
+    loadBlog();
+  }, [blogId]);
+
+  // Convert blog content when blogData updates
+  useEffect(() => {
+    if (blogData) {
+      setHtmlContent(processContent(blogData.content));
+    }
+  }, [blogData]);
+
+  // Check if user liked this blog (when blogId and isSignedIn change)
+  useEffect(() => {
     const checkIfLiked = async () => {
-      if (!isSignedIn) return;
-      const res = await fetch("/api/check-like", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          blogId,
-          email: user.primaryEmailAddress.emailAddress,
-        }),
-      });
-      const data = await res.json();
-      console.log("Like check response:", data);
-      setIsLiked(data.liked);
+      if (!isSignedIn || !user?.primaryEmailAddress?.emailAddress) return;
+
+      try {
+        const res = await fetch("/api/check-like", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            blogId,
+            email: user.primaryEmailAddress.emailAddress,
+          }),
+        });
+
+        const data = await res.json();
+        console.log("Like check response:", data);
+        setIsLiked(data.liked);
+      } catch (err) {
+        console.error("Error checking like:", err);
+      }
     };
 
-    loadBlog();
-    loadBlog().then(() => checkIfLiked());
-    convertMarkdownToHtml();
-  }, [blogId, blogData]);
+    checkIfLiked();
+  }, [blogId, isSignedIn, user?.primaryEmailAddress?.emailAddress]);
 
   useEffect(() => {
     if (!isSignedIn) return;
@@ -103,7 +117,6 @@ export default function Page() {
     setIsLiked(data.liked);
     setLikesCount((prev) => (data.liked ? prev + 1 : prev - 1));
   };
-  
 
   const placeholderImage = "/placeholder.png"; // Fallback image
 
