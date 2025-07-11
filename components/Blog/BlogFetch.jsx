@@ -519,18 +519,6 @@ const BlogFetch = ({ blogs, refreshData }) => {
             </Link>
           </div>
         </div>
-
-        {/* Blog Share Modal */}
-        {individualBlog && (
-          <BlogShare
-            isOpen={isShareOpen}
-            onClose={() => setIsShareOpen(false)}
-            title={individualBlog.title}
-            description={individualBlog.description}
-            url={`https://yourdomain.com/blogpost/${individualBlog.id}`} // replace with your actual domain
-            // url={"https://www.google.com"} // placeholder URL, replace with actual blog URL
-          />
-        )}
       </article>
     );
   };
@@ -1226,6 +1214,17 @@ const BlogFetch = ({ blogs, refreshData }) => {
           </div>
         )}
       </div>
+      {/* Blog Share Modal */}
+      {individualBlog && (
+        <BlogShare
+          isOpen={isShareOpen}
+          onClose={() => setIsShareOpen(false)}
+          title={individualBlog.title}
+          description={individualBlog.description}
+          url={`https://yourdomain.com/blogpost/${individualBlog.id}`} // replace with your actual domain
+          // url={"https://www.google.com"} // placeholder URL, replace with actual blog URL
+        />
+      )}
     </div>
   );
 };
