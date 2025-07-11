@@ -47,6 +47,8 @@ import { Badge } from "../ui/badge";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import BlogShare from "../Miscellaneous/BlogShare";
+import { useUser } from "@clerk/nextjs";
+import BlogLike from "../Miscellaneous/BlogLikeButton";
 
 const BlogFetch = ({ blogs, refreshData }) => {
   const Blogs = [
@@ -353,10 +355,11 @@ const BlogFetch = ({ blogs, refreshData }) => {
                       <Eye className="h-4 w-4" />
                       <span>{blog.views ?? "0"}</span>
                     </div>
-                    <div className="flex items-center space-x-1">
-                      <Heart className="h-4 w-4" />
-                      <span>{blog.likes ?? "0"}</span>
-                    </div>
+                    <BlogLike
+                      blogId={blog.id}
+                      initialLikes={likesMap[blog.id] ?? blog.likes ?? 0}
+                      onChange={handleLikeChange}
+                    />
                   </div>
 
                   <button className="group/btn inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold transition-colors">
@@ -405,9 +408,13 @@ const BlogFetch = ({ blogs, refreshData }) => {
             <button className="p-2 bg-white/30 backdrop-blur-sm rounded-full text-white hover:bg-white/40 transition-colors shadow-lg">
               <Bookmark className="h-4 w-4" />
             </button>
-            <button className="p-2 bg-white/30 backdrop-blur-sm rounded-full text-white hover:bg-white/40 transition-colors shadow-lg">
-              <Heart className="h-4 w-4" />
-            </button>
+            <BlogLike
+              blogId={blog.id}
+              initialLikes={likesMap[blog.id] ?? blog.likes ?? 0}
+              onChange={handleLikeChange}
+              showIconOnly={true}
+            />
+
             <button
               className="p-2 bg-white/30 backdrop-blur-sm rounded-full text-white hover:bg-white/40 transition-colors shadow-lg"
               onClick={() => {
@@ -478,10 +485,11 @@ const BlogFetch = ({ blogs, refreshData }) => {
                 <Eye className="h-4 w-4" />
                 <span>{blog.views ?? "0"}</span>
               </div>
-              <div className="flex items-center space-x-1">
-                <Heart className="h-4 w-4" />
-                <span>{blog.likes ?? "0"}</span>
-              </div>
+              <BlogLike
+                blogId={blog.id}
+                initialLikes={likesMap[blog.id] ?? blog.likes ?? 0}
+                onChange={handleLikeChange}
+              />
             </div>
             <span className="font-semibold">{blog.readTime}</span>
           </div>
@@ -536,9 +544,14 @@ const BlogFetch = ({ blogs, refreshData }) => {
     }).format(date);
   };
 
+  const { user, isSignedIn } = useUser();
   const [searchTerm, setSearchTerm] = useState("");
   const [individualBlog, setIndividualBlog] = useState(null);
   const [isShareOpen, setIsShareOpen] = useState(false);
+  const [likesMap, setLikesMap] = useState(() => {
+    return Object.fromEntries(blogs.map((b) => [b.id, b.likes ?? 0]));
+  });
+  
   const [viewMode, setViewMode] = useState("grid");
   const [tempFilters, setTempFilters] = useState({
     authors: [],
@@ -713,6 +726,11 @@ const BlogFetch = ({ blogs, refreshData }) => {
     (appliedFilters.dateRange.to &&
       appliedFilters.dateRange.to.trim() !== "") ||
     appliedFilters.oldestBlog;
+
+    const handleLikeChange = (blogId, total, liked) => {
+      setLikesMap((prev) => ({ ...prev, [blogId]: total }));
+      refreshData?.(); // optional if you're syncing from DB
+    };    
 
   return (
     <div>
@@ -1214,12 +1232,15 @@ const BlogFetch = ({ blogs, refreshData }) => {
           </div>
         )}
       </div>
-      
+
       {/* Blog Share Modal */}
       {individualBlog && (
         <BlogShare
           isOpen={isShareOpen}
-          onClose={() => setIsShareOpen(false)}
+          onClose={() => {
+            setIsShareOpen(false);
+            setIndividualBlog(null);
+          }}
           title={individualBlog.title}
           description={individualBlog.description}
           url={`https://yourdomain.com/blogpost/${individualBlog.id}`} // replace with your actual domain
