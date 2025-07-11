@@ -28,7 +28,6 @@ export default function Page() {
       try {
         const response = await fetch(`/api/fetch-blogs/${blogId}`);
         const data = await response.json();
-        console.log("Blog data fetched:", data);
         setBlogData(data);
         setLikesCount(data.likes || 0);
       } catch (err) {
@@ -62,7 +61,6 @@ export default function Page() {
         });
 
         const data = await res.json();
-        console.log("Like check response:", data);
         setIsLiked(data.liked);
       } catch (err) {
         console.error("Error checking like:", err);
@@ -103,20 +101,35 @@ export default function Page() {
   const handleLikeToggle = async () => {
     if (!isSignedIn) return;
 
-    const res = await fetch("/api/toggle-like", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        blogId,
-        email: user.primaryEmailAddress.emailAddress,
-        time: new Date().toISOString(),
-      }),
-    });
+    try {
+      const res = await fetch("/api/toggle-like", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          blogId,
+          email: user.primaryEmailAddress.emailAddress,
+          time: new Date().toISOString(),
+        }),
+      });
 
-    const data = await res.json();
-    setIsLiked(data.liked);
-    setLikesCount((prev) => (data.liked ? prev + 1 : prev - 1));
+      if (!res.ok) {
+        console.error("Server error:", await res.text());
+        return;
+      }
+
+      const data = await res.json();
+
+      if (typeof data.liked === "boolean") {
+        setIsLiked(data.liked);
+        setLikesCount((prev) => (data.liked ? prev + 1 : prev - 1));
+      } else {
+        console.warn("Unexpected like response:", data);
+      }
+    } catch (error) {
+      console.error("Error toggling like:", error);
+    }
   };
+  
 
   const placeholderImage = "/placeholder.png"; // Fallback image
 

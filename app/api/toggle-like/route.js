@@ -12,6 +12,13 @@ export async function POST(req) {
       .from(blogLikes)
       .where(and(eq(blogLikes.blogId, blogId), eq(blogLikes.likedBy, email)));
 
+    const [blog] = await db
+      .select({ likes: Blogs.likes })
+      .from(Blogs)
+      .where(eq(Blogs.id, blogId));
+
+    const currentLikes = blog?.likes ?? 0;
+
     if (existingLike) {
       // Remove like
       await db
@@ -20,7 +27,7 @@ export async function POST(req) {
 
       await db
         .update(Blogs)
-        .set({ likes: Blogs.likes - 1 })
+        .set({ likes: Math.max(0, currentLikes - 1) })
         .where(eq(Blogs.id, blogId));
 
       return NextResponse.json({ liked: false });
@@ -35,7 +42,7 @@ export async function POST(req) {
 
       await db
         .update(Blogs)
-        .set({ likes: Blogs.likes + 1 })
+        .set({ likes: currentLikes + 1 })
         .where(eq(Blogs.id, blogId));
 
       return NextResponse.json({ liked: true });
@@ -43,7 +50,7 @@ export async function POST(req) {
   } catch (error) {
     console.error("Error toggling like:", error);
     return NextResponse.json(
-      { error: "Failed to toggle like" },
+      { liked: null, error: "Failed to toggle like" },
       { status: 500 }
     );
   }
