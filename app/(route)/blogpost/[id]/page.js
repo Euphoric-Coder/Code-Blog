@@ -52,7 +52,7 @@ export default function Page() {
       if (!isSignedIn || !user?.primaryEmailAddress?.emailAddress) return;
 
       try {
-        const res = await fetch("/api/check-like", {
+        const res = await fetch("/api/check-blog-like", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -76,7 +76,7 @@ export default function Page() {
       if (!isSignedIn || !user?.primaryEmailAddress?.emailAddress) return;
 
       try {
-        const res = await fetch("/api/check-bookmark", {
+        const res = await fetch("/api/check-blog-bookmark", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -128,7 +128,7 @@ export default function Page() {
     if (!isSignedIn) return;
 
     try {
-      const res = await fetch("/api/toggle-like", {
+      const res = await fetch("/api/toggle-blog-like", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -160,7 +160,7 @@ export default function Page() {
     if (!isSignedIn) return;
 
     try {
-      const res = await fetch("/api/toggle-bookmark", {
+      const res = await fetch("/api/toggle-blog-bookmark", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
