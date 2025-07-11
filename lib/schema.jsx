@@ -51,7 +51,8 @@ export const blogLikes = pgTable("blogLikes", {
   blogId: varchar("blogId")
     .notNull()
     .references(() => Blogs.id, { onDelete: "cascade" }),
-  likes: jsonb("likes").default([]).notNull(), // example: [{ email: "a@b.com", viewedAt: "2024-06-27T12:00:00Z" }]
+  likedBy: varchar("likedBy").notNull(),
+  likedAt: varchar("likedAt").notNull(),
   totalLikes: varchar("totalLikes").default(0).notNull(),
 });
 

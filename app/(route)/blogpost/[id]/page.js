@@ -17,6 +17,8 @@ export default function Page() {
   const { user, isSignedIn } = useUser();
   const [blogData, setBlogData] = useState(null);
   const [isShareOpen, setIsShareOpen] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [likesCount, setLikesCount] = useState(0);
 
   const [htmlContent, setHtmlContent] = useState("");
 
@@ -35,7 +37,23 @@ export default function Page() {
       }
     };
 
+    const checkIfLiked = async () => {
+      if (!isSignedIn) return;
+      const res = await fetch("/api/check-like", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          blogId,
+          email: user.primaryEmailAddress.emailAddress,
+        }),
+      });
+      const data = await res.json();
+      console.log("Like check response:", data);
+      setIsLiked(data.liked);
+    };
+
     loadBlog();
+    loadBlog().then(() => checkIfLiked());
     convertMarkdownToHtml();
   }, [blogId, blogData]);
 
@@ -175,7 +193,7 @@ export default function Page() {
             comments={blogData.comments || []}
             onAddComment={handleAddComment}
           /> */}
-        
+
           {/* Blog Share Modal */}
           <BlogShare
             isOpen={isShareOpen}
@@ -183,6 +201,7 @@ export default function Page() {
             title={blogData.title}
             description={blogData.description}
             url={`https://yourdomain.com/blogpost/${blogId}`} // replace with your actual domain
+            // url={"https://www.google.com"} // placeholder URL, replace with actual blog URL
           />
 
           <Comment blogId={blogId} />
