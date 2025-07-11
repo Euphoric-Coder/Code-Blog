@@ -9,12 +9,14 @@ import { processContent } from "@/lib/processContent";
 import BlogLoader from "@/components/Blog/BlogLoader";
 import Comment from "@/components/Blog/Comments";
 import Image from "next/image";
+import BlogShare from "@/components/Miscellaneous/BlogShare";
 
 export default function Page() {
   const blogId = useParams().id;
   const router = useRouter();
   const { user, isSignedIn } = useUser();
   const [blogData, setBlogData] = useState(null);
+  const [isShareOpen, setIsShareOpen] = useState(false);
 
   const [htmlContent, setHtmlContent] = useState("");
 
@@ -126,7 +128,10 @@ export default function Page() {
                 <Heart className="w-5 h-5 mr-2" />
                 <span>Like</span>
               </button>
-              <button className="flex items-center text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">
+              <button
+                onClick={() => setIsShareOpen(true)}
+                className="flex items-center text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors"
+              >
                 <Share2 className="w-5 h-5 mr-2" />
                 <span>Share</span>
               </button>
@@ -170,6 +175,15 @@ export default function Page() {
             comments={blogData.comments || []}
             onAddComment={handleAddComment}
           /> */}
+        
+          {/* Blog Share Modal */}
+          <BlogShare
+            isOpen={isShareOpen}
+            onClose={() => setIsShareOpen(false)}
+            title={blogData.title}
+            description={blogData.description}
+            url={`https://yourdomain.com/blogpost/${blogId}`} // replace with your actual domain
+          />
 
           <Comment blogId={blogId} />
         </div>
