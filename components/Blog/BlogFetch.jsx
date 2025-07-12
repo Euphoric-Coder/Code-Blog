@@ -38,6 +38,7 @@ import {
   MoreHorizontal,
   Search,
   Share2,
+  Tag,
   TrendingUp,
   User,
 } from "lucide-react";
@@ -205,7 +206,7 @@ const BlogFetch = ({ blogs, refreshData }) => {
         {visibleSubcategories.map((subcategory) => (
           <span
             key={subcategory}
-            className="px-2 py-1 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-600/60 dark:to-gray-500/60 text-gray-800 dark:text-gray-100 text-xs rounded-md shadow-sm font-medium"
+            className="inline-block px-3 py-1 bg-gradient-to-r from-sky-600 to-teal-500 dark:from-pink-500 dark:to-yellow-400 text-white rounded-full text-xs md:text-sm font-semibold shadow-sm hover:scale-105 transition-transform duration-300"
           >
             {subcategory}
           </span>
@@ -250,7 +251,7 @@ const BlogFetch = ({ blogs, refreshData }) => {
   const BlogCard = ({ blog, isListView = false }) => {
     if (isListView) {
       return (
-        <article className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl border border-gray-200/50 dark:border-gray-700/50 transition-all duration-300 hover:-translate-y-1">
+        <article className="group relative overflow-hidden rounded-3xl shadow-lg hover:shadow-xl border border-gray-200/50 dark:border-gray-700/50 transition-all duration-300 hover:-translate-y-1">
           {/* Enhanced gradient background overlay */}
           <div className="absolute inset-0 bg-gradient-to-tr from-blue-400 via-blue-50 to-blue-200 dark:from-gray-800 dark:via-gray-900 dark:to-black text-gray-900 dark:text-gray-100"></div>
 
@@ -311,8 +312,9 @@ const BlogFetch = ({ blogs, refreshData }) => {
                   {blog.tags.slice(0, 3).map((tag) => (
                     <span
                       key={tag}
-                      className="px-2 py-1 bg-gradient-to-r from-teal-200 to-teal-300 dark:from-teal-800/60 dark:to-teal-700/60 text-teal-800 dark:text-teal-200 text-xs rounded-md shadow-sm font-medium"
+                      className="inline-flex gap-1 items-center px-3 py-1 bg-gradient-to-br from-cyan-400 via-sky-300 to-sky-400 dark:from-cyan-700 dark:to-sky-600 text-white text-sm font-semibold rounded-full shadow-md"
                     >
+                      <Tag className="h-4 w-4" />
                       {tag}
                     </span>
                   ))}
@@ -361,12 +363,15 @@ const BlogFetch = ({ blogs, refreshData }) => {
                       initialLikes={likesMap[blog.id] ?? blog.likes ?? 0}
                       onChange={handleLikeChange}
                     />
+                    <BlogBookmark blogId={blog.id} />
                   </div>
 
-                  <button className="group/btn inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold transition-colors">
-                    Read More
-                    <ArrowRight className="ml-1 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-                  </button>
+                  <Link href={`/blogpost/${blog.id}`}>
+                    <button className="group/btn inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold transition-colors">
+                      Read More
+                      <ArrowRight className="ml-1 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -376,9 +381,9 @@ const BlogFetch = ({ blogs, refreshData }) => {
     }
 
     return (
-      <article className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl border border-gray-200/50 dark:border-gray-700/50 transition-all duration-300 hover:-translate-y-2">
+      <article className="group relative overflow-hidden rounded-3xl shadow-lg hover:shadow-xl border border-gray-200/50 dark:border-gray-700/50 transition-all duration-300 hover:-translate-y-2">
         {/* Enhanced gradient background overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-400 via-blue-50 to-blue-200 dark:from-gray-800 dark:via-gray-900 dark:to-black text-gray-900 dark:text-gray-100"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-400 via-white to-blue-200 dark:from-gray-800 dark:via-gray-900 dark:to-black text-gray-900 dark:text-gray-100"></div>
 
         {/* Image */}
         <div className="relative h-48 overflow-hidden">
@@ -431,24 +436,12 @@ const BlogFetch = ({ blogs, refreshData }) => {
         {/* Content */}
         <div className="relative p-6 space-y-4">
           {/* Category */}
-          <span className="inline-block px-3 py-1 bg-gradient-to-r from-fuchsia-300 to-pink-400 dark:from-fuchsia-700 dark:to-pink-600 text-white text-sm font-semibold rounded-full shadow-md">
-            {blog.category}
-          </span>
-          <span className="inline-block px-3 py-1 bg-gradient-to-r from-amber-300 to-orange-400 dark:from-amber-700 dark:to-orange-600 text-white text-sm font-semibold rounded-full shadow-md">
-            {blog.category}
-          </span>
-          <span className="inline-block px-3 py-1 bg-gradient-to-r from-lime-300 to-teal-400 dark:from-lime-700 dark:to-teal-600 text-white text-sm font-semibold rounded-full shadow-md">
-            {blog.category}
-          </span>
-          <span className="inline-block px-3 py-1 bg-gradient-to-r from-indigo-400 to-violet-500 dark:from-indigo-700 dark:to-violet-600 text-white text-sm font-semibold rounded-full shadow-md">
-            {blog.category}
-          </span>
-          <span className="inline-block px-3 py-1 bg-gradient-to-br from-cyan-400 via-sky-300 to-sky-400 dark:from-cyan-700 dark:to-sky-600 text-white text-sm font-semibold rounded-full shadow-md">
+          <span className="inline-block px-3 py-1 bg-gradient-to-br from-purple-200 via-purple-100 to-purple-300 dark:from-purple-800/60 dark:via-purple-800 dark:to-purple-700/60 text-purple-800 dark:text-purple-200 text-sm font-semibold rounded-full shadow-sm">
             {blog.category}
           </span>
 
           {/* Title */}
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 drop-shadow-sm">
+          <h3 className="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-teal-500 to-emerald-400 dark:from-pink-400 dark:via-orange-300 dark:to-yellow-400 transition-all duration-300 leading-tight">
             {blog.title}
           </h3>
 
@@ -470,8 +463,9 @@ const BlogFetch = ({ blogs, refreshData }) => {
             {blog.tags.slice(0, 3).map((tag) => (
               <span
                 key={tag}
-                className="px-2 py-1 bg-gradient-to-r from-teal-200 to-teal-300 dark:from-teal-800/60 dark:to-teal-700/60 text-teal-800 dark:text-teal-200 text-xs rounded-md shadow-sm font-medium"
+                className="inline-flex gap-1 items-center px-3 py-1 bg-gradient-to-br from-cyan-400 via-sky-300 to-sky-400 dark:from-cyan-700 dark:to-sky-600 text-white text-sm font-semibold rounded-full shadow-md"
               >
+                <Tag className="h-4 w-4" />
                 {tag}
               </span>
             ))}
@@ -551,7 +545,7 @@ const BlogFetch = ({ blogs, refreshData }) => {
   const [likesMap, setLikesMap] = useState(() => {
     return Object.fromEntries(blogs.map((b) => [b.id, b.likes ?? 0]));
   });
-  
+
   const [viewMode, setViewMode] = useState("grid");
   const [tempFilters, setTempFilters] = useState({
     authors: [],
@@ -727,10 +721,10 @@ const BlogFetch = ({ blogs, refreshData }) => {
       appliedFilters.dateRange.to.trim() !== "") ||
     appliedFilters.oldestBlog;
 
-    const handleLikeChange = (blogId, total, liked) => {
-      setLikesMap((prev) => ({ ...prev, [blogId]: total }));
-      refreshData?.(); // optional if you're syncing from DB
-    };    
+  const handleLikeChange = (blogId, total, liked) => {
+    setLikesMap((prev) => ({ ...prev, [blogId]: total }));
+    refreshData?.(); // optional if you're syncing from DB
+  };
 
   return (
     <div>
