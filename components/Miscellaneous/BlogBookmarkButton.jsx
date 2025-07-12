@@ -71,9 +71,9 @@ export default function BlogBookmark({
       onClick={toggleBookmark}
       className={cn(
         "flex items-center gap-1 transition-colors",
-        bookmarked ? "text-yellow-500" : "text-white hover:text-yellow-300",
+        bookmarked ? "text-yellow-500" : "hover:text-amber-500",
         showIconOnly &&
-          "p-2 bg-white/30 backdrop-blur-sm rounded-full shadow-lg"
+          "text-white p-2 bg-white/30 backdrop-blur-sm rounded-full shadow-lg"
       )}
       aria-pressed={bookmarked}
     >
@@ -81,7 +81,7 @@ export default function BlogBookmark({
         className="h-4 w-4"
         fill={bookmarked ? "currentColor" : "none"}
       />
-      {!showIconOnly && <span className="text-sm">Bookmark</span>}
+      {!showIconOnly && <span className="text-sm">{bookmarked ? "Bookmarked" : "Bookmark"}</span>}
     </button>
   );
 }

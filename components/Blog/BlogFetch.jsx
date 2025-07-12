@@ -489,6 +489,7 @@ const BlogFetch = ({ blogs, refreshData }) => {
                 initialLikes={likesMap[blog.id] ?? blog.likes ?? 0}
                 onChange={handleLikeChange}
               />
+              <BlogBookmark blogId={blog.id} />
             </div>
             <span className="font-semibold">{blog.readTime}</span>
           </div>
