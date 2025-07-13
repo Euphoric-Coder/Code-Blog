@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   Dialog,
   DialogTrigger,
@@ -36,33 +36,6 @@ const FilterButton = ({
   resetFilters,
   handleDialogClose,
 }) => {
-//   const applyFilters = () => {
-//     setAppliedFilters({ ...tempFilters });
-//     setIsDialogOpen(false); // Close the dialog
-//   };
-
-//   const clearFilters = () => {
-//     setTempFilters(appliedFilters);
-//   };
-
-//   const resetFilters = () => {
-//     setAppliedFilters({
-//       authors: [],
-//       category: [],
-//       subCategories: [],
-//       dateRange: { from: "", to: "" },
-//       oldestBlog: false,
-//     });
-//     setTempFilters({
-//       authors: [],
-//       category: [],
-//       subCategories: [],
-//       dateRange: { from: "", to: "" },
-//       oldestBlog: false,
-//     });
-
-//     toast.success("Filters have been successfully reset to default!");
-//   };
   return (
     <div className="flex gap-3">
       <Dialog
@@ -482,4 +455,4 @@ const FilterButton = ({
   );
 };
 
-export default FilterButton
+export default FilterButton;

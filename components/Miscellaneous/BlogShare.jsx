@@ -113,7 +113,7 @@ const BlogShare = ({ isOpen, onClose, title, description, url }) => {
       <div className="relative bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md p-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold text-slate-800 dark:text-white">
-            Share this article
+            Share this Blog
           </h2>
           <button
             onClick={onClose}
