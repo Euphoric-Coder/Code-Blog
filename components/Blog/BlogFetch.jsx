@@ -814,11 +814,51 @@ const BlogFetch = ({ blogs, refreshData }) => {
         </div>
       </div>
 
-      <div className="container flex items-center justify-between mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+      {/* Search Bar & Filter Button for Mobile Devices */}
+      <div className="flex md:hidden justify-center mb-4 gap-4 items-center pt-3 px-6">
+        <div className="relative max-w-3xl w-full">
+          <Input
+            type="text"
+            placeholder="Search transactions by name, description, or category..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full px-6 py-5 rounded-full placeholder:text-[10px] text-[11px] font-bold shadow-lg border transition-all duration-300 bg-white dark:bg-gray-900 dark:text-white text-gray-800 border-gray-300 dark:border-gray-600 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-500 dark:focus:ring-purple-600"
+          />
+
+          {/* Clear Button Inside Search Bar */}
+          {isSearchActive && (
+            <Button
+              onClick={() => setSearchTerm("")}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white px-3 py-1 rounded-full shadow-md text-sm xs:text-base transition-transform duration-300 bg-gradient-to-r from-blue-500 to-teal-500 dark:from-pink-400 dark:to-yellow-400 hover:scale-110 active:scale-95"
+            >
+              Clear
+            </Button>
+          )}
+        </div>
+      </div>
+      <div className="flex md:hidden justify-center mb-6 gap-4 items-center pt-3 px-6">
+        <FilterButton
+          tempFilters={tempFilters}
+          setTempFilters={setTempFilters}
+          blogCategories={blogCategories}
+          blogSubCategoriesList={blogSubCategoriesList}
+          blogAuthors={blogAuthors}
+          filterCount={filterCount}
+          selectedCategoryCount={selectedCategoryCount}
+          selectedSubCategoryCount={selectedSubCategoryCount}
+          selectedAuthorCount={selectedAuthorCount}
+          hasActiveFilters={hasActiveFilters}
+          applyFilters={applyFilters}
+          clearFilters={clearFilters}
+          resetFilters={resetFilters}
+          handleDialogClose={handleDialogClose}
+        />
+      </div>
+      <div className="container flex items-center justify-center md:justify-between mx-auto px-4 sm:px-6 lg:px-8 mb-6">
         <div className="text-sm text-gray-600 dark:text-gray-400">
           Showing {displayedBlogs.length} of {blogs.length} blogs
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="hidden md:flex items-center space-x-2">
           <button
             onClick={() => setViewMode("grid")}
             className={`p-2 rounded-lg transition-colors ${
