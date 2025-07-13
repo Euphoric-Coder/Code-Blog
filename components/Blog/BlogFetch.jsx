@@ -276,15 +276,30 @@ const BlogFetch = ({ blogs, refreshData }) => {
                   <span className="inline-block px-3 py-1 bg-gradient-to-br from-purple-200 via-purple-100 to-purple-300 dark:from-purple-800/60 dark:via-purple-800 dark:to-purple-700/60 text-purple-800 dark:text-purple-200 text-sm font-semibold rounded-full shadow-sm">
                     {blog.category}
                   </span>
-                  <button
-                    className="p-2 bg-white hover:bg-white/80 dark:bg-white/30 backdrop-blur-sm rounded-full dark:hover:bg-white/40 transition-colors shadow-lg"
-                    onClick={() => {
-                      setIndividualBlog(fetchIndividualBlog(blog.id));
-                      setIsShareOpen(true);
-                    }}
-                  >
-                    <Share2 className="h-4 w-4" />
-                  </button>
+                  <div className="flex items-center space-x-2">
+                    <BlogLike
+                      blogId={blog.id}
+                      initialLikes={likesMap[blog.id] ?? blog.likes ?? 0}
+                      onChange={handleLikeChange}
+                      showIconOnly={true}
+                      listView={true}
+                    />
+                    <BlogBookmark
+                      blogId={blog.id}
+                      onChange={handleBookmarkChange}
+                      showIconOnly={true}
+                      listView={true}
+                    />
+                    <button
+                      className="p-2 bg-white hover:bg-white/80 dark:bg-white/30 dark:hover:bg-white/40 backdrop-blur-sm rounded-full transition-colors shadow-lg"
+                      onClick={() => {
+                        setIndividualBlog(fetchIndividualBlog(blog.id));
+                        setIsShareOpen(true);
+                      }}
+                    >
+                      <Share2 className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
 
                 {/* Title */}
@@ -361,7 +376,10 @@ const BlogFetch = ({ blogs, refreshData }) => {
                       initialLikes={likesMap[blog.id] ?? blog.likes ?? 0}
                       onChange={handleLikeChange}
                     />
-                    <BlogBookmark blogId={blog.id} />
+                    <BlogBookmark
+                      blogId={blog.id}
+                      onChange={handleBookmarkChange}
+                    />
                   </div>
 
                   <Link href={`/blogpost/${blog.id}`}>
@@ -409,7 +427,11 @@ const BlogFetch = ({ blogs, refreshData }) => {
 
           {/* Quick Actions */}
           <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            <BlogBookmark blogId={blog.id} showIconOnly={true} />
+            <BlogBookmark
+              blogId={blog.id}
+              onChange={handleBookmarkChange}
+              showIconOnly={true}
+            />
             <BlogLike
               blogId={blog.id}
               initialLikes={likesMap[blog.id] ?? blog.likes ?? 0}
@@ -479,7 +501,7 @@ const BlogFetch = ({ blogs, refreshData }) => {
                 initialLikes={likesMap[blog.id] ?? blog.likes ?? 0}
                 onChange={handleLikeChange}
               />
-              <BlogBookmark blogId={blog.id} />
+              <BlogBookmark blogId={blog.id} onChange={handleBookmarkChange} />
             </div>
             <span className="font-semibold">{blog.readTime}</span>
           </div>
@@ -554,6 +576,7 @@ const BlogFetch = ({ blogs, refreshData }) => {
   const [likesMap, setLikesMap] = useState(() => {
     return Object.fromEntries(blogs.map((b) => [b.id, b.likes ?? 0]));
   });
+  const [bookmarkedMap, setBookmarkedMap] = useState({});
 
   const [viewMode, setViewMode] = useState("grid");
   const [tempFilters, setTempFilters] = useState({
@@ -733,6 +756,10 @@ const BlogFetch = ({ blogs, refreshData }) => {
   const handleLikeChange = (blogId, total, liked) => {
     setLikesMap((prev) => ({ ...prev, [blogId]: total }));
     refreshData?.(); // optional if you're syncing from DB
+  };
+
+  const handleBookmarkChange = (blogId, bookmarked) => {
+    setBookmarkedMap((prev) => ({ ...prev, [blogId]: bookmarked }));
   };
 
   return (

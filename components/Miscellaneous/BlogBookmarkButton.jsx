@@ -9,6 +9,7 @@ export default function BlogBookmark({
   blogId,
   onChange,
   showIconOnly = false,
+  listView = false
 }) {
   const { isSignedIn, user } = useUser();
   const [bookmarked, setBookmarked] = useState(false);
@@ -73,7 +74,10 @@ export default function BlogBookmark({
         "flex items-center gap-1 transition-colors",
         bookmarked ? "text-yellow-500" : "hover:text-amber-500",
         showIconOnly &&
-          "text-white p-2 bg-white/30 backdrop-blur-sm rounded-full shadow-lg"
+          `${bookmarked ? "text-yellow-500" : "hover:text-amber-500 text-white"} p-2 bg-white/30 backdrop-blur-sm rounded-full shadow-lg`,
+        showIconOnly &&
+          listView &&
+          `${bookmarked ? "text-yellow-500" : "hover:text-amber-500 text-black dark:text-white"} p-2 bg-white hover:bg-white/80 dark:bg-white/30 dark:hover:bg-white/40 backdrop-blur-sm rounded-full shadow-lg`
       )}
       aria-pressed={bookmarked}
     >
@@ -81,7 +85,11 @@ export default function BlogBookmark({
         className="h-4 w-4"
         fill={bookmarked ? "currentColor" : "none"}
       />
-      {!showIconOnly && <span className="text-sm">{bookmarked ? "Bookmarked" : "Bookmark"}</span>}
+      {!showIconOnly && (
+        <span className="text-sm">
+          {bookmarked ? "Bookmarked" : "Bookmark"}
+        </span>
+      )}
     </button>
   );
 }

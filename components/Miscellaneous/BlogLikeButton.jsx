@@ -11,6 +11,7 @@ export default function BlogLike({
   initialLikes = 0,
   onChange,
   showIconOnly = false,
+  listView = false,
 }) {
   const { isSignedIn, user } = useUser();
   const [likes, setLikes] = useState(initialLikes);
@@ -86,7 +87,10 @@ export default function BlogLike({
         "flex items-center gap-1 transition-colors",
         liked ? "text-rose-600" : "hover:text-rose-400",
         showIconOnly &&
-          "p-2 bg-white/30 text-white backdrop-blur-sm rounded-full shadow-lg"
+          `${liked ? "text-rose-600" : "hover:text-rose-400 text-white"} p-2 bg-white/30 backdrop-blur-sm rounded-full shadow-lg`,
+        showIconOnly &&
+          listView &&
+          `${liked ? "text-rose-600" : "hover:text-rose-400 text-black dark:text-white"} p-2 bg-white hover:bg-white/80 dark:bg-white/30 dark:hover:bg-white/40 backdrop-blur-sm rounded-full shadow-lg`
       )}
       aria-pressed={liked}
     >
