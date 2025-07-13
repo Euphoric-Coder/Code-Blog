@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import {
@@ -51,6 +51,7 @@ import BlogShare from "../Miscellaneous/BlogShare";
 import { useUser } from "@clerk/nextjs";
 import BlogLike from "../Miscellaneous/BlogLikeButton";
 import BlogBookmark from "../Miscellaneous/BlogBookmarkButton";
+import FilterButton from "./FilterButton";
 
 const BlogFetch = ({ blogs, refreshData }) => {
   const Blogs = [
@@ -538,6 +539,19 @@ const BlogFetch = ({ blogs, refreshData }) => {
     }).format(date);
   };
 
+  useEffect(() => {
+    const updateViewMode = () => {
+      if (window.innerWidth < 768) {
+        setViewMode("grid"); // force grid for small screens
+      }
+    };
+
+    updateViewMode(); // call on mount
+    window.addEventListener("resize", updateViewMode); // optional: respond to resize
+
+    return () => window.removeEventListener("resize", updateViewMode);
+  }, []);
+
   const { user, isSignedIn } = useUser();
   const [searchTerm, setSearchTerm] = useState("");
   const [individualBlog, setIndividualBlog] = useState(null);
@@ -730,27 +744,82 @@ const BlogFetch = ({ blogs, refreshData }) => {
     <div>
       {/* Search Bar & Filter Button */}
       <div className="flex justify-center mb-16 gap-4 items-center pt-3 px-6">
-        <div className="relative max-w-3xl w-full">
-          <Input
-            type="text"
-            placeholder="Search transactions by name, description, or category..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-6 py-5 rounded-full shadow-lg border transition-all duration-300 bg-white dark:bg-gray-900 dark:text-white text-gray-800 border-gray-300 dark:border-gray-600 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-500 dark:focus:ring-purple-600"
-          />
+        <div className="relative max-w-3xl w-full mx-auto">
+          <div className="relative bg-gradient-to-r from-blue-50 via-white to-teal-50 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-600/50">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 sm:gap-x-4 sm:gap-y-0">
+              <div className="flex items-center justify-center w-12 h-12 text-gray-400">
+                <Search className="h-5 w-5" />
+              </div>
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search blogs by title, content, or tags..."
+                className="flex-1 min-w-[200px] max-w-full sm:max-w-none h-12 px-1 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 bg-transparent border-none outline-none"
+              />
 
-          {/* Clear Button Inside Search Bar */}
-          {isSearchActive && (
-            <Button
-              onClick={() => setSearchTerm("")}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white px-3 py-1 rounded-full shadow-md text-sm xs:text-base transition-transform duration-300 bg-gradient-to-r from-blue-500 to-teal-500 dark:from-pink-400 dark:to-yellow-400 hover:scale-110 active:scale-95"
-            >
-              Clear
-            </Button>
-          )}
+              <div className="flex flex-wrap gap-2 items-center pr-4">
+                {/* Clear Button Inside Search Bar */}
+                <div>
+                  {isSearchActive && (
+                    <Button
+                      onClick={() => setSearchTerm("")}
+                      className=" text-white px-3 py-1 rounded-full shadow-md text-sm xs:text-base transition-transform duration-300 bg-gradient-to-r from-blue-500 to-teal-500 dark:from-pink-400 dark:to-yellow-400 hover:scale-110 active:scale-95"
+                    >
+                      Clear
+                    </Button>
+                  )}
+                </div>
+                <FilterButton
+                  tempFilters={tempFilters}
+                  setTempFilters={setTempFilters}
+                  blogCategories={blogCategories}
+                  blogSubCategoriesList={blogSubCategoriesList}
+                  blogAuthors={blogAuthors}
+                  filterCount={filterCount}
+                  selectedCategoryCount={selectedCategoryCount}
+                  selectedSubCategoryCount={selectedSubCategoryCount}
+                  selectedAuthorCount={selectedAuthorCount}
+                  hasActiveFilters={hasActiveFilters}
+                  applyFilters={applyFilters}
+                  clearFilters={clearFilters}
+                  resetFilters={resetFilters}
+                  handleDialogClose={handleDialogClose}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex justify-center mb-8">
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => setViewMode("grid")}
+            className={`p-2 rounded-lg transition-colors ${
+              viewMode === "grid"
+                ? "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
+                : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            }`}
+          >
+            <Grid className="h-5 w-5" />
+          </button>
+          <button
+            onClick={() => setViewMode("list")}
+            className={`p-2 rounded-lg transition-colors ${
+              viewMode === "list"
+                ? "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
+                : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            }`}
+          >
+            <List className="h-5 w-5" />
+          </button>
         </div>
         <div className="flex gap-3">
-          <Dialog onOpenChange={handleDialogClose}>
+          <Dialog
+            onOpenChange={handleDialogClose}
+            onClose={() => setIsFilterOpen(false)}
+          >
             <DialogTrigger asChild>
               <Button
                 className={`flex items-center gap-2 px-4 py-2 rounded-3xl transition-colors ${
@@ -1166,33 +1235,12 @@ const BlogFetch = ({ blogs, refreshData }) => {
               </div>
             </DialogContent>
           </Dialog>
+
           {hasActiveFilters && (
             <button onClick={resetFilters} className="del3">
               Reset Filters
             </button>
           )}
-        </div>
-        <div className="flex items-center space-x-2">
-          <button
-            onClick={() => setViewMode("grid")}
-            className={`p-2 rounded-lg transition-colors ${
-              viewMode === "grid"
-                ? "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
-                : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-            }`}
-          >
-            <Grid className="h-5 w-5" />
-          </button>
-          <button
-            onClick={() => setViewMode("list")}
-            className={`p-2 rounded-lg transition-colors ${
-              viewMode === "list"
-                ? "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
-                : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-            }`}
-          >
-            <List className="h-5 w-5" />
-          </button>
         </div>
       </div>
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
