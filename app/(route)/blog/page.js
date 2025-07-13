@@ -1,11 +1,24 @@
 "use client";
 
 import BlogFetch from "@/components/Blog/BlogFetch";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { formatDate } from "date-fns";
+import { BookOpen, PenBox, PlusCircle } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const Page = () => {
   const [blogData, setblogData] = useState([]);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   useEffect(() => {
     loadBlogs();
@@ -69,12 +82,89 @@ const Page = () => {
               </span>
             </p>
             <div className="mt-10 flex justify-center lg:justify-start gap-4">
-              <button className="px-6 py-3 bg-gradient-to-r from-blue-500 to-teal-500 text-white font-medium rounded-full shadow-lg hover:scale-105 hover:shadow-2xl transition-transform duration-300 ease-out dark:from-teal-400 dark:to-blue-500">
-                Explore Blogs
-              </button>
-              <button className="px-6 py-3 bg-gray-200 text-gray-800 font-medium rounded-full shadow-lg hover:scale-105 hover:bg-gray-300 dark:bg-gray-900 dark:text-gray-100 dark:hover:bg-gray-700 transition-transform duration-300 ease-out">
-                Browse Categories
-              </button>
+              {/* Call to Action Buttons */}
+              <Link href={"/blog/add-blog/"}>
+                <button className="flex gap-1 px-6 py-3 bg-gradient-to-r from-blue-500 to-teal-500 text-white font-medium rounded-full shadow-lg hover:scale-105 hover:shadow-2xl transition-transform duration-300 ease-out dark:from-teal-400 dark:to-blue-500">
+                  <PlusCircle />
+                  Create Blogs
+                </button>
+              </Link>
+              {/* Edit Blog Button with Dialog */}
+              <Dialog
+                open={isEditDialogOpen}
+                onOpenChange={setIsEditDialogOpen}
+              >
+                <DialogTrigger asChild>
+                  <button
+                    className="flex gap-1 px-6 py-3 bg-gray-200 text-gray-800 font-medium rounded-full shadow-lg hover:scale-105 hover:bg-gray-300 dark:bg-gray-900 dark:text-gray-100 dark:hover:bg-gray-700 transition-transform duration-300 ease-out"
+                    onClick={() => setIsEditDialogOpen(true)}
+                  >
+                    <PenBox />
+                    Edit Blogs
+                  </button>
+                </DialogTrigger>
+                <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle className="text-2xl font-bold">
+                      My Blogs
+                    </DialogTitle>
+                    <DialogDescription>
+                      Manage and edit your published blogs. You have{" "}
+                      {blogData.length} blog(s).
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <div className="space-y-4 mt-6">
+                    {blogData.length > 0 ? (
+                      blogData.map((blog) => (
+                        <div
+                          key={blog.id}
+                          className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                        >
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+                              {blog.title}
+                            </h3>
+                            <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
+                              {blog.description}
+                            </p>
+                            <div className="flex items-center space-x-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                              <span>
+                                Published: {formatDate(blog.date, "PPP")}
+                              </span>
+                              <span>{blog.views.toLocaleString()} views</span>
+                              <span>{blog.likes} likes</span>
+                            </div>
+                          </div>
+                          <Link href={`/blog/edit-blog/${blog.id}`}>
+                            <Button size="sm" className="btn7">
+                              <PenBox className="h-4 w-4" />
+                              Edit
+                            </Button>
+                          </Link>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-center py-8">
+                        <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                          No blogs yet
+                        </h3>
+                        <p className="text-gray-600 dark:text-gray-300 mb-4">
+                          You haven't created any blogs yet. Start writing your
+                          first blog!
+                        </p>
+                        <Link href="/blog/add-blog/">
+                          <Button className="btn4">
+                            <PlusCircle className="h-4 w-4 mr-2" />
+                            Create Your First Blog
+                          </Button>
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
 
@@ -131,7 +221,7 @@ const Page = () => {
       </section>
 
       <section>
-        <BlogFetch blogs={blogData} refreshData={refreshData}/>
+        <BlogFetch blogs={blogData} refreshData={refreshData} />
       </section>
     </main>
   );
