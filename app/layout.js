@@ -1,4 +1,4 @@
-import { Inter } from "next/font/google";
+import { Inter, Montserrat, Poppins } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "../components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -6,7 +6,27 @@ import ThemedNotification from "@/components/ThemedNotification";
 import NavbarWrapper from "@/components/HomePage/NavbarWrapper";
 import FooterWrapper from "@/components/HomePage/FooterWrapper";
 
-const inter = Inter({ subsets: ["latin"] });
+// Loaded fonts with custom weights and assign CSS variables
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-poppins",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-montserrat",
+  display: "swap",
+});
 
 export const metadata = {
   title: "Dev Block",
@@ -18,10 +38,13 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
       <html
         lang="en"
-        className="scroll-p-20 scroll-smooth"
+        className={`${poppins.variable} ${inter.variable} ${montserrat.variable} scroll-p-20 scroll-smooth`}
         suppressHydrationWarning
       >
-        <body className={inter.className}>
+        {/* <body className={`${inter.className} ${poppins.variable}`}> */}
+        <body
+          className={`font-inter`}
+        >
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
@@ -35,7 +58,6 @@ export default function RootLayout({ children }) {
             </div>
             <ThemedNotification />
           </ThemeProvider>
-          {/* <Toaster richColors theme="system"/> */}
         </body>
       </html>
     </ClerkProvider>

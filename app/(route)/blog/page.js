@@ -40,47 +40,65 @@ const Page = () => {
     <main className="relative w-full min-h-screen bg-gradient-to-b from-blue-50 via-white to-white dark:from-gray-800 dark:via-gray-800 dark:to-blue-950 text-gray-900 dark:text-gray-100 transition-all duration-700">
       {/* Hero Section Heading */}
       <section className="py-20 bg-gradient-to-b from-blue-100 via-blue-50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800">
-        <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between">
-          {/* Main Text Section */}
+        <div className="container p-4 md:p-0 mx-auto flex flex-col lg:flex-row items-center justify-between">
+          {/* Text Content */}
           <div className="lg:w-3/5 text-center lg:text-left mb-12 lg:mb-0">
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-extrabold leading-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-blue-500 to-teal-400 dark:from-teal-300 dark:via-blue-400 dark:to-indigo-500 mb-6 drop-shadow-md">
-              Stay Ahead in Tech & Innovation
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-extrabold font-montserrat leading-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-blue-500 to-teal-400 dark:from-teal-300 dark:via-blue-400 dark:to-indigo-500 mb-6 drop-shadow-md">
+              Empower Your Dev Journey
             </h1>
-            <p className="text-lg sm:text-xl lg:text-lg xl:text-xl font-serif leading-relaxed mb-8 text-gray-800 dark:text-gray-300 max-w-2xl lg:max-w-full">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900 dark:from-gray-200 dark:to-gray-400">
-                Explore expert-led blogs on{" "}
+
+            <p className="text-lg sm:text-xl lg:text-lg xl:text-xl leading-relaxed font-poppins font-medium text-justify text-gray-800 dark:text-gray-300 max-w-3xl lg:max-w-5xl">
+              <span className="block">
+                Unlock insights, stories, and guides crafted for developers and
+                tech explorers. Our platform empowers you to dive deep into
+                practical experiences, coding patterns, and architecture
+                essentials shaping the future of software.
               </span>
-              <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-blue-600 dark:from-teal-300 dark:to-blue-400">
-                Full Stack Development
+
+              <span className="block mt-3">
+                From real-world case studies in{" "}
+                <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-600 dark:from-blue-300 dark:to-teal-400">
+                  Full Stack Development
+                </span>{" "}
+                and system design, to thought leadership in{" "}
+                <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-300 dark:to-pink-400">
+                  AI & Machine Learning
+                </span>{" "}
+                — each blog brings clarity, relevance, and impact.
               </span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900 dark:from-gray-200 dark:to-gray-400">
-                , advancements in{" "}
-              </span>
-              <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-300 dark:to-pink-400">
-                AI/ML
-              </span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900 dark:from-gray-200 dark:to-gray-400">
-                , and insights into{" "}
-              </span>
-              <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-600 dark:from-blue-300 dark:to-teal-400">
-                Cloud Computing
-              </span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900 dark:from-gray-200 dark:to-gray-400">
-                . Stay informed with the latest in{" "}
-              </span>
-              <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-teal-600 dark:from-indigo-300 dark:to-teal-400">
-                Blockchain
-              </span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900 dark:from-gray-200 dark:to-gray-400">
+
+              <span className="block mt-3">
+                Explore powerful ideas across{" "}
+                <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-cyan-600 dark:from-green-300 dark:to-cyan-400">
+                  DevOps
+                </span>
                 ,{" "}
-              </span>
-              <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600 dark:from-yellow-300 dark:to-orange-400">
-                DevOps
-              </span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900 dark:from-gray-200 dark:to-gray-400">
-                , and more to elevate your tech journey.
+                <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-sky-500 dark:from-indigo-300 dark:to-sky-400">
+                  Cloud Computing
+                </span>
+                ,{" "}
+                <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-orange-500 dark:from-yellow-300 dark:to-orange-400">
+                  JavaScript Frameworks
+                </span>{" "}
+                and more — all curated to accelerate your dev journey.
               </span>
             </p>
+            <blockquote className="mt-10 p-6 rounded-xl bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 border-l-4 border-blue-500 dark:border-teal-400 shadow-md">
+              <div className="text-base sm:text-lg leading-relaxed text-gray-800 dark:text-gray-200 font-medium">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-500 dark:from-teal-300 dark:via-blue-400 dark:to-indigo-500 font-semibold">
+                  “There are two ways of constructing a software design:
+                </span>{" "}
+                <span>
+                  one way is to make it so simple that there are obviously no
+                  deficiencies, and the other way is to make it so complicated
+                  that there are no obvious deficiencies.”
+                </span>
+              </div>
+              <div className="mt-4 text-sm font-semibold text-right text-gray-600 dark:text-gray-400">
+                — Sir Tony Hoare
+              </div>
+            </blockquote>
+
             <div className="mt-10 flex justify-center lg:justify-start gap-4">
               {/* Call to Action Buttons */}
               <Link href={"/blog/add-blog/"}>
@@ -168,7 +186,7 @@ const Page = () => {
             </div>
           </div>
 
-          {/* Illustration Section */}
+          {/* Illustration */}
           <div className="lg:w-2/5 flex justify-center items-center">
             <Image
               src="/blog-Page.png"
@@ -182,40 +200,30 @@ const Page = () => {
       </section>
 
       <section className="pb-10">
-        <div className="container mx-auto text-center">
-          {/* Main Heading */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 dark:from-purple-400 dark:via-pink-500 dark:to-yellow-400 mb-4 p-2">
-            Stay Ahead in Tech & Innovation
-          </h1>
+        <div className="text-center mb-10">
+          <h2 className="text-4xl sm:text-5xl font-extrabold font-montserrat text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-500 dark:from-teal-300 dark:via-blue-400 dark:to-indigo-400 drop-shadow-sm">
+            Explore. Filter. Learn.
+          </h2>
 
-          {/* Subheading with tagline */}
-          <p className="text-xl sm:text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500 dark:from-yellow-500 dark:to-purple-400 mb-6">
-            Your Daily Dose of Technology Insights
+          <p className="mt-4 text-lg sm:text-xl font-poppins font-medium text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
+            Browse curated blogs in{" "}
+            <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-600 dark:from-blue-300 dark:to-teal-400">
+              Web Development
+            </span>
+            ,{" "}
+            <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-300 dark:to-pink-400">
+              AI/ML
+            </span>
+            ,{" "}
+            <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-cyan-600 dark:from-green-300 dark:to-cyan-400">
+              Cloud & DevOps
+            </span>{" "}
+            and more — then filter by category or tag to find what fuels your
+            curiosity.
           </p>
 
-          {/* Additional description */}
-          <p className="text-md sm:text-lg md:text-xl font-mono font-extrabold leading-relaxed max-w-3xl mx-auto text-transparent bg-clip-text bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900 dark:from-gray-200 dark:to-gray-400">
-            Dive into expert-led blogs covering{" "}
-            <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-blue-600 dark:from-teal-300 dark:to-blue-400">
-              Full Stack Development
-            </span>
-            ,{" "}
-            <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-300 dark:to-pink-400">
-              AI/ML advancements
-            </span>
-            , and{" "}
-            <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-600 dark:from-blue-300 dark:to-teal-400">
-              Cloud Computing
-            </span>{" "}
-            insights. Stay informed with the latest in{" "}
-            <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-teal-600 dark:from-indigo-300 dark:to-teal-400">
-              Blockchain
-            </span>
-            ,{" "}
-            <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600 dark:from-yellow-300 dark:to-orange-400">
-              DevOps practices
-            </span>
-            , and more to elevate your tech journey.
+          <p className="mt-2 text-base text-gray-600 dark:text-gray-400 italic">
+            Search precisely. Filter effortlessly. View your way.
           </p>
         </div>
       </section>
