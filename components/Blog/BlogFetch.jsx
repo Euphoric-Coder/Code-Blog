@@ -397,7 +397,7 @@ const BlogFetch = ({ blogs, refreshData }) => {
     }
 
     return (
-      <article className="group relative overflow-hidden rounded-3xl shadow-lg hover:shadow-xl border border-gray-200/50 dark:border-gray-700/50 transition-all duration-300 hover:-translate-y-2">
+      <article className="group mb-6 relative overflow-hidden rounded-3xl shadow-lg hover:shadow-xl border border-gray-200/50 dark:border-gray-700/50 transition-all duration-300 hover:-translate-y-2">
         {/* Enhanced gradient background overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-400 via-white to-blue-200 dark:from-gray-800 dark:via-gray-900 dark:to-black text-gray-900 dark:text-gray-100"></div>
 

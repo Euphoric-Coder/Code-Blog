@@ -189,7 +189,7 @@ const Page = () => {
           {/* Illustration */}
           <div className="lg:w-2/5 flex justify-center items-center">
             <Image
-              src="/blog-Page.png"
+              src="/blog-page.png"
               alt="Blog Illustration"
               width={400}
               height={400}
