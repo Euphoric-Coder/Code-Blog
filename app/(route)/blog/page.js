@@ -169,8 +169,8 @@ const Page = () => {
                           No blogs yet
                         </h3>
                         <p className="text-gray-600 dark:text-gray-300 mb-4">
-                          You haven't created any blogs yet. Start writing your
-                          first blog!
+                          You haven&apos;t created any blogs yet. Start writing
+                          your first blog!
                         </p>
                         <Link href="/blog/add-blog/">
                           <Button className="btn4">
