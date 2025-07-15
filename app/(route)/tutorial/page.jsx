@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { TutorialFetch } from "@/components/Tutorial/TutorialFetch";
 
-const page = () => {
+const Page = () => {
   const [tutorialData, setTutorialData] = useState([]);
 
   // Fetch tutorial data from an API or database
@@ -126,4 +126,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
