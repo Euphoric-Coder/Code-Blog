@@ -75,9 +75,11 @@ export const Tutorials = pgTable("tutorials", {
   category: varchar("category").notNull().default("Programming"),
   subCategories: jsonb("subCategories"),
   tags: jsonb("tags").notNull(),
+  level: varchar("level").notNull().default("Beginner"),
   content: jsonb("content").notNull(),
   author: varchar("author").notNull(),
   date: varchar("date").notNull(),
+  duration: varchar("duration").notNull().default("0 hours"),
   featured: boolean("featured").notNull().default(false),
   createdBy: varchar("createdBy").notNull(),
 });

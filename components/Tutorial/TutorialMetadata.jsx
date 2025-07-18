@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import MultiSelect from "../Form/UI/MultiSelect";
 import { Badge } from "../ui/badge";
 import { toast } from "sonner";
+import { tutorialCategories, tutorialSubCategoriesList } from "@/lib/data";
 
 const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
   // Initialize metadata from initialData
@@ -120,54 +121,6 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
     onUpdateMetadata && onUpdateMetadata(emptyData); // Sync reset with parent
   };
 
-  const categories = [
-    "Programming",
-    "Design",
-    "Marketing",
-    "Business",
-    "Personal Development",
-  ];
-  const subcategories = {
-    Programming: [
-      { value: "javascript", label: "JavaScript" },
-      { value: "python", label: "Python" },
-      { value: "java", label: "Java" },
-      { value: "c-cpp", label: "C/C++" },
-      { value: "ruby", label: "Ruby" },
-      { value: "php", label: "PHP" },
-      { value: "go", label: "Go" },
-      { value: "rust", label: "Rust" },
-    ],
-    Design: [
-      { value: "ui-ux", label: "UI/UX" },
-      { value: "graphic-design", label: "Graphic Design" },
-      { value: "web-design", label: "Web Design" },
-      { value: "logo-design", label: "Logo Design" },
-      { value: "illustration", label: "Illustration" },
-    ],
-    Marketing: [
-      { value: "digital-marketing", label: "Digital Marketing" },
-      { value: "content-marketing", label: "Content Marketing" },
-      { value: "seo", label: "SEO" },
-      { value: "social-media", label: "Social Media" },
-      { value: "email-marketing", label: "Email Marketing" },
-    ],
-    Business: [
-      { value: "entrepreneurship", label: "Entrepreneurship" },
-      { value: "management", label: "Management" },
-      { value: "finance", label: "Finance" },
-      { value: "sales", label: "Sales" },
-      { value: "strategy", label: "Strategy" },
-    ],
-    "Personal Development": [
-      { value: "productivity", label: "Productivity" },
-      { value: "leadership", label: "Leadership" },
-      { value: "communication", label: "Communication" },
-      { value: "mindfulness", label: "Mindfulness" },
-      { value: "creativity", label: "Creativity" },
-    ],
-  };
-
   return (
     <div className="form-layout">
       <FormBackgroundEffect />
@@ -231,6 +184,7 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                     value={data.category}
                     onValueChange={(val) => {
                       setData({ ...data, category: val });
+                      setData({ ...data, subcategory: [] });
                       setErrors((prev) => ({ ...prev, category: null })); // clear error}}
                     }}
                   >
@@ -249,7 +203,7 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                     </SelectTrigger>
 
                     <SelectContent className="select-content mt-2">
-                      {categories.map((category) => (
+                      {tutorialCategories.map((category) => (
                         <SelectItem
                           key={category}
                           value={category}
@@ -271,7 +225,9 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                       onChange={(values) =>
                         handleMultiSelectChange("subcategory", values)
                       }
-                      options={subcategories["Programming"]}
+                      options={
+                        tutorialSubCategoriesList[data.category]
+                      }
                       error={errors.subcategory}
                       required
                       placeholder="Add the Sub-Categories"

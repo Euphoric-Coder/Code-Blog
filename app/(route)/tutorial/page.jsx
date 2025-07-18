@@ -121,7 +121,7 @@ const Page = () => {
         </div>
       </section>
 
-    <TutorialFetch />
+    <TutorialFetch tutorials={tutorialData}/>
     </main>
   );
 };
