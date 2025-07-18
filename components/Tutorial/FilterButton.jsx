@@ -63,7 +63,7 @@ const FilterButton = ({
           {/* Filter Heading */}
           <DialogHeader>
             <DialogTitle className="flex gap-2 items-center text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-500 via-purple-500 to-pink-500 dark:from-blue-400 dark:via-indigo-400 dark:to-teal-400">
-              Blog Filter
+              Tutorial Filter
             </DialogTitle>
             <DialogDescription asChild>
               <p className="text-sm text-gray-600 dark:text-gray-400">

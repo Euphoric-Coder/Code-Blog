@@ -22,9 +22,9 @@ import {
   ChevronDown,
   ChevronRight,
 } from "lucide-react";
-import FilterButton from "../Blog/FilterButton";
 import { tutorialCategories, tutorialSubCategoriesList } from "@/lib/data";
 import { toast } from "sonner";
+import FilterButton from "./FilterButton";
 
 export const TutorialFetch = ({ tutorials }) => {
   const [searchQuery, setSearchQuery] = useState("");
