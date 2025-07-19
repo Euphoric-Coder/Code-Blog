@@ -183,8 +183,7 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                   <Select
                     value={data.category}
                     onValueChange={(val) => {
-                      setData({ ...data, category: val });
-                      setData({ ...data, subcategory: [] });
+                      setData({ ...data, category: val, subcategory: [] });
                       setErrors((prev) => ({ ...prev, category: null })); // clear error}}
                     }}
                   >
@@ -225,9 +224,7 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
                       onChange={(values) =>
                         handleMultiSelectChange("subcategory", values)
                       }
-                      options={
-                        tutorialSubCategoriesList[data.category]
-                      }
+                      options={tutorialSubCategoriesList[data.category]}
                       error={errors.subcategory}
                       required
                       placeholder="Add the Sub-Categories"

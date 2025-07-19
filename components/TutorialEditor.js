@@ -20,7 +20,6 @@ import { common, createLowlight } from "lowlight";
 const lowlight = createLowlight(common);
 
 import { useState } from "react";
-import CodeBlockComponent from "./Blog/CodeBlock";
 import { Button } from "./ui/button";
 import {
   MdFormatBold,
@@ -34,6 +33,8 @@ import {
   MdTableChart,
 } from "react-icons/md";
 import { toast } from "sonner";
+import CodeBlockComponent from "./Blog/EditorCodeBlock";
+import { Code } from "lucide-react";
 
 const MenuBar = ({ editor }) => {
   if (!editor) return null;
@@ -141,7 +142,7 @@ export default function TutorialEditor() {
       TableCell,
       CodeBlockLowlight.extend({
         addNodeView() {
-          return ReactNodeViewRenderer(CodeBlockComponent);
+          return ReactNodeViewRenderer(CodeBlockComponent({node: { attrs: { language: "javascript" } }, updateAttributes: () => {} }));
         },
       }).configure({ lowlight }),
     ],
