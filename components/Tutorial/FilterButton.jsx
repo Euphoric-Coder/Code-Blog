@@ -19,6 +19,7 @@ import { CalendarIcon, Filter } from "lucide-react";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar"; // Assuming you're using shadcn
 import { cn } from "@/lib/utils";
+import { tutorialLevels } from "@/lib/data";
 
 const FilterButton = ({
   tempFilters,
@@ -30,6 +31,7 @@ const FilterButton = ({
   selectedCategoryCount,
   selectedSubCategoryCount,
   selectedAuthorCount,
+  selectedLevelCount,
   hasActiveFilters,
   applyFilters,
   clearFilters,
@@ -208,67 +210,138 @@ const FilterButton = ({
                 </Popover>
               </div>
             </div>
-            {/* Categories */}
-            <div
-              className="relative max-h-[300px] overflow-y-auto 
+            {/* Levels */}
+            <div>
+              <label className="text">
+                Levels
+              </label>
+              <div
+                className="relative mt-2 max-h-[300px] overflow-y-auto 
                     p-3 shadow-sm rounded-xl border-2 
                     bg-gradient-to-r from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-900
                     border-cyan-400 dark:border-blue-800 transition-all"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <label className="budg-text1">
-                    Categories ({blogCategories.length})
-                  </label>
-                  {/* Show Selected Count Badge */}
-                  {selectedCategoryCount > 0 && (
-                    <Badge className="border-0 bg-gradient-to-r from-green-400 to-green-600 text-white px-2 py-1 rounded-full text-xs dark:from-green-500 dark:to-green-700 ">
-                      Selected: {selectedCategoryCount}
-                    </Badge>
-                  )}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    {/* Show Selected Count Badge */}
+                    {selectedLevelCount > 0 && (
+                      <Badge className="border-0 bg-gradient-to-r from-green-400 to-green-600 text-white px-2 py-1 rounded-full text-xs dark:from-green-500 dark:to-green-700 ">
+                        Selected: {selectedLevelCount}
+                      </Badge>
+                    )}
+                  </div>
+                  <div>
+                    {/* Clear Button */}
+                    {selectedLevelCount > 0 && (
+                      <Button
+                        variant="outline"
+                        onClick={() =>
+                          setTempFilters({
+                            ...tempFilters,
+                            level: [],
+                          })
+                        }
+                        className="del2"
+                        size="sm"
+                      >
+                        Clear Selection
+                      </Button>
+                    )}
+                  </div>
                 </div>
-                <div>
-                  {/* Clear Button */}
-                  {selectedCategoryCount > 0 && (
-                    <Button
-                      variant="outline"
-                      onClick={() =>
-                        setTempFilters({
-                          ...tempFilters,
-                          category: [],
-                        })
-                      }
-                      className="del2"
-                      size="sm"
+                <div className="mt-2 flex flex-wrap gap-3">
+                  {tutorialLevels.map((level) => (
+                    <Badge
+                      key={level}
+                      onClick={() => {
+                        setTempFilters((prev) => ({
+                          ...prev,
+                          level: prev.level.includes(
+                            level.toLowerCase()
+                          )
+                            ? prev.level.filter(
+                                (c) => c !== level.toLowerCase()
+                              )
+                            : [...prev.level, level.toLowerCase()],
+                        }));
+                      }}
+                      className={`border-0 rounded-full text-sm cursor-pointer px-3 py-1 transition-all font-bold ${
+                        tempFilters.level.includes(level.toLowerCase())
+                          ? "bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800"
+                          : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                      }`}
                     >
-                      Clear Selection
-                    </Button>
-                  )}
+                      {level}
+                    </Badge>
+                  ))}
                 </div>
               </div>
-              <div className="mt-2 flex flex-wrap gap-3">
-                {blogCategories.map((category) => (
-                  <Badge
-                    key={category}
-                    onClick={() => {
-                      setTempFilters((prev) => ({
-                        ...prev,
-                        category: prev.category.includes(category.toLowerCase())
-                          ? prev.category.filter(
-                              (c) => c !== category.toLowerCase()
-                            )
-                          : [...prev.category, category.toLowerCase()],
-                      }));
-                    }}
-                    className={`border-0 rounded-full text-sm cursor-pointer px-3 py-1 transition-all font-bold ${
-                      tempFilters.category.includes(category.toLowerCase())
-                        ? "bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800"
-                        : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
-                    }`}
-                  >
-                    {category}
-                  </Badge>
-                ))}
+            </div>
+            {/* Categories */}
+            <div>
+              <label className="text">
+                Categories ({blogCategories.length})
+              </label>
+              <div
+                className="relative mt-2 max-h-[300px] overflow-y-auto 
+                    p-3 shadow-sm rounded-xl border-2 
+                    bg-gradient-to-r from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-900
+                    border-cyan-400 dark:border-blue-800 transition-all"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    {/* Show Selected Count Badge */}
+                    {selectedCategoryCount > 0 && (
+                      <Badge className="border-0 bg-gradient-to-r from-green-400 to-green-600 text-white px-2 py-1 rounded-full text-xs dark:from-green-500 dark:to-green-700 ">
+                        Selected: {selectedCategoryCount}
+                      </Badge>
+                    )}
+                  </div>
+                  <div>
+                    {/* Clear Button */}
+                    {selectedCategoryCount > 0 && (
+                      <Button
+                        variant="outline"
+                        onClick={() =>
+                          setTempFilters({
+                            ...tempFilters,
+                            category: [],
+                          })
+                        }
+                        className="del2"
+                        size="sm"
+                      >
+                        Clear Selection
+                      </Button>
+                    )}
+                  </div>
+                </div>
+                <div className="mt-2 flex flex-wrap gap-3">
+                  {blogCategories.map((category) => (
+                    <Badge
+                      key={category}
+                      onClick={() => {
+                        setTempFilters((prev) => ({
+                          ...prev,
+                          category: prev.category.includes(
+                            category.toLowerCase()
+                          )
+                            ? prev.category.filter(
+                                (c) => c !== category.toLowerCase()
+                              )
+                            : [...prev.category, category.toLowerCase()],
+                        }));
+                      }}
+                      className={`border-0 rounded-full text-sm cursor-pointer px-3 py-1 transition-all font-bold ${
+                        tempFilters.category.includes(category.toLowerCase())
+                          ? "bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800"
+                          : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                      }`}
+                    >
+                      {category}
+                    </Badge>
+                  ))}
+                </div>
               </div>
             </div>
 
