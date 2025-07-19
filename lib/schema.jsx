@@ -80,6 +80,8 @@ export const Tutorials = pgTable("tutorials", {
   author: varchar("author").notNull(),
   date: varchar("date").notNull(),
   duration: varchar("duration").notNull().default("0 hours"),
+  views: integer("views").default(0),
+  likes: integer("likes").default(0),
   featured: boolean("featured").notNull().default(false),
   trending: boolean("trending").notNull().default(false),
   createdBy: varchar("createdBy").notNull(),

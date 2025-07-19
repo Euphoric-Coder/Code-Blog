@@ -854,7 +854,7 @@ const BlogFetch = ({ blogs, refreshData }) => {
           handleDialogClose={handleDialogClose}
         />
       </div>
-      <div className="container flex items-center justify-center md:justify-between mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+      <div className="max-w-screen-3xl flex items-center justify-center md:justify-between mx-auto px-4 sm:px-6 lg:px-8 mb-6">
         <div className="text-sm text-gray-600 dark:text-gray-400">
           Showing {displayedBlogs.length} of {blogs.length} blogs
         </div>
@@ -881,12 +881,12 @@ const BlogFetch = ({ blogs, refreshData }) => {
           </button>
         </div>
       </div>
-      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-screen-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {displayedBlogs.length > 0 ? (
           <div
             className={`${
               viewMode === "grid"
-                ? "grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+                ? "grid md:grid-cols-2 xl:grid-cols-3 gap-8"
                 : "space-y-8"
             }`}
           >
