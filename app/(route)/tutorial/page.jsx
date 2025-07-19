@@ -5,7 +5,7 @@ import Image from "next/image";
 import { TutorialFetch } from "@/components/Tutorial/TutorialFetch";
 
 const Page = () => {
-  const [tutorialData, setTutorialData] = useState([]);
+  const [tutorialData, setTutorialData] = useState(null);
 
   // Fetch tutorial data from an API or database
   useEffect(() => {
@@ -28,7 +28,7 @@ const Page = () => {
       <section className="py-20 bg-gradient-to-b from-blue-100 via-blue-50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800">
         <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between">
           {/* Main Text Section */}
-          <div className="lg:w-3/5 text-center lg:text-left mb-12 lg:mb-0">
+          <div className="lg:w-4/5 text-center lg:text-left mb-12 lg:mb-0">
             <h1 className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl font-extrabold leading-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-blue-500 to-teal-400 dark:from-teal-300 dark:via-blue-400 dark:to-indigo-500 mb-6 drop-shadow-md">
               Master Coding with Expert Tutorials
             </h1>

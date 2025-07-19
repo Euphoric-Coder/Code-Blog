@@ -48,7 +48,7 @@ export const TutorialFetch = ({ tutorials }) => {
     ? tempFilters.authors.length
     : 0;
   const selectedLevelCount = tempFilters.level ? tempFilters.level.length : 0;
-  const blogAuthors = [...new Set(tutorials.map((blog) => blog.author))];
+  const tutorialAuthors = [...new Set(tutorials.map((blog) => blog.author))];
   const [appliedFilters, setAppliedFilters] = useState({ ...tempFilters });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -594,7 +594,7 @@ export const TutorialFetch = ({ tutorials }) => {
               setTempFilters={setTempFilters}
               blogCategories={tutorialCategories}
               blogSubCategoriesList={subCategoryList}
-              blogAuthors={blogAuthors}
+              tutorialAuthors={tutorialAuthors}
               filterCount={filterCount}
               selectedCategoryCount={selectedCategoryCount}
               selectedSubCategoryCount={selectedSubCategoryCount}

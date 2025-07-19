@@ -26,7 +26,7 @@ const FilterButton = ({
   setTempFilters,
   blogCategories,
   blogSubCategoriesList,
-  blogAuthors,
+  tutorialAuthors,
   filterCount,
   selectedCategoryCount,
   selectedSubCategoryCount,
@@ -445,7 +445,7 @@ const FilterButton = ({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <label className="budg-text1">
-                    Authors ({blogAuthors.length})
+                    Authors ({tutorialAuthors.length})
                   </label>
                   {/* Show Selected Count Badge */}
                   {selectedAuthorCount > 0 && (
@@ -474,7 +474,7 @@ const FilterButton = ({
                 </div>
               </div>
               <div className="mt-2 flex flex-wrap gap-3">
-                {blogAuthors.map((author) => (
+                {tutorialAuthors.map((author) => (
                   <Badge
                     key={author}
                     onClick={() => {
