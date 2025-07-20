@@ -1,4 +1,4 @@
-import { pgTable, varchar, uuid, boolean, jsonb, integer } from "drizzle-orm/pg-core";
+import { pgTable, varchar, uuid, boolean, jsonb, integer, timestamp } from "drizzle-orm/pg-core";
 
 export const Users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -115,4 +115,12 @@ export const Replies = pgTable("replies", {
   createdBy: varchar("createdBy").notNull(),
   text: varchar("text").notNull(),
   time: varchar("time").notNull(),
+});
+
+export const EditorImageUploads = pgTable("editorImageUploads", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  url: varchar("url").notNull(),
+  fileId: varchar("fileId").notNull(),
+  addedBy: varchar("addedBy").notNull(), 
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
