@@ -220,7 +220,6 @@ const TutorialMetadata = ({
                     </SelectContent>
                   </Select>
                 </div>
-
                 {data.category && (
                   <div>
                     <MultiSelect
@@ -230,7 +229,20 @@ const TutorialMetadata = ({
                       onChange={(values) =>
                         handleMultiSelectChange("subcategory", values)
                       }
-                      options={tutorialSubCategoriesList[data.category]}
+                      options={[
+                        ...(tutorialSubCategoriesList[data.category]?.filter(
+                          (option) => !data.subcategory.includes(option.value)
+                        ) || []),
+                        // Include custom subcategories (not present in predefined list)
+                        ...data.subcategory
+                          .filter(
+                            (val) =>
+                              !tutorialSubCategoriesList[data.category]?.some(
+                                (option) => option.value === val
+                              )
+                          )
+                          .map((val) => ({ value: val, label: val })),
+                      ]}
                       error={errors.subcategory}
                       required
                       placeholder="Add the Sub-Categories"
