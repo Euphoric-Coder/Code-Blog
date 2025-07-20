@@ -7,7 +7,7 @@ import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import TutorialCreator from "../_components/TestEditor";
 
-const page = () => {
+const Page = () => {
   const params = useParams();
   const id = params?.id;
 
@@ -58,4 +58,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
