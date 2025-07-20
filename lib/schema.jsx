@@ -87,6 +87,13 @@ export const Tutorials = pgTable("tutorials", {
   createdBy: varchar("createdBy").notNull(),
 });
 
+export const TutorialsMarkedAsRead = pgTable("tutorialsMarkedAsRead", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  markedBy: varchar("markedBy").notNull(),
+  tutorialId: uuid("tutorialId").notNull(),
+  subsectionId: varchar("subsectionId").notNull(),
+});
+
 export const Comments = pgTable("comments", {
   id: uuid("id").defaultRandom().primaryKey(),
   blogId: varchar("blogId")

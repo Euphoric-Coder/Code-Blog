@@ -11,21 +11,35 @@ const TutorialViewer = ({ tutorial }) => {
   const [completedSubsections, setCompletedSubsections] = useState([]);
 
   useEffect(() => {
-    if (tutorial.content.length > 0) {
-      const firstSection = tutorial.content[0];
-      setActiveSection(firstSection.id);
+    const initialize = async () => {
+      if (tutorial.content.length > 0) {
+        const firstSection = tutorial.content[0];
+        setActiveSection(firstSection.id);
 
-      if (firstSection.subsections.length > 0) {
-        setActiveSubsection(firstSection.subsections[0].id);
+        if (firstSection.subsections.length > 0) {
+          setActiveSubsection(firstSection.subsections[0].id);
+        }
+
+        const initialExpandedSections = {};
+        initialExpandedSections[firstSection.id] = true;
+        setExpandedSections(initialExpandedSections);
       }
 
-      const initialExpandedSections = {};
-      initialExpandedSections[firstSection.id] = true;
-      setExpandedSections(initialExpandedSections);
-    }
+      try {
+        const res = await fetch("/api/tutorials/get-marked", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ tutorialId: tutorial.id }),
+        });
 
-    setCompletedSubsections([]);
-    updateProgress();
+        const data = await res.json();
+        setCompletedSubsections(data.completed || []);
+      } catch (err) {
+        console.error("Failed to fetch completed subsections:", err);
+      }
+    };
+
+    initialize();
   }, [tutorial]);
 
   useEffect(() => {
@@ -53,9 +67,22 @@ const TutorialViewer = ({ tutorial }) => {
     }));
   };
 
-  const markSubsectionComplete = (subsectionId) => {
+  const markSubsectionComplete = async (subsectionId) => {
     if (!completedSubsections.includes(subsectionId)) {
       setCompletedSubsections((prev) => [...prev, subsectionId]);
+
+      try {
+        await fetch("/api/tutorials/mark-as-read", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            tutorialId: tutorial.id,
+            subsectionId: subsectionId,
+          }),
+        });
+      } catch (err) {
+        console.error("Failed to mark as read:", err);
+      }
     }
   };
 
@@ -132,7 +159,6 @@ const TutorialViewer = ({ tutorial }) => {
 
     return null; // ✅ end of the tutorial
   };
-  
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-gray-50">
