@@ -253,20 +253,47 @@ const TutorialMetadata = ({
 
                 <div>
                   <label className="text">Tags</label>
-                  <div className="flex space-x-2">
-                    <Input
-                      type="text"
-                      value={tag}
-                      onChange={(e) => setTag(e.target.value)}
-                      className="mt-1 flex-1 px-4 py-2 input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
-                      placeholder="Add a tag"
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          e.preventDefault();
-                          addTag();
-                        }
-                      }}
-                    />
+                  <div className="flex items-center gap-2">
+                    <div
+                      className={`
+      mt-1 w-full flex flex-wrap items-center gap-2 px-3 py-2
+      border rounded-lg input-field focus-within:ring-[4px]
+      focus-within:ring-blue-500 dark:focus-within:ring-blue-400
+    `}
+                    >
+                      {/* Render existing tags */}
+                      {data.tags.map((t) => (
+                        <Badge
+                          key={t}
+                          className="inline-flex items-center gap-1 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 px-2 py-1 rounded-3xl text-sm dark:bg-indigo-900 hover:dark:bg-indigo-700 dark:text-indigo-100"
+                        >
+                          {t}
+                          <button
+                            type="button"
+                            onClick={() => removeTag(t)}
+                            className="text-indigo-500 hover:text-red-600 focus:outline-none dark:text-indigo-300 dark:hover:text-red-600"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </Badge>
+                      ))}
+
+                      {/* Tag input field */}
+                      <input
+                        type="text"
+                        value={tag}
+                        onChange={(e) => setTag(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            addTag();
+                          }
+                        }}
+                        placeholder="Add a tag"
+                        className="flex-1 min-w-[100px] bg-transparent border-none focus:outline-none text-sm placeholder-gray-400 dark:placeholder-gray-500"
+                      />
+                    </div>
+                    {/* Add tag button */}
                     <Button
                       onClick={(e) => {
                         e.preventDefault();
@@ -277,24 +304,6 @@ const TutorialMetadata = ({
                       <PlusCircle />
                       Add
                     </Button>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {data.tags.map((t) => (
-                      <Badge
-                        key={t}
-                        className="inline-flex items-center gap-1 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 px-2 py-1 rounded-3xl text-sm dark:bg-indigo-900 hover:dark:bg-indigo-700 dark:text-indigo-100 cursor-pointer"
-                      >
-                        {t}
-                        <button
-                          type="button"
-                          onClick={() => removeTag(t)}
-                          className="text-indigo-500 hover:text-red-600 focus:outline-none dark:text-indigo-300 dark:hover:text-red-600"
-                        >
-                          <X className="h-3 w-3" />
-                        </button>
-                      </Badge>
-                    ))}
                   </div>
                 </div>
               </div>
