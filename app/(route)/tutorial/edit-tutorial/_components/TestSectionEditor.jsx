@@ -90,10 +90,7 @@ import ImageKit from "imagekit-javascript";
 const MenuBar = ({ editor }) => {
   const imageInputRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const [addImage, setAddImage] = useState(false);
-
   const [url, setUrl] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
 
   if (!editor) return null;
 
@@ -124,7 +121,7 @@ const MenuBar = ({ editor }) => {
         signature: auth.signature,
         expire: auth.expire,
       },
-      async (err, result) =>  {
+      async (err, result) => {
         if (err) {
           console.error("ImageKit upload error:", err);
           toast.error("Image upload failed");
@@ -139,9 +136,8 @@ const MenuBar = ({ editor }) => {
                 fileId: result.fileId,
               }),
             });
-  
+
             if (!res.ok) throw new Error("Failed to save image in DB");
-  
           } catch (err) {
             console.error("Failed to save to DB:", err);
             toast.warning("Image uploaded, but DB save failed.");
@@ -444,6 +440,7 @@ const TutorialEditor = ({
   onUpdateUsedMarkdown,
 }) => {
   const [isUploading, setIsUploading] = useState(false);
+  const { user } = useUser();
   const previousImagesRef = useRef([]);
 
   useEffect(() => {
@@ -458,6 +455,38 @@ const TutorialEditor = ({
     const imgs = tempDiv.querySelectorAll("img");
     return Array.from(imgs).map((img) => img.src);
   };
+
+  const deleteFile = async (fileId, url) => {
+    if (!fileId) return false;
+
+    try {
+      const res = await fetch("/api/delete-image", {
+        method: "POST",
+        body: JSON.stringify({ fileId }),
+      });
+
+      const res1 = await fetch("/api/editor-image/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+      });
+
+      if (!res.ok || !res1.ok) {
+        console.error("One of the delete operations failed", {
+          imageKit: await res.text(),
+          db: await res1.text(),
+        });
+        return false;
+      }
+
+      console.log("Deleted file:", fileId);
+      return true;
+    } catch (err) {
+      console.error("Delete failed", err);
+      return false;
+    }
+  };
+  
 
   const handleSectionTitleChange = (e) => {
     onUpdateSectionTitle(e.target.value);
@@ -525,7 +554,7 @@ const TutorialEditor = ({
           "prose dark:prose-invert max-w-none p-4 min-h-[300px] rounded-b-3xl border-top-none border border-blue-600 dark:border-blue-400 bg-white dark:bg-slate-900 outline-none",
       },
     },
-    onUpdate: ({ editor }) => {
+    onUpdate: async ({ editor }) => {
       const html = editor.getHTML();
       onUpdateSubsectionContent(html);
 
@@ -536,9 +565,32 @@ const TutorialEditor = ({
         (url) => !currentImages.includes(url)
       );
 
-      deletedImages.forEach((url) => {
-        console.log("Deleted image with URL:", url);
-      });
+      for (const url of deletedImages) {
+        try {
+          const res = await fetch("/api/editor-image/fetch", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ url }),
+          });
+
+          const { fileId } = await res.json();
+
+          // Try deleting from ImageKit
+          const imageKitDeleteSuccess = await deleteFile(fileId, url);
+
+          if (!imageKitDeleteSuccess) {
+            // Reinstate in the editor
+            editor.chain().focus().setImage({ src: url }).run();
+      
+            toast.error("Deletion failed — image added back to editor.");
+            continue;
+          }
+
+          toast.success("Image Deleted from DB");
+        } catch (error) {
+          console.error("Failed to delete image:", url, error);
+        }
+      }
 
       previousImagesRef.current = currentImages;
     },
