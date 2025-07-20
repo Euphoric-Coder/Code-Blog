@@ -17,7 +17,12 @@ import { Badge } from "../ui/badge";
 import { toast } from "sonner";
 import { tutorialCategories, tutorialSubCategoriesList } from "@/lib/data";
 
-const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
+const TutorialMetadata = ({
+  initialData,
+  onComplete,
+  onUpdateMetadata,
+  editing = false,
+}) => {
   // Initialize metadata from initialData
   useEffect(() => {
     setData(initialData);
@@ -31,6 +36,7 @@ const TutorialMetadata = ({ initialData, onComplete, onUpdateMetadata }) => {
   const [tag, setTag] = useState("");
 
   useEffect(() => {
+    if (editing) return;
     if (onUpdateMetadata) {
       console.log("Updating metadata:", data);
       onUpdateMetadata(data);

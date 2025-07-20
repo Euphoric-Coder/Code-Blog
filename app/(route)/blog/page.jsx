@@ -229,7 +229,9 @@ const Page = () => {
       </section>
 
       <section>
-        <BlogFetch blogs={blogData} refreshData={refreshData} />
+        {blogData && (
+          <BlogFetch blogs={blogData} refreshData={refreshData} />
+        )}
       </section>
     </main>
   );

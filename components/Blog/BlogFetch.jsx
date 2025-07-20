@@ -766,7 +766,7 @@ const BlogFetch = ({ blogs, refreshData }) => {
     <div>
       {/* Search Bar & Filter Button for Non-Mobile Devices */}
       <div className="hidden md:flex justify-center mb-16 gap-4 items-center pt-3 px-6">
-        <div className="relative max-w-3xl w-full mx-auto">
+        <div className="relative max-w-4xl w-full mx-auto">
           <div className="relative bg-gradient-to-r from-blue-50 via-white to-teal-50 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700 rounded-3xl shadow-lg border border-blue-500 dark:border-gray-300">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-2 sm:gap-x-4 sm:gap-y-0">
               <div className="flex items-center justify-center w-12 h-12 text-gray-400">
