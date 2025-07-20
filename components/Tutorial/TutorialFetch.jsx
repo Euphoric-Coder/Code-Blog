@@ -25,6 +25,7 @@ import {
 import { tutorialCategories, tutorialSubCategoriesList } from "@/lib/data";
 import { toast } from "sonner";
 import FilterButton from "./FilterButton";
+import Link from "next/link";
 
 export const TutorialFetch = ({ tutorials }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -337,7 +338,7 @@ export const TutorialFetch = ({ tutorials }) => {
                 )}
                 {tutorial.trending && (
                   <span className="flex items-center px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-semibold rounded-full shadow-lg">
-                    <TrendingUp className="h-4 w-4 mr-1"/> Trending
+                    <TrendingUp className="h-4 w-4 mr-1" /> Trending
                   </span>
                 )}
               </div>
@@ -420,10 +421,12 @@ export const TutorialFetch = ({ tutorials }) => {
                   </div>
                 </div>
 
-                <button className="group/btn inline-flex items-center text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-semibold transition-colors">
-                  Start Tutorial
-                  <ArrowRight className="ml-1 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-                </button>
+                <Link href={`/tutorialpost/${tutorial.id}`}>
+                  <button className="group/btn inline-flex items-center text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-semibold transition-colors">
+                    View Tutorial
+                    <ArrowRight className="ml-1 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -572,10 +575,12 @@ export const TutorialFetch = ({ tutorials }) => {
               </span>
             </div>
 
-            <button className="group/btn inline-flex items-center text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-semibold transition-colors">
-              Start Tutorial
-              <ArrowRight className="ml-1 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-            </button>
+            <Link href={`/tutorialpost/${tutorial.id}`}>
+              <button className="group/btn inline-flex items-center text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-semibold transition-colors">
+                View Tutorial
+                <ArrowRight className="ml-1 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+              </button>
+            </Link>
           </div>
         </div>
       </article>

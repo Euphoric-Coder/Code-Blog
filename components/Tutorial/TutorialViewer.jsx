@@ -130,8 +130,9 @@ const TutorialViewer = ({ tutorial }) => {
       };
     }
 
-    return null;
+    return null; // ✅ end of the tutorial
   };
+  
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-gray-50">
@@ -285,8 +286,9 @@ const TutorialViewer = ({ tutorial }) => {
               </button>
             </div>
 
-            <div className="p-6 prose max-w-none">
+            <div className="p-6 prose max-w-none min-h-[300px] lg:min-h-[400px] flex flex-col justify-start">
               <div
+                className="flex-1"
                 dangerouslySetInnerHTML={{
                   __html: getActiveSubsectionContent() || "",
                 }}
@@ -313,7 +315,7 @@ const TutorialViewer = ({ tutorial }) => {
               </button>
 
               <button
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={!getNextSubsection()}
                 onClick={() => {
                   const next = getNextSubsection();
