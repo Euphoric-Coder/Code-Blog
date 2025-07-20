@@ -252,7 +252,19 @@ const TutorialMetadata = ({
                 )}
 
                 <div>
-                  <label className="text">Tags</label>
+                  <div className="flex items-center justify-between">
+                    <label className="text">Tags</label>
+                    <Button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        addTag();
+                      }}
+                      className="flex md:hidden btn4 [&_svg]:size-6"
+                    >
+                      <PlusCircle />
+                      Add
+                    </Button>
+                  </div>
                   <div className="flex items-center gap-2">
                     <div
                       className={`
@@ -299,7 +311,7 @@ const TutorialMetadata = ({
                         e.preventDefault();
                         addTag();
                       }}
-                      className="btn4 [&_svg]:size-6"
+                      className="hidden md:flex btn4 [&_svg]:size-6"
                     >
                       <PlusCircle />
                       Add

@@ -106,10 +106,26 @@ const MultiSelect = ({
 
   return (
     <div className={`mb-4 ${className}`} ref={containerRef}>
-      <label htmlFor={id} className="text">
-        {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
-      </label>
+      <div className="flex items-center justify-between mb-2">
+        <label htmlFor={id} className="text">
+          {label}
+          {required && <span className="text-red-500 ml-1">*</span>}
+        </label>
+        {/* Right: Fixed Clear Button */}
+        {selectedOptions.length > 0 && !disabled && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClearAll();
+            }}
+            className="flex md:hidden del3"
+            title="Clear all"
+          >
+            Clear
+          </button>
+        )}
+      </div>
       <div
         className={`
          mt-1 w-full relative
@@ -177,7 +193,7 @@ const MultiSelect = ({
               e.stopPropagation();
               handleClearAll();
             }}
-            className="absolute right-3 top-1/2 -translate-y-1/2 del3"
+            className="hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 del3"
             title="Clear all"
           >
             Clear
