@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Upload, Code, PanelRight, Save, ImageIcon } from "lucide-react";
 
 // TipTap Editor imports
@@ -84,31 +84,75 @@ import ImageUpload from "@/components/ImageUpload";
 import NextImage from "next/image";
 import CodeBlockComponent from "@/components/Blog/EditorCodeBlock";
 import { markdownToHtml } from "@/components/MarkdownProcessor";
-import { set } from "date-fns";
 import FormBackgroundEffect from "@/components/Effect/FormBackgroundEffect";
+import ImageKit from "imagekit-javascript";
 
 const MenuBar = ({ editor }) => {
+  const imageInputRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const [addImage, setAddImage] = useState(false);
-
   const [url, setUrl] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
 
   if (!editor) return null;
+
+  const handleFileSelect = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file || !file.type.startsWith("image/")) {
+      toast.error("Please select a valid image.");
+      return;
+    }
+
+    const auth = await fetch("/api/upload-auth").then((res) => res.json());
+
+    const imagekit = new ImageKit({
+      publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
+      urlEndpoint: process.env.NEXT_PUBLIC_URL_ENDPOINT,
+      authenticationEndpoint: "",
+    });
+
+    toast.info("Uploading image... Please wait.");
+
+    imagekit.upload(
+      {
+        file,
+        fileName: file.name,
+        useUniqueFileName: true,
+        folder: "/editor-images",
+        token: auth.token,
+        signature: auth.signature,
+        expire: auth.expire,
+      },
+      async (err, result) => {
+        if (err) {
+          console.error("ImageKit upload error:", err);
+          toast.error("Image upload failed");
+        } else {
+          editor.chain().focus().setImage({ src: result.url }).run();
+          try {
+            const res = await fetch("/api/save-upload", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                url: result.url,
+                fileId: result.fileId,
+              }),
+            });
+
+            if (!res.ok) throw new Error("Failed to save image in DB");
+          } catch (err) {
+            console.error("Failed to save to DB:", err);
+            toast.warning("Image uploaded, but DB save failed.");
+          }
+          toast.success("Image added to editor");
+        }
+      }
+    );
+  };
 
   const insertLink = () => {
     if (url) {
       editor.chain().focus().setLink({ href: url }).run();
       setOpen(false);
       setUrl("");
-    }
-  };
-
-  const insertImage = () => {
-    if (imageUrl) {
-      editor.chain().focus().setImage({ src: imageUrl }).run();
-      setAddImage(false);
-      setImageUrl("");
     }
   };
 
@@ -265,7 +309,7 @@ const MenuBar = ({ editor }) => {
           <Tooltip>
             <TooltipTrigger asChild>
               <button
-                className={buttonStyle(editor.isActive("image"))}
+                className={buttonStyle(editor.isActive("link"))}
                 onClick={() => setOpen(true)}
               >
                 <MdLink className="mr-1" />
@@ -281,8 +325,8 @@ const MenuBar = ({ editor }) => {
           <Tooltip>
             <TooltipTrigger asChild>
               <button
-                className={buttonStyle(editor.isActive("link"))}
-                onClick={() => setAddImage(true)}
+                className={buttonStyle(editor.isActive("image"))}
+                onClick={() => imageInputRef.current?.click()}
               >
                 <ImageIcon className="mr-1" />
               </button>
@@ -294,6 +338,13 @@ const MenuBar = ({ editor }) => {
         </TooltipProvider>
       </div>
 
+      <input
+        type="file"
+        ref={imageInputRef}
+        accept="image/*"
+        className="hidden"
+        onChange={handleFileSelect}
+      />
       <div className="lg:hidden flex">
         <Menu>
           <MenuButton className="inline-flex items-center gap-2 rounded-md bg-gray-800 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-gray-700 data-open:bg-gray-700">
@@ -376,32 +427,6 @@ const MenuBar = ({ editor }) => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
-      <Dialog
-        open={addImage}
-        onOpenChange={() => {
-          setAddImage(false);
-          setImageUrl("");
-        }}
-      >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Insert Image</DialogTitle>
-          </DialogHeader>
-          <Input
-            type="text"
-            placeholder="https://example.com"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-          />
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button>Cancel</Button>
-            </DialogClose>
-            <Button onClick={insertImage}>Insert</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
@@ -415,12 +440,52 @@ const TutorialEditor = ({
   onUpdateUsedMarkdown,
 }) => {
   const [isUploading, setIsUploading] = useState(false);
+  const { user } = useUser();
+  const previousImagesRef = useRef([]);
 
   useEffect(() => {
     if (editor && activeSubsection?.content !== editor.getHTML()) {
       editor.commands.setContent(activeSubsection.content || "");
     }
   }, [activeSubsection?.id, activeSubsection?.content]);
+
+  const getImageUrlsFromHTML = (html) => {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    const imgs = tempDiv.querySelectorAll("img");
+    return Array.from(imgs).map((img) => img.src);
+  };
+
+  const deleteFile = async (fileId, url) => {
+    if (!fileId) return false;
+
+    try {
+      const res = await fetch("/api/delete-image", {
+        method: "POST",
+        body: JSON.stringify({ fileId }),
+      });
+
+      const res1 = await fetch("/api/editor-image/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+      });
+
+      if (!res.ok || !res1.ok) {
+        console.error("One of the delete operations failed", {
+          imageKit: await res.text(),
+          db: await res1.text(),
+        });
+        return false;
+      }
+
+      console.log("Deleted file:", fileId);
+      return true;
+    } catch (err) {
+      console.error("Delete failed", err);
+      return false;
+    }
+  };
 
   const handleSectionTitleChange = (e) => {
     onUpdateSectionTitle(e.target.value);
@@ -454,7 +519,9 @@ const TutorialEditor = ({
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ codeBlock: false }),
-      Placeholder.configure({ placeholder: "Start writing your content here..." }),
+      Placeholder.configure({
+        placeholder: "Start writing your content here...",
+      }),
       Document,
       Paragraph,
       Text,
@@ -475,6 +542,9 @@ const TutorialEditor = ({
       // The editor is ready.
       if (activeSubsection.content) {
         editor.commands.setContent(activeSubsection.content, false); // false = no history entry
+        previousImagesRef.current = getImageUrlsFromHTML(
+          activeSubsection.content
+        );
       }
     },
     editorProps: {
@@ -483,8 +553,46 @@ const TutorialEditor = ({
           "prose dark:prose-invert max-w-none p-4 min-h-[300px] rounded-b-3xl border-top-none border border-blue-600 dark:border-blue-400 bg-white dark:bg-slate-900 outline-none",
       },
     },
-    onUpdate: ({ editor }) => {
-      onUpdateSubsectionContent(editor.getHTML());
+    onUpdate: async ({ editor }) => {
+      const html = editor.getHTML();
+      onUpdateSubsectionContent(html);
+
+      const currentImages = getImageUrlsFromHTML(html);
+      const previousImages = previousImagesRef.current;
+
+      const deletedImages = previousImages.filter(
+        (url) => !currentImages.includes(url)
+      );
+
+      for (const url of deletedImages) {
+        try {
+          toast.info("Deleting image from DB... Please wait.");
+          const res = await fetch("/api/editor-image/fetch", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ url }),
+          });
+
+          const { fileId } = await res.json();
+
+          // Try deleting from ImageKit
+          const imageKitDeleteSuccess = await deleteFile(fileId, url);
+
+          if (!imageKitDeleteSuccess) {
+            // Reinstate in the editor
+            editor.chain().focus().setImage({ src: url }).run();
+
+            toast.error("Deletion failed — image added back to editor.");
+            continue;
+          }
+
+          toast.success("Image Deleted from DB");
+        } catch (error) {
+          console.error("Failed to delete image:", url, error);
+        }
+      }
+
+      previousImagesRef.current = currentImages;
     },
   });
 

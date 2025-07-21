@@ -567,6 +567,7 @@ const TutorialEditor = ({
 
       for (const url of deletedImages) {
         try {
+          toast.info("Deleting image from DB... Please wait.");
           const res = await fetch("/api/editor-image/fetch", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -588,7 +589,7 @@ const TutorialEditor = ({
 
           toast.success("Image Deleted from DB");
         } catch (error) {
-          console.error("Failed to delete image:", url, error);
+          console.log("Failed to delete image:", url, error);
         }
       }
 

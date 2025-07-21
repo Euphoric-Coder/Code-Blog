@@ -122,5 +122,6 @@ export const EditorImageUploads = pgTable("editorImageUploads", {
   url: varchar("url").notNull(),
   fileId: varchar("fileId").notNull(),
   addedBy: varchar("addedBy").notNull(), 
+  inUse : boolean("inUse").notNull().default(false),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });

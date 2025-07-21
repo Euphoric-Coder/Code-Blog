@@ -19,7 +19,7 @@ import TurndownService from "turndown";
 import { common, createLowlight } from "lowlight";
 const lowlight = createLowlight(common);
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -55,6 +55,7 @@ import {
   Archive,
   ChevronDownIcon,
   Copy,
+  ImageIcon,
   PenBox,
   PencilIcon,
   PlusCircle,
@@ -91,12 +92,68 @@ import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "../ImageUpload";
 import NextImage from "next/image";
 import CodeBlockComponent from "./EditorCodeBlock";
+import ImageKit from "imagekit-javascript";
 
 const MenuBar = ({ editor }) => {
+  const imageInputRef = useRef(null);
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState("");
 
   if (!editor) return null;
+
+  const handleFileSelect = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file || !file.type.startsWith("image/")) {
+      toast.error("Please select a valid image.");
+      return;
+    }
+
+    const auth = await fetch("/api/upload-auth").then((res) => res.json());
+
+    const imagekit = new ImageKit({
+      publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
+      urlEndpoint: process.env.NEXT_PUBLIC_URL_ENDPOINT,
+      authenticationEndpoint: "",
+    });
+
+    toast.info("Uploading image... Please wait.");
+
+    imagekit.upload(
+      {
+        file,
+        fileName: file.name,
+        useUniqueFileName: true,
+        folder: "/editor-images",
+        token: auth.token,
+        signature: auth.signature,
+        expire: auth.expire,
+      },
+      async (err, result) => {
+        if (err) {
+          console.error("ImageKit upload error:", err);
+          toast.error("Image upload failed");
+        } else {
+          editor.chain().focus().setImage({ src: result.url }).run();
+          try {
+            const res = await fetch("/api/save-upload", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                url: result.url,
+                fileId: result.fileId,
+              }),
+            });
+
+            if (!res.ok) throw new Error("Failed to save image in DB");
+          } catch (err) {
+            console.error("Failed to save to DB:", err);
+            toast.warning("Image uploaded, but DB save failed.");
+          }
+          toast.success("Image added to editor");
+        }
+      }
+    );
+  };
 
   const insertLink = () => {
     if (url) {
@@ -270,8 +327,31 @@ const MenuBar = ({ editor }) => {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className={buttonStyle(editor.isActive("image"))}
+                onClick={() => imageInputRef.current?.click()}
+              >
+                <ImageIcon className="mr-1" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Image</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
 
+      <input
+        type="file"
+        ref={imageInputRef}
+        accept="image/*"
+        className="hidden"
+        onChange={handleFileSelect}
+      />
       <div className="lg:hidden flex">
         <Menu>
           <MenuButton className="inline-flex items-center gap-2 rounded-md bg-gray-800 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-gray-700 data-open:bg-gray-700">
@@ -397,6 +477,7 @@ export default function BlogEditor({
   const [tags, setTags] = useState(editing ? initialTags : []);
   const [tag, setTag] = useState("");
   const { user } = useUser();
+  const previousImagesRef = useRef([]);
 
   // Generate a unique key for current blog's pending content
   const storageKey = `pendingBlogData-${user?.id}`;
@@ -423,11 +504,6 @@ export default function BlogEditor({
       setCategory(storedBlogData.category || blogCategories[0]);
       setSelectedSubCategories(storedBlogData.subcategories || []);
       setTags(storedBlogData.tags || []);
-      // console.log(
-      //   "Unfinished blog data found in local storage:",
-      //   storedBlogData
-      // );
-      // console.log(storedBlogData.content);
       setUnfinishedBlog(true);
     }
   }, [storageKey]);
@@ -456,6 +532,7 @@ export default function BlogEditor({
       // The editor is ready.
       if (content && unfinishedBlog) {
         editor.commands.setContent(content, false); // false = no history entry
+        previousImagesRef.current = getImageUrlsFromHTML(content);
       }
     },
     editorProps: {
@@ -464,11 +541,88 @@ export default function BlogEditor({
           "prose dark:prose-invert max-w-none p-4 min-h-[300px] rounded-b-3xl border-top-none border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 outline-none",
       },
     },
-    onUpdate: ({ editor }) => {
-      setContent(editor.getHTML());
-      handleInputChange("content", editor.getHTML());
+    onUpdate: async ({ editor }) => {
+      const html = editor.getHTML();
+      setContent(html);
+      handleInputChange("content", html);
+
+      const currentImages = getImageUrlsFromHTML(html);
+      const previousImages = previousImagesRef.current;
+
+      const deletedImages = previousImages.filter(
+        (url) => !currentImages.includes(url)
+      );
+
+      for (const url of deletedImages) {
+        console.log("Deleting image from DB:", url);
+        try {
+          toast.info("Deleting image from DB... Please wait.");
+          const res = await fetch("/api/editor-image/fetch", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ url }),
+          });
+
+          const { fileId } = await res.json();
+
+          // Try deleting from ImageKit
+          const imageKitDeleteSuccess = await deleteEditorImage(fileId, url);
+
+          if (!imageKitDeleteSuccess) {
+            // Reinstate in the editor
+            editor.chain().focus().setImage({ src: url }).run();
+
+            toast.error("Deletion failed — image added back to editor.");
+            continue;
+          }
+
+          toast.success("Image Deleted from DB");
+        } catch (error) {
+          console.log("Failed to delete image:", url, error);
+        }
+      }
+
+      previousImagesRef.current = currentImages;
     },
   });
+
+  const getImageUrlsFromHTML = (html) => {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    const imgs = tempDiv.querySelectorAll("img");
+    return Array.from(imgs).map((img) => img.src);
+  };
+
+  const deleteEditorImage = async (fileId, url) => {
+    if (!fileId) return false;
+
+    try {
+      const res = await fetch("/api/delete-image", {
+        method: "POST",
+        body: JSON.stringify({ fileId }),
+      });
+
+      const res1 = await fetch("/api/editor-image/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+      });
+
+      if (!res.ok || !res1.ok) {
+        console.error("One of the delete operations failed", {
+          imageKit: await res.text(),
+          db: await res1.text(),
+        });
+        return false;
+      }
+
+      console.log("Deleted file:", fileId);
+      return true;
+    } catch (err) {
+      console.error("Delete failed", err);
+      return false;
+    }
+  };
 
   const AddBlog = async () => {
     if (!title || content === "") {
