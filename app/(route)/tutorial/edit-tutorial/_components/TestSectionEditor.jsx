@@ -92,6 +92,63 @@ const MenuBar = ({ editor }) => {
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState("");
 
+  const isMac =
+    typeof window !== "undefined" &&
+    navigator.platform.toUpperCase().includes("MAC");
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      const mod = isMac ? e.metaKey : e.ctrlKey;
+
+      if (!editor) return;
+
+      // Headings H1, H2, H3
+      if (mod && e.altKey && e.key === "1") {
+        e.preventDefault();
+        editor.chain().focus().toggleHeading({ level: 1 }).run();
+      } else if (mod && e.altKey && e.key === "2") {
+        e.preventDefault();
+        editor.chain().focus().toggleHeading({ level: 2 }).run();
+      } else if (mod && e.altKey && e.key === "3") {
+        e.preventDefault();
+        editor.chain().focus().toggleHeading({ level: 3 }).run();
+      }
+
+      // Bullet List
+      else if (mod && e.shiftKey && e.key === "8") {
+        e.preventDefault();
+        editor.chain().focus().toggleBulletList().run();
+      }
+
+      // Numbered List
+      else if (mod && e.shiftKey && e.key === "7") {
+        e.preventDefault();
+        editor.chain().focus().toggleOrderedList().run();
+      }
+
+      // Bold
+      else if (mod && e.key.toLowerCase() === "b") {
+        e.preventDefault();
+        editor.chain().focus().toggleBold().run();
+      }
+
+      // Italic
+      else if (mod && e.key.toLowerCase() === "i") {
+        e.preventDefault();
+        editor.chain().focus().toggleItalic().run();
+      }
+
+      // Blockquote
+      else if (mod && e.shiftKey && e.key.toLowerCase() === "b") {
+        e.preventDefault();
+        editor.chain().focus().toggleBlockquote().run();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   if (!editor) return null;
 
   const handleFileSelect = async (e) => {
@@ -347,51 +404,77 @@ const MenuBar = ({ editor }) => {
       />
       <div className="lg:hidden flex">
         <Menu>
-          <MenuButton className="inline-flex items-center gap-2 rounded-md bg-gray-800 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-gray-700 data-open:bg-gray-700">
+          <MenuButton className="inline-flex items-center gap-2 rounded-md bg-white dark:bg-gray-900 px-4 py-2 text-sm font-medium text-gray-800 dark:text-gray-100 shadow-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
             Options
-            <ChevronDownIcon className="size-4 fill-white/60" />
+            <ChevronDownIcon className="size-4 text-gray-600 dark:text-gray-400" />
           </MenuButton>
 
           <MenuItems
             transition
             anchor="bottom end"
-            className="w-52 origin-top-right rounded-xl border border-white/5 bg-white/5 p-1 text-sm/6 text-white transition duration-100 ease-out [--anchor-gap:--spacing(1)] focus:outline-none data-closed:scale-95 data-closed:opacity-0"
+            className="w-56 mt-2 origin-top-right rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-1 shadow-lg ring-1 ring-black/10 dark:ring-white/10 focus:outline-none"
           >
+            {/* Edit */}
             <MenuItem>
-              <button className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-white/10">
-                <PencilIcon className="size-4 fill-white/30" />
-                Edit
-                <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-focus:inline">
+              <button
+                onClick={() => console.log("Edit selected")}
+                className="group flex w-full items-center justify-between rounded-md px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+              >
+                <span className="flex items-center gap-2">
+                  <PencilIcon className="size-4 text-gray-500 dark:text-gray-400" />
+                  Edit
+                </span>
+                <kbd className="font-mono text-xs text-gray-400 dark:text-gray-500">
                   ⌘E
                 </kbd>
               </button>
             </MenuItem>
+
+            {/* Duplicate */}
             <MenuItem>
-              <button className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-white/10">
-                <Copy className="size-4 fill-white/30" />
-                Duplicate
-                <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-focus:inline">
+              <button
+                onClick={() => console.log("Duplicate selected")}
+                className="group flex w-full items-center justify-between rounded-md px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+              >
+                <span className="flex items-center gap-2">
+                  <Copy className="size-4 text-gray-500 dark:text-gray-400" />
+                  Duplicate
+                </span>
+                <kbd className="font-mono text-xs text-gray-400 dark:text-gray-500">
                   ⌘D
                 </kbd>
               </button>
             </MenuItem>
-            <div className="my-1 h-px bg-white/5" />
+
+            <div className="my-1 h-px bg-gray-200 dark:bg-gray-700" />
+
+            {/* Archive */}
             <MenuItem>
-              <button className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-white/10">
-                <Archive className="size-4 fill-white/30" />
-                Archive
-                <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-focus:inline">
+              <button
+                onClick={() => console.log("Archive selected")}
+                className="group flex w-full items-center justify-between rounded-md px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+              >
+                <span className="flex items-center gap-2">
+                  <Archive className="size-4 text-gray-500 dark:text-gray-400" />
+                  Archive
+                </span>
+                <kbd className="font-mono text-xs text-gray-400 dark:text-gray-500">
                   ⌘A
                 </kbd>
               </button>
             </MenuItem>
+
+            {/* Delete */}
             <MenuItem>
-              <button className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-white/10">
-                <TrashIcon className="size-4 fill-white/30" />
-                Delete
-                <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-focus:inline">
-                  ⌘D
-                </kbd>
+              <button
+                onClick={() => console.log("Delete selected")}
+                className="group flex w-full items-center justify-between rounded-md px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/40 transition"
+              >
+                <span className="flex items-center gap-2">
+                  <TrashIcon className="size-4 text-red-500 dark:text-red-400" />
+                  Delete
+                </span>
+                <kbd className="font-mono text-xs text-red-400">⌘⌫</kbd>
               </button>
             </MenuItem>
           </MenuItems>
@@ -486,7 +569,6 @@ const TutorialEditor = ({
       return false;
     }
   };
-  
 
   const handleSectionTitleChange = (e) => {
     onUpdateSectionTitle(e.target.value);
@@ -582,7 +664,7 @@ const TutorialEditor = ({
           if (!imageKitDeleteSuccess) {
             // Reinstate in the editor
             editor.chain().focus().setImage({ src: url }).run();
-      
+
             toast.error("Deletion failed — image added back to editor.");
             continue;
           }

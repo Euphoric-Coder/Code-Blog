@@ -579,8 +579,8 @@ const TutorialCreator = () => {
             </div>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-8">
-            <div className="form-layout bg-white lg:w-1/3 h-fit">
+          <div className="flex flex-col xl:flex-row gap-8">
+            <div className="form-layout bg-white xl:w-1/3 h-fit">
               <FormBackgroundEffect />
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold text-blue-900 dark:text-blue-200 tracking-wide">
@@ -705,7 +705,7 @@ const TutorialCreator = () => {
               </div>
             </div>
 
-            <div className="lg:w-full lg:col-span-3">
+            <div className="xl:w-full xl:col-span-3">
               {activeSectionId && activeSubsectionId && (
                 <div>
                   <SectionEditor
