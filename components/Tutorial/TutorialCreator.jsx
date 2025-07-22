@@ -20,8 +20,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import TutorialMetadata from "./TutorialMetadata";
-import SectionEditor from "./SectionEditor";
+import TutorialMetadata from "@/components/Tutorial/TutorialMetadata";
+import SectionEditor from "@/components/Tutorial/SectionEditor";
 import { v4 as uuidv4 } from "uuid";
 import { useUser } from "@clerk/nextjs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -98,13 +98,13 @@ const isDefaultLike = (data) => {
   return tutorialIsEmpty && sectionsAreDefault && idsAreDefault;
 };
 
-const TutorialCreator = () => {
+const TutorialCreator = ({ editData = null, editing = false }) => {
   const { user } = useUser();
   const LOCAL_STORAGE_KEY = useMemo(() => {
     return user?.id ? `tutorialCreatorData-${user.id}` : null;
   }, [user?.id]);
 
-  const [initialData, setInitialData] = useState(null);
+  const [initialData, setInitialData] = useState(editData ?? null);
   const [tutorial, setTutorial] = useState(null);
   const [sections, setSections] = useState([]);
   const [activeSectionId, setActiveSectionId] = useState(null);
@@ -117,6 +117,8 @@ const TutorialCreator = () => {
 
   // ✅ Load initial data from localStorage after mount
   useEffect(() => {
+    if (editData) return; // skip loading for editing
+
     if (typeof window !== "undefined" && LOCAL_STORAGE_KEY) {
       const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
       console.log(!isDefaultLike(savedData));
@@ -145,9 +147,19 @@ const TutorialCreator = () => {
     }
   }, [LOCAL_STORAGE_KEY]);
 
+  // Load data for editing
+  useEffect(() => {
+    if (editData) {
+      setTutorial(editData.tutorial);
+      setSections(editData.sections);
+      setActiveSectionId(editData.activeSectionId);
+      setActiveSubsectionId(editData.activeSubsectionId);
+    }
+  }, [editData]);
+
   // ✅ Save changes to localStorage
   useEffect(() => {
-    if (tutorial && sections) {
+    if (tutorial && sections && !editing) {
       const dataToSave = {
         tutorial,
         sections,
@@ -472,89 +484,100 @@ const TutorialCreator = () => {
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-tr from-[#f6fbff] to-[#ffffff] dark:from-[#0b1625] dark:to-[#112030] transition-colors duration-500 flex flex-col items-center justify-center px-4 py-10">
-      <AlertDialog open={clearPendingAlert}>
-        <AlertDialogContent className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-br from-white via-blue-50 to-cyan-200 dark:from-gray-800 dark:via-gray-900 dark:to-blue-800 p-8 rounded-3xl shadow-[0_0_40px_rgba(0,150,255,0.3)] dark:shadow-[0_0_40px_rgba(0,75,150,0.5)] w-[95%] max-w-lg">
-          {/* Background Effects */}
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute -top-10 -left-10 w-60 h-60 bg-gradient-radial from-blue-500 via-blue-400 to-transparent dark:from-blue-900 dark:via-gray-800 dark:to-transparent opacity-25 blur-3xl"></div>
-            <div className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-radial from-cyan-400 via-blue-300 to-transparent dark:from-cyan-800 dark:via-blue-900 dark:to-transparent opacity-30 blur-[120px]"></div>
-          </div>
+      {!editing && (
+        <AlertDialog open={clearPendingAlert}>
+          <AlertDialogContent className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-br from-white via-blue-50 to-cyan-200 dark:from-gray-800 dark:via-gray-900 dark:to-blue-800 p-8 rounded-3xl shadow-[0_0_40px_rgba(0,150,255,0.3)] dark:shadow-[0_0_40px_rgba(0,75,150,0.5)] w-[95%] max-w-lg">
+            {/* Background Effects */}
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute -top-10 -left-10 w-60 h-60 bg-gradient-radial from-blue-500 via-blue-400 to-transparent dark:from-blue-900 dark:via-gray-800 dark:to-transparent opacity-25 blur-3xl"></div>
+              <div className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-radial from-cyan-400 via-blue-300 to-transparent dark:from-cyan-800 dark:via-blue-900 dark:to-transparent opacity-30 blur-[120px]"></div>
+            </div>
 
-          {/* Dialog Header */}
-          <AlertDialogHeader>
-            <AlertDialogTitle className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-400 dark:from-blue-300 dark:via-cyan-400 dark:to-blue-500">
-              Are you absolutely sure to delete?
-            </AlertDialogTitle>
-            <AlertDialogDescription className="text-sm text-gray-600 dark:text-gray-300 mt-2">
-              This action cannot be undone. This will permanently delete your
-              income <strong>&quot;{tutorial.title}&quot;</strong> and all of
-              its associated data.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
+            {/* Dialog Header */}
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-400 dark:from-blue-300 dark:via-cyan-400 dark:to-blue-500">
+                Are you absolutely sure to delete?
+              </AlertDialogTitle>
+              <AlertDialogDescription className="text-sm text-gray-600 dark:text-gray-300 mt-2">
+                This action cannot be undone. This will permanently delete your
+                income <strong>&quot;{tutorial.title}&quot;</strong> and all of
+                its associated data.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
 
-          {/* Dialog Footer */}
-          <AlertDialogFooter className="flex gap-4 mt-6">
-            <AlertDialogCancel
-              onClick={() => setClearPendingAlert(false)}
-              className="w-full py-3 rounded-2xl border border-blue-300 bg-gradient-to-r from-white to-blue-50 text-blue-600 font-semibold shadow-sm hover:shadow-md hover:bg-blue-100 transition-transform transform hover:scale-105 active:scale-95 dark:border-blue-500 dark:bg-gradient-to-r dark:from-gray-800 dark:to-blue-900 dark:text-blue-300 dark:hover:bg-blue-800 hover:text-indigo-500 dark:hover:text-indigo-200"
-            >
-              Cancel
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => {
-                clearData();
-                setClearPendingAlert(false);
-              }}
-              className="w-full py-3 rounded-2xl bg-gradient-to-r from-red-500 via-red-600 to-red-700 text-white font-bold shadow-lg hover:shadow-[0_0_20px_rgba(255,100,100,0.5)] hover:scale-105 active:scale-95 transition-transform transform dark:bg-gradient-to-r dark:from-red-700 dark:via-red-800 dark:to-red-900 dark:shadow-[0_0_20px_rgba(200,50,50,0.5)] dark:hover:shadow-[0_0_30px_rgba(200,50,50,0.7)]"
-            >
-              Continue
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+            {/* Dialog Footer */}
+            <AlertDialogFooter className="flex gap-4 mt-6">
+              <AlertDialogCancel
+                onClick={() => setClearPendingAlert(false)}
+                className="w-full py-3 rounded-2xl border border-blue-300 bg-gradient-to-r from-white to-blue-50 text-blue-600 font-semibold shadow-sm hover:shadow-md hover:bg-blue-100 transition-transform transform hover:scale-105 active:scale-95 dark:border-blue-500 dark:bg-gradient-to-r dark:from-gray-800 dark:to-blue-900 dark:text-blue-300 dark:hover:bg-blue-800 hover:text-indigo-500 dark:hover:text-indigo-200"
+              >
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  clearData();
+                  setClearPendingAlert(false);
+                }}
+                className="w-full py-3 rounded-2xl bg-gradient-to-r from-red-500 via-red-600 to-red-700 text-white font-bold shadow-lg hover:shadow-[0_0_20px_rgba(255,100,100,0.5)] hover:scale-105 active:scale-95 transition-transform transform dark:bg-gradient-to-r dark:from-red-700 dark:via-red-800 dark:to-red-900 dark:shadow-[0_0_20px_rgba(200,50,50,0.5)] dark:hover:shadow-[0_0_30px_rgba(200,50,50,0.7)]"
+              >
+                Continue
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
 
       {/* Pending Expense Alert */}
-      {pendingTutorial && (
-        <Alert className="mt-10 mb-8 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 border border-yellow-400 dark:border-gray-600 shadow-md p-4 rounded-xl flex items-center hover:shadow-lg transition-transform transform">
-          <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 mr-3" />
-          <div>
-            <AlertTitle className="text-yellow-700 dark:text-yellow-300 font-bold">
-              Pending Tutorial
-            </AlertTitle>
-            <AlertDescription className="text-yellow-600 dark:text-yellow-400">
-              You have an unfinished Tutorial: &quot;
-              <b>{tutorial.title === "" ? "Untitled" : tutorial.title}</b>
-              &quot;. Would you like to continue?
-            </AlertDescription>
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            className="ml-auto"
-            onClick={clearData}
-          >
-            <XCircle className="h-4 w-4 mr-1" />
-            Dismiss
-          </Button>
-        </Alert>
+      {!editing && (
+        <div>
+          {pendingTutorial && (
+            <Alert className="gap-6 mt-10 mb-8 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 border border-yellow-400 dark:border-gray-600 shadow-md p-4 rounded-xl flex items-center hover:shadow-lg transition-transform transform">
+              <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 mr-3" />
+              <div>
+                <AlertTitle className="text-yellow-700 dark:text-yellow-300 font-bold">
+                  Pending Tutorial
+                </AlertTitle>
+                <AlertDescription className="text-yellow-600 dark:text-yellow-400">
+                  You have an unfinished Tutorial: &quot;
+                  <b>{tutorial.title === "" ? "Untitled" : tutorial.title}</b>
+                  &quot;. Would you like to continue?
+                </AlertDescription>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="ml-auto"
+                onClick={clearData}
+              >
+                <XCircle className="h-4 w-4 mr-1" />
+                Dismiss
+              </Button>
+            </Alert>
+          )}
+        </div>
       )}
       {currentStep === "metadata" ? (
         <div className="w-full max-w-6xl">
-          <TutorialMetadata
-            initialData={
-              tutorial || {
-                title: "",
-                description: "",
-                coverImage: null,
-                imageId: null,
-                category: "",
-                subcategory: "",
-                tags: [],
+          {tutorial && (
+            <TutorialMetadata
+              initialData={
+                tutorial || {
+                  title: "",
+                  description: "",
+                  coverImage: null,
+                  imageId: null,
+                  category: "",
+                  subcategory: "",
+                  tags: [],
+                }
               }
-            }
-            onComplete={handleMetadataComplete}
-            onUpdateMetadata={(updatedMetadata) => setTutorial(updatedMetadata)} // ✅ Sync metadata updates
-          />
+              editing={editing}
+              onComplete={handleMetadataComplete}
+              onUpdateMetadata={(updatedMetadata) =>
+                setTutorial(updatedMetadata)
+              } // Sync metadata updates
+            />
+          )}
         </div>
       ) : (
         <div className="w-full bg-[#e8f4ff]/60 dark:bg-[#1e2e44]/60 backdrop-blur-xl border border-blue-200 dark:border-blue-800 rounded-3xl shadow-2xl p-8 md:p-12">
@@ -579,8 +602,8 @@ const TutorialCreator = () => {
             </div>
           </div>
 
-          <div className="flex flex-col xl:flex-row gap-8">
-            <div className="form-layout bg-white xl:w-1/3 h-fit">
+          <div className="flex flex-col lg:flex-row gap-8">
+            <div className="form-layout bg-white lg:w-1/3 h-fit">
               <FormBackgroundEffect />
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold text-blue-900 dark:text-blue-200 tracking-wide">
@@ -705,7 +728,7 @@ const TutorialCreator = () => {
               </div>
             </div>
 
-            <div className="xl:w-full xl:col-span-3">
+            <div className="lg:w-full lg:col-span-3">
               {activeSectionId && activeSubsectionId && (
                 <div>
                   <SectionEditor

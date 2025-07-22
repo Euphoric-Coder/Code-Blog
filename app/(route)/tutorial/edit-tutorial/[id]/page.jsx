@@ -1,11 +1,11 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
 import { db } from "@/lib/dbConfig";
 import { Tutorials } from "@/lib/schema";
 import { eq } from "drizzle-orm";
 import { useParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import TutorialCreator from "../_components/TestEditor";
+import TutorialCreator from "@/components/Tutorial/TutorialCreator";
 
 const Page = () => {
   const params = useParams();
