@@ -545,11 +545,11 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
               </div>
               <Button
                 variant="outline"
-                size="sm"
-                className="ml-auto"
+                size="lg"
+                className="del3 hover:bg-red-300 hover:text-red-500 [&_svg]:size-6"
                 onClick={clearData}
               >
-                <XCircle className="h-4 w-4 mr-1" />
+                <XCircle className="" />
                 Dismiss
               </Button>
             </Alert>
@@ -557,7 +557,7 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
         </div>
       )}
       {currentStep === "metadata" ? (
-        <div className="w-full max-w-6xl">
+        <div className="w-full max-w-6xl mt-10">
           {tutorial && (
             <TutorialMetadata
               initialData={
@@ -580,7 +580,7 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
           )}
         </div>
       ) : (
-        <div className="w-full bg-[#e8f4ff]/60 dark:bg-[#1e2e44]/60 backdrop-blur-xl border border-blue-200 dark:border-blue-800 rounded-3xl shadow-2xl p-8 md:p-12">
+        <div className="w-full mt-10 bg-[#e8f4ff]/60 dark:bg-[#1e2e44]/60 backdrop-blur-xl border border-blue-200 dark:border-blue-800 rounded-3xl shadow-2xl p-8 md:p-12">
           <div className="mb-8 flex flex-col lg:flex-row space-y-4 lg:space-y-0 justify-between items-center">
             <h1 className="text-3xl font-extrabold text-blue-900 dark:text-blue-200">
               Creating: {tutorial.title}
@@ -602,8 +602,8 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
             </div>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-8">
-            <div className="form-layout bg-white lg:w-1/3 h-fit">
+          <div className="flex flex-col xl:flex-row gap-8">
+            <div className="form-layout bg-white xl:w-1/3 h-fit">
               <FormBackgroundEffect />
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold text-blue-900 dark:text-blue-200 tracking-wide">
@@ -728,7 +728,7 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
               </div>
             </div>
 
-            <div className="lg:w-full lg:col-span-3">
+            <div className="xl:w-full xl:col-span-3">
               {activeSectionId && activeSubsectionId && (
                 <div>
                   <SectionEditor
