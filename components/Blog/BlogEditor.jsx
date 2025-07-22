@@ -53,6 +53,7 @@ import { v4 as uuid } from "uuid";
 import {
   AlertCircle,
   Archive,
+  CheckCircle,
   ChevronDownIcon,
   Copy,
   ImageIcon,
@@ -900,34 +901,67 @@ export default function BlogEditor({
     <div className="p-8">
       {/* Pending Expense Alert */}
       {unfinishedBlog && !editing && (
-        <Alert
-          variant="warning"
-          className="max-w-lg mt-6 mb-5 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 border border-yellow-400 dark:border-gray-600 shadow-lg p-4 rounded-xl flex items-center hover:shadow-xl transition-transform transform hover:scale-[1.02]"
-        >
-          <AlertCircle className="h-5 w-5 text-yellow-600 dark:text-yellow-400 mr-3" />
-          <div>
-            <AlertTitle className="text-yellow-700 dark:text-yellow-300 font-bold">
-              Pending Expense
-            </AlertTitle>
-            <AlertDescription className="text-yellow-600 dark:text-yellow-400">
-              You have an unfinished expense: &quote;
-              <b>{title ? title.slice(0, 20) : "Untitled"}</b>&quote;. Would you like to
-              continue?
-            </AlertDescription>
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            className="ml-auto"
-            onClick={removePendingBlogData}
+        <div className="container mx-auto justify-center">
+          <Alert
+            variant="warning"
+            className="mt-10 mb-5 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 border border-yellow-400 dark:border-gray-600 shadow-lg p-4 rounded-3xl flex items-center hover:shadow-xl"
           >
-            <XCircle className="h-4 w-4 mr-1" />
-            Dismiss
-          </Button>
-        </Alert>
+            {/* Content that grows to fill space */}
+            <div className="flex flex-col gap-2 flex-grow">
+              <div className="flex items-center gap-2">
+                <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400" />
+                <AlertTitle className="text-yellow-700 text-sm md:text-lg dark:text-yellow-300 font-bold">
+                  Pending Blog
+                </AlertTitle>
+              </div>
+              <div className="flex items-center gap-2">
+                <AlertDescription className="w-full">
+                  <div
+                    className="rounded-xl border border-yellow-300 dark:border-yellow-700 bg-yellow-50 dark:bg-yellow-900/10 
+                       px-4 py-3 text-sm sm:text-base text-justify leading-relaxed text-yellow-800 dark:text-yellow-200 
+                       shadow-sm transition-all"
+                  >
+                    <p className="text-wrap break-words">
+                      You have an unfinished Blog: &quot;
+                      <b className="font-semibold">
+                        {title === ""
+                          ? "Untitled"
+                          : `${title.slice(0, 50)}${
+                              title.length > 50 ? " ..." : ""
+                            }`}
+                      </b>
+                      &quot;. Would you like to continue?
+                    </p>
+                  </div>
+                </AlertDescription>
+                {/* Button on the right */}
+                <div className="flex flex-col md:flex-row items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="accept hover:bg-green-300 hover:text-green-700 dark:hover:text-green-400 [&_svg]:size-6"
+                    onClick={() => setUnfinishedBlog(false)}
+                  >
+                    <CheckCircle className="h-4 w-4 mr-1" />
+                    Continue
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="del3 hover:bg-red-300 hover:text-red-500 [&_svg]:size-6"
+                    onClick={removePendingBlogData}
+                  >
+                    <XCircle className="h-4 w-4 mr-1" />
+                    Dismiss
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </Alert>
+        </div>
       )}
 
-      <div className="w-full bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-[#111827] dark:via-[#0f172a] dark:to-[#1e1b4b] rounded-2xl p-6 shadow-md mb-8 transition-all duration-300">
+      <div className="mt-10 w-full bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-[#111827] dark:via-[#0f172a] dark:to-[#1e1b4b] rounded-2xl p-6 shadow-md mb-8 transition-all duration-300">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           {/* Title & subtitle */}
           <div>

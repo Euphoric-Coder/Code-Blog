@@ -10,6 +10,7 @@ import {
   XCircle,
   AlertCircle,
   Edit,
+  CheckCircle,
 } from "lucide-react";
 import {
   AlertDialog,
@@ -553,7 +554,7 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400" />
-                  <AlertTitle className="text-yellow-700 dark:text-yellow-300 font-bold">
+                  <AlertTitle className="text-yellow-700 text-sm md:text-lg dark:text-yellow-300 font-bold">
                     Pending Tutorial
                   </AlertTitle>
                 </div>
@@ -577,15 +578,26 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
                       </p>
                     </div>
                   </AlertDescription>
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="del3 hover:bg-red-300 hover:text-red-500 [&_svg]:size-6"
-                    onClick={clearData}
-                  >
-                    <XCircle className="" />
-                    Dismiss
-                  </Button>
+                  <div className="flex flex-col md:flex-row items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="accept hover:bg-green-300 hover:text-green-700 dark:hover:text-green-400 [&_svg]:size-6"
+                      onClick={() => setPendingTutorial(false)}
+                    >
+                      <CheckCircle className="" />
+                      Continue
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="del3 hover:bg-red-300 hover:text-red-500 [&_svg]:size-6"
+                      onClick={clearData}
+                    >
+                      <XCircle className="" />
+                      Dismiss
+                    </Button>
+                  </div>
                 </div>
               </div>
             </Alert>
