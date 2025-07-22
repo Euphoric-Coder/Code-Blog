@@ -5,6 +5,7 @@ import ImageKit from "imagekit-javascript";
 import { FiUploadCloud } from "react-icons/fi";
 import { Button } from "./ui/button";
 import Image from "next/image";
+import { Label } from "./ui/label";
 
 const publicKey = process.env.NEXT_PUBLIC_PUBLIC_KEY;
 const urlEndpoint = process.env.NEXT_PUBLIC_URL_ENDPOINT;
@@ -137,21 +138,12 @@ export default function ImageUpload({
     if (file) handleUpload(file);
   };
 
-  const handleReset = async () => {
-    if (fileId) await deleteFile(fileId);
-    setUploadData(null);
-    setProgress(null);
-    setFileId(null);
-    if (inputRef.current) inputRef.current.value = "";
-  };
-
   const handleReUpload = async () => {
     if (fileId) await deleteFile(fileId);
     setUploadData(null);
     setProgress(null);
     setFileId(null);
     if (inputRef.current) inputRef.current.value = "";
-    inputRef.current.click();
   };
 
   return (
@@ -203,20 +195,40 @@ export default function ImageUpload({
         </>
       ) : (
         <>
-          <div className="p-6 rounded-2xl border border-gray-200 dark:border-gray-800 bg-gradient-to-br from-white via-gray-50 to-gray-100 dark:from-[#1b1b1b] dark:via-[#121212] dark:to-black shadow-xl space-y-6 transition-all duration-300">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-              <div className="space-y-1">
-                <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
-                  File Uploaded Successfully
+          <div className="mb-6">
+            <Label
+              htmlFor="blog-cover-image"
+              className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
+            >
+              Blog Cover Image
+            </Label>
+            <div className="relative flex flex-col items-center gap-6 mt-4 p-6 border-2 border-dashed border-blue-300 rounded-2xl bg-gradient-to-br from-cyan-50 to-indigo-100 shadow-lg hover:shadow-xl transition-all duration-300">
+              {/* Image Block */}
+              <div className="flex-1 max-w-md overflow-hidden rounded-xl shadow-md transition-transform duration-300 hover:scale-105">
+                <Image
+                  src={uploadData.url}
+                  alt="Blog Cover"
+                  width={500}
+                  height={500}
+                  className="w-full h-[300px] object-cover rounded-xl"
+                  draggable={false}
+                />
+              </div>
+
+              {/* Info and Actions - stacked below image for better alignment */}
+              <div className="flex flex-col gap-3 justify-center items-center w-full md:w-auto md:items-start text-center md:text-left">
+                <h3 className="text-lg font-bold text-gray-800 dark:text-white">
+                  Cover Image Uploaded
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  <span className="font-medium text-gray-900 dark:text-gray-100">
-                    {uploadData.name}
-                  </span>
-                </p>
-                <p className="text-sm text-gray-500 dark:text-gray-500">
-                  {(uploadData.size / 1024).toFixed(2)} KB
-                </p>
+                <Button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleReUpload();
+                  }}
+                  className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white font-medium px-5 py-2 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300"
+                >
+                  Reupload Image
+                </Button>
               </div>
             </div>
           </div>
