@@ -116,6 +116,7 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
   const [draggingSubsection, setDraggingSubsection] = useState(null);
   const [pendingTutorial, setPendingTutorial] = useState(false);
   const [clearPendingAlert, setClearPendingAlert] = useState(false);
+  const [editBlogCoverImageId, setEditBlogCoverImageId] = useState(null);
 
   // ✅ Load initial data from localStorage after mount
   useEffect(() => {
@@ -624,6 +625,7 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
               onUpdateMetadata={(updatedMetadata) =>
                 setTutorial(updatedMetadata)
               } // Sync metadata updates
+              setEditBlogCoverImageId={setEditBlogCoverImageId}
             />
           )}
         </div>

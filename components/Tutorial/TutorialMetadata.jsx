@@ -16,22 +16,29 @@ import MultiSelect from "../Form/UI/MultiSelect";
 import { Badge } from "../ui/badge";
 import { toast } from "sonner";
 import { tutorialCategories, tutorialSubCategoriesList } from "@/lib/data";
+import { Label } from "../ui/label";
+import Image from "next/image";
+import { set } from "date-fns";
 
 const TutorialMetadata = ({
   initialData,
   onComplete,
   onUpdateMetadata,
   editing = false,
+  setEditBlogCoverImageId,
 }) => {
   // Initialize metadata from initialData
   useEffect(() => {
     setData(initialData);
     setUploadData(initialData?.coverImage || null);
     setFileId(initialData?.imageId || null);
+    setEditBlogCoverImageId(editing ? initialData?.imageId : null);
   }, [initialData]);
+
   const [data, setData] = useState(initialData);
   const [uploadData, setUploadData] = useState(null);
   const [fileId, setFileId] = useState(null);
+  const [editCoverImage, setEditCoverImage] = useState(editing ? true : false);
   const [errors, setErrors] = useState({});
   const [tag, setTag] = useState("");
 
@@ -321,13 +328,57 @@ const TutorialMetadata = ({
               </div>
 
               <div>
-                <ImageUpload
-                  uploadData={uploadData}
-                  setUploadData={setUploadData}
-                  fileId={fileId}
-                  setFileId={setFileId}
-                  tutorial={true}
-                />
+                {editCoverImage && editing && uploadData && fileId ? (
+                  <div className="mb-6">
+                    <Label
+                      htmlFor="blog-cover-image"
+                      className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
+                    >
+                      Blog Cover Image
+                    </Label>
+                    <div className="relative flex flex-col items-center gap-6 mt-4 p-6 border-2 border-dashed border-blue-300 rounded-2xl bg-gradient-to-br from-cyan-50 to-indigo-100 shadow-lg hover:shadow-xl transition-all duration-300">
+                      {/* Image Block */}
+                      <div className="flex-1 max-w-md overflow-hidden rounded-xl shadow-md transition-transform duration-300 hover:scale-105">
+                        <Image
+                          src={uploadData || initialData?.coverImage}
+                          alt="Blog Cover"
+                          width={500}
+                          height={500}
+                          className="w-full h-[300px] object-cover rounded-xl"
+                          draggable={false}
+                        />
+                      </div>
+
+                      {/* Info and Actions - stacked below image for better alignment */}
+                      <div className="flex flex-col gap-3 justify-center items-center w-full md:w-auto md:items-start text-center md:text-left">
+                        <h3 className="text-lg font-bold text-gray-800 dark:text-white">
+                          Cover Image Uploaded
+                        </h3>
+                        <Button
+                          onClick={() => {
+                            setEditCoverImage(false);
+                            setEditBlogCoverImageId(
+                              fileId || initialData?.imageId
+                            );
+                            setUploadData(null);
+                            setFileId(null);
+                          }}
+                          className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white font-medium px-5 py-2 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300"
+                        >
+                          Reupload Image
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <ImageUpload
+                    uploadData={uploadData}
+                    setUploadData={setUploadData}
+                    fileId={fileId}
+                    setFileId={setFileId}
+                    tutorial={true}
+                  />
+                )}
               </div>
             </div>
 
