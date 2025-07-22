@@ -21,7 +21,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import TutorialMetadata from "@/components/Tutorial/TutorialMetadata";
-import SectionEditor from "../_components/TestSectionEditor";
+import SectionEditor from "@/components/Tutorial/SectionEditor";
+import { v4 as uuid } from "uuid";
 import { v4 as uuidv4 } from "uuid";
 import { useUser } from "@clerk/nextjs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
