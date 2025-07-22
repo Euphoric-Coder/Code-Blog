@@ -9,6 +9,7 @@ import {
   GripVertical,
   XCircle,
   AlertCircle,
+  Edit,
 } from "lucide-react";
 import {
   AlertDialog,
@@ -482,6 +483,23 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
     // });
   };
 
+  const editTutorial = async () => {
+    // for Demo Purpose
+    console.log({
+      title: tutorial.title,
+      coverImage: tutorial.coverImage,
+      imageId: tutorial.imageId,
+      description: tutorial.description,
+      category: tutorial.category,
+      subCategories: tutorial.subcategory,
+      tags: tutorial.tags,
+      content: sections,
+      author: user?.fullName ?? "Anonymous",
+      date: getISTDate(),
+      createdBy: user?.primaryEmailAddress?.emailAddress,
+    });
+  };
+
   return (
     <div className="min-h-screen w-full bg-gradient-to-tr from-[#f6fbff] to-[#ffffff] dark:from-[#0b1625] dark:to-[#112030] transition-colors duration-500 flex flex-col items-center justify-center px-4 py-10">
       {!editing && (
@@ -527,31 +545,49 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
         </AlertDialog>
       )}
 
-      {/* Pending Expense Alert */}
+      {/* Pending Tutorial Alert */}
       {!editing && (
         <div>
           {pendingTutorial && (
-            <Alert className="gap-6 mt-10 mb-8 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 border border-yellow-400 dark:border-gray-600 shadow-md p-4 rounded-xl flex items-center hover:shadow-lg transition-transform transform">
-              <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 mr-3" />
+            <Alert className="gap-6 mt-10 mb-8 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 border border-yellow-400 dark:border-gray-600 shadow-md p-4 rounded-3xl flex items-center hover:shadow-lg transition-transform transform">
               <div>
-                <AlertTitle className="text-yellow-700 dark:text-yellow-300 font-bold">
-                  Pending Tutorial
-                </AlertTitle>
-                <AlertDescription className="text-yellow-600 dark:text-yellow-400">
-                  You have an unfinished Tutorial: &quot;
-                  <b>{tutorial.title === "" ? "Untitled" : tutorial.title}</b>
-                  &quot;. Would you like to continue?
-                </AlertDescription>
+                <div className="flex items-center gap-2 mb-2">
+                  <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400" />
+                  <AlertTitle className="text-yellow-700 dark:text-yellow-300 font-bold">
+                    Pending Tutorial
+                  </AlertTitle>
+                </div>
+                <div className="flex items-center gap-4">
+                  <AlertDescription className="w-full">
+                    <div
+                      className="rounded-xl border border-yellow-300 dark:border-yellow-700 bg-yellow-50 dark:bg-yellow-900/10 
+               px-4 py-3 text-sm sm:text-base text-justify leading-relaxed text-yellow-800 dark:text-yellow-200 
+               shadow-sm transition-all"
+                    >
+                      <p className="text-wrap break-words">
+                        You have an unfinished Tutorial: &quot;
+                        <b className="font-semibold">
+                          {tutorial.title === ""
+                            ? "Untitled"
+                            : `${tutorial.title.slice(0, 50)}${
+                                tutorial.title.length > 50 ? " ..." : ""
+                              }`}
+                        </b>
+                        &quot;. Would you like to continue?
+                      </p>
+                    </div>
+                  </AlertDescription>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="del3 hover:bg-red-300 hover:text-red-500 [&_svg]:size-6"
+                    onClick={clearData}
+                  >
+                    <XCircle className="" />
+                    Dismiss
+                  </Button>
+                </div>
               </div>
-              <Button
-                variant="outline"
-                size="lg"
-                className="del3 hover:bg-red-300 hover:text-red-500 [&_svg]:size-6"
-                onClick={clearData}
-              >
-                <XCircle className="" />
-                Dismiss
-              </Button>
             </Alert>
           )}
         </div>
@@ -592,13 +628,23 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
               >
                 Back to Metadata
               </Button>
-              <Button
-                onClick={saveTutorial}
-                className="btn9 flex [&_svg]:size-6"
-              >
-                <Save className="text-white" />
-                Save Tutorial
-              </Button>
+              {!editing ? (
+                <Button
+                  onClick={saveTutorial}
+                  className="btn9 flex [&_svg]:size-6"
+                >
+                  <Save className="text-white" />
+                  Save Tutorial
+                </Button>
+              ) : (
+                <Button
+                  onClick={editTutorial}
+                  className="btn9 flex [&_svg]:size-6"
+                >
+                  <Edit className="text-white" />
+                  Update Tutorial
+                </Button>
+              )}
             </div>
           </div>
 

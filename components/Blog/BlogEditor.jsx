@@ -902,7 +902,7 @@ export default function BlogEditor({
       {unfinishedBlog && !editing && (
         <Alert
           variant="warning"
-          className="mt-6 mb-5 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 border border-yellow-400 dark:border-gray-600 shadow-lg p-4 rounded-xl flex items-center hover:shadow-xl transition-transform transform hover:scale-[1.02]"
+          className="max-w-lg mt-6 mb-5 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 border border-yellow-400 dark:border-gray-600 shadow-lg p-4 rounded-xl flex items-center hover:shadow-xl transition-transform transform hover:scale-[1.02]"
         >
           <AlertCircle className="h-5 w-5 text-yellow-600 dark:text-yellow-400 mr-3" />
           <div>
@@ -911,7 +911,7 @@ export default function BlogEditor({
             </AlertTitle>
             <AlertDescription className="text-yellow-600 dark:text-yellow-400">
               You have an unfinished expense: &quote;
-              <b>{title ? title : "Untitled"}</b>&quote;. Would you like to
+              <b>{title ? title.slice(0, 20) : "Untitled"}</b>&quote;. Would you like to
               continue?
             </AlertDescription>
           </div>
