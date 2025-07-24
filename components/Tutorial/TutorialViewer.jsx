@@ -242,7 +242,7 @@ const TutorialViewer = ({ tutorial }) => {
                 <img
                   src={tutorial.coverImage}
                   alt={tutorial.title}
-                  className="w-full h-64 object-cover rounded-lg shadow-md mb-6"
+                  className="w-full h-72 object-fill rounded-lg shadow-md mb-6"
                 />
               )}
 

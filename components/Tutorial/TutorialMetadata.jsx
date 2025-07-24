@@ -360,6 +360,11 @@ const TutorialMetadata = ({
                             setEditBlogCoverImageId(
                               fileId || initialData?.imageId
                             );
+                            setData((prev) => ({
+                              ...prev,
+                              coverImage: null,
+                              imageId: null,
+                            }));
                             setUploadData(null);
                             setFileId(null);
                           }}

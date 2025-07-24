@@ -26,6 +26,7 @@ import { tutorialCategories, tutorialSubCategoriesList } from "@/lib/data";
 import { toast } from "sonner";
 import FilterButton from "./FilterButton";
 import Link from "next/link";
+import Image from "next/image";
 
 export const TutorialFetch = ({ tutorials }) => {
   const [searchTerm, setSearchTerm] = useState("");

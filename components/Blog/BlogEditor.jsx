@@ -1141,7 +1141,7 @@ export default function BlogEditor({
         bg-gradient-to-r from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-900 border-[2px]
         border-blue-500 dark:border-blue-900 transition-all"
           >
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col md:flex-row items-center justify-between">
               {/* Title & Selected Badge */}
               <div className="flex items-center gap-2">
                 <label className="blog-text1">
