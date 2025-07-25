@@ -15,6 +15,7 @@ import { TutorialFetch } from "@/components/Tutorial/TutorialFetch";
 import { PenBox, PlusCircle, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import QuoteOfTheDay from "@/components/Miscellaneous/QuoteOfTheDay";
 
 const Page = () => {
   const [tutorialData, setTutorialData] = useState([]);
@@ -42,68 +43,54 @@ const Page = () => {
         <div className="container p-4 md:p-0 mx-auto flex flex-col lg:flex-row items-center justify-between">
           {/* Text Content */}
           <div className="lg:w-3/5 text-center lg:text-left mb-12 lg:mb-0">
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-extrabold font-montserrat leading-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-blue-500 to-teal-400 dark:from-teal-300 dark:via-blue-400 dark:to-indigo-500 mb-6 drop-shadow-md">
-              Empower Your Dev Journey
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold font-montserrat leading-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-blue-500 to-teal-400 dark:from-teal-300 dark:via-blue-400 dark:to-indigo-500 mb-6 drop-shadow-md">
+              Explore Curated Tutorials by Topic & Skill Level
             </h1>
 
             <p className="text-lg sm:text-xl lg:text-lg xl:text-xl leading-relaxed font-poppins font-medium text-justify text-gray-800 dark:text-gray-300 max-w-3xl lg:max-w-5xl">
               <span className="block">
-                Unlock insights, stories, and guides crafted for developers and
-                tech explorers. Our platform empowers you to dive deep into
-                practical experiences, coding patterns, and architecture
-                essentials shaping the future of software.
+                Dive into structured learning experiences designed to help you
+                grow — whether you're starting out or leveling up your dev
+                skills. Our tutorials are grouped by topic and split into
+                actionable subsections, guiding you from fundamentals to
+                advanced insights.
               </span>
 
               <span className="block mt-3">
-                From real-world case studies in{" "}
+                Begin your journey with{" "}
                 <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-600 dark:from-blue-300 dark:to-teal-400">
-                  Full Stack Development
-                </span>{" "}
-                and system design, to thought leadership in{" "}
+                  Frontend & Backend Development
+                </span>
+                , refine your workflow with{" "}
                 <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-300 dark:to-pink-400">
-                  AI & Machine Learning
-                </span>{" "}
-                — each tutorial brings clarity, relevance, and impact.
+                  Git & DevOps Tools
+                </span>
+                , or master{" "}
+                <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-orange-500 dark:from-yellow-300 dark:to-orange-400">
+                  Full Stack Projects & System Design
+                </span>
+                .
               </span>
 
               <span className="block mt-3">
-                Explore powerful ideas across{" "}
+                Each tutorial is crafted with clarity and progression in mind —
+                covering practical implementation, step-by-step walkthroughs,
+                and expert techniques across{" "}
                 <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-cyan-600 dark:from-green-300 dark:to-cyan-400">
-                  DevOps
+                  databases, APIs, deployment
                 </span>
-                ,{" "}
-                <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-sky-500 dark:from-indigo-300 dark:to-sky-400">
-                  Cloud Computing
-                </span>
-                ,{" "}
-                <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-orange-500 dark:from-yellow-300 dark:to-orange-400">
-                  JavaScript Frameworks
-                </span>{" "}
-                and more — all curated to accelerate your dev journey.
+                , and more.
               </span>
             </p>
-            <blockquote className="mt-10 p-6 rounded-xl bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 border-l-4 border-blue-500 dark:border-teal-400 shadow-md">
-              <div className="text-base sm:text-lg leading-relaxed text-gray-800 dark:text-gray-200 font-medium">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-500 dark:from-teal-300 dark:via-blue-400 dark:to-indigo-500 font-semibold">
-                  “There are two ways of constructing a software design:
-                </span>{" "}
-                <span>
-                  one way is to make it so simple that there are obviously no
-                  deficiencies, and the other way is to make it so complicated
-                  that there are no obvious deficiencies.”
-                </span>
-              </div>
-              <div className="mt-4 text-sm font-semibold text-right text-gray-600 dark:text-gray-400">
-                — Sir Tony Hoare
-              </div>
-            </blockquote>
+
+            <QuoteOfTheDay type="tutorial" />
 
             <div className="mt-10 flex justify-center lg:justify-start gap-4">
               {/* Call to Action Buttons */}
               <Link href={"/tutorial/add-tutorial/"}>
                 <button className="flex gap-1 px-6 py-3 bg-gradient-to-r from-blue-500 to-teal-500 text-white font-medium rounded-full shadow-lg hover:scale-105 hover:shadow-2xl transition-transform duration-300 ease-out dark:from-teal-400 dark:to-blue-500">
                   <PlusCircle />
-                  Create Blogs
+                  Create Tutorials
                 </button>
               </Link>
               {/* Edit Blog Button with Dialog */}
@@ -203,28 +190,28 @@ const Page = () => {
       <section className="pb-10">
         <div className="text-center mb-10">
           <h2 className="text-4xl sm:text-5xl font-extrabold font-montserrat text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-500 dark:from-teal-300 dark:via-blue-400 dark:to-indigo-400 drop-shadow-sm">
-            Explore. Filter. Learn.
+            Learn. Filter. Build.
           </h2>
 
           <p className="mt-4 text-lg sm:text-xl font-poppins font-medium text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
-            Browse curated blogs in{" "}
+            Dive into structured tutorials in{" "}
             <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-600 dark:from-blue-300 dark:to-teal-400">
-              Web Development
+              Frontend & Backend Development
             </span>
             ,{" "}
             <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-300 dark:to-pink-400">
-              AI/ML
+              AI & Machine Learning
             </span>
             ,{" "}
             <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-cyan-600 dark:from-green-300 dark:to-cyan-400">
-              Cloud & DevOps
+              Cloud, DevOps & APIs
             </span>{" "}
-            and more — then filter by category or tag to find what fuels your
-            curiosity.
+            — then filter by topic, level, or tag to follow your personalized
+            learning path.
           </p>
 
           <p className="mt-2 text-base text-gray-600 dark:text-gray-400 italic">
-            Search precisely. Filter effortlessly. View your way.
+            Search smart. Filter fast. Learn your way.
           </p>
         </div>
       </section>

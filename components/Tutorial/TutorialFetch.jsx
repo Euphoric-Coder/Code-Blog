@@ -591,7 +591,7 @@ export const TutorialFetch = ({ tutorials }) => {
   return (
     <div>
       {/* Search and Filter Section */}
-      <section className="py-12 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-6">
             {/* Search Bar */}

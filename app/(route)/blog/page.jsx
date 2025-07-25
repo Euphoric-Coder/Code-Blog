@@ -1,6 +1,7 @@
 "use client";
 
 import BlogFetch from "@/components/Blog/BlogFetch";
+import QuoteOfTheDay from "@/components/Miscellaneous/QuoteOfTheDay";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -83,21 +84,8 @@ const Page = () => {
                 and more — all curated to accelerate your dev journey.
               </span>
             </p>
-            <blockquote className="mt-10 p-6 rounded-xl bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 border-l-4 border-blue-500 dark:border-teal-400 shadow-md">
-              <div className="text-base sm:text-lg leading-relaxed text-gray-800 dark:text-gray-200 font-medium">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-500 dark:from-teal-300 dark:via-blue-400 dark:to-indigo-500 font-semibold">
-                  “There are two ways of constructing a software design:
-                </span>{" "}
-                <span>
-                  one way is to make it so simple that there are obviously no
-                  deficiencies, and the other way is to make it so complicated
-                  that there are no obvious deficiencies.”
-                </span>
-              </div>
-              <div className="mt-4 text-sm font-semibold text-right text-gray-600 dark:text-gray-400">
-                — Sir Tony Hoare
-              </div>
-            </blockquote>
+
+            <QuoteOfTheDay type="blog" />
 
             <div className="mt-10 flex justify-center lg:justify-start gap-4">
               {/* Call to Action Buttons */}
@@ -229,9 +217,7 @@ const Page = () => {
       </section>
 
       <section>
-        {blogData && (
-          <BlogFetch blogs={blogData} refreshData={refreshData} />
-        )}
+        {blogData && <BlogFetch blogs={blogData} refreshData={refreshData} />}
       </section>
     </main>
   );
