@@ -92,62 +92,60 @@ const MenuBar = ({ editor }) => {
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState("");
 
-  const isMac =
-    typeof window !== "undefined" &&
-    navigator.platform.toUpperCase().includes("MAC");
+  
 
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      const mod = isMac ? e.metaKey : e.ctrlKey;
+  // useEffect(() => {
+  //   const handleKeyDown = (e) => {
+  //     const mod = isMac ? e.metaKey : e.ctrlKey;
 
-      if (!editor) return;
+  //     if (!editor) return;
 
-      // Headings H1, H2, H3
-      if (mod && e.altKey && e.key === "1") {
-        e.preventDefault();
-        editor.chain().focus().toggleHeading({ level: 1 }).run();
-      } else if (mod && e.altKey && e.key === "2") {
-        e.preventDefault();
-        editor.chain().focus().toggleHeading({ level: 2 }).run();
-      } else if (mod && e.altKey && e.key === "3") {
-        e.preventDefault();
-        editor.chain().focus().toggleHeading({ level: 3 }).run();
-      }
+  //     // Headings H1, H2, H3
+  //     if (mod && e.altKey && e.key === "1") {
+  //       e.preventDefault();
+  //       editor.chain().focus().toggleHeading({ level: 1 }).run();
+  //     } else if (mod && e.altKey && e.key === "2") {
+  //       e.preventDefault();
+  //       editor.chain().focus().toggleHeading({ level: 2 }).run();
+  //     } else if (mod && e.altKey && e.key === "3") {
+  //       e.preventDefault();
+  //       editor.chain().focus().toggleHeading({ level: 3 }).run();
+  //     }
 
-      // Bullet List
-      else if (mod && e.shiftKey && e.key === "8") {
-        e.preventDefault();
-        editor.chain().focus().toggleBulletList().run();
-      }
+  //     // Bullet List
+  //     else if (mod && e.shiftKey && e.key === "8") {
+  //       e.preventDefault();
+  //       editor.chain().focus().toggleBulletList().run();
+  //     }
 
-      // Numbered List
-      else if (mod && e.shiftKey && e.key === "7") {
-        e.preventDefault();
-        editor.chain().focus().toggleOrderedList().run();
-      }
+  //     // Numbered List
+  //     else if (mod && e.shiftKey && e.key === "7") {
+  //       e.preventDefault();
+  //       editor.chain().focus().toggleOrderedList().run();
+  //     }
 
-      // Bold
-      else if (mod && e.key.toLowerCase() === "b") {
-        e.preventDefault();
-        editor.chain().focus().toggleBold().run();
-      }
+  //     // Bold
+  //     else if (mod && e.key.toLowerCase() === "b") {
+  //       e.preventDefault();
+  //       editor.chain().focus().toggleBold().run();
+  //     }
 
-      // Italic
-      else if (mod && e.key.toLowerCase() === "i") {
-        e.preventDefault();
-        editor.chain().focus().toggleItalic().run();
-      }
+  //     // Italic
+  //     else if (mod && e.key.toLowerCase() === "i") {
+  //       e.preventDefault();
+  //       editor.chain().focus().toggleItalic().run();
+  //     }
 
-      // Blockquote
-      else if (mod && e.shiftKey && e.key.toLowerCase() === "b") {
-        e.preventDefault();
-        editor.chain().focus().toggleBlockquote().run();
-      }
-    };
+  //     // Blockquote
+  //     else if (mod && e.shiftKey && e.key.toLowerCase() === "b") {
+  //       e.preventDefault();
+  //       editor.chain().focus().toggleBlockquote().run();
+  //     }
+  //   };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  //   window.addEventListener("keydown", handleKeyDown);
+  //   return () => window.removeEventListener("keydown", handleKeyDown);
+  // }, []);
 
   if (!editor) return null;
 

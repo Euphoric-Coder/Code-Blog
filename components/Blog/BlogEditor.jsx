@@ -495,13 +495,16 @@ export default function BlogEditor({
         storedBlogData.description) &&
       !editing
     ) {
+      console.log("Stored blog data found:", storedBlogData.content);
       setTitle(storedBlogData.title || "");
       setDescription(storedBlogData.description || "");
       setUploadData(storedBlogData.uploadData || "");
       setFileId(storedBlogData.fileId || "");
-      setContent(
-        storedBlogData.content === "<p></p>" ? "" : storedBlogData.content || ""
-      );
+      // setContent(
+      //   storedBlogData.content === "<p></p>" ? "" : storedBlogData.content
+      // );
+      setContent(storedBlogData.content);
+      editor.commands.setContent(storedBlogData.content);
       setCategory(storedBlogData.category || blogCategories[0]);
       setSelectedSubCategories(storedBlogData.subcategories || []);
       setTags(storedBlogData.tags || []);
@@ -528,11 +531,12 @@ export default function BlogEditor({
         },
       }).configure({ lowlight }),
     ],
-    content: initialContent,
+    content: content,
     onCreate({ editor }) {
       // The editor is ready.
       if (content && unfinishedBlog) {
-        editor.commands.setContent(content, false); // false = no history entry
+        editor.commands.setContent(content); // false = no history entry
+        console.log("content", content);
         previousImagesRef.current = getImageUrlsFromHTML(content);
       }
     },
@@ -544,6 +548,7 @@ export default function BlogEditor({
     },
     onUpdate: async ({ editor }) => {
       const html = editor.getHTML();
+      console.log("Updated HTML:", html);
       setContent(html);
       handleInputChange("content", html);
 
@@ -838,6 +843,7 @@ export default function BlogEditor({
     };
 
     console.log("Updated blog data:", updatedBlogData);
+    console.log("Updated Conent: ", updatedBlogData.content);
     localStorage.setItem(storageKey, JSON.stringify(updatedBlogData));
   };
 
