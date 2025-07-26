@@ -484,6 +484,8 @@ export default function BlogEditor({
   const storageKey = `pendingBlogData-${user?.id}`;
 
   useEffect(() => {
+    if(!editor) return;
+
     const storedBlogData = JSON.parse(localStorage.getItem(storageKey) || "{}");
     if (
       (storedBlogData.title ||
@@ -500,11 +502,8 @@ export default function BlogEditor({
       setDescription(storedBlogData.description || "");
       setUploadData(storedBlogData.uploadData || "");
       setFileId(storedBlogData.fileId || "");
-      // setContent(
-      //   storedBlogData.content === "<p></p>" ? "" : storedBlogData.content
-      // );
-      setContent(storedBlogData.content);
-      editor.commands.setContent(storedBlogData.content);
+      setContent(storedBlogData?.content || "");
+      editor.commands.setContent(storedBlogData?.content || "<p></p>");
       setCategory(storedBlogData.category || blogCategories[0]);
       setSelectedSubCategories(storedBlogData.subcategories || []);
       setTags(storedBlogData.tags || []);
