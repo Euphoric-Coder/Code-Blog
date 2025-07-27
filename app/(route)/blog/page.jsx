@@ -1,6 +1,7 @@
 "use client";
 
 import BlogFetch from "@/components/Blog/BlogFetch";
+import CardSkeleton from "@/components/Miscellaneous/CardSkeleton";
 import QuoteOfTheDay from "@/components/Miscellaneous/QuoteOfTheDay";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,6 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useUser } from "@clerk/nextjs";
 import { formatDate } from "date-fns";
 import { BookOpen, PenBox, PlusCircle } from "lucide-react";
 import Image from "next/image";
@@ -18,6 +20,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const Page = () => {
+  const [loading, setLoading] = useState(true);
   const [blogData, setblogData] = useState([]);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
@@ -26,11 +29,17 @@ const Page = () => {
   }, []);
 
   const loadBlogs = async () => {
-    const response = await fetch("/api/fetch-blogs/");
-    const data = await response.json();
+    setLoading(true);
 
-    console.log(data);
-    setblogData(data);
+    try {
+      const response = await fetch("/api/fetch-blogs/");
+      const data = await response.json();
+      setblogData(data);
+    } catch (error) {
+      console.error("Failed to load blogs:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const refreshData = () => {
@@ -217,7 +226,15 @@ const Page = () => {
       </section>
 
       <section>
-        {blogData && <BlogFetch blogs={blogData} refreshData={refreshData} />}
+        {loading ? (
+          <div className="px-16 pb-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3, 4, 5, 6].map((blog) => (
+              <CardSkeleton key={blog} />
+            ))}
+          </div>
+        ) : (
+          <BlogFetch blogs={blogData} refreshData={refreshData} />
+        )}
       </section>
     </main>
   );

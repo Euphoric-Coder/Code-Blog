@@ -16,25 +16,39 @@ import { PenBox, PlusCircle, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import QuoteOfTheDay from "@/components/Miscellaneous/QuoteOfTheDay";
+import FormBackgroundEffect from "@/components/Effect/FormBackgroundEffect";
+import { Skeleton } from "@/components/ui/skeleton";
+import CardSkeleton from "@/components/Miscellaneous/CardSkeleton";
+import { useUser } from "@clerk/nextjs";
 
 const Page = () => {
+  const { isLoaded } = useUser();
+  const [loading, setLoading] = useState(true);
   const [tutorialData, setTutorialData] = useState([]);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   // Fetch tutorial data from an API or database
   useEffect(() => {
-    const fetchTutorials = async () => {
-      try {
-        const response = await fetch("/api/fetch-tutorial"); // Replace with your API endpoint
-        const data = await response.json();
-        console.log("Fetched tutorials:", data);
-        setTutorialData(data);
-      } catch (error) {
-        console.error("Error fetching tutorials:", error);
-      }
-    };
     fetchTutorials();
   }, []);
+
+  const fetchTutorials = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch("/api/fetch-tutorial"); // Replace with your API endpoint
+      const data = await response.json();
+      console.log("Fetched tutorials:", data);
+      setTutorialData(data);
+    } catch (error) {
+      console.error("Error fetching tutorials:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const refreshData = async () => {
+    await fetchTutorials();
+  };
 
   return (
     <main className="relative w-full min-h-screen bg-gradient-to-b from-blue-50 via-white to-blue-100 dark:from-gray-700 dark:via-gray-800 dark:to-blue-950 text-gray-900 dark:text-gray-100 transition-all duration-700">
@@ -93,7 +107,7 @@ const Page = () => {
                   Create Tutorials
                 </button>
               </Link>
-              {/* Edit Blog Button with Dialog */}
+              {/* Edit Tutorial Button with Dialog */}
               <Dialog
                 open={isEditDialogOpen}
                 onOpenChange={setIsEditDialogOpen}
@@ -104,16 +118,16 @@ const Page = () => {
                     onClick={() => setIsEditDialogOpen(true)}
                   >
                     <PenBox />
-                    Edit Blogs
+                    Edit Tutorials
                   </button>
                 </DialogTrigger>
                 <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
                   <DialogHeader>
                     <DialogTitle className="text-2xl font-bold">
-                      My Blogs
+                      My Tutorials
                     </DialogTitle>
                     <DialogDescription>
-                      Manage and edit your published blogs. You have{" "}
+                      Manage and edit your published tutorial. You have{" "}
                       {tutorialData.length} tutorial(s).
                     </DialogDescription>
                   </DialogHeader>
@@ -154,16 +168,16 @@ const Page = () => {
                       <div className="text-center py-8">
                         <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-3" />
                         <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                          No blogs yet
+                          No tutorials yet
                         </h3>
                         <p className="text-gray-600 dark:text-gray-300 mb-4">
-                          You haven&apos;t created any blogs yet. Start writing
-                          your first tutorial!
+                          You haven&apos;t created any tutorial yet. Start
+                          writing your first tutorial!
                         </p>
                         <Link href="/tutorial/add-tutorial/">
                           <Button className="btn4">
                             <PlusCircle className="h-4 w-4 mr-2" />
-                            Create Your First Blog
+                            Create Your First Tutorial
                           </Button>
                         </Link>
                       </div>
@@ -217,7 +231,17 @@ const Page = () => {
       </section>
 
       {/* Fetch and display tutorials */}
-      {tutorialData && <TutorialFetch tutorials={tutorialData} />}
+      <section>
+        {loading ? (
+          <div className="px-16 pb-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3, 4, 5, 6].map((tutorial) => (
+              <CardSkeleton key={tutorial} />
+            ))}
+          </div>
+        ) : (
+          <TutorialFetch tutorials={tutorialData} />
+        )}
+      </section>
     </main>
   );
 };
