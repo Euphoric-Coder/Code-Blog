@@ -29,10 +29,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import TutorialBookmark from "./TutorialBookmarkButton";
 
 export const TutorialFetch = ({ tutorials }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState("grid");
+  const [individualTutorial, setIndividualTutorial] = useState(null);
+  const [bookmarkedMap, setBookmarkedMap] = useState({});
   const [tempFilters, setTempFilters] = useState({
     authors: [],
     category: [],
@@ -58,6 +61,14 @@ export const TutorialFetch = ({ tutorials }) => {
 
   // Check if there is text in the search bar
   const isSearchActive = searchTerm !== "";
+
+  const fetchIndividualTutorial = (id) => {
+    return tutorials.find((tutorial) => tutorial.id === id);
+  };
+
+  const handleBookmarkChange = (tutorialId, bookmarked) => {
+    setBookmarkedMap((prev) => ({ ...prev, [tutorialId]: bookmarked }));
+  };
 
   const convertToTutorialSubCategoriesList = (input) => {
     const result = {};
@@ -506,6 +517,24 @@ export const TutorialFetch = ({ tutorials }) => {
             )}
           </div>
 
+          <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <TutorialBookmark
+              tutorialId={tutorial.id}
+              onChange={handleBookmarkChange}
+              showIconOnly={true}
+            />
+            {tutorial.featured && (
+              <span className="px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-semibold rounded-full shadow-lg">
+                Featured
+              </span>
+            )}
+            {tutorial.trending && (
+              <span className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-semibold rounded-full shadow-lg">
+                <TrendingUp className="h-4 w-4" /> Trending
+              </span>
+            )}
+          </div>
+
           {/* Play Button Overlay */}
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
@@ -553,6 +582,12 @@ export const TutorialFetch = ({ tutorials }) => {
 
           {/* Tutorial Stats */}
           <div className="flex items-center justify-between text-sm text-gray-700 dark:text-gray-200">
+            <div>
+              <TutorialBookmark 
+                tutorialId={tutorial.id}
+                onChange={handleBookmarkChange}
+              />
+            </div>
             <div className="flex items-center space-x-3">
               <div className="flex items-center space-x-1">
                 <Clock className="h-4 w-4" />

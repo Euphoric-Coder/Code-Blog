@@ -405,19 +405,6 @@ const BlogFetch = ({ blogs, refreshData }) => {
     );
   };
 
-  // Function to format date consistently using Intl.DateTimeFormat with error handling
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    if (isNaN(date.getTime())) {
-      return "Invalid Date"; // Handle invalid dates
-    }
-    return new Intl.DateTimeFormat("en-GB", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    }).format(date);
-  };
-
   useEffect(() => {
     const updateViewMode = () => {
       if (window.innerWidth < 768) {
@@ -430,8 +417,6 @@ const BlogFetch = ({ blogs, refreshData }) => {
 
     return () => window.removeEventListener("resize", updateViewMode);
   }, []);
-
-  const { user, isSignedIn } = useUser();
   const [searchTerm, setSearchTerm] = useState("");
   const [individualBlog, setIndividualBlog] = useState(null);
   const [isShareOpen, setIsShareOpen] = useState(false);

@@ -65,7 +65,6 @@ export const blogBookmarks = pgTable("blogBookmarks", {
   bookmarkedAt: varchar("bookmarkedAt").notNull(),
 });
 
-
 export const Tutorials = pgTable("tutorials", {
   id: uuid("id").defaultRandom().primaryKey(),
   title: varchar("title").notNull(),
@@ -92,6 +91,25 @@ export const TutorialsMarkedAsRead = pgTable("tutorialsMarkedAsRead", {
   markedBy: varchar("markedBy").notNull(),
   tutorialId: uuid("tutorialId").notNull(),
   subsectionId: varchar("subsectionId").notNull(),
+});
+
+export const tutorialLikes = pgTable("tutorialLikes", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  tutorialId: uuid("tutorialId")
+    .notNull()
+    .references(() => Tutorials.id, { onDelete: "cascade" }),
+  likedBy: varchar("likedBy").notNull(),
+  likedAt: varchar("likedAt").notNull(),
+  totalLikes: varchar("totalLikes").default(0).notNull(),
+});
+
+export const tutorialBookmarks = pgTable("tutorialBookmarks", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  tutorialId: uuid("tutorialId")
+    .notNull()
+    .references(() => Tutorials.id, { onDelete: "cascade" }),
+  bookmarkedBy: varchar("bookmarkedBy").notNull(),
+  bookmarkedAt: varchar("bookmarkedAt").notNull(),
 });
 
 export const Comments = pgTable("comments", {
