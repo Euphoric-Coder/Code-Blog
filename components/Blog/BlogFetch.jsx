@@ -33,151 +33,13 @@ import { blogCategories, blogSubCategoriesList } from "@/lib/data";
 import { Badge } from "../ui/badge";
 import { toast } from "sonner";
 import { format } from "date-fns";
-import BlogShare from "../Miscellaneous/BlogShare";
+import BlogShare from "./BlogShare";
 import { useUser } from "@clerk/nextjs";
-import BlogLike from "../Miscellaneous/BlogLikeButton";
-import BlogBookmark from "../Miscellaneous/BlogBookmarkButton";
+import BlogLike from "./BlogLikeButton";
+import BlogBookmark from "./BlogBookmarkButton";
 import FilterButton from "./FilterButton";
 
 const BlogFetch = ({ blogs, refreshData }) => {
-  const Blogs = [
-    {
-      id: 1,
-      title: "The Future of Web Development: Static vs Dynamic Websites",
-      description:
-        "Explore the evolution of web development and understand when to choose static or dynamic approaches for your next project.",
-      content: "Full blog content here...",
-      category: "Web Development",
-      subCategories: [
-        "Frontend Architecture",
-        "Performance Optimization",
-        "SEO Best Practices",
-      ],
-      tags: ["React", "JavaScript", "Web Development"],
-      author: "Sagnik Dey",
-      date: "2024-04-17",
-      readTime: "8 min read",
-      blogImage:
-        "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=800",
-      views: 12500,
-      likes: 890,
-      featured: true,
-      trending: true,
-    },
-    {
-      id: 2,
-      title: "The Rise of AI Assistants: From Siri to ChatGPT",
-      description:
-        "A comprehensive look at how AI assistants have evolved and their impact on modern technology and daily life.",
-      content: "Full blog content here...",
-      category: "AI/ML",
-      subCategories: [
-        "Natural Language Processing",
-        "Machine Learning",
-        "Deep Learning",
-        "Computer Vision",
-        "Neural Networks",
-      ],
-      tags: ["AI", "Machine Learning", "Technology"],
-      author: "Sagnik Dey",
-      date: "2024-04-17",
-      readTime: "12 min read",
-      blogImage:
-        "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800",
-      views: 18900,
-      likes: 1250,
-      featured: true,
-      trending: true,
-    },
-    {
-      id: 3,
-      title: "Mastering React Hooks: A Complete Guide",
-      description:
-        "Deep dive into React Hooks with practical examples and best practices for modern React development.",
-      content: "Full blog content here...",
-      category: "Web Development",
-      subCategories: ["React Development", "Frontend Patterns"],
-      tags: ["React", "JavaScript", "Frontend"],
-      author: "Sarah Johnson",
-      date: "2024-04-15",
-      readTime: "15 min read",
-      blogImage:
-        "https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&cs=tinysrgb&w=800",
-      views: 9800,
-      likes: 720,
-      featured: false,
-      trending: true,
-    },
-    {
-      id: 4,
-      title: "Docker and Kubernetes: Container Orchestration Mastery",
-      description:
-        "Learn how to effectively use Docker and Kubernetes for scalable application deployment and management.",
-      content: "Full blog content here...",
-      category: "DevOps",
-      subCategories: [
-        "Container Orchestration",
-        "Infrastructure",
-        "Deployment Strategies",
-        "Monitoring",
-      ],
-      tags: ["Docker", "Kubernetes", "DevOps"],
-      author: "Mike Chen",
-      date: "2024-04-14",
-      readTime: "20 min read",
-      blogImage:
-        "https://images.pexels.com/photos/577585/pexels-photo-577585.jpeg?auto=compress&cs=tinysrgb&w=800",
-      views: 7600,
-      likes: 540,
-      featured: false,
-      trending: false,
-    },
-    {
-      id: 5,
-      title: "Python for Data Science: Essential Libraries and Tools",
-      description:
-        "Comprehensive guide to Python libraries essential for data science including Pandas, NumPy, and Scikit-learn.",
-      content: "Full blog content here...",
-      category: "Data Science",
-      subCategories: [
-        "Data Analysis",
-        "Machine Learning",
-        "Data Visualization",
-        "Statistical Computing",
-        "Big Data",
-      ],
-      tags: ["Python", "Data Science", "Machine Learning"],
-      author: "Dr. Emily Watson",
-      date: "2024-04-12",
-      readTime: "18 min read",
-      blogImage:
-        "https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=800",
-      views: 11200,
-      likes: 890,
-      featured: false,
-      trending: true,
-    },
-    {
-      id: 6,
-      title: "Building Scalable APIs with Node.js and Express",
-      description:
-        "Learn best practices for creating robust, scalable APIs using Node.js and Express framework.",
-      content: "Full blog content here...",
-      category: "Web Development",
-      subCategories: ["Backend Development", "API Design"],
-      tags: ["Node.js", "Express", "API"],
-      author: "Alex Rodriguez",
-      date: "2024-04-10",
-      readTime: "14 min read",
-      blogImage:
-        "https://images.pexels.com/photos/943096/pexels-photo-943096.jpeg?auto=compress&cs=tinysrgb&w=800",
-      views: 8900,
-      likes: 650,
-      featured: false,
-      trending: false,
-    },
-  ];
-
   // Subcategory display component
   const SubcategoryDisplay = ({ blog }) => {
     const maxVisible = 2;
@@ -755,7 +617,6 @@ const BlogFetch = ({ blogs, refreshData }) => {
 
   const handleLikeChange = (blogId, total, liked) => {
     setLikesMap((prev) => ({ ...prev, [blogId]: total }));
-    refreshData?.(); // optional if you're syncing from DB
   };
 
   const handleBookmarkChange = (blogId, bookmarked) => {

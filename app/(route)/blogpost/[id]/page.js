@@ -9,7 +9,7 @@ import { processContent } from "@/lib/processContent";
 import BlogLoader from "@/components/Blog/BlogLoader";
 import Comment from "@/components/Blog/Comments";
 import Image from "next/image";
-import BlogShare from "@/components/Miscellaneous/BlogShare";
+import BlogShare from "@/components/Blog/BlogShare";
 import NotSignedIn from "@/components/Miscellaneous/NotSignedIn";
 
 export default function Page() {
@@ -96,7 +96,6 @@ export default function Page() {
 
     checkIfBookmarked();
   }, [blogId, isSignedIn, user?.primaryEmailAddress?.emailAddress]);
-  
 
   useEffect(() => {
     if (!isSignedIn) return;
@@ -130,7 +129,7 @@ export default function Page() {
     if (!isSignedIn) {
       setShowSignInModal(true);
       return;
-    };
+    }
 
     try {
       const res = await fetch("/api/toggle-blog-like", {
@@ -184,8 +183,6 @@ export default function Page() {
       console.error("Error toggling bookmark:", error);
     }
   };
-  
-  
 
   const placeholderImage = "/placeholder.png"; // Fallback image
 
