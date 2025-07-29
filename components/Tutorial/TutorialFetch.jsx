@@ -30,11 +30,16 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import TutorialBookmark from "./TutorialBookmarkButton";
+import TutorialLike from "./TutorialLikeButton";
 
 export const TutorialFetch = ({ tutorials }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState("grid");
   const [individualTutorial, setIndividualTutorial] = useState(null);
+  const [isShareOpen, setIsShareOpen] = useState(false);
+  const [likesMap, setLikesMap] = useState(() => {
+    return Object.fromEntries(tutorials.map((t) => [t.id, t.likes ?? 0]));
+  });
   const [bookmarkedMap, setBookmarkedMap] = useState({});
   const [tempFilters, setTempFilters] = useState({
     authors: [],
@@ -68,6 +73,10 @@ export const TutorialFetch = ({ tutorials }) => {
 
   const handleBookmarkChange = (tutorialId, bookmarked) => {
     setBookmarkedMap((prev) => ({ ...prev, [tutorialId]: bookmarked }));
+  };
+
+  const handleLikeChange = (blogId, total, liked) => {
+    setLikesMap((prev) => ({ ...prev, [blogId]: total }));
   };
 
   const convertToTutorialSubCategoriesList = (input) => {
@@ -523,6 +532,12 @@ export const TutorialFetch = ({ tutorials }) => {
               onChange={handleBookmarkChange}
               showIconOnly={true}
             />
+            <TutorialLike
+              tutorialId={tutorial.id}
+              initialLikes={likesMap[tutorial.id] ?? blog.likes ?? 0}
+              onChange={handleLikeChange}
+              showIconOnly={true}
+            />
             {tutorial.featured && (
               <span className="px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-semibold rounded-full shadow-lg">
                 Featured
@@ -580,12 +595,17 @@ export const TutorialFetch = ({ tutorials }) => {
             ))}
           </div>
 
-          {/* Tutorial Stats */}
+          {/* Tutorial Quick Actions */}
           <div className="flex items-center justify-between text-sm text-gray-700 dark:text-gray-200">
-            <div>
-              <TutorialBookmark 
+            <div className="flex gap-1">
+              <TutorialBookmark
                 tutorialId={tutorial.id}
                 onChange={handleBookmarkChange}
+              />
+              <TutorialLike
+                tutorialId={tutorial.id}
+                initialLikes={likesMap[tutorial.id] ?? blog.likes ?? 0}
+                onChange={handleLikeChange}
               />
             </div>
             <div className="flex items-center space-x-3">
@@ -640,7 +660,7 @@ export const TutorialFetch = ({ tutorials }) => {
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search blogs by title, content, or tags..."
+                placeholder="Search tutorials by title, content, or tags..."
                 className="flex-1 min-w-[200px] max-w-full sm:max-w-none h-12 px-1 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 bg-transparent border-none outline-none"
               />
 
@@ -722,7 +742,7 @@ export const TutorialFetch = ({ tutorials }) => {
       </div>
       <div className="max-w-screen-3xl flex items-center justify-center md:justify-between mx-auto px-4 sm:px-6 lg:px-8 mb-6">
         <div className="text-sm text-gray-600 dark:text-gray-400">
-          Showing {displayedTutorial.length} of {tutorials.length} blogs
+          Showing {displayedTutorial.length} of {tutorials.length} tutorials
         </div>
         <div className="hidden md:flex items-center space-x-2">
           <button
