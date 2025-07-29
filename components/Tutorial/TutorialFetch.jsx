@@ -31,6 +31,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import TutorialBookmark from "./TutorialBookmarkButton";
 import TutorialLike from "./TutorialLikeButton";
+import TutorialShare from "./TutorialShare";
 
 export const TutorialFetch = ({ tutorials }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -60,7 +61,7 @@ export const TutorialFetch = ({ tutorials }) => {
     ? tempFilters.authors.length
     : 0;
   const selectedLevelCount = tempFilters.level ? tempFilters.level.length : 0;
-  const tutorialAuthors = [...new Set(tutorials.map((blog) => blog.author))];
+  const tutorialAuthors = [...new Set(tutorials.map((tutorial) => tutorial.author))];
   const [appliedFilters, setAppliedFilters] = useState({ ...tempFilters });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -534,10 +535,19 @@ export const TutorialFetch = ({ tutorials }) => {
             />
             <TutorialLike
               tutorialId={tutorial.id}
-              initialLikes={likesMap[tutorial.id] ?? blog.likes ?? 0}
+              initialLikes={likesMap[tutorial.id] ?? tutorial.likes ?? 0}
               onChange={handleLikeChange}
               showIconOnly={true}
             />
+            <button
+              className="p-2 z-10 bg-white/30 backdrop-blur-sm rounded-full text-white hover:bg-white/40 transition-colors shadow-lg"
+              onClick={() => {
+                setIndividualTutorial(fetchIndividualTutorial(tutorial.id));
+                setIsShareOpen(true);
+              }}
+            >
+              <Share2 className="h-4 w-4" />
+            </button>
             {tutorial.featured && (
               <span className="px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-semibold rounded-full shadow-lg">
                 Featured
@@ -604,7 +614,7 @@ export const TutorialFetch = ({ tutorials }) => {
               />
               <TutorialLike
                 tutorialId={tutorial.id}
-                initialLikes={likesMap[tutorial.id] ?? blog.likes ?? 0}
+                initialLikes={likesMap[tutorial.id] ?? tutorial.likes ?? 0}
                 onChange={handleLikeChange}
               />
             </div>
@@ -800,6 +810,21 @@ export const TutorialFetch = ({ tutorials }) => {
             </div>
           )}
         </div>
+
+        {/* Blog Share Modal */}
+        {individualTutorial && (
+          <TutorialShare
+            isOpen={isShareOpen}
+            onClose={() => {
+              setIsShareOpen(false);
+              setIndividualTutorial(null);
+            }}
+            title={individualTutorial.title}
+            description={individualTutorial.description}
+            url={`https://yourdomain.com/blogpost/${individualTutorial.id}`} // replace with your actual domain
+            // url={"https://www.google.com"} // placeholder URL, replace with actual blog URL
+          />
+        )}
       </section>
     </div>
   );
