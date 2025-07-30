@@ -212,13 +212,13 @@ export default function Page() {
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-3 sm:space-y-0 sm:space-x-6">
               <div className="flex items-center">
                 <Image
-                  src={blogData?.author.avatar || "/default-avatar.jpg"}
-                  alt={blogData?.author.name || "Author"}
+                  src={blogData?.author?.avatar || "/default-avatar.jpg"}
+                  alt={blogData?.author?.name || "Author"}
                   width={40}
                   height={40}
                   className="w-10 h-10 rounded-full mr-3"
                 />
-                <span>{blogData?.author.name || "Anonymous"}</span>
+                <span>{blogData?.author?.name || "Anonymous"}</span>
               </div>
 
               <div className="flex items-center">

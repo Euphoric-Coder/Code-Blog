@@ -705,31 +705,33 @@ export default function BlogEditor({
       createdBy: user?.primaryEmailAddress.emailAddress,
     });
 
-    // const addBlog = await db
-    //   .insert(Blogs)
-    //   .values({
-    //     id: `${slug}--${uuid()}`,
-    //     title: title,
-    //     blogImage: uploadData?.url,
-    //     mdFormat: markdown,
-    //     content: content,
-    //     author: user?.fullName,
-    //     categories: category,
-    //     subCategories: selectedSubCategories,
-    //     date: getISTDate(),
-    //     createdBy: user?.primaryEmailAddress.emailAddress,
-    //   })
-    //   .returning({
-    //     id: Blogs.id,
-    //   });
-    // console.log("Blog added successfully:", addBlog);
-    // if (!addBlog) {
-    //   toast.error("Failed to add blog");
-    //   return;
-    // } else {
-    //   clearDataAfterAdding();
-    //   toast.success("Blog added successfully!");
-    // }
+    const addBlog = await db
+      .insert(Blogs)
+      .values({
+        id: `${slug}--${uuid()}`,
+        title: title,
+        blogImage: uploadData?.url,
+        blogImageId: fileId,
+        description: description,
+        content: content,
+        author: user?.fullName,
+        categories: category,
+        subCategories: selectedSubCategories,
+        tags: tags,
+        date: new Date().toISOString(),
+        createdBy: user?.primaryEmailAddress.emailAddress,
+      })
+      .returning({
+        id: Blogs.id,
+      });
+    console.log("Blog added successfully:", addBlog);
+    if (!addBlog) {
+      toast.error("Failed to add blog");
+      return;
+    } else {
+      clearDataAfterAdding();
+      toast.success("Blog added successfully!");
+    }
   };
 
   const EditBlog = async () => {
