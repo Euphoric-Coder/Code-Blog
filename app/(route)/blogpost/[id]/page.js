@@ -2,7 +2,16 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Clock, Share2, Heart, Bookmark, Calendar } from "lucide-react";
+import {
+  Clock,
+  Share2,
+  Heart,
+  Bookmark,
+  Calendar,
+  ArrowLeft,
+  PenBox,
+  LayoutDashboard,
+} from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { format } from "date-fns";
 import { processContent } from "@/lib/processContent";
@@ -195,6 +204,34 @@ export default function Page() {
           backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(${blogData?.blogImage || placeholderImage})`,
         }}
       >
+        <div className="relative z-20 w-full flex gap-2 items-center justify-between px-4 sm:px-6 md:px-10 py-4">
+          <button
+            onClick={() => router.push("/blog")}
+            className="group flex items-center bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white px-4 py-2 rounded-full transition-all duration-300 border border-white/20 hover:border-white/40"
+          >
+            <ArrowLeft className="w-6 h-4 mr-2 group-hover:-translate-x-1 transition-transform duration-300" />
+            <span className="font-medium">Back</span>
+          </button>
+
+          <div className="flex items-center gap-4">
+            {user?.primaryEmailAddress?.emailAddress === blogData?.createdBy && (
+              <button
+                onClick={console.log("working on it")}
+                className="group flex items-center bg-indigo-600/80 backdrop-blur-sm hover:bg-indigo-600 text-white px-4 py-2 rounded-full transition-all duration-300 border border-indigo-500/50 hover:border-indigo-400"
+              >
+                <PenBox className="w-6 h-4 mr-2 group-hover:rotate-12 transition-transform duration-300" />
+                <span className="font-medium">Edit</span>
+              </button>
+            )}
+            <button
+              onClick={() => router.push("/blog")}
+              className="group flex items-center bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white px-4 py-2 rounded-full transition-all duration-300 border border-white/20 hover:border-white/40"
+            >
+              <LayoutDashboard className="w-6 h-4 mr-2 group-hover:-translate-x-1 transition-transform duration-300" />
+              <span className="font-medium">Go to Dashboard</span>
+            </button>
+          </div>
+        </div>
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-4 sm:p-6 md:p-10 text-white">
           <div className="max-w-3xl">
             <span className="inline-block px-3 py-1 bg-indigo-600 rounded-full text-sm font-medium mb-4">
