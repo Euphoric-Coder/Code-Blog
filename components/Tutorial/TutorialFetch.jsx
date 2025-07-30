@@ -33,7 +33,7 @@ import TutorialBookmark from "./TutorialBookmarkButton";
 import TutorialLike from "./TutorialLikeButton";
 import TutorialShare from "./TutorialShare";
 
-export const TutorialFetch = ({ tutorials }) => {
+export const TutorialFetch = ({ tutorials = [] }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState("grid");
   const [individualTutorial, setIndividualTutorial] = useState(null);
@@ -61,7 +61,9 @@ export const TutorialFetch = ({ tutorials }) => {
     ? tempFilters.authors.length
     : 0;
   const selectedLevelCount = tempFilters.level ? tempFilters.level.length : 0;
-  const tutorialAuthors = [...new Set(tutorials.map((tutorial) => tutorial.author))];
+  const tutorialAuthors = [
+    ...new Set(tutorials.map((tutorial) => tutorial.author)),
+  ];
   const [appliedFilters, setAppliedFilters] = useState({ ...tempFilters });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -101,7 +103,7 @@ export const TutorialFetch = ({ tutorials }) => {
     return count;
   }, [tempFilters]);
 
-  const filteredBlogs = useMemo(() => {
+  const filteredTutorials = useMemo(() => {
     let filters = tutorials.filter((bg) => {
       const filtersToApply = appliedFilters;
 
@@ -162,7 +164,7 @@ export const TutorialFetch = ({ tutorials }) => {
     tutorialSubCategoriesList
   );
 
-  const previewedBlogs = useMemo(() => {
+  const previewedTutorials = useMemo(() => {
     let filtered = tutorials.filter((bg) => {
       const matchesCategory =
         tempFilters.category.length === 0 ||
@@ -247,7 +249,9 @@ export const TutorialFetch = ({ tutorials }) => {
     setIsDialogOpen(isOpen); // Track dialog state
   };
 
-  const displayedTutorial = isDialogOpen ? previewedBlogs : filteredBlogs;
+  const displayedTutorial = isDialogOpen
+    ? previewedTutorials
+    : filteredTutorials;
 
   const hasActiveFilters =
     appliedFilters.authors.length > 0 ||
@@ -528,15 +532,15 @@ export const TutorialFetch = ({ tutorials }) => {
           </div>
 
           <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            <TutorialBookmark
-              tutorialId={tutorial.id}
-              onChange={handleBookmarkChange}
-              showIconOnly={true}
-            />
             <TutorialLike
               tutorialId={tutorial.id}
               initialLikes={likesMap[tutorial.id] ?? tutorial.likes ?? 0}
               onChange={handleLikeChange}
+              showIconOnly={true}
+            />
+            <TutorialBookmark
+              tutorialId={tutorial.id}
+              onChange={handleBookmarkChange}
               showIconOnly={true}
             />
             <button
@@ -548,16 +552,6 @@ export const TutorialFetch = ({ tutorials }) => {
             >
               <Share2 className="h-4 w-4" />
             </button>
-            {tutorial.featured && (
-              <span className="px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-semibold rounded-full shadow-lg">
-                Featured
-              </span>
-            )}
-            {tutorial.trending && (
-              <span className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-semibold rounded-full shadow-lg">
-                <TrendingUp className="h-4 w-4" /> Trending
-              </span>
-            )}
           </div>
 
           {/* Play Button Overlay */}

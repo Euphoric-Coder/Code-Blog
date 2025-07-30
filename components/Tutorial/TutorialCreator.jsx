@@ -443,7 +443,7 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
         .insert(Tutorials)
         .values({
           title: tutorial.title,
-          coverImage: tutorial.coverImage,
+          coverImage: tutorial.coverImage?.url || tutorial.coverImage,
           imageId: tutorial.imageId,
           description: tutorial.description,
           category: tutorial.category,
@@ -458,12 +458,12 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
 
       if (result) {
         toast.success("Tutorial saved successfully!");
-        clearData();
 
         // Redirects to the Tutorial Page
         setTimeout(() => {
           redirect(`/tutorialpost/${result.insertedId}`);
         }, 4000);
+        clearData();
       }
     } catch (error) {
       toast.error("Some Error occurred!", error);
