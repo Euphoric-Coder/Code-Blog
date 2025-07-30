@@ -64,7 +64,7 @@ const Page = () => {
             <p className="text-lg sm:text-xl lg:text-lg xl:text-xl leading-relaxed font-poppins font-medium text-justify text-gray-800 dark:text-gray-300 max-w-3xl lg:max-w-5xl">
               <span className="block">
                 Dive into structured learning experiences designed to help you
-                grow — whether you're starting out or leveling up your dev
+                grow — whether you&apos;re starting out or leveling up your dev
                 skills. Our tutorials are grouped by topic and split into
                 actionable subsections, guiding you from fundamentals to
                 advanced insights.
