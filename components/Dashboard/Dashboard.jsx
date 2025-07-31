@@ -326,12 +326,14 @@ export const DashboardPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                Dashboard
+              </h1>
               <p className="text-gray-600 dark:text-gray-300 mt-1">
                 Welcome back! Here's what's happening with your content.
               </p>
             </div>
-            
+
             <div className="flex items-center space-x-4">
               {/* Time Range Selector */}
               <select
@@ -344,25 +346,25 @@ export const DashboardPage = () => {
                 <option value="30d">Last 30 days</option>
                 <option value="90d">Last 90 days</option>
               </select>
-              
+
               {/* Settings Button */}
               <button
-                onClick={() => setActiveTab('settings')}
+                onClick={() => setActiveTab("settings")}
                 className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
                 title="Settings"
               >
                 <Settings className="h-5 w-5" />
               </button>
-              
+
               {/* Notifications */}
               <div className="relative">
-                <button 
+                <button
                   onClick={() => setShowNotifications(!showNotifications)}
                   className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors relative"
                   title="Notifications"
                 >
                   <Bell className="h-5 w-5" />
-                  {notifications.filter(n => !n.read).length > 0 && (
+                  {notifications.filter((n) => !n.read).length > 0 && (
                     <div className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></div>
                   )}
                 </button>
@@ -377,9 +379,11 @@ export const DashboardPage = () => {
                           Notifications
                         </h3>
                         <div className="flex items-center space-x-2">
-                          <button 
+                          <button
                             onClick={() => {
-                              setNotifications(notifications.map(n => ({ ...n, read: true })));
+                              setNotifications(
+                                notifications.map((n) => ({ ...n, read: true }))
+                              );
                             }}
                             className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium"
                           >
@@ -393,9 +397,10 @@ export const DashboardPage = () => {
                           </button>
                         </div>
                       </div>
-                      {notifications.filter(n => !n.read).length > 0 && (
+                      {notifications.filter((n) => !n.read).length > 0 && (
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                          {notifications.filter(n => !n.read).length} unread notifications
+                          {notifications.filter((n) => !n.read).length} unread
+                          notifications
                         </p>
                       )}
                     </div>
@@ -408,24 +413,36 @@ export const DashboardPage = () => {
                             <div
                               key={notification.id}
                               className={`p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer ${
-                                !notification.read ? 'bg-blue-50/50 dark:bg-blue-900/10' : ''
+                                !notification.read
+                                  ? "bg-blue-50/50 dark:bg-blue-900/10"
+                                  : ""
                               }`}
                               onClick={() => {
-                                setNotifications(notifications.map(n => 
-                                  n.id === notification.id ? { ...n, read: true } : n
-                                ));
+                                setNotifications(
+                                  notifications.map((n) =>
+                                    n.id === notification.id
+                                      ? { ...n, read: true }
+                                      : n
+                                  )
+                                );
                               }}
                             >
                               <div className="flex items-start space-x-3">
-                                <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${
-                                  !notification.read ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-600'
-                                }`}></div>
+                                <div
+                                  className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${
+                                    !notification.read
+                                      ? "bg-blue-500"
+                                      : "bg-gray-300 dark:bg-gray-600"
+                                  }`}
+                                ></div>
                                 <div className="flex-1 min-w-0">
-                                  <p className={`text-sm font-medium ${
-                                    !notification.read 
-                                      ? 'text-gray-900 dark:text-white' 
-                                      : 'text-gray-700 dark:text-gray-300'
-                                  }`}>
+                                  <p
+                                    className={`text-sm font-medium ${
+                                      !notification.read
+                                        ? "text-gray-900 dark:text-white"
+                                        : "text-gray-700 dark:text-gray-300"
+                                    }`}
+                                  >
                                     {notification.title}
                                   </p>
                                   <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
@@ -442,7 +459,9 @@ export const DashboardPage = () => {
                       ) : (
                         <div className="p-8 text-center">
                           <Bell className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                          <p className="text-gray-500 dark:text-gray-400">No notifications yet</p>
+                          <p className="text-gray-500 dark:text-gray-400">
+                            No notifications yet
+                          </p>
                         </div>
                       )}
                     </div>
@@ -469,10 +488,10 @@ export const DashboardPage = () => {
           {/* Navigation Tabs */}
           <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 rounded-xl p-1 mb-8">
             {[
-              { id: 'overview', label: 'Overview', icon: BarChart3 },
-              { id: 'content', label: 'Content', icon: FileText },
-              { id: 'analytics', label: 'Analytics', icon: Activity },
-              { id: 'settings', label: 'Settings', icon: Settings }
+              { id: "overview", label: "Overview", icon: BarChart3 },
+              { id: "content", label: "Content", icon: FileText },
+              { id: "analytics", label: "Analytics", icon: Activity },
+              { id: "settings", label: "Settings", icon: Settings },
             ].map((tab) => {
               const Icon = tab.icon;
               return (
@@ -481,8 +500,8 @@ export const DashboardPage = () => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all ${
                     activeTab === tab.id
-                      ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
-                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                      ? "bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm"
+                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                   }`}
                 >
                   <Icon className="h-4 w-4" />
@@ -493,7 +512,7 @@ export const DashboardPage = () => {
           </div>
 
           {/* Overview Tab */}
-          {activeTab === 'overview' && (
+          {activeTab === "overview" && (
             <div className="space-y-8">
               {/* Stats Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -574,15 +593,22 @@ export const DashboardPage = () => {
                     Playground Language Usage
                   </h3>
                   <span className="text-sm text-gray-500 dark:text-gray-400">
-                    {timeRange === '24h' ? 'Last 24 hours' : 
-                     timeRange === '7d' ? 'Last 7 days' : 
-                     timeRange === '30d' ? 'Last 30 days' : 'Last 90 days'}
+                    {timeRange === "24h"
+                      ? "Last 24 hours"
+                      : timeRange === "7d"
+                        ? "Last 7 days"
+                        : timeRange === "30d"
+                          ? "Last 30 days"
+                          : "Last 90 days"}
                   </span>
                 </div>
-                
+
                 <div className="space-y-4">
                   {playgroundUsage.map((item) => (
-                    <div key={item.language} className="flex items-center space-x-4">
+                    <div
+                      key={item.language}
+                      className="flex items-center space-x-4"
+                    >
                       <div className="w-24 text-sm font-medium text-gray-700 dark:text-gray-300">
                         {item.language}
                       </div>
@@ -613,10 +639,13 @@ export const DashboardPage = () => {
                     View All
                   </button>
                 </div>
-                
+
                 <div className="space-y-4">
                   {recentContent.slice(0, 5).map((item) => (
-                    <div key={item.id} className="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                    <div
+                      key={item.id}
+                      className="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                    >
                       <div className="flex-shrink-0">
                         {getTypeIcon(item.type)}
                       </div>
@@ -625,7 +654,12 @@ export const DashboardPage = () => {
                           {item.title}
                         </p>
                         <p className="text-xs text-gray-500 dark:text-gray-400">
-                          by {item.author} • {new Date(item.publishDate).toLocaleDateString()}
+                          by {item.author} •{" "}
+                          {new Intl.DateTimeFormat("en-GB", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                          }).format(new Date(item.publishDate))}
                         </p>
                       </div>
                       <div className="flex items-center space-x-3 text-xs text-gray-500 dark:text-gray-400">
@@ -638,7 +672,9 @@ export const DashboardPage = () => {
                           <span>{item.likes}</span>
                         </div>
                       </div>
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(item.status)}`}>
+                      <span
+                        className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(item.status)}`}
+                      >
                         {item.status}
                       </span>
                     </div>
@@ -649,13 +685,17 @@ export const DashboardPage = () => {
           )}
 
           {/* Content Management Tab */}
-          {activeTab === 'content' && (
+          {activeTab === "content" && (
             <div className="space-y-6">
               {/* Content Header */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Content Management</h2>
-                  <p className="text-gray-600 dark:text-gray-300">Manage your blogs, tutorials, and code snippets</p>
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                    Content Management
+                  </h2>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    Manage your blogs, tutorials, and code snippets
+                  </p>
                 </div>
                 <button className="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
                   <Plus className="h-4 w-4 mr-2" />
@@ -718,7 +758,10 @@ export const DashboardPage = () => {
                     </thead>
                     <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                       {recentContent.map((item) => (
-                        <tr key={item.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                        <tr
+                          key={item.id}
+                          className="hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                        >
                           <td className="px-6 py-4">
                             <div className="flex items-center space-x-3">
                               {getTypeIcon(item.type)}
@@ -738,7 +781,9 @@ export const DashboardPage = () => {
                             </span>
                           </td>
                           <td className="px-6 py-4">
-                            <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(item.status)}`}>
+                            <span
+                              className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(item.status)}`}
+                            >
                               {item.status}
                             </span>
                           </td>
@@ -774,11 +819,15 @@ export const DashboardPage = () => {
           )}
 
           {/* Analytics Tab */}
-          {activeTab === 'analytics' && (
+          {activeTab === "analytics" && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Analytics</h2>
-                <p className="text-gray-600 dark:text-gray-300">Detailed insights into your content performance</p>
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  Analytics
+                </h2>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Detailed insights into your content performance
+                </p>
               </div>
 
               {/* Analytics Cards */}
@@ -786,13 +835,20 @@ export const DashboardPage = () => {
                 {/* Views Chart */}
                 <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200/50 dark:border-gray-700/50">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                    {timeRange === '24h' ? 'Hourly Views' : 
-                     timeRange === '7d' ? 'Daily Views' : 
-                     timeRange === '30d' ? 'Weekly Views' : 'Monthly Views'}
+                    {timeRange === "24h"
+                      ? "Hourly Views"
+                      : timeRange === "7d"
+                        ? "Daily Views"
+                        : timeRange === "30d"
+                          ? "Weekly Views"
+                          : "Monthly Views"}
                   </h3>
                   <div className="h-64 flex items-end justify-between space-x-2">
                     {analyticsData.views.map((item, index) => (
-                      <div key={index} className="flex-1 flex flex-col items-center">
+                      <div
+                        key={index}
+                        className="flex-1 flex flex-col items-center"
+                      >
                         <div
                           className="w-full bg-blue-500 rounded-t-sm transition-all duration-500 hover:bg-blue-600"
                           style={{ height: `${(item.value / 20000) * 100}%` }}
@@ -808,20 +864,32 @@ export const DashboardPage = () => {
                 {/* Users Chart */}
                 <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200/50 dark:border-gray-700/50">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                    {timeRange === '24h' ? 'Hourly Active Users' : 
-                     timeRange === '7d' ? 'Daily Active Users' : 
-                     timeRange === '30d' ? 'Weekly Active Users' : 'Monthly Active Users'}
+                    {timeRange === "24h"
+                      ? "Hourly Active Users"
+                      : timeRange === "7d"
+                        ? "Daily Active Users"
+                        : timeRange === "30d"
+                          ? "Weekly Active Users"
+                          : "Monthly Active Users"}
                   </h3>
                   <div className="h-64 flex items-end justify-between space-x-2">
                     {analyticsData.users.map((item, index) => (
-                      <div key={index} className="flex-1 flex flex-col items-center">
+                      <div
+                        key={index}
+                        className="flex-1 flex flex-col items-center"
+                      >
                         <div
                           className="w-full bg-green-500 rounded-t-sm transition-all duration-500 hover:bg-green-600"
-                          style={{ 
-                            height: `${timeRange === '24h' ? (item.value / 4000) * 100 :
-                                     timeRange === '7d' ? (item.value / 20000) * 100 :
-                                     timeRange === '30d' ? (item.value / 120000) * 100 :
-                                     (item.value / 350000) * 100}%` 
+                          style={{
+                            height: `${
+                              timeRange === "24h"
+                                ? (item.value / 4000) * 100
+                                : timeRange === "7d"
+                                  ? (item.value / 20000) * 100
+                                  : timeRange === "30d"
+                                    ? (item.value / 120000) * 100
+                                    : (item.value / 350000) * 100
+                            }%`,
                           }}
                         ></div>
                         <span className="text-xs text-gray-500 dark:text-gray-400 mt-2">
@@ -840,10 +908,13 @@ export const DashboardPage = () => {
                 </h3>
                 <div className="space-y-4">
                   {recentContent
-                    .filter(item => item.status === 'published')
+                    .filter((item) => item.status === "published")
                     .sort((a, b) => b.views - a.views)
                     .map((item, index) => (
-                      <div key={item.id} className="flex items-center space-x-4">
+                      <div
+                        key={item.id}
+                        className="flex items-center space-x-4"
+                      >
                         <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                           {index + 1}
                         </div>
@@ -871,11 +942,15 @@ export const DashboardPage = () => {
           )}
 
           {/* Settings Tab */}
-          {activeTab === 'settings' && (
+          {activeTab === "settings" && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Settings</h2>
-                <p className="text-gray-600 dark:text-gray-300">Manage your account and application preferences</p>
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  Settings
+                </h2>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Manage your account and application preferences
+                </p>
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -925,13 +1000,22 @@ export const DashboardPage = () => {
                   </h3>
                   <div className="space-y-4">
                     {[
-                      { label: 'Email notifications for new comments', checked: true },
-                      { label: 'Push notifications for likes', checked: false },
-                      { label: 'Weekly analytics summary', checked: true },
-                      { label: 'New follower notifications', checked: true },
-                      { label: 'Content approval notifications', checked: true }
+                      {
+                        label: "Email notifications for new comments",
+                        checked: true,
+                      },
+                      { label: "Push notifications for likes", checked: false },
+                      { label: "Weekly analytics summary", checked: true },
+                      { label: "New follower notifications", checked: true },
+                      {
+                        label: "Content approval notifications",
+                        checked: true,
+                      },
                     ].map((setting, index) => (
-                      <div key={index} className="flex items-center justify-between">
+                      <div
+                        key={index}
+                        className="flex items-center justify-between"
+                      >
                         <span className="text-sm text-gray-700 dark:text-gray-300">
                           {setting.label}
                         </span>

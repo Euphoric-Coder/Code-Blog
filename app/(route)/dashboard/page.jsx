@@ -1,9 +1,14 @@
-import React from 'react'
+"use client";
+
+import { DashboardPage } from "@/components/Dashboard/Dashboard";
+import React from "react";
 
 const page = () => {
   return (
-    <div>page</div>
-  )
-}
+    <div>
+      <DashboardPage />
+    </div>
+  );
+};
 
-export default page
+export default page;
