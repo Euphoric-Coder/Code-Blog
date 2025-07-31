@@ -205,25 +205,25 @@ const TutorialViewer = ({ tutorial }) => {
             <div className="flex items-center space-x-2 sm:space-x-6">
               <button
                 onClick={() => router.push("/tutorial")}
-                className="flex items-center px-3 sm:px-6 py-2 sm:py-3 text-slate-700 hover:text-blue-600 bg-white/80 hover:bg-blue-50 rounded-lg sm:rounded-xl transition-all duration-300 border border-slate-200/60 hover:border-blue-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 backdrop-blur-sm"
+                className="flex items-center px-3 sm:px-6 py-2 sm:py-3 text-slate-700 hover:text-blue-600 bg-white/80 hover:bg-blue-50 rounded-lg sm:rounded-full transition-all duration-300 border border-slate-200/60 border-gray-500 hover:border-blue-400 shadow-lg hover:shadow-xl transform hover:-translate-y-1 backdrop-blur-sm"
               >
-                <ArrowLeft className="h-5 w-5 mr-2" />
-                <span className="font-semibold text-sm hidden sm:inline">
+                <ArrowLeft className="h-5 w-5 xl:mr-2" />
+                <span className="font-semibold text-sm hidden xl:inline">
                   Back
                 </span>
               </button>
 
-              <div className="h-8 w-px bg-slate-300/50 hidden sm:block"></div>
+              <div className="h-8 w-px bg-slate-300/50 hidden xl:block"></div>
 
               <div className="flex items-center space-x-2 sm:space-x-4">
                 <div className="w-10 h-10 sm:w-14 sm:h-14 bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-xl ring-2 sm:ring-4 ring-white/20">
                   <BookOpen className="h-4 w-4 sm:h-6 sm:w-6 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-lg sm:text-xl font-bold text-slate-900 truncate max-w-32 sm:max-w-md">
+                  <h1 className="text-md sm:text-xl font-bold text-slate-900 truncate max-w-32 sm:max-w-md">
                     {tutorial.title}
                   </h1>
-                  <div className="hidden sm:flex items-center space-x-2 text-sm text-slate-600">
+                  <div className="hidden xl:flex items-center space-x-2 text-sm text-slate-600">
                     <span>{tutorial.category}</span>
                     <span className="text-slate-400">•</span>
                     <span>{tutorial.subcategory}</span>
@@ -239,18 +239,18 @@ const TutorialViewer = ({ tutorial }) => {
             <div className="flex items-center space-x-2 sm:space-x-3">
               <button
                 onClick={() => router.push("/dashboard")}
-                className="hidden sm:flex items-center px-6 py-3 text-slate-700 hover:text-indigo-600 bg-white/80 hover:bg-indigo-50 rounded-xl transition-all duration-300 border border-slate-200/60 hover:border-indigo-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 backdrop-blur-sm"
+                className="hidden xl:flex items-center px-6 py-3 text-slate-700 hover:text-indigo-600 bg-white/80 hover:bg-indigo-50 rounded-full transition-all duration-300 border border-slate-200/60 border-gray-500 hover:border-indigo-400 shadow-lg hover:shadow-xl transform hover:-translate-y-1 backdrop-blur-sm"
               >
-                <LayoutDashboard className="h-5 w-5 mr-2" />
+                <LayoutDashboard className="h-5 w-5 xl:mr-2" />
                 <span className="font-semibold text-sm">Dashboard</span>
               </button>
 
               <button
                 onClick={() => (window.location.href = `/edit/${tutorial.id}`)}
-                className="flex items-center px-3 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 text-white rounded-lg sm:rounded-xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 ring-2 ring-white/20"
+                className="flex items-center px-3 sm:px-6 py-2 sm:py-3 btn9"
               >
-                <PenBox className="h-4 w-4 sm:h-5 sm:w-5 sm:mr-2" />
-                <span className="font-semibold text-sm hidden sm:inline">
+                <PenBox className="h-4 w-4 sm:h-5 sm:w-5 xl:mr-2" />
+                <span className="font-semibold text-sm hidden xl:inline">
                   Edit Tutorial
                 </span>
               </button>
@@ -258,7 +258,7 @@ const TutorialViewer = ({ tutorial }) => {
               {/* Mobile Dashboard Button */}
               <button
                 onClick={() => (window.location.href = "/dashboard")}
-                className="sm:hidden flex items-center px-3 py-2 text-slate-700 hover:text-indigo-600 bg-white/80 hover:bg-indigo-50 rounded-lg transition-all duration-300 border border-slate-200/60 hover:border-indigo-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 backdrop-blur-sm"
+                className="xl:hidden flex items-center px-3 py-2 text-slate-700 hover:text-indigo-600 bg-white/80 hover:bg-indigo-50 rounded-lg transition-all duration-300 border border-slate-200/60 hover:border-indigo-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 backdrop-blur-sm"
               >
                 <LayoutDashboard className="h-4 w-4" />
               </button>
@@ -267,9 +267,9 @@ const TutorialViewer = ({ tutorial }) => {
         </div>
       </div>
 
-      <div className="pt-16 sm:pt-24 flex flex-col lg:flex-row">
-        {/* Enhanced Sidebar */}
-        <div className="lg:w-96 bg-white/95 backdrop-blur-xl lg:border-r border-slate-200/60 shadow-2xl overflow-y-auto lg:h-[calc(100vh-96px)] lg:sticky lg:top-24">
+      <div className="pt-16 sm:pt-20 flex flex-col xl:flex-row">
+        {/* Sidebar */}
+        <div className="xl:w-96 bg-white/95 backdrop-blur-xl xl:border-r border-slate-200/60 shadow-2xl overflow-y-auto xl:h-[calc(100vh-96px)] xl:sticky xl:top-24">
           {/* Progress Section */}
           <div className="p-4 sm:p-8 border-b border-slate-200/60 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
             <div className="mb-4 sm:mb-6">
@@ -609,7 +609,7 @@ const TutorialViewer = ({ tutorial }) => {
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0">
                   <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-6 w-full sm:w-auto">
                     <button
-                      className="flex items-center justify-center px-4 sm:px-8 py-3 sm:py-4 bg-white hover:bg-slate-50 text-slate-700 rounded-xl sm:rounded-2xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-1 border border-slate-200/60 font-semibold text-sm sm:text-base"
+                      className="flex items-center justify-center px-4 sm:px-8 py-3 sm:py-4 bg-white hover:bg-slate-50 text-slate-700 rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-1 border border-slate-200/60 font-semibold text-sm sm:text-base"
                       disabled={!getPreviousSubsection()}
                       onClick={() => {
                         const prev = getPreviousSubsection();
@@ -628,7 +628,7 @@ const TutorialViewer = ({ tutorial }) => {
                     </button>
 
                     <button
-                      className="flex items-center justify-center px-4 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl sm:rounded-2xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-xl hover:shadow-2xl transform hover:-translate-y-1 font-semibold text-sm sm:text-base"
+                      className="flex items-center justify-center px-4 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 dark:from-blue-700 dark:via-indigo-800 dark:to-purple-800 hover:dark:from-blue-800 hover:dark:via-indigo-900 hover:dark:to-purple-900 text-white rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-xl hover:shadow-2xl transform hover:-translate-y-1 font-semibold text-sm sm:text-base"
                       disabled={!getNextSubsection()}
                       onClick={() => {
                         const next = getNextSubsection();
@@ -649,7 +649,7 @@ const TutorialViewer = ({ tutorial }) => {
 
                   <button
                     onClick={() => markSubsectionComplete(activeSubsection)}
-                    className={`flex items-center justify-center px-4 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 font-semibold text-sm sm:text-base w-full sm:w-auto ${
+                    className={`flex items-center justify-center px-4 sm:px-8 py-3 sm:py-4 rounded-full transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 font-semibold text-sm sm:text-base w-full sm:w-auto ${
                       completedSubsections.includes(activeSubsection)
                         ? "bg-gradient-to-r from-emerald-100 to-emerald-200 text-emerald-800 border-2 border-emerald-300"
                         : "bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white"
