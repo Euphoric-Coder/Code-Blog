@@ -19,8 +19,11 @@ import {
   Calendar,
   Clock,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { processContent } from "@/lib/processContent";
 
 const TutorialViewer = ({ tutorial }) => {
+  const router = useRouter();
   const [expandedSections, setExpandedSections] = useState({});
   const [activeSection, setActiveSection] = useState(null);
   const [activeSubsection, setActiveSubsection] = useState(null);
@@ -188,207 +191,6 @@ const TutorialViewer = ({ tutorial }) => {
   };
 
   return (
-    // <div className="flex flex-col lg:flex-row min-h-screen bg-gray-50">
-    //   <div className="lg:w-1/4 bg-white border-r border-gray-200 overflow-y-auto lg:h-[calc(100vh-64px)] lg:sticky lg:top-16">
-    //     <div className="p-4 border-b border-gray-200">
-    //       <h2 className="font-bold text-xl text-gray-900">{tutorial.title}</h2>
-    //       <div className="mt-4 mb-2 w-full bg-gray-200 rounded-full h-2.5">
-    //         <div
-    //           className="bg-blue-600 h-2.5 rounded-full transition-all duration-500 ease-out"
-    //           style={{ width: `${progress}%` }}
-    //         ></div>
-    //       </div>
-    //       <div className="flex justify-between text-sm text-gray-600">
-    //         <span>{Math.round(progress)}% complete</span>
-    //         <span>
-    //           {completedSubsections.length} /{" "}
-    //           {tutorial.content.reduce(
-    //             (total, section) => total + section.subsections.length,
-    //             0
-    //           )}{" "}
-    //           content
-    //         </span>
-    //       </div>
-    //     </div>
-
-    //     <div className="p-2">
-    //       {tutorial.content.map((section) => (
-    //         <div key={section.id} className="mb-2">
-    //           <div
-    //             className={`p-3 flex items-center justify-between rounded-md cursor-pointer transition-colors ${
-    //               activeSection === section.id
-    //                 ? "bg-blue-50 text-blue-700"
-    //                 : "hover:bg-gray-100"
-    //             }`}
-    //             onClick={() => toggleSection(section.id)}
-    //           >
-    //             <div className="flex items-center">
-    //               {expandedSections[section.id] ? (
-    //                 <ChevronDown className="h-4 w-4 mr-2 flex-shrink-0" />
-    //               ) : (
-    //                 <ChevronRight className="h-4 w-4 mr-2 flex-shrink-0" />
-    //               )}
-    //               <span className="font-medium">{section.title}</span>
-    //             </div>
-    //           </div>
-
-    //           {expandedSections[section.id] && (
-    //             <div className="ml-6 mt-1 space-y-1">
-    //               {section.subsections.map((subsection) => (
-    //                 <div
-    //                   key={subsection.id}
-    //                   className={`flex items-center px-3 py-2 rounded-md cursor-pointer transition-colors ${
-    //                     activeSubsection === subsection.id
-    //                       ? "bg-blue-100 text-blue-800"
-    //                       : "hover:bg-gray-100"
-    //                   }`}
-    //                   onClick={() => {
-    //                     setActiveSection(section.id);
-    //                     setActiveSubsection(subsection.id);
-    //                   }}
-    //                 >
-    //                   <div className="flex-1 text-sm">{subsection.title}</div>
-
-    //                   {completedSubsections.includes(subsection.id) && (
-    //                     <Award className="h-4 w-4 text-green-500 ml-2 flex-shrink-0" />
-    //                   )}
-    //                 </div>
-    //               ))}
-    //             </div>
-    //           )}
-    //         </div>
-    //       ))}
-    //     </div>
-    //   </div>
-
-    //   <div className="flex-1 p-6 lg:p-8">
-    //     {activeSection === tutorial.content[0]?.id &&
-    //       activeSubsection === tutorial.content[0]?.subsections[0]?.id && (
-    //         <div className="mb-8">
-    //           {tutorial.coverImage && (
-    //             <img
-    //               src={tutorial.coverImage}
-    //               alt={tutorial.title}
-    //               className="w-full h-72 object-fill rounded-lg shadow-md mb-6"
-    //             />
-    //           )}
-
-    //           <h1 className="text-3xl font-bold text-gray-900 mb-4">
-    //             {tutorial.title}
-    //           </h1>
-
-    //           <div className="flex flex-wrap gap-2 mb-4">
-    //             {tutorial.tags.map((tag) => (
-    //               <span
-    //                 key={tag}
-    //                 className="bg-blue-100 text-blue-800 px-2 py-1 rounded-md text-sm"
-    //               >
-    //                 {tag
-    //                   .split(" ")
-    //                   .map(
-    //                     (word) => word.charAt(0).toUpperCase() + word.slice(1)
-    //                   )
-    //                   .join(" ")}
-    //               </span>
-    //             ))}
-    //           </div>
-
-    //           <p className="text-gray-700 mb-6">{tutorial.description}</p>
-
-    //           <div className="flex items-center text-gray-600 mb-8">
-    //             <BookOpen className="h-5 w-5 mr-2" />
-    //             <span>
-    //               {tutorial.content.reduce(
-    //                 (total, section) => total + section.subsections.length,
-    //                 0
-    //               )}{" "}
-    //               lessons
-    //             </span>
-    //           </div>
-    //         </div>
-    //       )}
-
-    //     {activeSection && activeSubsection && (
-    //       <div className="bg-white rounded-lg shadow-md overflow-hidden">
-    //         <div className="p-4 border-b border-gray-200 flex justify-between items-center">
-    //           <div>
-    //             <h2 className="text-xl font-semibold text-gray-900">
-    //               {tutorial.content.find((s) => s.id === activeSection)?.title}
-    //             </h2>
-    //             <h3 className="text-lg text-gray-700">
-    //               {
-    //                 tutorial.content
-    //                   .find((s) => s.id === activeSection)
-    //                   ?.subsections.find((sub) => sub.id === activeSubsection)
-    //                   ?.title
-    //               }
-    //             </h3>
-    //           </div>
-
-    //           <button
-    //             onClick={() => markSubsectionComplete(activeSubsection)}
-    //             className={`px-4 py-2 rounded-md transition-colors ${
-    //               completedSubsections.includes(activeSubsection)
-    //                 ? "bg-green-100 text-green-800"
-    //                 : "bg-blue-600 hover:bg-blue-700 text-white"
-    //             }`}
-    //           >
-    //             {completedSubsections.includes(activeSubsection)
-    //               ? "Completed!"
-    //               : "Mark as Complete"}
-    //           </button>
-    //         </div>
-
-    //         <div className="p-6 prose max-w-none min-h-[300px] lg:min-h-[400px] flex flex-col justify-start">
-    //           <div
-    //             className="flex-1"
-    //             dangerouslySetInnerHTML={{
-    //               __html: getActiveSubsectionContent() || "",
-    //             }}
-    //           ></div>
-    //         </div>
-
-    //         <div className="p-4 border-t border-gray-200 flex justify-between">
-    //           <button
-    //             className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-md transition-colors"
-    //             disabled={!getPreviousSubsection()}
-    //             onClick={() => {
-    //               const prev = getPreviousSubsection();
-    //               if (prev) {
-    //                 setActiveSection(prev.sectionId);
-    //                 setActiveSubsection(prev.subsectionId);
-    //                 setExpandedSections((current) => ({
-    //                   ...current,
-    //                   [prev.sectionId]: true,
-    //                 }));
-    //               }
-    //             }}
-    //           >
-    //             Previous
-    //           </button>
-
-    //           <button
-    //             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-    //             disabled={!getNextSubsection()}
-    //             onClick={() => {
-    //               const next = getNextSubsection();
-    //               if (next) {
-    //                 setActiveSection(next.sectionId);
-    //                 setActiveSubsection(next.subsectionId);
-    //                 setExpandedSections((current) => ({
-    //                   ...current,
-    //                   [next.sectionId]: true,
-    //                 }));
-    //               }
-    //             }}
-    //           >
-    //             Next
-    //           </button>
-    //         </div>
-    //       </div>
-    //     )}
-    //   </div>
-    // </div>
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Modern Header */}
       <div
@@ -402,7 +204,7 @@ const TutorialViewer = ({ tutorial }) => {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 sm:space-x-6">
               <button
-                onClick={() => window.history.back()}
+                onClick={() => router.push("/tutorial")}
                 className="flex items-center px-3 sm:px-6 py-2 sm:py-3 text-slate-700 hover:text-blue-600 bg-white/80 hover:bg-blue-50 rounded-lg sm:rounded-xl transition-all duration-300 border border-slate-200/60 hover:border-blue-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 backdrop-blur-sm"
               >
                 <ArrowLeft className="h-5 w-5 mr-2" />
@@ -436,7 +238,7 @@ const TutorialViewer = ({ tutorial }) => {
 
             <div className="flex items-center space-x-2 sm:space-x-3">
               <button
-                onClick={() => (window.location.href = "/dashboard")}
+                onClick={() => router.push("/dashboard")}
                 className="hidden sm:flex items-center px-6 py-3 text-slate-700 hover:text-indigo-600 bg-white/80 hover:bg-indigo-50 rounded-xl transition-all duration-300 border border-slate-200/60 hover:border-indigo-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 backdrop-blur-sm"
               >
                 <LayoutDashboard className="h-5 w-5 mr-2" />
@@ -799,12 +601,8 @@ const TutorialViewer = ({ tutorial }) => {
                 </div>
               </div>
 
-              <div className="p-4 sm:p-10 prose prose-base sm:prose-xl max-w-none prose-headings:text-slate-900 prose-headings:font-black prose-p:text-slate-700 prose-p:font-medium prose-a:text-blue-600 prose-a:font-semibold prose-code:bg-slate-100 prose-code:px-2 prose-code:py-1 prose-code:rounded-lg prose-code:font-semibold">
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: getActiveSubsectionContent() || "",
-                  }}
-                ></div>
+              <div className="p-4 sm:p-10 prose prose-base sm:prose-xl max-w-none ...">
+                {processContent(getActiveSubsectionContent() || "")}
               </div>
 
               <div className="p-4 sm:p-10 border-t border-slate-200/60 bg-gradient-to-r from-slate-50 to-blue-50">
