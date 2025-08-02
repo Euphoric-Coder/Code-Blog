@@ -143,3 +143,27 @@ export const EditorImageUploads = pgTable("editorImageUploads", {
   inUse : boolean("inUse").notNull().default(false),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
+
+export const PlaygroundUserLogs = pgTable("playgroundUserLogs", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  language: varchar("language").notNull(),
+  code: varchar("code").notNull(),
+  output: varchar("output").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  createdBy: varchar("createdBy").notNull(),
+});
+
+export const PlaygroundOverallUsage = pgTable("playgroundOverallUsage", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  language: varchar("language").notNull(),
+  numberOfExecutions: varchar("numberOfExecutions").notNull(),
+  numberOfDownloads: varchar("numberOfDownloads").notNull(),
+});
+
+export const PlaygroundUsageByUser = pgTable("playgroundUsageByUser", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  language: varchar("language").notNull(),
+  numberOfExecutions: varchar("numberOfExecutions").notNull(),
+  numberOfDownloads: varchar("numberOfDownloads").notNull(),
+  createdBy: varchar("createdBy").notNull(),
+});
