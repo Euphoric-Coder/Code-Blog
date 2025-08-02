@@ -601,6 +601,9 @@ class Program
           output = "Code executed successfully with no output.";
         }
         setOutput(output);
+        console.log("Output:", output);
+        console.log("Code:", editorRef.current?.getValue());
+        console.log("Selected Language:", selectedLanguage);
       } else {
         setOutput("Error: Unable to execute code. Please try again.");
       }
@@ -612,7 +615,6 @@ class Program
       setIsRunning(false);
     }
   };
-  
 
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;

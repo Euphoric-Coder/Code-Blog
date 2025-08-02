@@ -446,10 +446,6 @@ const TutorialViewer = ({ tutorial }) => {
                         <span className="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-2 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg ring-2 ring-white/20">
                           {tutorial.subcategory}
                         </span>
-                        <span className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-2 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg ring-2 ring-white/20 flex items-center">
-                          <Star className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-                          Premium
-                        </span>
                       </div>
 
                       <h1 className="text-2xl sm:text-5xl font-black mb-3 sm:mb-6 leading-tight">
