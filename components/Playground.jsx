@@ -11,8 +11,10 @@ import {
   Loader,
 } from "lucide-react";
 import Editor from "@monaco-editor/react";
+import { useUser } from "@clerk/nextjs";
 
 export const PlaygroundPage = () => {
+  const { user, isSignedIn } = useUser();
   const [selectedLanguage, setSelectedLanguage] = useState("javascript");
   const [code, setCode] = useState("");
   const [input, setInput] = useState("");
@@ -563,6 +565,22 @@ class Program
     }
   };
 
+  const logExecution = async ({ language, code, output, createdBy }) => {
+    await fetch("/api/playground/execute", {
+      method: "POST",
+      body: JSON.stringify({ language, code, output, createdBy }),
+      headers: { "Content-Type": "application/json" },
+    });
+  };
+
+  const logDownload = async ({ language, createdBy }) => {
+    await fetch("/api/playground/download", {
+      method: "POST",
+      body: JSON.stringify({ language, createdBy }),
+      headers: { "Content-Type": "application/json" },
+    });
+  };
+
   const runCode = async () => {
     const currentCode = editorRef.current?.getValue(); // Gets latest from editor directly
     setIsRunning(true);
@@ -604,6 +622,14 @@ class Program
         console.log("Output:", output);
         console.log("Code:", editorRef.current?.getValue());
         console.log("Selected Language:", selectedLanguage);
+        if (isSignedIn) {
+          await logExecution({
+            language: selectedLanguage,
+            code: currentCode || code,
+            output,
+            createdBy: user?.primaryEmailAddress?.emailAddress,
+          });
+        }
       } else {
         setOutput("Error: Unable to execute code. Please try again.");
       }
