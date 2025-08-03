@@ -639,6 +639,8 @@ class Program
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+
+    console.log("Downloaded code:", code);
   };
 
   const shareCode = async () => {
@@ -854,7 +856,13 @@ class Program
                     </span>
                   </div>
                 </div>
-                <div className="h-64 lg:h-[400px] p-4 bg-gray-900 text-green-400 font-mono text-sm overflow-auto">
+                <div
+                  className={`h-64 lg:h-[400px] p-4 bg-gray-900 ${
+                    output?.includes("Errors:")
+                      ? "text-red-400"
+                      : "text-green-400"
+                  } font-mono text-sm overflow-auto`}
+                >
                   <pre className="whitespace-pre-wrap">
                     {output || 'Click "Run Code" to see output here...'}
                   </pre>

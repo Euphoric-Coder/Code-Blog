@@ -156,14 +156,14 @@ export const PlaygroundUserLogs = pgTable("playgroundUserLogs", {
 export const PlaygroundOverallUsage = pgTable("playgroundOverallUsage", {
   id: uuid("id").defaultRandom().primaryKey(),
   language: varchar("language").notNull(),
-  numberOfExecutions: varchar("numberOfExecutions").notNull(),
-  numberOfDownloads: varchar("numberOfDownloads").notNull(),
+  numberOfExecutions: integer("numberOfExecutions").notNull(),
+  numberOfDownloads: integer("numberOfDownloads").notNull(),
 });
 
 export const PlaygroundUsageByUser = pgTable("playgroundUsageByUser", {
   id: uuid("id").defaultRandom().primaryKey(),
   language: varchar("language").notNull(),
-  numberOfExecutions: varchar("numberOfExecutions").notNull(),
-  numberOfDownloads: varchar("numberOfDownloads").notNull(),
+  numberOfExecutions: integer("numberOfExecutions").notNull(),
+  numberOfDownloads: integer("numberOfDownloads").notNull(),
   createdBy: varchar("createdBy").notNull(),
 });
