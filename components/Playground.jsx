@@ -667,6 +667,12 @@ class Program
     URL.revokeObjectURL(url);
 
     console.log("Downloaded code:", code);
+    if(isSignedIn) {
+      logDownload({
+        language: selectedLanguage,
+        createdBy: user?.primaryEmailAddress?.emailAddress,
+      });
+    }
   };
 
   const shareCode = async () => {
