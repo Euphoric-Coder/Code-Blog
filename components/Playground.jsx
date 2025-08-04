@@ -619,9 +619,6 @@ class Program
           output = "Code executed successfully with no output.";
         }
         setOutput(output);
-        console.log("Output:", output);
-        console.log("Code:", editorRef.current?.getValue());
-        console.log("Selected Language:", selectedLanguage);
         if (isSignedIn) {
           await logExecution({
             language: selectedLanguage,
@@ -665,8 +662,6 @@ class Program
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-
-    console.log("Downloaded code:", code);
     if(isSignedIn) {
       logDownload({
         language: selectedLanguage,
