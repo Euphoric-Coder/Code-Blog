@@ -257,7 +257,7 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
                   className="btn9 flex [&_svg]:size-6"
                 >
                   <Save className="text-white" />
-                  Save Tutorial
+                  Save Snippet
                 </Button>
               ) : (
                 <Button
@@ -265,7 +265,7 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
                   className="btn9 flex [&_svg]:size-6"
                 >
                   <Edit className="text-white" />
-                  Update Tutorial
+                  Update Snippet
                 </Button>
               )}
             </div>
