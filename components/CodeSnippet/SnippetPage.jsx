@@ -1,5 +1,23 @@
-import React, { useState } from 'react';
-import { ArrowLeft, Copy, Download, Share2, Heart, Eye, User, Calendar, Tag, Code2, Check, ExternalLink, Bookmark } from 'lucide-react';
+"use client";
+
+import React, { useState } from "react";
+import {
+  ArrowLeft,
+  Copy,
+  Download,
+  Share2,
+  Heart,
+  Eye,
+  User,
+  Calendar,
+  Tag,
+  Code2,
+  Check,
+  ExternalLink,
+  Bookmark,
+} from "lucide-react";
+import SnippetBlock from "./SnippetBlock";
+import { ModeToggle } from "../theme-btn";
 
 export const CodeSnippetPage = () => {
   const [copied, setCopied] = useState(false);
@@ -9,14 +27,15 @@ export const CodeSnippetPage = () => {
   // Mock data - in real app this would come from props or API
   const snippet = {
     id: 1,
-    title: 'React Custom Hook for API Calls',
-    description: 'A reusable custom hook for handling API requests with loading states and error handling.',
-    language: 'TypeScript',
-    category: 'Utilities',
-    subcategory: 'React Hooks',
-    tags: ['React', 'Hooks', 'API', 'TypeScript', 'Custom Hook'],
-    author: 'Alex Chen',
-    publishDate: '2024-04-17',
+    title: "React Custom Hook for API Calls",
+    description:
+      "A reusable custom hook for handling API requests with loading states and error handling.",
+    language: "TypeScript",
+    category: "Utilities",
+    subcategory: "React Hooks",
+    tags: ["React", "Hooks", "API", "TypeScript", "Custom Hook"],
+    author: "Alex Chen",
+    publishDate: "2024-04-17",
     code: `import { useState, useEffect } from 'react';
 
 interface ApiResponse<T> {
@@ -154,7 +173,7 @@ const handleLoadUsers = () => {
         <li>Consider implementing retry logic for failed requests</li>
         <li>Use the refetch function for user-triggered data updates</li>
       </ul>
-    `
+    `,
   };
 
   const copyToClipboard = async () => {
@@ -163,16 +182,16 @@ const handleLoadUsers = () => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error('Failed to copy code:', err);
+      console.error("Failed to copy code:", err);
     }
   };
 
   const downloadCode = () => {
-    const blob = new Blob([snippet.code], { type: 'text/plain' });
+    const blob = new Blob([snippet.code], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `${snippet.title.toLowerCase().replace(/\s+/g, '-')}.${snippet.language.toLowerCase() === 'typescript' ? 'ts' : 'js'}`;
+    a.download = `${snippet.title.toLowerCase().replace(/\s+/g, "-")}.${snippet.language.toLowerCase() === "typescript" ? "ts" : "js"}`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -185,10 +204,10 @@ const handleLoadUsers = () => {
         await navigator.share({
           title: snippet.title,
           text: snippet.description,
-          url: window.location.href
+          url: window.location.href,
         });
       } catch (err) {
-        console.error('Error sharing:', err);
+        console.error("Error sharing:", err);
       }
     } else {
       // Fallback to copying URL
@@ -206,20 +225,26 @@ const handleLoadUsers = () => {
 
   const getLanguageColor = (language) => {
     const colors = {
-      'TypeScript': 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
-      'JavaScript': 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300',
-      'Python': 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
-      'CSS': 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300',
-      'Go': 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-300'
+      TypeScript:
+        "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300",
+      JavaScript:
+        "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300",
+      Python:
+        "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",
+      CSS: "bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300",
+      Go: "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-300",
     };
-    return colors[language] || 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-300';
+    return (
+      colors[language] ||
+      "bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-300"
+    );
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
@@ -238,12 +263,13 @@ const handleLoadUsers = () => {
             </button>
 
             <div className="flex items-center space-x-3">
+                <ModeToggle />
               <button
                 onClick={toggleBookmark}
                 className={`p-2 rounded-lg transition-colors ${
                   bookmarked
-                    ? 'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400'
-                    : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
+                    ? "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400"
+                    : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                 }`}
               >
                 <Bookmark className="h-5 w-5" />
@@ -279,7 +305,9 @@ const handleLoadUsers = () => {
                       Trending
                     </span>
                   )}
-                  <span className={`px-3 py-1 text-sm font-medium rounded-full ${getLanguageColor(snippet.language)}`}>
+                  <span
+                    className={`px-3 py-1 text-sm font-medium rounded-full ${getLanguageColor(snippet.language)}`}
+                  >
                     {snippet.language}
                   </span>
                 </div>
@@ -314,7 +342,7 @@ const handleLoadUsers = () => {
 
             {/* HTML Content */}
             <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg p-8">
-              <div 
+              <div
                 className="prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert max-w-none"
                 dangerouslySetInnerHTML={{ __html: snippet.content }}
               />
@@ -322,46 +350,14 @@ const handleLoadUsers = () => {
 
             {/* Code Block */}
             <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg overflow-hidden">
-              <div className="bg-gray-900 dark:bg-gray-950 px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
-                <div className="flex items-center space-x-3 min-w-0 flex-1">
-                  <Code2 className="h-5 w-5 text-gray-400" />
-                  <span className="text-gray-300 font-medium truncate">{snippet.title}</span>
-                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${getLanguageColor(snippet.language)}`}>
-                    {snippet.language}
-                  </span>
-                </div>
-                
-                <div className="flex items-center space-x-2 flex-shrink-0">
-                  <button
-                    onClick={copyToClipboard}
-                    className="inline-flex items-center px-3 py-1.5 bg-gray-700 hover:bg-gray-600 text-white text-xs sm:text-sm rounded-lg transition-colors"
-                  >
-                    {copied ? (
-                      <>
-                        <Check className="h-4 w-4 mr-1" />
-                        Copied!
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="h-4 w-4 mr-1" />
-                        Copy
-                      </>
-                    )}
-                  </button>
-                  <button
-                    onClick={downloadCode}
-                    className="p-1.5 text-gray-400 hover:text-white transition-colors"
-                  >
-                    <Download className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-              
-              <div className="p-4 sm:p-6 bg-gray-900 dark:bg-gray-950 overflow-x-auto">
-                <pre className="text-xs sm:text-sm text-gray-300 font-mono leading-relaxed">
-                  <code>{snippet.code}</code>
-                </pre>
-              </div>
+              <SnippetBlock
+                language={snippet.language.toLowerCase()}
+                title={`${snippet.title} - ${snippet.language}`}
+                showDownload={true}
+                onDownload={downloadCode}
+              >
+                {snippet.code}
+              </SnippetBlock>
             </div>
           </div>
 
@@ -372,7 +368,7 @@ const handleLoadUsers = () => {
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Classification
               </h3>
-              
+
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
@@ -398,7 +394,7 @@ const handleLoadUsers = () => {
                   </label>
                   <div className="flex flex-wrap gap-2">
                     {snippet.tags.map((tag) => (
-                      <span 
+                      <span
                         key={tag}
                         className="inline-flex items-center px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded-md"
                       >
@@ -416,7 +412,7 @@ const handleLoadUsers = () => {
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Statistics
               </h3>
-              
+
               <div className="space-y-4">
                 <div className="flex items-center justify-between py-2">
                   <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
@@ -455,18 +451,20 @@ const handleLoadUsers = () => {
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Actions
               </h3>
-              
+
               <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3">
                 <button
                   onClick={toggleLike}
                   className={`w-full inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-colors ${
                     liked
-                      ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
-                      : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                      ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300"
+                      : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
                   }`}
                 >
-                  <Heart className={`h-4 w-4 mr-2 ${liked ? 'fill-current' : ''}`} />
-                  {liked ? 'Liked' : 'Like'}
+                  <Heart
+                    className={`h-4 w-4 mr-2 ${liked ? "fill-current" : ""}`}
+                  />
+                  {liked ? "Liked" : "Like"}
                 </button>
 
                 <button
@@ -506,8 +504,8 @@ const handleLoadUsers = () => {
             onClick={copyToClipboard}
             className={`w-14 h-14 rounded-full shadow-lg transition-all duration-200 ${
               copied
-                ? 'bg-green-500 text-white'
-                : 'bg-blue-500 hover:bg-blue-600 text-white'
+                ? "bg-green-500 text-white"
+                : "bg-blue-500 hover:bg-blue-600 text-white"
             }`}
           >
             {copied ? (
@@ -516,16 +514,18 @@ const handleLoadUsers = () => {
               <Copy className="h-6 w-6 mx-auto" />
             )}
           </button>
-          
+
           <button
             onClick={toggleLike}
             className={`w-14 h-14 rounded-full shadow-lg transition-all duration-200 ${
               liked
-                ? 'bg-red-500 text-white'
-                : 'bg-gray-600 hover:bg-gray-700 text-white'
+                ? "bg-red-500 text-white"
+                : "bg-gray-600 hover:bg-gray-700 text-white"
             }`}
           >
-            <Heart className={`h-6 w-6 mx-auto ${liked ? 'fill-current' : ''}`} />
+            <Heart
+              className={`h-6 w-6 mx-auto ${liked ? "fill-current" : ""}`}
+            />
           </button>
         </div>
       </div>
