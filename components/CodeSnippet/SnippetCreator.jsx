@@ -107,6 +107,7 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
 
       // Fallback default data on empty or invalid data from localStorage
       setMetadata(defaultData.metadata);
+      console.log("Printing snippet data", defaultData.snippet);
       setSnippet(defaultData.snippet);
       setInitialData(defaultData);
     }
@@ -122,7 +123,11 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
 
   // ✅ Save changes to localStorage
   useEffect(() => {
+    console.log("it is running");
+    console.log(metadata);
+    console.log(snippet);
     if (metadata && snippet && !editing) {
+      console.log(metadata);
       const dataToSave = {
         metadata,
         snippet,
@@ -233,6 +238,7 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
               editing={editing}
               onComplete={handleMetadataComplete}
               onUpdateMetadata={(updatedMetadata) => {
+                console.log(updatedMetadata);
                 setMetadata(updatedMetadata);
               }} // Sync metadata updates
             />

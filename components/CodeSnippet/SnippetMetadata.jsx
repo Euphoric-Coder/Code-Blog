@@ -15,7 +15,11 @@ import { Button } from "@/components/ui/button";
 import MultiSelect from "../Form/UI/MultiSelect";
 import { Badge } from "../ui/badge";
 import { toast } from "sonner";
-import { tutorialCategories, tutorialSubCategoriesList } from "@/lib/data";
+import {
+  snippetCategories,
+  tutorialCategories,
+  tutorialSubCategoriesList,
+} from "@/lib/data";
 
 const SnippetMetadata = ({
   initialData,
@@ -31,6 +35,8 @@ const SnippetMetadata = ({
   const [data, setData] = useState(initialData);
   const [errors, setErrors] = useState({});
   const [tag, setTag] = useState("");
+
+  const languages = snippetCategories.map((category) => category.name);
 
   useEffect(() => {
     if (editing) return;
@@ -157,6 +163,48 @@ const SnippetMetadata = ({
                     }`}
                     placeholder="Provide a brief description of your tutorial"
                   ></Textarea>
+                </div>
+
+                <div>
+                  <label htmlFor="language" className="text">
+                    Language
+                  </label>
+                  <span className="text-red-500">&nbsp;*</span>
+
+                  <Select
+                    value={data.language}
+                    onValueChange={(val) => {
+                      console.log(val);
+                      setData({ ...data, language: val });
+                      setErrors((prev) => ({ ...prev, language: null })); // clear error}}
+                    }}
+                  >
+                    <SelectTrigger
+                      id="language"
+                      className={`
+                        mt-1 w-full rounded-lg px-3 py-2 border transition-colors
+                        ${
+                          errors.language
+                            ? "input-error-field focus-visible:ring-red-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-red-400 focus-visible:ring-[4px]"
+                            : "input-field focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-[3px]"
+                        }
+                      `}
+                    >
+                      <SelectValue placeholder="Select a Language" />
+                    </SelectTrigger>
+
+                    <SelectContent className="select-content mt-2">
+                      {languages.map((language) => (
+                        <SelectItem
+                          key={language}
+                          value={language}
+                          className="select-item"
+                        >
+                          {language}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div>
