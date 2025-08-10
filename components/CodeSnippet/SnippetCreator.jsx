@@ -98,6 +98,7 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
           console.log("Loaded metadata data from localStorage:", parsed);
           setInitialData(parsed);
           setMetadata(parsed.metadata);
+          setSnippet(parsed.snippet);
           setPendingTutorial(true);
           return;
         } catch (error) {
