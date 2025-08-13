@@ -100,6 +100,59 @@ const MenuBar = ({ editor }) => {
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState("");
 
+  // useEffect(() => {
+  //   const handleKeyDown = (e) => {
+  //     const mod = isMac ? e.metaKey : e.ctrlKey;
+
+  //     if (!editor) return;
+
+  //     // Headings H1, H2, H3
+  //     if (mod && e.altKey && e.key === "1") {
+  //       e.preventDefault();
+  //       editor.chain().focus().toggleHeading({ level: 1 }).run();
+  //     } else if (mod && e.altKey && e.key === "2") {
+  //       e.preventDefault();
+  //       editor.chain().focus().toggleHeading({ level: 2 }).run();
+  //     } else if (mod && e.altKey && e.key === "3") {
+  //       e.preventDefault();
+  //       editor.chain().focus().toggleHeading({ level: 3 }).run();
+  //     }
+
+  //     // Bullet List
+  //     else if (mod && e.shiftKey && e.key === "8") {
+  //       e.preventDefault();
+  //       editor.chain().focus().toggleBulletList().run();
+  //     }
+
+  //     // Numbered List
+  //     else if (mod && e.shiftKey && e.key === "7") {
+  //       e.preventDefault();
+  //       editor.chain().focus().toggleOrderedList().run();
+  //     }
+
+  //     // Bold
+  //     else if (mod && e.key.toLowerCase() === "b") {
+  //       e.preventDefault();
+  //       editor.chain().focus().toggleBold().run();
+  //     }
+
+  //     // Italic
+  //     else if (mod && e.key.toLowerCase() === "i") {
+  //       e.preventDefault();
+  //       editor.chain().focus().toggleItalic().run();
+  //     }
+
+  //     // Blockquote
+  //     else if (mod && e.shiftKey && e.key.toLowerCase() === "b") {
+  //       e.preventDefault();
+  //       editor.chain().focus().toggleBlockquote().run();
+  //     }
+  //   };
+
+  //   window.addEventListener("keydown", handleKeyDown);
+  //   return () => window.removeEventListener("keydown", handleKeyDown);
+  // }, []);
+
   if (!editor) return null;
 
   const handleFileSelect = async (e) => {
@@ -172,178 +225,193 @@ const MenuBar = ({ editor }) => {
     }`;
 
   return (
-    <div className="sticky top-0 flex flex-wrap items-center justify-between rounded-tr-2xl rounded-tl-2xl gap-2 border-r border-l border-2 p-4 backdrop-blur-md bg-white/60 dark:bg-slate-900/60">
-      <div className="hidden lg:flex gap-2 items-center">
-        {[1, 2, 3].map((level) => (
-          <TooltipProvider key={level}>
+    <div className="sticky top-0 flex flex-wrap items-center justify-between rounded-tr-2xl rounded-tl-2xl gap-2 border-r border-l border-2 border-blue-600 dark:border-blue-400 p-4 backdrop-blur-md bg-white/60 dark:bg-slate-900/60">
+      <div className="hidden xl:flex w-full gap-1 items-center justify-between">
+        <div className="flex items-center">
+          {[1, 2, 3].map((level) => (
+            <TooltipProvider key={level}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    key={level}
+                    className={buttonStyle(
+                      editor.isActive("heading", { level })
+                    )}
+                    onClick={() =>
+                      editor.chain().focus().toggleHeading({ level }).run()
+                    }
+                  >
+                    H{level}
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Heading {level}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ))}
+
+          <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
-                  key={level}
-                  className={buttonStyle(editor.isActive("heading", { level }))}
+                  className={buttonStyle(editor.isActive("bulletList"))}
                   onClick={() =>
-                    editor.chain().focus().toggleHeading({ level }).run()
+                    editor.chain().focus().toggleBulletList().run()
                   }
                 >
-                  H{level}
+                  <MdFormatListBulleted size={30} className="mr-1" />
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Heading {level}</p>
+                <p>Bullet List</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-        ))}
 
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                className={buttonStyle(editor.isActive("bulletList"))}
-                onClick={() => editor.chain().focus().toggleBulletList().run()}
-              >
-                <MdFormatListBulleted size={30} className="mr-1" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Bullet List</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  className={buttonStyle(editor.isActive("orderedList"))}
+                  onClick={() =>
+                    editor.chain().focus().toggleOrderedList().run()
+                  }
+                >
+                  <MdFormatListNumbered size={30} className="mr-1" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Numbered List</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
 
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                className={buttonStyle(editor.isActive("orderedList"))}
-                onClick={() => editor.chain().focus().toggleOrderedList().run()}
-              >
-                <MdFormatListNumbered size={30} className="mr-1" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Numbered List</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  className={buttonStyle(editor.isActive("bold"))}
+                  onClick={() => editor.chain().focus().toggleBold().run()}
+                >
+                  <MdFormatBold size={30} className="mr-1" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Bold</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
 
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                className={buttonStyle(editor.isActive("bold"))}
-                onClick={() => editor.chain().focus().toggleBold().run()}
-              >
-                <MdFormatBold size={30} className="mr-1" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Bold</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  className={buttonStyle(editor.isActive("italic"))}
+                  onClick={() => editor.chain().focus().toggleItalic().run()}
+                >
+                  <MdFormatItalic size={30} className="mr-1" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Italics</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
 
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                className={buttonStyle(editor.isActive("italic"))}
-                onClick={() => editor.chain().focus().toggleItalic().run()}
-              >
-                <MdFormatItalic size={30} className="mr-1" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Italics</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  className={buttonStyle(editor.isActive("blockquote"))}
+                  onClick={() =>
+                    editor.chain().focus().toggleBlockquote().run()
+                  }
+                >
+                  <MdFormatQuote size={30} className="mr-1" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Quote</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
 
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                className={buttonStyle(editor.isActive("blockquote"))}
-                onClick={() => editor.chain().focus().toggleBlockquote().run()}
-              >
-                <MdFormatQuote size={30} className="mr-1" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Quote</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  className={buttonStyle(editor.isActive("codeBlock"))}
+                  onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+                >
+                  <MdCode size={30} className="mr-1" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Code Block</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
 
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                className={buttonStyle(editor.isActive("codeBlock"))}
-                onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-              >
-                <MdCode size={30} className="mr-1" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Code Block</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  className={buttonStyle(editor.isActive("table"))}
+                  onClick={() =>
+                    editor
+                      .chain()
+                      .focus()
+                      .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+                      .run()
+                  }
+                >
+                  <MdTableChart className="mr-1" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Table</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
 
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                className={buttonStyle(editor.isActive("table"))}
-                onClick={() =>
-                  editor
-                    .chain()
-                    .focus()
-                    .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
-                    .run()
-                }
-              >
-                <MdTableChart className="mr-1" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Table</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  className={buttonStyle(editor.isActive("link"))}
+                  onClick={() => setOpen(true)}
+                >
+                  <MdLink className="mr-1" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Link</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
 
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                className={buttonStyle(editor.isActive("link"))}
-                onClick={() => setOpen(true)}
-              >
-                <MdLink className="mr-1" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Link</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  className={buttonStyle(editor.isActive("image"))}
+                  onClick={() => imageInputRef.current?.click()}
+                >
+                  <ImageIcon className="mr-1" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Image</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
 
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                className={buttonStyle(editor.isActive("image"))}
-                onClick={() => imageInputRef.current?.click()}
-              >
-                <ImageIcon className="mr-1" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Image</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        {/* Clear Button */}
+        <button onClick={() => editor.commands.clearContent(true)}>
+          <Trash />
+        </button>
       </div>
 
       <input
@@ -353,63 +421,8 @@ const MenuBar = ({ editor }) => {
         className="hidden"
         onChange={handleFileSelect}
       />
-      <div className="lg:hidden flex">
-        <Menu>
-          <MenuButton className="inline-flex items-center gap-2 rounded-md bg-gray-800 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-gray-700 data-open:bg-gray-700">
-            Options
-            <ChevronDownIcon className="size-4 fill-white/60" />
-          </MenuButton>
 
-          <MenuItems
-            transition
-            anchor="bottom end"
-            className="w-52 origin-top-right rounded-xl border border-white/5 bg-white/5 p-1 text-sm/6 text-white transition duration-100 ease-out [--anchor-gap:--spacing(1)] focus:outline-none data-closed:scale-95 data-closed:opacity-0"
-          >
-            <MenuItem>
-              <button className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-white/10">
-                <PencilIcon className="size-4 fill-white/30" />
-                Edit
-                <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-focus:inline">
-                  ⌘E
-                </kbd>
-              </button>
-            </MenuItem>
-            <MenuItem>
-              <button className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-white/10">
-                <Copy className="size-4 fill-white/30" />
-                Duplicate
-                <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-focus:inline">
-                  ⌘D
-                </kbd>
-              </button>
-            </MenuItem>
-            <div className="my-1 h-px bg-white/5" />
-            <MenuItem>
-              <button className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-white/10">
-                <Archive className="size-4 fill-white/30" />
-                Archive
-                <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-focus:inline">
-                  ⌘A
-                </kbd>
-              </button>
-            </MenuItem>
-            <MenuItem>
-              <button className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-white/10">
-                <TrashIcon className="size-4 fill-white/30" />
-                Delete
-                <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-focus:inline">
-                  ⌘D
-                </kbd>
-              </button>
-            </MenuItem>
-          </MenuItems>
-        </Menu>
-      </div>
-
-      <button onClick={() => editor.commands.clearContent(true)}>
-        <Trash />
-      </button>
-
+      {/* Link Insert Dialog */}
       <Dialog
         open={open}
         onOpenChange={() => {
@@ -435,6 +448,218 @@ const MenuBar = ({ editor }) => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* TOOLBAR: Directly Shown Items */}
+      <div className="flex xl:hidden items-center justify-between w-full gap-4">
+        <div className="flex items-center">
+          <div className="flex gap-2 items-center flex-wrap">
+            {/* H1, H2 (Mobile+) */}
+            {[1, 2].map((level) => (
+              <TooltipProvider key={level}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      key={level}
+                      className={buttonStyle(
+                        editor.isActive("heading", { level })
+                      )}
+                      onClick={() =>
+                        editor.chain().focus().toggleHeading({ level }).run()
+                      }
+                    >
+                      H{level}
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Heading {level}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            ))}
+
+            {/* H3, Bullet List, Numbered List (Tablet+) */}
+            <div className="hidden md:flex xl:hidden gap-2">
+              <button
+                className={buttonStyle(
+                  editor.isActive("heading", { level: 3 })
+                )}
+                onClick={() =>
+                  editor.chain().focus().toggleHeading({ level: 3 }).run()
+                }
+              >
+                H3
+              </button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      className={buttonStyle(editor.isActive("bulletList"))}
+                      onClick={() =>
+                        editor.chain().focus().toggleBulletList().run()
+                      }
+                    >
+                      <MdFormatListBulleted size={30} className="mr-1" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Bullet List</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      className={buttonStyle(editor.isActive("orderedList"))}
+                      onClick={() =>
+                        editor.chain().focus().toggleOrderedList().run()
+                      }
+                    >
+                      <MdFormatListNumbered size={30} className="mr-1" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Numbered List</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          </div>
+
+          {/* MENU: Shown on Mobile & Tablet */}
+          <div className="xl:hidden flex">
+            <Menu>
+              <MenuButton className="inline-flex items-center gap-2 rounded-md bg-white dark:bg-gray-900 px-4 py-2 text-sm font-medium text-gray-800 dark:text-gray-100 shadow-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                Options
+                <ChevronDownIcon className="size-4 text-gray-600 dark:text-gray-400" />
+              </MenuButton>
+
+              <MenuItems
+                transition
+                anchor="bottom end"
+                className="w-60 mt-2 origin-top-right rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-1 shadow-lg ring-1 ring-black/10 dark:ring-white/10 focus:outline-none"
+              >
+                {/* Bullet List */}
+                <MenuItem className="flex md:hidden">
+                  <button
+                    className="group flex w-full items-center gap-2 px-4 py-2 text-sm hover:bg-muted/80 dark:hover:bg-gray-800 rounded-md"
+                    onClick={() =>
+                      editor.chain().focus().toggleBulletList().run()
+                    }
+                  >
+                    <MdFormatListBulleted className="text-lg" /> Bullet
+                  </button>
+                </MenuItem>
+
+                {/* Numbered List */}
+                <MenuItem className="flex md:hidden">
+                  <button
+                    className="group flex w-full items-center gap-2 px-4 py-2 text-sm hover:bg-muted/80 dark:hover:bg-gray-800 rounded-md"
+                    onClick={() =>
+                      editor.chain().focus().toggleOrderedList().run()
+                    }
+                  >
+                    <MdFormatListNumbered className="text-lg" /> Numbered
+                  </button>
+                </MenuItem>
+                {/* Bold */}
+                <MenuItem>
+                  <button
+                    onClick={() => editor.chain().focus().toggleBold().run()}
+                    className="group flex w-full items-center gap-2 px-4 py-2 text-sm hover:bg-muted/80 dark:hover:bg-gray-800 rounded-md"
+                  >
+                    <MdFormatBold className="text-lg" /> Bold
+                  </button>
+                </MenuItem>
+
+                {/* Italic */}
+                <MenuItem>
+                  <button
+                    onClick={() => editor.chain().focus().toggleItalic().run()}
+                    className="group flex w-full items-center gap-2 px-4 py-2 text-sm hover:bg-muted/80 dark:hover:bg-gray-800 rounded-md"
+                  >
+                    <MdFormatItalic className="text-lg" /> Italic
+                  </button>
+                </MenuItem>
+
+                {/* Blockquote */}
+                <MenuItem>
+                  <button
+                    onClick={() =>
+                      editor.chain().focus().toggleBlockquote().run()
+                    }
+                    className="group flex w-full items-center gap-2 px-4 py-2 text-sm hover:bg-muted/80 dark:hover:bg-gray-800 rounded-md"
+                  >
+                    <MdFormatQuote className="text-lg" /> Quote
+                  </button>
+                </MenuItem>
+
+                {/* Code Block */}
+                <MenuItem>
+                  <button
+                    onClick={() =>
+                      editor.chain().focus().toggleCodeBlock().run()
+                    }
+                    className="group flex w-full items-center gap-2 px-4 py-2 text-sm hover:bg-muted/80 dark:hover:bg-gray-800 rounded-md"
+                  >
+                    <MdCode className="text-lg" /> Code Block
+                  </button>
+                </MenuItem>
+
+                {/* Table */}
+                <MenuItem>
+                  <button
+                    onClick={() =>
+                      editor
+                        .chain()
+                        .focus()
+                        .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+                        .run()
+                    }
+                    className="group flex w-full items-center gap-2 px-4 py-2 text-sm hover:bg-muted/80 dark:hover:bg-gray-800 rounded-md"
+                  >
+                    <MdTableChart className="text-lg" /> Table
+                  </button>
+                </MenuItem>
+
+                {/* Link */}
+                <MenuItem>
+                  <button
+                    onClick={() => setOpen(true)}
+                    className="group flex w-full items-center gap-2 px-4 py-2 text-sm hover:bg-muted/80 dark:hover:bg-gray-800 rounded-md"
+                  >
+                    <MdLink className="text-lg" /> Link
+                  </button>
+                </MenuItem>
+
+                {/* Image */}
+                <MenuItem>
+                  <button
+                    onClick={() => imageInputRef.current?.click()}
+                    className="group flex w-full items-center gap-2 px-4 py-2 text-sm hover:bg-muted/80 dark:hover:bg-gray-800 rounded-md"
+                  >
+                    <ImageIcon className="text-lg" /> Image
+                  </button>
+                </MenuItem>
+
+                <div className="my-1 h-px bg-black/10 dark:bg-white/10 flex md:hidden" />
+                <MenuItem className="flex md:hidden">
+                  <button
+                    onClick={() => console.log("deleting")}
+                    className="group flex w-full items-center gap-2 px-4 py-2 text-sm text-red-500 dark:text-red-400 hover:bg-muted/80 dark:hover:bg-gray-800 rounded-md"
+                  >
+                    <Trash className="text-lg" /> Delete
+                  </button>
+                </MenuItem>
+              </MenuItems>
+            </Menu>
+          </div>
+        </div>
+        <button onClick={() => editor.commands.clearContent(true)}>
+          <Trash />
+        </button>
+      </div>
     </div>
   );
 };

@@ -22,9 +22,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import TutorialMetadata from "@/components/Tutorial/TutorialMetadata";
-import SectionEditor from "@/components/Tutorial/SectionEditor";
-import { v4 as uuidv4 } from "uuid";
 import { useUser } from "@clerk/nextjs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -36,6 +33,9 @@ import { getISTDate } from "@/lib/utils";
 import { redirect } from "next/navigation";
 import SnippetMetadata from "./SnippetMetadata";
 import { set } from "date-fns";
+import { snippetCategories } from "@/lib/data";
+import CodeEditor from "./CodeEditor";
+import SnippetContentEditor from "./SnippetEditor";
 
 const defaultData = {
   metadata: {
@@ -85,7 +85,7 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
   const [pendingTutorial, setPendingTutorial] = useState(false);
   const [clearPendingAlert, setClearPendingAlert] = useState(false);
 
-  // ✅ Load initial data from localStorage after mount
+  // Load initial data from localStorage after mount
   useEffect(() => {
     if (editData) return; // skip loading for editing
 
@@ -122,7 +122,7 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
     }
   }, [editData]);
 
-  // ✅ Save changes to localStorage
+  // Save changes to localStorage
   useEffect(() => {
     console.log("it is running");
     console.log(metadata);
@@ -138,7 +138,7 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
     }
   }, [metadata, snippet, LOCAL_STORAGE_KEY]);
 
-  // ✅ Avoid rendering until initial data is loaded
+  // To avoid rendering until initial data is loaded
   if (!initialData) return <div>Loading metadata data...</div>;
 
   const handleMetadataComplete = (metadata) => {
@@ -153,11 +153,15 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
     setMetadata(defaultData.metadata);
     setSnippet(defaultData.snippet);
     setCurrentStep("metadata");
-    console.log("Tutorial data fully reset.");
+    console.log("Snippet data fully reset.");
   };
 
   const saveTutorial = async () => {
     try {
+      toast.message("Saving metadata...");
+      console.log("Saving metadata...");
+      console.log(metadata);
+      console.log(snippet);
       // Inserts the metadata into the DB
       //   const result = await db
       //     .insert(Tutorials)
@@ -176,8 +180,8 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
       //     })
       //     .returning({ insertedId: Tutorials.id });
       //   if (result) {
-      //     toast.success("Tutorial saved successfully!");
-      //     // Redirects to the Tutorial Page
+      //     toast.success("Snippet saved successfully!");
+      //     // Redirects to the Snippet Page
       //     setTimeout(() => {
       //       redirect(`/tutorialpost/${result.insertedId}`);
       //     }, 4000);
@@ -204,24 +208,12 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
   };
 
   const editTutorial = async () => {
-    // for Demo Purpose
-    // console.log({
-    //   title: metadata.title,
-    //   coverImage: metadata.coverImage,
-    //   imageId: metadata.imageId,
-    //   description: metadata.description,
-    //   category: metadata.category,
-    //   subCategories: metadata.subcategory,
-    //   tags: metadata.tags,
-    //   content: sections,
-    //   author: user?.fullName ?? "Anonymous",
-    //   date: getISTDate(),
-    //   createdBy: user?.primaryEmailAddress?.emailAddress,
-    // });
+    
   };
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-tr from-[#f6fbff] to-[#ffffff] dark:from-[#0b1625] dark:to-[#112030] transition-colors duration-500 flex flex-col items-center justify-center px-4 py-10">
+      
       {currentStep === "metadata" ? (
         <div className="w-full max-w-6xl mt-10">
           {initialData && (
@@ -249,7 +241,7 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
         <div className="w-full mt-10 bg-[#e8f4ff]/60 dark:bg-[#1e2e44]/60 backdrop-blur-xl border border-blue-200 dark:border-blue-800 rounded-3xl shadow-2xl p-8 md:p-12">
           <div className="mb-8 flex flex-col lg:flex-row space-y-4 lg:space-y-0 justify-between items-center">
             <h1 className="text-3xl font-extrabold text-blue-900 dark:text-blue-200">
-              Creating: {metadata.title}
+              Creating Snippet: {metadata.title}
             </h1>
             <div className="flex gap-5">
               <Button
@@ -277,6 +269,23 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
               )}
             </div>
           </div>
+          <SnippetContentEditor
+            value={snippet?.content ?? ""}
+            onChange={(html) =>
+              setSnippet((prev) => ({ ...(prev ?? {}), content: html }))
+            }
+            placeholder="Write your snippet explanation here…"
+          />
+          <CodeEditor
+            languageName={metadata.language} // e.g., "JavaScript"
+            value={snippet?.code ?? ""} // current code string
+            onChange={(newCode) =>
+              setSnippet((prev) => ({ ...(prev ?? {}), code: newCode }))
+            }
+            theme="vs-dark"
+            height="520px"
+            className="rounded-xl overflow-hidden"
+          />
         </div>
       )}
     </div>
