@@ -156,7 +156,7 @@ const SnippetMetadata = ({
                     value={data.description}
                     onChange={handleChange}
                     rows={4}
-                    className={`mt-1 w-full px-4 py-2 ${
+                    className={`mt-1 w-full px-4 py-2 resize-none ${
                       errors.description
                         ? "input-error-field focus-visible:ring-red-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-red-400 focus-visible:ring-[4px]"
                         : "input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"

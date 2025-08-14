@@ -28,12 +28,9 @@ import { Button } from "@/components/ui/button";
 import FormBackgroundEffect from "@/components/Effect/FormBackgroundEffect";
 import { toast } from "sonner";
 import { db } from "@/lib/dbConfig";
-import { Tutorials } from "@/lib/schema";
 import { getISTDate } from "@/lib/utils";
 import { redirect } from "next/navigation";
 import SnippetMetadata from "./SnippetMetadata";
-import { set } from "date-fns";
-import { snippetCategories } from "@/lib/data";
 import CodeEditor from "./CodeEditor";
 import SnippetContentEditor from "./SnippetEditor";
 
@@ -213,7 +210,61 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-tr from-[#f6fbff] to-[#ffffff] dark:from-[#0b1625] dark:to-[#112030] transition-colors duration-500 flex flex-col items-center justify-center px-4 py-10">
-      
+      <div>
+        {pendingTutorial && (
+          <Alert className="gap-6 mt-10 mb-8 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 border border-yellow-400 dark:border-gray-600 shadow-md p-4 rounded-3xl flex items-center hover:shadow-lg transition-transform transform">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400" />
+                <AlertTitle className="text-yellow-700 text-sm md:text-lg dark:text-yellow-300 font-bold">
+                  Pending Snippet
+                </AlertTitle>
+              </div>
+              <div className="flex items-center gap-4">
+                <AlertDescription className="w-full">
+                  <div
+                    className="rounded-xl border border-yellow-300 dark:border-yellow-700 bg-yellow-50 dark:bg-yellow-900/10 
+                     px-4 py-3 text-sm sm:text-base text-justify leading-relaxed text-yellow-800 dark:text-yellow-200 
+                     shadow-sm transition-all"
+                  >
+                    <p className="text-wrap break-words">
+                      You have an unfinished Snippet: &quot;
+                      <b className="font-semibold">
+                        {metadata.title === ""
+                          ? "Untitled"
+                          : `${metadata.title.slice(0, 50)}${
+                              metadata.title.length > 50 ? " ..." : ""
+                            }`}
+                      </b>
+                      &quot;. Would you like to continue?
+                    </p>
+                  </div>
+                </AlertDescription>
+                <div className="flex flex-col md:flex-row items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="accept hover:bg-green-300 hover:text-green-700 dark:hover:text-green-400 [&_svg]:size-6"
+                    onClick={() => setPendingTutorial(false)}
+                  >
+                    <CheckCircle className="" />
+                    Continue
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="del3 hover:bg-red-300 hover:text-red-500 [&_svg]:size-6"
+                    onClick={clearData}
+                  >
+                    <XCircle className="" />
+                    Dismiss
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </Alert>
+        )}
+      </div>
       {currentStep === "metadata" ? (
         <div className="w-full max-w-6xl mt-10">
           {initialData && (

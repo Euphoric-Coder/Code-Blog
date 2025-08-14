@@ -167,3 +167,17 @@ export const PlaygroundUsageByUser = pgTable("playgroundUsageByUser", {
   numberOfDownloads: integer("numberOfDownloads").notNull(),
   createdBy: varchar("createdBy").notNull(),
 });
+
+export const CodeSnippet = pgTable("codeSnippets", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  title: varchar("title").notNull(),
+  description: varchar("description").notNull(),
+  category: varchar("category").notNull(),
+  subcategory: jsonb("subcategory").notNull().default([]),
+  tags: jsonb("tags").notNull().default([]),
+  language: varchar("language").notNull(),
+  content: varchar("content").notNull(),
+  code: varchar("code").notNull(),
+  createdBy: varchar("createdBy").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
