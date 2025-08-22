@@ -1,36 +1,145 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# **Dev Block** – Full-Stack Platform for Code Snippets, Blogs, Tutorials & Developer Collaboration
 
-## Getting Started
+**Tagline:** *Breaking barriers in tech knowledge sharing and building meaningful developer connections.*
 
-First, run the development server:
+---
 
+## 📖 Table of Contents
+1. [Overview](#overview)
+2. [Inspiration](#inspiration)
+3. [Core Features](#core-features)
+4. [Tech Stack](#tech-stack)
+5. [System Architecture](#system-architecture)
+6. [Database Schema](#database-schema)
+7. [Installation & Setup](#installation--setup)
+8. [Environment Variables](#environment-variables)
+9. [Usage Guide](#usage-guide)
+10. [Screenshots](#screenshots)
+11. [Future Roadmap](#future-roadmap)
+
+---
+
+## **Overview**
+**Dev Block** is an **interactive, community-driven platform** for developers to:
+- Publish **blogs** and **tutorials**
+- Share **code snippets**
+- Collaborate and discuss ideas via threaded comments
+- Run live code with an **integrated code playground**
+
+It centralizes **tech learning, collaboration, and practical coding** in one platform.
+
+---
+
+## **Inspiration**
+Dev Block started as **Code Blog**, a markdown-powered blog for coding tutorials and tech insights. It evolved into a feature-rich platform supporting:
+- Multiple content types (blogs, tutorials, snippets)
+- Real-time code execution
+- Engagement features (likes, bookmarks, comments)
+
+The **Primary Goal** is to provide a **single space where developers write, run, and refine ideas** while connecting with the community.
+
+---
+
+## **Core Features**
+
+### **Content Types**
+- **Blogs** – Long-form articles, guides, and insights.
+- **Tutorials** – Step-by-step instructions with media and formatting.
+- **Code Snippets** – Reusable code blocks with syntax highlighting.
+
+### **Engagement**
+- Likes, bookmarks, and threaded comments on all content types.
+- Nested replies, edit/delete, and “show more” toggle for long threads.
+- Real-time UI updates for engagement.
+
+### **Code Playground**
+- Multi-language execution with **online compiler APIs**.
+- Shareable playground sessions with output display.
+- Reduced code-testing friction by 70%.
+
+### **Social Sharing**
+- Share via WhatsApp, Twitter/X, LinkedIn, Email, Reddit, Telegram.
+- One-click link copying for easy sharing.
+
+### **UI & UX**
+- Theme-switchable (light/dark) with smooth animations.
+- Fully responsive design.
+- Hydration-safe date rendering for SSR.
+---
+
+## **Tech Stack**
+
+### **Frontend**
+- [Next.js](https://nextjs.org/)
+- [JavaScript (ES6+)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [ShadCN UI](https://ui.shadcn.com/)
+- [TipTap](https://tiptap.dev/) – Rich text editing
+
+### **Backend & Databases**
+- [PostgreSQL](https://www.postgresql.org/) – Structured content storage
+- [MongoDB](https://www.mongodb.com/) – Flexible content storage
+- [Piston API](https://rapidapi.com/) – Live code execution API
+- [Clerk](https://clerk.com/) – Authentication
+
+---
+
+<!-- ## **System Architecture**
+Frontend (Next.js, Tailwind CSS, ShadCN UI)
+|
+|-- TipTap Editor, Syntax Highlighting
+|
+Backend (Next.js API Routes, Compiler API Integration)
+|
+| |
+PostgreSQL MongoDB
+| |
+Clerk Auth Compiler API
+
+--- -->
+
+## **Database Schema**
+**Entities:**
+- Users
+- Blogs
+- Tutorials
+- Code Snippets
+- Comments
+- Likes
+- Bookmarks
+- Playground Sessions
+
+**Relationships:**
+- `Users` ↔ `Blogs` (One-to-Many)
+- `Users` ↔ `Tutorials` (One-to-Many)
+- `Users` ↔ `Code Snippets` (One-to-Many)
+- `Users` ↔ `Comments` (One-to-Many)
+- `Content` ↔ `Likes`/`Bookmarks` (Many-to-Many)
+
+---
+
+## **Installation & Setup**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Clone repository
+git clone https://github.com/yourusername/dev-block.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```bash
+# Move into directory
+cd dev-block
+```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+# Install dependencies
+npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```bash
+# Copy environment variables
+cp .env.example .env.local
+```
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```bash
+# Start development server
+npm run dev
+```
