@@ -1,7 +1,6 @@
 # **Dev Block** – Full-Stack Platform for Code Snippets, Blogs, Tutorials & Developer Collaboration
 
 **Tagline:** *Breaking barriers in tech knowledge sharing and building meaningful developer connections.*
-
 ---
 
 ## 📖 Table of Contents
