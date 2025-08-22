@@ -17,7 +17,7 @@ import {
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
 import { db } from "@/lib/dbConfig";
-import { Comments, Replies } from "@/lib/schema";
+import { BlogComments, BlogReplies } from "@/lib/schema";
 import { eq } from "drizzle-orm";
 import {
   Popover,
@@ -130,7 +130,7 @@ const Comment = ({ blogId }) => {
         })
       );
 
-      console.log("Enriched Comments:", enrichedComments);
+      console.log("Enriched BlogComments:", enrichedComments);
 
       setComments(enrichedComments);
     } catch (error) {
@@ -143,7 +143,7 @@ const Comment = ({ blogId }) => {
   const handlePostComment = async () => {
     if (!isSignedIn) return setShowSignInModal(true);
     if (!comment.trim()) return toast.error("Comment cannot be empty!");
-    await db.insert(Comments).values({
+    await db.insert(BlogComments).values({
       blogId: blogId,
       name: user.fullName,
       createdBy: user.primaryEmailAddress.emailAddress,
@@ -159,7 +159,7 @@ const Comment = ({ blogId }) => {
     if (!isSignedIn) return setShowSignInModal(true);
     if (!reply.trim() || !replyingTo)
       return toast.error("Reply cannot be empty!");
-    await db.insert(Replies).values({
+    await db.insert(BlogReplies).values({
       commentId: replyingTo,
       name: user.fullName,
       createdBy: user.primaryEmailAddress.emailAddress,
@@ -175,16 +175,16 @@ const Comment = ({ blogId }) => {
   const EditComment = async (id, newText) => {
     if (!newText) return;
     await db
-      .update(Comments)
+      .update(BlogComments)
       .set({ text: newText, time: getISTDateTime() })
-      .where(eq(Comments.id, id));
+      .where(eq(BlogComments.id, id));
     toast.success("Comment edited!");
     refreshData();
   };
 
   const DeleteComment = async (id) => {
-    await db.delete(Replies).where(eq(Replies.commentId, id));
-    await db.delete(Comments).where(eq(Comments.id, id));
+    await db.delete(BlogReplies).where(eq(BlogReplies.commentId, id));
+    await db.delete(BlogComments).where(eq(BlogComments.id, id));
     toast.success("Comment deleted!");
     refreshData();
   };
@@ -192,15 +192,15 @@ const Comment = ({ blogId }) => {
   const EditReply = async (id, newText) => {
     if (!newText) return;
     await db
-      .update(Replies)
+      .update(BlogReplies)
       .set({ text: newText, time: getISTDateTime() })
-      .where(eq(Replies.id, id));
+      .where(eq(BlogReplies.id, id));
     toast.success("Comment edited!");
     refreshData();
   };
 
   const DeleteReply = async (id) => {
-    await db.delete(Replies).where(eq(Replies.id, id));
+    await db.delete(BlogReplies).where(eq(BlogReplies.id, id));
     toast.success("Comment deleted!");
     refreshData();
   };
@@ -208,7 +208,7 @@ const Comment = ({ blogId }) => {
   return (
     <div className="mt-12 border-t border-gray-300 dark:border-gray-700 pt-6">
       <h3 className="text-2xl font-serif font-bold mb-6 text-gray-900 dark:text-white">
-        Comments ({comments.length})
+        BlogComments ({comments.length})
       </h3>
       {/* Comment input */}
       <div className="flex items-start gap-4 mb-6">
@@ -247,7 +247,7 @@ const Comment = ({ blogId }) => {
         </div>
       </div>
 
-      {/* Comments and replies */}
+      {/* BlogComments and replies */}
       <div className="space-y-8">
         {comments.map((c, cIdx) => (
           <div key={c.id} className="flex items-start gap-4">
@@ -281,7 +281,7 @@ const Comment = ({ blogId }) => {
                       {user?.primaryEmailAddress.emailAddress ===
                         c.createdBy && (
                         <PopoverContent className="w-32 p-1 space-y-1">
-                          {/* Edit and Delete Comments */}
+                          {/* Edit and Delete BlogComments */}
 
                           {/* Edit Comment */}
                           <Dialog
@@ -432,7 +432,7 @@ const Comment = ({ blogId }) => {
                   </Button>
                 </div>
 
-                {/* Show/Hide Replies Toggle */}
+                {/* Show/Hide BlogReplies Toggle */}
                 {c.replies.length > 0 && (
                   <Button
                     variant="ghost"
@@ -447,12 +447,12 @@ const Comment = ({ blogId }) => {
                     {showReplies[cIdx] ? (
                       <>
                         <MdOutlineKeyboardArrowUp size={20} />
-                        Hide Replies
+                        Hide BlogReplies
                       </>
                     ) : (
                       <>
                         <MdOutlineKeyboardArrowDown size={20} />
-                        Show Replies ({c.replies.length})
+                        Show BlogReplies ({c.replies.length})
                       </>
                     )}
                   </Button>
@@ -464,7 +464,10 @@ const Comment = ({ blogId }) => {
                 <div>
                   <div className="flex items-start gap-2 mt-4">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={user?.imageUrl ?? "/default-avatar.jpg"} draggable={false} />
+                      <AvatarImage
+                        src={user?.imageUrl ?? "/default-avatar.jpg"}
+                        draggable={false}
+                      />
                       <AvatarFallback>{user?.fullName?.[0]}</AvatarFallback>
                     </Avatar>
                     <input
@@ -496,7 +499,7 @@ const Comment = ({ blogId }) => {
                 </div>
               )}
 
-              {/* Replies */}
+              {/* BlogReplies */}
               {showReplies[cIdx] && c.replies.length > 0 && (
                 <div className="mt-5 space-y-4 pl-10">
                   <div className="mt-5 space-y-4 pl-2">
@@ -536,7 +539,7 @@ const Comment = ({ blogId }) => {
                                     {user?.primaryEmailAddress.emailAddress ===
                                       r.createdBy && (
                                       <PopoverContent className="w-32 p-1 space-y-1">
-                                        {/* Edit and Delete Replies */}
+                                        {/* Edit and Delete BlogReplies */}
 
                                         {/* Edit Reply */}
                                         <Dialog

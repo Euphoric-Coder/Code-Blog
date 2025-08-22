@@ -134,7 +134,7 @@ const OnThisPage = ({ htmlContent }) => {
                   >
                     {/* This should be the ID of your comments section */}
                     {/* Replace with the actual ID of your comments section */}
-                    View Blog Comments
+                    View Blog BlogComments
                   </a>
                 </li>
               </ul>

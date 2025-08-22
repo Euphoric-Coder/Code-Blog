@@ -1,4 +1,12 @@
-import { pgTable, varchar, uuid, boolean, jsonb, integer, timestamp } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  varchar,
+  uuid,
+  boolean,
+  jsonb,
+  integer,
+  timestamp,
+} from "drizzle-orm/pg-core";
 
 export const Users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -112,7 +120,7 @@ export const tutorialBookmarks = pgTable("tutorialBookmarks", {
   bookmarkedAt: varchar("bookmarkedAt").notNull(),
 });
 
-export const Comments = pgTable("comments", {
+export const BlogComments = pgTable("BlogComments", {
   id: uuid("id").defaultRandom().primaryKey(),
   blogId: varchar("blogId")
     .notNull()
@@ -124,11 +132,34 @@ export const Comments = pgTable("comments", {
   time: varchar("time").notNull(),
 });
 
-export const Replies = pgTable("replies", {
+export const BlogReplies = pgTable("BlogReplies", {
   id: uuid("id").defaultRandom().primaryKey(),
   commentId: uuid("commentId")
     .notNull()
-    .references(() => Comments.id),
+    .references(() => BlogComments.id),
+  name: varchar("name").notNull(),
+  createdBy: varchar("createdBy").notNull(),
+  text: varchar("text").notNull(),
+  time: varchar("time").notNull(),
+});
+
+export const TutorialComments = pgTable("TutorialComments", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  tutorialId: varchar("tutorialId")
+    .notNull()
+    .references(() => Tutorials.id),
+  // userId: uuid("userId").references(() => Users.id),
+  name: varchar("name").notNull(),
+  createdBy: varchar("createdBy").notNull(),
+  text: varchar("text").notNull(),
+  time: varchar("time").notNull(),
+});
+
+export const TutorialReplies = pgTable("TutorialReplies", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  commentId: uuid("commentId")
+    .notNull()
+    .references(() => TutorialComments.id),
   name: varchar("name").notNull(),
   createdBy: varchar("createdBy").notNull(),
   text: varchar("text").notNull(),
@@ -139,8 +170,8 @@ export const EditorImageUploads = pgTable("editorImageUploads", {
   id: uuid("id").defaultRandom().primaryKey(),
   url: varchar("url").notNull(),
   fileId: varchar("fileId").notNull(),
-  addedBy: varchar("addedBy").notNull(), 
-  inUse : boolean("inUse").notNull().default(false),
+  addedBy: varchar("addedBy").notNull(),
+  inUse: boolean("inUse").notNull().default(false),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 

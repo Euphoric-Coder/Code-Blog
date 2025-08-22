@@ -16,7 +16,7 @@ import { useUser } from "@clerk/nextjs";
 import { format } from "date-fns";
 import { processContent } from "@/lib/processContent";
 import BlogLoader from "@/components/Blog/BlogLoader";
-import Comment from "@/components/Blog/Comments";
+import Comment from "@/components/Blog/BlogComments";
 import Image from "next/image";
 import BlogShare from "@/components/Blog/BlogShare";
 import NotSignedIn from "@/components/Miscellaneous/NotSignedIn";
@@ -214,7 +214,8 @@ export default function Page() {
           </button>
 
           <div className="flex items-center gap-4">
-            {user?.primaryEmailAddress?.emailAddress === blogData?.createdBy && (
+            {user?.primaryEmailAddress?.emailAddress ===
+              blogData?.createdBy && (
               <button
                 onClick={console.log("working on it")}
                 className="group flex items-center bg-indigo-600/80 backdrop-blur-sm hover:bg-indigo-600 text-white px-4 py-2 rounded-full transition-all duration-300 border border-indigo-500/50 hover:border-indigo-400"
@@ -341,7 +342,7 @@ export default function Page() {
             </div>
           </div>
 
-          {/* Comments */}
+          {/* BlogComments */}
           {/* <CommentSection
             comments={blogData.comments || []}
             onAddComment={handleAddComment}
