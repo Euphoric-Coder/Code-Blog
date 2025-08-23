@@ -145,7 +145,7 @@ export const BlogReplies = pgTable("BlogReplies", {
 
 export const TutorialComments = pgTable("TutorialComments", {
   id: uuid("id").defaultRandom().primaryKey(),
-  tutorialId: varchar("tutorialId")
+  tutorialId: uuid("tutorialId")
     .notNull()
     .references(() => Tutorials.id),
   // userId: uuid("userId").references(() => Users.id),
