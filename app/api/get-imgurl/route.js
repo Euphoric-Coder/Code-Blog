@@ -13,8 +13,6 @@ export async function POST(req) {
       .from(Users)
       .where(eq(Users.email, email.trim()));
 
-    console.log("Image URL:", imageURL);
-
     if (imageURL.length === 0) {
       return NextResponse.json({ imgURL: null });
     }

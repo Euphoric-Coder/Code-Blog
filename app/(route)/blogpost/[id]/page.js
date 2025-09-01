@@ -16,7 +16,7 @@ import { useUser } from "@clerk/nextjs";
 import { format } from "date-fns";
 import { processContent } from "@/lib/processContent";
 import BlogLoader from "@/components/Blog/BlogLoader";
-import Comment from "@/components/Blog/BlogComments";
+import Comment from "@/components/Blog/Comments";
 import Image from "next/image";
 import BlogShare from "@/components/Blog/BlogShare";
 import NotSignedIn from "@/components/Miscellaneous/NotSignedIn";
