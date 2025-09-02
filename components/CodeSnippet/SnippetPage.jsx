@@ -1,23 +1,6 @@
-"use client";
-
-import React, { useState } from "react";
-import {
-  ArrowLeft,
-  Copy,
-  Download,
-  Share2,
-  Heart,
-  Eye,
-  User,
-  Calendar,
-  Tag,
-  Code2,
-  Check,
-  ExternalLink,
-  Bookmark,
-} from "lucide-react";
-import SnippetBlock from "./SnippetBlock";
-import { ModeToggle } from "../theme-btn";
+import React, { useState } from 'react';
+import { ArrowLeft, Copy, Download, Share2, Heart, Eye, User, Calendar, Tag, Code2, Check, ExternalLink, Bookmark } from 'lucide-react';
+import SnippetBlock from './SnippetBlock';
 
 export const CodeSnippetPage = () => {
   const [copied, setCopied] = useState(false);
@@ -27,15 +10,14 @@ export const CodeSnippetPage = () => {
   // Mock data - in real app this would come from props or API
   const snippet = {
     id: 1,
-    title: "React Custom Hook for API Calls",
-    description:
-      "A reusable custom hook for handling API requests with loading states and error handling.",
-    language: "TypeScript",
-    category: "Utilities",
-    subcategory: "React Hooks",
-    tags: ["React", "Hooks", "API", "TypeScript", "Custom Hook"],
-    author: "Alex Chen",
-    publishDate: "2024-04-17",
+    title: 'React Custom Hook for API Calls',
+    description: 'A reusable custom hook for handling API requests with loading states and error handling.',
+    language: 'TypeScript',
+    category: 'Utilities',
+    subcategory: 'React Hooks',
+    tags: ['React', 'Hooks', 'API', 'TypeScript', 'Custom Hook'],
+    author: 'Alex Chen',
+    publishDate: '2024-04-17',
     code: `import { useState, useEffect } from 'react';
 
 interface ApiResponse<T> {
@@ -110,7 +92,7 @@ export default useApi;
     downloads: 450,
     featured: true,
     trending: true,
-    content: `
+    htmlContent: `
       <h2>Overview</h2>
       <p>This custom React hook simplifies API calls by providing a clean interface for handling loading states, error management, and data fetching. It's designed to be reusable across your application and follows React best practices.</p>
       
@@ -173,7 +155,7 @@ const handleLoadUsers = () => {
         <li>Consider implementing retry logic for failed requests</li>
         <li>Use the refetch function for user-triggered data updates</li>
       </ul>
-    `,
+    `
   };
 
   const copyToClipboard = async () => {
@@ -182,16 +164,16 @@ const handleLoadUsers = () => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error("Failed to copy code:", err);
+      console.error('Failed to copy code:', err);
     }
   };
 
   const downloadCode = () => {
-    const blob = new Blob([snippet.code], { type: "text/plain" });
+    const blob = new Blob([snippet.code], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
-    a.download = `${snippet.title.toLowerCase().replace(/\s+/g, "-")}.${snippet.language.toLowerCase() === "typescript" ? "ts" : "js"}`;
+    a.download = `${snippet.title.toLowerCase().replace(/\s+/g, '-')}.${snippet.language.toLowerCase() === 'typescript' ? 'ts' : 'js'}`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -204,10 +186,10 @@ const handleLoadUsers = () => {
         await navigator.share({
           title: snippet.title,
           text: snippet.description,
-          url: window.location.href,
+          url: window.location.href
         });
       } catch (err) {
-        console.error("Error sharing:", err);
+        console.error('Error sharing:', err);
       }
     } else {
       // Fallback to copying URL
@@ -225,26 +207,20 @@ const handleLoadUsers = () => {
 
   const getLanguageColor = (language) => {
     const colors = {
-      TypeScript:
-        "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300",
-      JavaScript:
-        "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300",
-      Python:
-        "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",
-      CSS: "bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300",
-      Go: "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-300",
+      'TypeScript': 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
+      'JavaScript': 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300',
+      'Python': 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
+      'CSS': 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300',
+      'Go': 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-300'
     };
-    return (
-      colors[language] ||
-      "bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-300"
-    );
+    return colors[language] || 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-300';
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
     });
   };
 
@@ -252,7 +228,7 @@ const handleLoadUsers = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
       <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <button
               onClick={() => window.history.back()}
@@ -263,13 +239,12 @@ const handleLoadUsers = () => {
             </button>
 
             <div className="flex items-center space-x-3">
-                <ModeToggle />
               <button
                 onClick={toggleBookmark}
                 className={`p-2 rounded-lg transition-colors ${
                   bookmarked
-                    ? "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400"
-                    : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                    ? 'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400'
+                    : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
                 }`}
               >
                 <Bookmark className="h-5 w-5" />
@@ -286,10 +261,10 @@ const handleLoadUsers = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6 lg:space-y-8">
+          <div className="lg:col-span-3 space-y-6 lg:space-y-8">
             {/* Title and Description */}
             <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg p-8">
               <div className="space-y-4 lg:space-y-6">
@@ -305,17 +280,76 @@ const handleLoadUsers = () => {
                       Trending
                     </span>
                   )}
-                  <span
-                    className={`px-3 py-1 text-sm font-medium rounded-full ${getLanguageColor(snippet.language)}`}
-                  >
+                  <span className={`px-3 py-1 text-sm font-medium rounded-full ${getLanguageColor(snippet.language)}`}>
                     {snippet.language}
                   </span>
                 </div>
 
-                {/* Title */}
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white leading-tight">
-                  {snippet.title}
-                </h1>
+                {/* Title with Action Buttons */}
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white leading-tight">
+                    {snippet.title}
+                  </h1>
+                  
+                  {/* Action Buttons */}
+                  <div className="flex items-center space-x-2 flex-shrink-0">
+                    <button
+                      onClick={toggleLike}
+                      className={`p-2 rounded-lg transition-colors ${
+                        liked
+                          ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400'
+                          : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
+                      }`}
+                      title={liked ? 'Unlike' : 'Like'}
+                    >
+                      <Heart className={`h-4 w-4 ${liked ? 'fill-current' : ''}`} />
+                    </button>
+
+                    <button
+                      onClick={copyToClipboard}
+                      className={`p-2 rounded-lg transition-colors ${
+                        copied
+                          ? 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400'
+                          : 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/50'
+                      }`}
+                      title="Copy code"
+                    >
+                      {copied ? (
+                        <Check className="h-4 w-4" />
+                      ) : (
+                        <Copy className="h-4 w-4" />
+                      )}
+                    </button>
+
+                    <button
+                      onClick={downloadCode}
+                      className="p-2 bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400 rounded-lg hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors"
+                      title="Download code"
+                    >
+                      <Download className="h-4 w-4" />
+                    </button>
+
+                    <button
+                      onClick={toggleBookmark}
+                      className={`p-2 rounded-lg transition-colors ${
+                        bookmarked
+                          ? 'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400'
+                          : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
+                      }`}
+                      title={bookmarked ? 'Remove bookmark' : 'Bookmark'}
+                    >
+                      <Bookmark className={`h-4 w-4 ${bookmarked ? 'fill-current' : ''}`} />
+                    </button>
+
+                    <button
+                      onClick={shareSnippet}
+                      className="p-2 bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                      title="Share snippet"
+                    >
+                      <Share2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
 
                 {/* Description */}
                 <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
@@ -342,9 +376,9 @@ const handleLoadUsers = () => {
 
             {/* HTML Content */}
             <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg p-8">
-              <div
+              <div 
                 className="prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert max-w-none"
-                dangerouslySetInnerHTML={{ __html: snippet.content }}
+                dangerouslySetInnerHTML={{ __html: snippet.htmlContent }}
               />
             </div>
 
@@ -361,14 +395,13 @@ const handleLoadUsers = () => {
             </div>
           </div>
 
-          {/* Sidebar */}
-          <div className="space-y-6 order-first lg:order-last">
-            {/* Category and Tags */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg p-6">
+          {/* Sidebar - Classification */}
+          <div className="lg:col-span-1">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg p-6 sticky top-24">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Classification
               </h3>
-
+              
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
@@ -394,7 +427,7 @@ const handleLoadUsers = () => {
                   </label>
                   <div className="flex flex-wrap gap-2">
                     {snippet.tags.map((tag) => (
-                      <span
+                      <span 
                         key={tag}
                         className="inline-flex items-center px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded-md"
                       >
@@ -404,93 +437,6 @@ const handleLoadUsers = () => {
                     ))}
                   </div>
                 </div>
-              </div>
-            </div>
-
-            {/* Stats */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Statistics
-              </h3>
-
-              <div className="space-y-4">
-                <div className="flex items-center justify-between py-2">
-                  <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
-                    <Eye className="h-4 w-4" />
-                    <span>Views</span>
-                  </div>
-                  <span className="font-semibold text-gray-900 dark:text-white">
-                    {snippet.views.toLocaleString()}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between py-2">
-                  <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
-                    <Heart className="h-4 w-4" />
-                    <span>Likes</span>
-                  </div>
-                  <span className="font-semibold text-gray-900 dark:text-white">
-                    {snippet.likes.toLocaleString()}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between py-2">
-                  <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
-                    <Download className="h-4 w-4" />
-                    <span>Downloads</span>
-                  </div>
-                  <span className="font-semibold text-gray-900 dark:text-white">
-                    {snippet.downloads.toLocaleString()}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Actions - Mobile Sticky */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Actions
-              </h3>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3">
-                <button
-                  onClick={toggleLike}
-                  className={`w-full inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-colors ${
-                    liked
-                      ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300"
-                      : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-                  }`}
-                >
-                  <Heart
-                    className={`h-4 w-4 mr-2 ${liked ? "fill-current" : ""}`}
-                  />
-                  {liked ? "Liked" : "Like"}
-                </button>
-
-                <button
-                  onClick={copyToClipboard}
-                  className="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 rounded-lg font-medium hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors text-sm"
-                >
-                  {copied ? (
-                    <>
-                      <Check className="h-4 w-4 mr-2" />
-                      Copied!
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="h-4 w-4 mr-2" />
-                      Copy Code
-                    </>
-                  )}
-                </button>
-
-                <button
-                  onClick={downloadCode}
-                  className="w-full inline-flex items-center justify-center px-4 py-2 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300 rounded-lg font-medium hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors text-sm"
-                >
-                  <Download className="h-4 w-4 mr-2" />
-                  Download
-                </button>
               </div>
             </div>
           </div>
@@ -504,8 +450,8 @@ const handleLoadUsers = () => {
             onClick={copyToClipboard}
             className={`w-14 h-14 rounded-full shadow-lg transition-all duration-200 ${
               copied
-                ? "bg-green-500 text-white"
-                : "bg-blue-500 hover:bg-blue-600 text-white"
+                ? 'bg-green-500 text-white'
+                : 'bg-blue-500 hover:bg-blue-600 text-white'
             }`}
           >
             {copied ? (
@@ -514,18 +460,16 @@ const handleLoadUsers = () => {
               <Copy className="h-6 w-6 mx-auto" />
             )}
           </button>
-
+          
           <button
             onClick={toggleLike}
             className={`w-14 h-14 rounded-full shadow-lg transition-all duration-200 ${
               liked
-                ? "bg-red-500 text-white"
-                : "bg-gray-600 hover:bg-gray-700 text-white"
+                ? 'bg-red-500 text-white'
+                : 'bg-gray-600 hover:bg-gray-700 text-white'
             }`}
           >
-            <Heart
-              className={`h-6 w-6 mx-auto ${liked ? "fill-current" : ""}`}
-            />
+            <Heart className={`h-6 w-6 mx-auto ${liked ? 'fill-current' : ''}`} />
           </button>
         </div>
       </div>
