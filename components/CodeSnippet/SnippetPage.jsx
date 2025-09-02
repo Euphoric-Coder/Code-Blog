@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Copy, Download, Share2, Heart, Eye, User, Calendar, Tag, Code2, Check, ExternalLink, Bookmark } from 'lucide-react';
 import SnippetBlock from './SnippetBlock';
+import { ModeToggle } from '../theme-btn';
 
 export const CodeSnippetPage = () => {
   const [copied, setCopied] = useState(false);
@@ -10,14 +11,15 @@ export const CodeSnippetPage = () => {
   // Mock data - in real app this would come from props or API
   const snippet = {
     id: 1,
-    title: 'React Custom Hook for API Calls',
-    description: 'A reusable custom hook for handling API requests with loading states and error handling.',
-    language: 'TypeScript',
-    category: 'Utilities',
-    subcategory: 'React Hooks',
-    tags: ['React', 'Hooks', 'API', 'TypeScript', 'Custom Hook'],
-    author: 'Alex Chen',
-    publishDate: '2024-04-17',
+    title: "React Custom Hook for API Calls",
+    description:
+      "A reusable custom hook for handling API requests with loading states and error handling.",
+    language: "JavaScript",
+    category: "Utilities",
+    subcategory: "React Hooks",
+    tags: ["React", "Hooks", "API", "TypeScript", "Custom Hook"],
+    author: "Alex Chen",
+    publishDate: "2024-04-17",
     code: `import { useState, useEffect } from 'react';
 
 interface ApiResponse<T> {
@@ -155,7 +157,7 @@ const handleLoadUsers = () => {
         <li>Consider implementing retry logic for failed requests</li>
         <li>Use the refetch function for user-triggered data updates</li>
       </ul>
-    `
+    `,
   };
 
   const copyToClipboard = async () => {
@@ -239,6 +241,7 @@ const handleLoadUsers = () => {
             </button>
 
             <div className="flex items-center space-x-3">
+              <ModeToggle />
               <button
                 onClick={toggleBookmark}
                 className={`p-2 rounded-lg transition-colors ${
@@ -397,7 +400,7 @@ const handleLoadUsers = () => {
 
           {/* Sidebar - Classification */}
           <div className="lg:col-span-1">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg p-6 sticky top-24">
+            <div className="bg-white dark:bg-gray-800 rounded-3xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg p-6 sticky top-24">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Classification
               </h3>
@@ -407,7 +410,7 @@ const handleLoadUsers = () => {
                   <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
                     Category
                   </label>
-                  <span className="inline-block px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 text-sm font-medium rounded-lg">
+                  <span className="inline-block px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 text-sm font-medium rounded-3xl">
                     {snippet.category}
                   </span>
                 </div>
@@ -416,7 +419,7 @@ const handleLoadUsers = () => {
                   <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
                     Subcategory
                   </label>
-                  <span className="inline-block px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-medium rounded-lg">
+                  <span className="inline-block px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-medium rounded-3xl">
                     {snippet.subcategory}
                   </span>
                 </div>
