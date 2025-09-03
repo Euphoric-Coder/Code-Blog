@@ -360,7 +360,7 @@ const handleLoadUsers = () => {
                 </p>
 
                 {/* Meta Info */}
-                <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm text-gray-500 dark:text-gray-400">
+                <div className="md:flex flex-wrap grid grid-cols-2 items-center gap-4 sm:gap-6 text-sm text-gray-500 dark:text-gray-400">
                   <div className="flex items-center space-x-2">
                     <User className="h-4 w-4" />
                     <span className="font-medium">{snippet.author}</span>
@@ -372,6 +372,14 @@ const handleLoadUsers = () => {
                   <div className="flex items-center space-x-2">
                     <Eye className="h-4 w-4" />
                     <span>{snippet.views.toLocaleString()} views</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Heart className="h-4 w-4" />
+                    <span>{snippet.likes.toLocaleString()} views</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Download className="h-4 w-4" />
+                    <span>{snippet.downloads.toLocaleString()} downloads</span>
                   </div>
                 </div>
               </div>

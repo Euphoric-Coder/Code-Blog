@@ -212,3 +212,31 @@ export const CodeSnippet = pgTable("codeSnippets", {
   createdBy: varchar("createdBy").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
+
+export const snippetViews = pgTable("snippetViews", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  snippetId: uuid("snippetId")
+    .notNull()
+    .references(() => CodeSnippet.id, { onDelete: "cascade" }),
+  viewers: jsonb("viewers").default([]).notNull(), // example: [{ email: "a@b.com", viewedAt: "2024-06-27T12:00:00Z" }]
+  totalViews: varchar("totalViews").default(0).notNull(),
+});
+
+export const snippetLikes = pgTable("snippetLikes", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  snippetId: uuid("snippetId")
+    .notNull()
+    .references(() => CodeSnippet.id, { onDelete: "cascade" }),
+  likedBy: varchar("likedBy").notNull(),
+  likedAt: varchar("likedAt").notNull(),
+  totalLikes: varchar("totalLikes").default(0).notNull(),
+});
+
+export const snippetBookmarks = pgTable("snippetBookmarks", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  snippetId: uuid("snippetId")
+    .notNull()
+    .references(() => CodeSnippet.id, { onDelete: "cascade" }),
+  bookmarkedBy: varchar("bookmarkedBy").notNull(),
+  bookmarkedAt: varchar("bookmarkedAt").notNull(),
+});
