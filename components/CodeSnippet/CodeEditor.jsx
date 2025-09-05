@@ -4,21 +4,9 @@ import React, { useMemo, useRef, useState } from "react";
 import Editor from "@monaco-editor/react";
 import { FileText, Loader } from "lucide-react";
 
-/**
- * Props:
- * - languageId?: string        // e.g., "javascript"
- * - languageName?: string      // e.g., "JavaScript" (case-insensitive)
- * - value: string              // code string (controlled)
- * - onChange: (v: string) => void
- * - theme?: "vs-dark" | "light" | "hc-black"
- * - height?: string            // e.g., "420px"
- * - className?: string
- *
- * This component is independent of your Playground languages list.
- * It maps common ids -> monaco language + extension internally.
- */
 const LANGUAGE_META = {
   javascript: { monaco: "javascript", ext: "js" },
+  typescript: { monaco: "typescript", ext: "ts" },
   python: { monaco: "python", ext: "py" },
   java: { monaco: "java", ext: "java" },
   cpp: { monaco: "cpp", ext: "cpp" },
@@ -32,6 +20,7 @@ const LANGUAGE_META = {
 
 const NAME_TO_ID = {
   javascript: "javascript",
+  typescript: "typescript",
   python: "python",
   java: "java",
   "c++": "cpp",
