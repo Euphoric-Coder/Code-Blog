@@ -209,6 +209,8 @@ export const CodeSnippet = pgTable("codeSnippets", {
   language: varchar("language").notNull(),
   content: varchar("content").notNull(),
   code: varchar("code").notNull(),
+  views: integer("views").default(0),
+  likes: integer("likes").default(0),
   createdBy: varchar("createdBy").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
