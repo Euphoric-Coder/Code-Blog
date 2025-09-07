@@ -320,13 +320,6 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
               )}
             </div>
           </div>
-          <SnippetContentEditor
-            value={snippet?.content ?? ""}
-            onChange={(html) =>
-              setSnippet((prev) => ({ ...(prev ?? {}), content: html }))
-            }
-            placeholder="Write your snippet explanation here…"
-          />
           <CodeEditor
             languageName={metadata.language} // e.g., "JavaScript"
             value={snippet?.code ?? ""} // current code string
@@ -336,6 +329,13 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
             theme="vs-dark"
             height="520px"
             className="rounded-xl overflow-hidden"
+          />
+          <SnippetContentEditor
+            value={snippet?.content ?? ""}
+            onChange={(html) =>
+              setSnippet((prev) => ({ ...(prev ?? {}), content: html }))
+            }
+            placeholder="Write your snippet explanation here…"
           />
         </div>
       )}
