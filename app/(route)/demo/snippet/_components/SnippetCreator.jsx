@@ -37,6 +37,7 @@ import SnippetContentEditor from "@/components/CodeSnippet/SnippetEditor";
 import CodeEditor from "@/components/CodeSnippet/CodeEditor";
 import SnippetMetadata from "@/components/CodeSnippet/SnippetMetadata";
 import { snippetCategories, tutorialSubCategoriesList } from "@/lib/data";
+import SnippetBasicInfo from "@/components/CodeSnippet/SnippetBasicInfo";
 
 const defaultData = {
   metadata: {
@@ -344,7 +345,7 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
             <div className="lg:col-span-3 space-y-6">
               <div className="w-full max-w-6xl mt-10">
                 {initialData && (
-                  <SnippetMetadata
+                  <SnippetBasicInfo
                     initialData={
                       metadata || {
                         title: "",
