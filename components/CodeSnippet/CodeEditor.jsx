@@ -2,7 +2,7 @@
 
 import React, { useMemo, useRef, useState } from "react";
 import Editor from "@monaco-editor/react";
-import { FileText, Loader } from "lucide-react";
+import { Code2, Loader } from "lucide-react";
 
 const LANGUAGE_META = {
   javascript: { monaco: "javascript", ext: "js" },
@@ -44,11 +44,12 @@ const CodeEditor = ({
   const [ready, setReady] = useState(false);
   const editorRef = useRef(null);
 
+  // Resolve monaco language from props
   const resolvedId = useMemo(() => {
     if (languageId) return languageId;
     if (languageName && typeof languageName === "string") {
       const key = languageName.trim().toLowerCase();
-      return NAME_TO_ID[key] || key; // fallback to key if it already matches an id
+      return NAME_TO_ID[key] || key; // fallback to key
     }
     return "javascript";
   }, [languageId, languageName]);
@@ -61,23 +62,22 @@ const CodeEditor = ({
   };
 
   return (
-    <div className={`h-full flex flex-col ${className}`}>
+    <div
+      className={`bg-white dark:bg-gray-800 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg overflow-hidden ${className}`}
+    >
       {/* Header */}
-      <div className="bg-gray-50 dark:bg-gray-700 px-4 py-2 border-b border-gray-200 dark:border-gray-600 rounded-t-xl">
-        <div className="flex items-center space-x-2">
-          <FileText className="h-4 w-4 text-gray-600 dark:text-gray-400" />
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            main.{meta.ext}
-          </span>
-        </div>
+      <div className="bg-gray-50 dark:bg-gray-700 px-6 py-4 border-b border-gray-200 dark:border-gray-600 flex justify-end items-center">
+        <span className="px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-600 to-teal-500 text-white shadow-md">
+          {languageName}
+        </span>
       </div>
 
       {/* Editor */}
-      <div className="relative">
+      <div className="relative" style={{ height }}>
         {!ready && (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800 z-10 rounded-b-xl">
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800 z-10">
             <div className="text-center">
-              <Loader className="h-8 w-8 animate-spin text-indigo-600 mx-auto mb-2" />
+              <Loader className="h-8 w-8 animate-spin text-blue-600 mx-auto mb-2" />
               <p className="text-gray-600 dark:text-gray-400">
                 Loading editor...
               </p>
@@ -85,7 +85,7 @@ const CodeEditor = ({
           </div>
         )}
         <Editor
-          height={height}
+          height="100%"
           language={meta.monaco}
           theme={theme}
           value={value}

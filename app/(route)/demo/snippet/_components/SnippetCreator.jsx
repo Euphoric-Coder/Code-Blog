@@ -37,13 +37,14 @@ import FormBackgroundEffect from "@/components/Effect/FormBackgroundEffect";
 import { toast } from "sonner";
 import { db } from "@/lib/dbConfig";
 import { getISTDate } from "@/lib/utils";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { CodeSnippet } from "@/lib/schema";
 import SnippetContentEditor from "@/components/CodeSnippet/SnippetEditor";
 import CodeEditor from "@/components/CodeSnippet/CodeEditor";
 import SnippetMetadata from "@/components/CodeSnippet/SnippetMetadata";
 import { snippetCategories, tutorialSubCategoriesList } from "@/lib/data";
 import SnippetBasicInfo from "@/components/CodeSnippet/SnippetBasicInfo";
+import { ModeToggle } from "@/components/theme-btn";
 
 const defaultData = {
   metadata: {
@@ -82,6 +83,7 @@ const isDefaultLike = (data) => {
 
 const SnippetCreator = ({ editData = null, editing = false }) => {
   const { user } = useUser();
+  const router = useRouter();
   const LOCAL_STORAGE_KEY = useMemo(() => {
     return user?.id ? `codeSnippetCreatorData-${user.id}` : null;
   }, [user?.id]);
@@ -180,7 +182,7 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
   };
 
   const handleBackToDashboard = () => {
-    window.location.hash = "dashboard";
+    router.push("/dashboard");
   };
 
   const addSnippet = async () => {
@@ -284,7 +286,6 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
     }
   };
 
-  const editTutorial = async () => {};
 
   return (
     <div>
@@ -332,24 +333,25 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
 
               {/* Right Side - Actions */}
               <div className="flex items-center space-x-2 sm:space-x-3">
-                {/* Mobile-only save button */}
-                <button
-                  onClick={addSnippet}
-                  className="sm:hidden p-2 bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white rounded-lg transition-all duration-200 shadow-lg hover:shadow-blue-500/25"
-                  title="Save Snippet"
-                >
-                  <Save className="h-4 w-4" />
-                </button>
-
+                <ModeToggle />
                 {/* Tablet and Desktop buttons */}
                 <button
                   onClick={handleBackToDashboard}
-                  className="hidden sm:inline-flex px-3 lg:px-4 py-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 border border-blue-300 dark:border-gray-600 rounded-3xl hover:bg-blue-50 dark:hover:bg-gray-700 transition-all duration-200 text-sm lg:text-base font-medium"
+                  className="inline-flex items-center px-3 lg:px-4 py-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 border border-blue-300 dark:border-gray-600 rounded-3xl hover:bg-blue-50 dark:hover:bg-gray-700 transition-all duration-200 text-sm lg:text-base font-medium"
                 >
-                  <LayoutDashboard className="mr-2" />
-                  <span className="lg:inline hidden">Back to Dashboard</span>
-                  <span className="lg:hidden">Dashboard</span>
+                  <LayoutDashboard className="md:mr-2" />
+                  <span className="md:inline hidden">Dashboard</span>
                 </button>
+
+                {/* Mobile-only save button */}
+                <button
+                  onClick={addSnippet}
+                  className="sm:hidden p-2 bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white rounded-3xl transition-all duration-200 shadow-lg hover:shadow-blue-500/25"
+                  title="Save Snippet"
+                >
+                  <Save />
+                </button>
+
                 <button
                   onClick={addSnippet}
                   className="hidden sm:inline-flex items-center px-3 lg:px-4 py-2 bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white font-semibold rounded-3xl transition-all duration-200 shadow-lg hover:shadow-blue-500/25 text-sm lg:text-base"
@@ -365,10 +367,10 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
 
         {/* Main Content */}
         <div className=" mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 xl:grid-cols-4 space-y-10 xl:gap-8">
             {/* Main Content Area */}
             <div className="lg:col-span-3 space-y-6">
-              <div className="w-full max-w-6xl mt-10">
+              <div className="w-full mt-10">
                 {initialData && (
                   <SnippetBasicInfo
                     initialData={
@@ -392,11 +394,28 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
                   />
                 )}
               </div>
-              <div className="w-full mt-10 bg-[#e8f4ff]/60 dark:bg-[#1e2e44]/60 backdrop-blur-xl border border-blue-200 dark:border-blue-800 rounded-3xl shadow-2xl p-8 md:p-12">
-                <div className="mb-8 flex flex-col lg:flex-row space-y-4 lg:space-y-0 justify-between items-center">
-                  <h1 className="text-3xl font-extrabold text-blue-900 dark:text-blue-200">
-                    Creating Snippet: {metadata.title}
-                  </h1>
+              <div className="form-layout">
+                <FormBackgroundEffect />
+                <h1 className="text-3xl mb-4 font-extrabold text-blue-900 dark:text-blue-200">
+                  Code Snippet
+                </h1>
+                <CodeEditor
+                  languageName={metadata.language} // e.g., "JavaScript"
+                  value={snippet?.code ?? ""} // current code string
+                  onChange={(newCode) =>
+                    setSnippet((prev) => ({ ...(prev ?? {}), code: newCode }))
+                  }
+                  theme="vs-dark"
+                  height="520px"
+                  className="rounded-xl overflow-hidden"
+                />
+              </div>
+              <div className="form-layout">
+                <FormBackgroundEffect />
+                <h1 className="text-3xl mb-4 font-extrabold text-blue-900 dark:text-blue-200">
+                  Code Overview
+                </h1>
+                {/* <div className="mb-8 flex flex-col lg:flex-row space-y-4 lg:space-y-0 justify-between items-center">
                   <div className="flex gap-5">
                     <Button
                       onClick={() => setCurrentStep("metadata")}
@@ -422,17 +441,7 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
                       </Button>
                     )}
                   </div>
-                </div>
-                <CodeEditor
-                  languageName={metadata.language} // e.g., "JavaScript"
-                  value={snippet?.code ?? ""} // current code string
-                  onChange={(newCode) =>
-                    setSnippet((prev) => ({ ...(prev ?? {}), code: newCode }))
-                  }
-                  theme="vs-dark"
-                  height="520px"
-                  className="rounded-xl overflow-hidden"
-                />
+                </div> */}
                 <SnippetContentEditor
                   value={snippet?.content ?? ""}
                   onChange={(html) =>
@@ -444,8 +453,8 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
             </div>
 
             {/* Sidebar */}
-            <div className="lg:col-span-1">
-              <div className="p-6 sticky top-24">
+            <div className="xl:col-span-1">
+              <div className="sticky top-24">
                 {initialData && (
                   <SnippetMetadata
                     initialData={
