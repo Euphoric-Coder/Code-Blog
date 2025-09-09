@@ -364,7 +364,63 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
           </div>
         </div>
 
-        <div className="mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="w-full flex justify-center">
+          {pendingTutorial && (
+            <Alert className="max-w-4xl gap-6 mt-10 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 border border-yellow-400 dark:border-gray-600 shadow-md p-4 rounded-3xl flex items-center hover:shadow-lg transition-transform transform">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400" />
+                  <AlertTitle className="text-yellow-700 text-sm md:text-lg dark:text-yellow-300 font-bold">
+                    Pending Snippet
+                  </AlertTitle>
+                </div>
+                <div className="flex items-center gap-4">
+                  <AlertDescription className="w-full">
+                    <div
+                      className="rounded-xl border border-yellow-300 dark:border-yellow-700 bg-yellow-50 dark:bg-yellow-900/10 
+               px-4 py-3 text-sm sm:text-base text-justify leading-relaxed text-yellow-800 dark:text-yellow-200 
+               shadow-sm transition-all"
+                    >
+                      <p className="text-wrap break-words">
+                        You have an unfinished Snippet: &quot;
+                        <b className="font-semibold">
+                          {metadata.title === ""
+                            ? "Untitled"
+                            : `${metadata.title.slice(0, 50)}${
+                                metadata.title.length > 50 ? " ..." : ""
+                              }`}
+                        </b>
+                        &quot;. Would you like to continue?
+                      </p>
+                    </div>
+                  </AlertDescription>
+                  <div className="flex flex-col md:flex-row items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="accept hover:bg-green-300 hover:text-green-700 dark:hover:text-green-400 [&_svg]:size-6"
+                      onClick={() => setPendingTutorial(false)}
+                    >
+                      <CheckCircle className="" />
+                      Continue
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="del3 hover:bg-red-300 hover:text-red-500 [&_svg]:size-6"
+                      onClick={clearData}
+                    >
+                      <XCircle className="" />
+                      Dismiss
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </Alert>
+          )}
+        </div>
+
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 py-2">
           {/* grid changes based on breakpoints */}
           <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-1 gap-8">
             {/* Main Content Area */}
@@ -483,61 +539,3 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
 };
 
 export default SnippetCreator;
-
-{
-  /* <div>
-  {pendingTutorial && (
-    <Alert className="gap-6 mt-10 mb-8 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 border border-yellow-400 dark:border-gray-600 shadow-md p-4 rounded-3xl flex items-center hover:shadow-lg transition-transform transform">
-      <div>
-        <div className="flex items-center gap-2 mb-2">
-          <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400" />
-          <AlertTitle className="text-yellow-700 text-sm md:text-lg dark:text-yellow-300 font-bold">
-            Pending Snippet
-          </AlertTitle>
-        </div>
-        <div className="flex items-center gap-4">
-          <AlertDescription className="w-full">
-            <div
-              className="rounded-xl border border-yellow-300 dark:border-yellow-700 bg-yellow-50 dark:bg-yellow-900/10 
-               px-4 py-3 text-sm sm:text-base text-justify leading-relaxed text-yellow-800 dark:text-yellow-200 
-               shadow-sm transition-all"
-            >
-              <p className="text-wrap break-words">
-                You have an unfinished Snippet: &quot;
-                <b className="font-semibold">
-                  {metadata.title === ""
-                    ? "Untitled"
-                    : `${metadata.title.slice(0, 50)}${
-                        metadata.title.length > 50 ? " ..." : ""
-                      }`}
-                </b>
-                &quot;. Would you like to continue?
-              </p>
-            </div>
-          </AlertDescription>
-          <div className="flex flex-col md:flex-row items-center gap-2">
-            <Button
-              variant="outline"
-              size="lg"
-              className="accept hover:bg-green-300 hover:text-green-700 dark:hover:text-green-400 [&_svg]:size-6"
-              onClick={() => setPendingTutorial(false)}
-            >
-              <CheckCircle className="" />
-              Continue
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="del3 hover:bg-red-300 hover:text-red-500 [&_svg]:size-6"
-              onClick={clearData}
-            >
-              <XCircle className="" />
-              Dismiss
-            </Button>
-          </div>
-        </div>
-      </div>
-    </Alert>
-  )}
-</div> */
-}
