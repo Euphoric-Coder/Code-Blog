@@ -33,6 +33,7 @@ import { redirect } from "next/navigation";
 import SnippetMetadata from "./SnippetMetadata";
 import CodeEditor from "./CodeEditor";
 import SnippetContentEditor from "./SnippetEditor";
+import { CodeSnippet } from "@/lib/schema";
 
 const defaultData = {
   metadata: {
@@ -153,60 +154,87 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
     console.log("Snippet data fully reset.");
   };
 
-  const saveTutorial = async () => {
+  const addSnippet = async () => {
     try {
-      toast.message("Saving metadata...");
-      console.log("Saving metadata...");
-      console.log(metadata);
-      console.log(snippet);
-      // Inserts the metadata into the DB
-      //   const result = await db
-      //     .insert(Tutorials)
-      //     .values({
-      //       title: metadata.title,
-      //       coverImage: metadata.coverImage?.url || metadata.coverImage,
-      //       imageId: metadata.imageId,
-      //       description: metadata.description,
-      //       category: metadata.category,
-      //       subCategories: metadata.subcategory,
-      //       tags: metadata.tags,
-      //       content: sections,
-      //       author: user?.fullName ?? "Anonymous",
-      //       date: getISTDate(),
-      //       createdBy: user?.primaryEmailAddress?.emailAddress,
-      //     })
-      //     .returning({ insertedId: Tutorials.id });
-      //   if (result) {
-      //     toast.success("Snippet saved successfully!");
-      //     // Redirects to the Snippet Page
-      //     setTimeout(() => {
-      //       redirect(`/tutorialpost/${result.insertedId}`);
-      //     }, 4000);
-      //     clearData();
-      //   }
+      console.log({
+        title: metadata.title,
+        description: metadata.description,
+        category: metadata.category,
+        subcategory: metadata.subcategory,
+        tags: metadata.tags,
+        language: metadata.language,
+        content: snippet.content,
+        code: snippet.code,
+        createdBy: user?.primaryEmailAddress?.emailAddress,
+      });
+      const result = await db
+        .insert(CodeSnippet)
+        .values({
+          title: metadata.title,
+          description: metadata.description,
+          category: metadata.category,
+          subcategory: metadata.subcategory,
+          tags: metadata.tags,
+          language: metadata.language,
+          content: snippet.content,
+          code: snippet.code,
+          createdBy: user?.primaryEmailAddress?.emailAddress,
+        })
+        .returning({ insertedId: CodeSnippet.id });
+      if (result) {
+        toast.success("Snippet saved successfully!");
+        // Redirects to the Snippet Page
+        // setTimeout(() => {
+        //   redirect(`/tutorialpost/${result.insertedId}`);
+        // }, 4000);
+        clearData();
+      }
     } catch (error) {
       toast.error("Some Error occurred!", error);
     }
-
-    // for Demo Purpose
-    // console.log({
-    //   title: metadata.title,
-    //   coverImage: metadata.coverImage,
-    //   imageId: metadata.imageId,
-    //   description: metadata.description,
-    //   category: metadata.category,
-    //   subCategories: metadata.subcategory,
-    //   tags: metadata.tags,
-    //   content: sections,
-    //   author: user?.fullName ?? "Anonymous",
-    //   date: getISTDate(),
-    //   createdBy: user?.primaryEmailAddress?.emailAddress,
-    // });
   };
 
-  const editTutorial = async () => {
-    
+  const editSnippet = async () => {
+    try {
+      console.log({
+        title: metadata.title,
+        description: metadata.description,
+        category: metadata.category,
+        subcategory: metadata.subcategory,
+        tags: metadata.tags,
+        language: metadata.language,
+        content: snippet.content,
+        code: snippet.code,
+        createdBy: user?.primaryEmailAddress?.emailAddress,
+      });
+      const result = await db
+        .insert(CodeSnippet)
+        .values({
+          title: metadata.title,
+          description: metadata.description,
+          category: metadata.category,
+          subcategory: metadata.subcategory,
+          tags: metadata.tags,
+          language: metadata.language,
+          content: snippet.content,
+          code: snippet.code,
+          createdBy: user?.primaryEmailAddress?.emailAddress,
+        })
+        .returning({ insertedId: CodeSnippet.id });
+      if (result) {
+        toast.success("Snippet saved successfully!");
+        // Redirects to the Snippet Page
+        // setTimeout(() => {
+        //   redirect(`/tutorialpost/${result.insertedId}`);
+        // }, 4000);
+        clearData();
+      }
+    } catch (error) {
+      toast.error("Some Error occurred!", error);
+    }
   };
+
+  const editTutorial = async () => {};
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-tr from-[#f6fbff] to-[#ffffff] dark:from-[#0b1625] dark:to-[#112030] transition-colors duration-500 flex flex-col items-center justify-center px-4 py-10">
@@ -303,7 +331,7 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
               </Button>
               {!editing ? (
                 <Button
-                  onClick={saveTutorial}
+                  onClick={addSnippet}
                   className="btn9 flex [&_svg]:size-6"
                 >
                   <Save className="text-white" />

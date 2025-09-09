@@ -26,6 +26,8 @@ const SnippetMetadata = ({
   onComplete,
   onUpdateMetadata,
   editing = false,
+  errors,
+  setErrors,
 }) => {
   // Initialize metadata from initialData
   useEffect(() => {
@@ -33,7 +35,6 @@ const SnippetMetadata = ({
   }, [initialData]);
 
   const [data, setData] = useState(initialData);
-  const [errors, setErrors] = useState({});
   const [tag, setTag] = useState("");
 
   const languages = snippetCategories.map((category) => category.name);
