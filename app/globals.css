@@ -180,6 +180,10 @@
   @apply border-[3px] border-blue-500 dark:border-blue-400 p-5 rounded-[20px] bg-gradient-to-b from-cyan-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 shadow-xl relative overflow-hidden
 }
 
+.form-layout-code {
+  @apply border-[3px] border-blue-500 dark:border-blue-400 rounded-[20px] bg-gradient-to-b from-cyan-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 shadow-xl relative overflow-hidden
+}
+
 .tutorial-section {
   @apply border-[3px] p-5 bg-gradient-to-b from-cyan-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 relative overflow-hidden
 }

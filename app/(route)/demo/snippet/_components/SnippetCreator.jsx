@@ -286,7 +286,6 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
     }
   };
 
-
   return (
     <div>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -397,51 +396,35 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
               <div className="form-layout">
                 <FormBackgroundEffect />
                 <h1 className="text-3xl mb-4 font-extrabold text-blue-900 dark:text-blue-200">
-                  Code Snippet
-                </h1>
-                <CodeEditor
-                  languageName={metadata.language} // e.g., "JavaScript"
-                  value={snippet?.code ?? ""} // current code string
-                  onChange={(newCode) =>
-                    setSnippet((prev) => ({ ...(prev ?? {}), code: newCode }))
-                  }
-                  theme="vs-dark"
-                  height="520px"
-                  className="rounded-xl overflow-hidden"
-                />
-              </div>
-              <div className="form-layout">
-                <FormBackgroundEffect />
-                <h1 className="text-3xl mb-4 font-extrabold text-blue-900 dark:text-blue-200">
                   Code Overview
                 </h1>
                 {/* <div className="mb-8 flex flex-col lg:flex-row space-y-4 lg:space-y-0 justify-between items-center">
                   <div className="flex gap-5">
+                  <Button
+                  onClick={() => setCurrentStep("metadata")}
+                  className="btn8 hover:bg-purple-500"
+                  >
+                  Back to Metadata
+                  </Button>
+                  {!editing ? (
                     <Button
-                      onClick={() => setCurrentStep("metadata")}
-                      className="btn8 hover:bg-purple-500"
+                    onClick={addSnippet}
+                    className="btn9 flex [&_svg]:size-6"
                     >
-                      Back to Metadata
+                    <Save className="text-white" />
+                    Save Snippet
                     </Button>
-                    {!editing ? (
-                      <Button
-                        onClick={addSnippet}
-                        className="btn9 flex [&_svg]:size-6"
-                      >
-                        <Save className="text-white" />
-                        Save Snippet
-                      </Button>
                     ) : (
-                      <Button
+                        <Button
                         onClick={editTutorial}
                         className="btn9 flex [&_svg]:size-6"
-                      >
+                        >
                         <Edit className="text-white" />
                         Update Snippet
-                      </Button>
-                    )}
-                  </div>
-                </div> */}
+                        </Button>
+                        )}
+                        </div>
+                        </div> */}
                 <SnippetContentEditor
                   value={snippet?.content ?? ""}
                   onChange={(html) =>
@@ -450,6 +433,16 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
                   placeholder="Write your snippet explanation here…"
                 />
               </div>
+              <CodeEditor
+                languageName={metadata.language} // e.g., "JavaScript"
+                value={snippet?.code ?? ""} // current code string
+                onChange={(newCode) =>
+                  setSnippet((prev) => ({ ...(prev ?? {}), code: newCode }))
+                }
+                theme="vs-dark"
+                height="520px"
+                className="rounded-xl overflow-hidden"
+              />
             </div>
 
             {/* Sidebar */}

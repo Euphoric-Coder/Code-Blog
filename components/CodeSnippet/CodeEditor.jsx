@@ -3,6 +3,7 @@
 import React, { useMemo, useRef, useState } from "react";
 import Editor from "@monaco-editor/react";
 import { Code2, Loader } from "lucide-react";
+import FormBackgroundEffect from "../Effect/FormBackgroundEffect";
 
 const LANGUAGE_META = {
   javascript: { monaco: "javascript", ext: "js" },
@@ -62,12 +63,14 @@ const CodeEditor = ({
   };
 
   return (
-    <div
-      className={`bg-white dark:bg-gray-800 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg overflow-hidden ${className}`}
-    >
+    <div className={"form-layout-code"}>
+      <FormBackgroundEffect />
       {/* Header */}
-      <div className="bg-gray-50 dark:bg-gray-700 px-6 py-4 border-b border-gray-200 dark:border-gray-600 flex justify-end items-center">
-        <span className="px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-600 to-teal-500 text-white shadow-md">
+      <div className="bg-gray-50 dark:bg-gray-700 px-6 py-4 border-b border-gray-200 dark:border-gray-600 flex justify-between items-center">
+        <h1 className="text-lg md:text-3xl font-extrabold text-blue-900 dark:text-blue-200">
+          Code Snippet
+        </h1>
+        <span className="px-3 py-1 rounded-full text-md font-semibold bg-gradient-to-r from-blue-600 to-teal-500 text-white shadow-md">
           {languageName}
         </span>
       </div>
