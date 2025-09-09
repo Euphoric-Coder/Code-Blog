@@ -545,8 +545,8 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
             {/* Center - Title */}
             <div className="flex-1 text-center px-2 sm:px-4">
               <h1 className="text-sm sm:text-base lg:text-lg font-bold bg-gradient-to-r from-blue-700 via-teal-600 to-blue-700 bg-clip-text text-transparent truncate">
-                <span className="hidden md:inline">Creating Snippet: </span>
-                <span className="md:hidden">Snippet: </span>
+                <span className="hidden md:inline">Creating Tutorial: </span>
+                <span className="md:hidden">Tutorial: </span>
                 <HoverCard>
                   {tutorial.title.length > limit ? (
                     <>
