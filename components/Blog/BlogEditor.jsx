@@ -53,13 +53,16 @@ import { v4 as uuid } from "uuid";
 import {
   AlertCircle,
   Archive,
+  ArrowLeft,
   CheckCircle,
   ChevronDownIcon,
   Copy,
   ImageIcon,
+  LayoutDashboard,
   PenBox,
   PencilIcon,
   PlusCircle,
+  Save,
   Send,
   Trash,
   Trash2,
@@ -94,6 +97,12 @@ import ImageUpload from "../ImageUpload";
 import NextImage from "next/image";
 import CodeBlockComponent from "./EditorCodeBlock";
 import ImageKit from "imagekit-javascript";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "../ui/hover-card";
+import { ModeToggle } from "../theme-btn";
 
 const MenuBar = ({ editor }) => {
   const imageInputRef = useRef(null);
@@ -708,8 +717,19 @@ export default function BlogEditor({
   // Generate a unique key for current blog's pending content
   const storageKey = `pendingBlogData-${user?.id}`;
 
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
-    if(!editor) return;
+    const checkScreen = () => setIsMobile(window.innerWidth <= 640); // Tailwind "sm"
+    checkScreen();
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
+
+  const limit = isMobile ? 11 : 30;
+
+  useEffect(() => {
+    if (!editor) return;
 
     const storedBlogData = JSON.parse(localStorage.getItem(storageKey) || "{}");
     if (
@@ -1129,8 +1149,88 @@ export default function BlogEditor({
     handleInputChange("tags", (prev) => prev.filter((t) => t !== tagToRemove));
   };
 
+  const handleBack = () => {
+    window.history.back();
+  };
+
+  const handleBackToDashboard = () => {
+    router.push("/dashboard");
+  };
+
   return (
-    <div className="p-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Dedicated Navigation Bar */}
+      <div className="bg-gradient-to-r from-blue-50 via-white to-teal-50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 border-b border-blue-200/50 dark:border-gray-700 sticky top-0 z-50 backdrop-blur-sm">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 lg:h-20">
+            {/* Left Side - Navigation */}
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <button
+                onClick={handleBack}
+                className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors p-2 sm:p-0 font-medium"
+              >
+                <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Back</span>
+              </button>
+            </div>
+
+            {/* Center - Title */}
+            <div className="flex-1 text-center px-2 sm:px-4">
+              <h1 className="text-sm sm:text-base lg:text-lg font-bold bg-gradient-to-r from-blue-700 via-teal-600 to-blue-700 bg-clip-text text-transparent truncate">
+                <span className="hidden md:inline">Creating Snippet: </span>
+                <span className="md:hidden">Snippet: </span>
+                <HoverCard>
+                  {title.length > limit ? (
+                    <>
+                      <HoverCardTrigger asChild>
+                        <span className="cursor-pointer">
+                          {title.slice(0, limit)}...
+                        </span>
+                      </HoverCardTrigger>
+                      <HoverCardContent className="max-w-xs break-words whitespace-normal p-2">
+                        {title}
+                      </HoverCardContent>
+                    </>
+                  ) : (
+                    <span>{title === "" ? "Untitled" : title}</span>
+                  )}
+                </HoverCard>
+              </h1>
+            </div>
+
+            {/* Right Side - Actions */}
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <ModeToggle />
+              {/* Tablet and Desktop buttons */}
+              <button
+                onClick={handleBackToDashboard}
+                className="inline-flex items-center px-3 lg:px-4 py-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 border border-blue-300 dark:border-gray-600 rounded-3xl hover:bg-blue-50 dark:hover:bg-gray-700 transition-all duration-200 text-sm lg:text-base font-medium"
+              >
+                <LayoutDashboard className="md:mr-2" />
+                <span className="md:inline hidden">Dashboard</span>
+              </button>
+
+              {/* Mobile-only save button */}
+              <button
+                onClick={AddBlog}
+                className="sm:hidden p-2 bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white rounded-3xl transition-all duration-200 shadow-lg hover:shadow-blue-500/25"
+                title="Save Snippet"
+              >
+                <Save />
+              </button>
+
+              <button
+                onClick={AddBlog}
+                className="hidden sm:inline-flex items-center px-3 lg:px-4 py-2 bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white font-semibold rounded-3xl transition-all duration-200 shadow-lg hover:shadow-blue-500/25 text-sm lg:text-base"
+              >
+                <Save className="mr-1 lg:mr-2" />
+                <span className="hidden lg:inline">Save Snippet</span>
+                <span className="lg:hidden">Save</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       {/* Pending Expense Alert */}
       {unfinishedBlog && !editing && (
         <div className="container mx-auto justify-center">
@@ -1193,338 +1293,346 @@ export default function BlogEditor({
         </div>
       )}
 
-      <div className="mt-10 w-full bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-[#111827] dark:via-[#0f172a] dark:to-[#1e1b4b] rounded-2xl p-6 shadow-md mb-8 transition-all duration-300">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          {/* Title & subtitle */}
-          <div>
-            <h1 className="text-4xl p-1 font-extrabold tracking-tight bg-gradient-to-r from-blue-600 via-cyan-400 to-purple-500 bg-clip-text text-transparent">
-              {editing ? "Edit Your Blog" : "Create a New Blog"}
-            </h1>
-            <p className="mt-1 text-sm text-gray-700 dark:text-gray-300 max-w-lg">
-              Start writing your thoughts, stories, or tutorials. This is your
-              creative space.
-            </p>
-            <p className="text-xs mt-1 italic text-blue-500 dark:text-cyan-400">
-              &quot;Writing is the painting of the voice&quot;
-            </p>
-          </div>
+      <div className="p-6">
+        <div className="mt-10 w-full bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-[#111827] dark:via-[#0f172a] dark:to-[#1e1b4b] rounded-2xl p-6 shadow-md mb-8 transition-all duration-300">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            {/* Title & subtitle */}
+            <div>
+              <h1 className="text-4xl p-1 font-extrabold tracking-tight bg-gradient-to-r from-blue-600 via-cyan-400 to-purple-500 bg-clip-text text-transparent">
+                {editing ? "Edit Your Blog" : "Create a New Blog"}
+              </h1>
+              <p className="mt-1 text-sm text-gray-700 dark:text-gray-300 max-w-lg">
+                Start writing your thoughts, stories, or tutorials. This is your
+                creative space.
+              </p>
+              <p className="text-xs mt-1 italic text-blue-500 dark:text-cyan-400">
+                &quot;Writing is the painting of the voice&quot;
+              </p>
+            </div>
 
-          {/* Action buttons */}
-          <div className="flex flex-wrap gap-3">
-            <button
-              // onClick={handleClear}
-              className="px-4 py-2 flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-[#1b1b1b] border border-gray-300 dark:border-gray-700 rounded-xl shadow-sm hover:bg-gray-200 dark:hover:bg-[#2a2a2a] transition-all"
-              onClick={() => {
-                clearData;
-              }}
-            >
-              <Trash2 />
-              Clear
-            </button>
-            {editing ? (
-              <Button
-                onClick={EditBlog}
-                className="px-5 py-2 flex items-center gap-2 text-sm font-bold text-white bg-gradient-to-r from-blue-500 via-cyan-500 to-purple-600 dark:from-blue-600 dark:via-purple-700 dark:to-pink-600 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform"
+            {/* Action buttons */}
+            <div className="flex flex-wrap gap-3">
+              <button
+                // onClick={handleClear}
+                className="px-4 py-2 flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-[#1b1b1b] border border-gray-300 dark:border-gray-700 rounded-xl shadow-sm hover:bg-gray-200 dark:hover:bg-[#2a2a2a] transition-all"
+                onClick={() => {
+                  clearData;
+                }}
               >
-                <PenBox />
-                Edit Blog
-              </Button>
-            ) : (
-              <Button
-                onClick={AddBlog}
-                className="px-5 py-2 flex items-center gap-2 text-sm font-bold text-white bg-gradient-to-r from-blue-500 via-cyan-500 to-purple-600 dark:from-blue-600 dark:via-purple-700 dark:to-pink-600 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform"
-              >
-                <Send />
-                Submit Blog
-              </Button>
-            )}
+                <Trash2 />
+                Clear
+              </button>
+              {editing ? (
+                <Button
+                  onClick={EditBlog}
+                  className="px-5 py-2 flex items-center gap-2 text-sm font-bold text-white bg-gradient-to-r from-blue-500 via-cyan-500 to-purple-600 dark:from-blue-600 dark:via-purple-700 dark:to-pink-600 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform"
+                >
+                  <PenBox />
+                  Edit Blog
+                </Button>
+              ) : (
+                <Button
+                  onClick={AddBlog}
+                  className="px-5 py-2 flex items-center gap-2 text-sm font-bold text-white bg-gradient-to-r from-blue-500 via-cyan-500 to-purple-600 dark:from-blue-600 dark:via-purple-700 dark:to-pink-600 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform"
+                >
+                  <Send />
+                  Submit Blog
+                </Button>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-      <div>
-        <Label
-          htmlFor="blog-title"
-          className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
-        >
-          Blog Title
-        </Label>
-        <Input
-          type="text"
-          id="blog-title"
-          placeholder="Blog Title"
-          className="mt-3 mb-4 input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
-          value={title}
-          onChange={(e) => {
-            setTitle(e.target.value);
-            handleInputChange("title", e.target.value);
-          }}
-        />
-      </div>
-      <div>
-        <Label
-          htmlFor="blog-description"
-          className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
-        >
-          Blog Description
-        </Label>
-        <Textarea
-          type="text"
-          id="blog-description"
-          placeholder="Enter a brief description of your blog..."
-          className="mt-3 mb-4 input-field h-[90px] focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
-          value={description}
-          onChange={(e) => {
-            setDescription(e.target.value);
-            handleInputChange("description", e.target.value);
-          }}
-        />
-      </div>
-
-      {editCoverImage ? (
-        <div className="mb-6">
+        <div>
           <Label
-            htmlFor="blog-cover-image"
+            htmlFor="blog-title"
             className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
           >
-            Blog Cover Image
+            Blog Title
           </Label>
-          <div className="relative flex flex-col items-center gap-6 mt-4 p-6 border-2 border-dashed border-blue-300 rounded-2xl bg-gradient-to-br from-cyan-50 to-indigo-100 shadow-lg hover:shadow-xl transition-all duration-300">
-            {/* Image Block */}
-            <div className="flex-1 max-w-md overflow-hidden rounded-xl shadow-md transition-transform duration-300 hover:scale-105">
-              <NextImage
-                src={editBlogCoverImageURL}
-                alt="Blog Cover"
-                width={500}
-                height={500}
-                className="w-full h-[300px] object-cover rounded-xl"
-                draggable={false}
-              />
-            </div>
+          <Input
+            type="text"
+            id="blog-title"
+            placeholder="Blog Title"
+            className="mt-3 mb-4 input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
+            value={title}
+            onChange={(e) => {
+              setTitle(e.target.value);
+              handleInputChange("title", e.target.value);
+            }}
+          />
+        </div>
+        <div>
+          <Label
+            htmlFor="blog-description"
+            className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
+          >
+            Blog Description
+          </Label>
+          <Textarea
+            type="text"
+            id="blog-description"
+            placeholder="Enter a brief description of your blog..."
+            className="mt-3 mb-4 input-field h-[90px] focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
+            value={description}
+            onChange={(e) => {
+              setDescription(e.target.value);
+              handleInputChange("description", e.target.value);
+            }}
+          />
+        </div>
 
-            {/* Info and Actions - stacked below image for better alignment */}
-            <div className="flex flex-col gap-3 justify-center items-center w-full md:w-auto md:items-start text-center md:text-left">
-              <h3 className="text-lg font-bold text-gray-800 dark:text-white">
-                Cover Image Uploaded
-              </h3>
-              <Button
-                onClick={() => {
-                  setEditCoverImage(false);
-                }}
-                className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white font-medium px-5 py-2 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300"
-              >
-                Reupload Image
-              </Button>
+        {editCoverImage ? (
+          <div className="mb-6">
+            <Label
+              htmlFor="blog-cover-image"
+              className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
+            >
+              Blog Cover Image
+            </Label>
+            <div className="relative flex flex-col items-center gap-6 mt-4 p-6 border-2 border-dashed border-blue-300 rounded-2xl bg-gradient-to-br from-cyan-50 to-indigo-100 shadow-lg hover:shadow-xl transition-all duration-300">
+              {/* Image Block */}
+              <div className="flex-1 max-w-md overflow-hidden rounded-xl shadow-md transition-transform duration-300 hover:scale-105">
+                <NextImage
+                  src={editBlogCoverImageURL}
+                  alt="Blog Cover"
+                  width={500}
+                  height={500}
+                  className="w-full h-[300px] object-cover rounded-xl"
+                  draggable={false}
+                />
+              </div>
+
+              {/* Info and Actions - stacked below image for better alignment */}
+              <div className="flex flex-col gap-3 justify-center items-center w-full md:w-auto md:items-start text-center md:text-left">
+                <h3 className="text-lg font-bold text-gray-800 dark:text-white">
+                  Cover Image Uploaded
+                </h3>
+                <Button
+                  onClick={() => {
+                    setEditCoverImage(false);
+                  }}
+                  className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white font-medium px-5 py-2 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300"
+                >
+                  Reupload Image
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      ) : (
-        <ImageUpload
-          uploadData={uploadData}
-          setUploadData={setUploadData}
-          fileId={fileId}
-          setFileId={setFileId}
-          handleInputChange={handleInputChange}
-        />
-      )}
+        ) : (
+          <ImageUpload
+            uploadData={uploadData}
+            setUploadData={setUploadData}
+            fileId={fileId}
+            setFileId={setFileId}
+            handleInputChange={handleInputChange}
+          />
+        )}
 
-      {/* Categories  */}
-      <div className="mt-1 space-y-4 mb-10">
-        <Label
-          htmlFor="blog-category"
-          className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
-        >
-          Blog Category
-        </Label>
-        <Select
-          value={category.toLowerCase()}
-          onValueChange={(e) => {
-            setCategory(e);
-            setSelectedSubCategories([]);
-            handleInputChange("category", e); // <- Add this
-            handleInputChange("subcategories", []); // Reset subcategories too
-          }}
-        >
-          <SelectTrigger
-            id="blog-category"
-            className="blog-select-field ring-0 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+        {/* Categories  */}
+        <div className="mt-1 space-y-4 mb-10">
+          <Label
+            htmlFor="blog-category"
+            className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
           >
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent className="blog-select-content mt-2">
-            <ScrollArea className="max-h-60 overflow-auto">
-              {blogCategories.map((category, index) => (
-                <SelectItem
-                  key={index}
-                  value={category.toLowerCase()}
-                  className="blog-select-item"
-                >
-                  {category}
-                </SelectItem>
-              ))}
-            </ScrollArea>
-          </SelectContent>
-        </Select>
+            Blog Category
+          </Label>
+          <Select
+            value={category.toLowerCase()}
+            onValueChange={(e) => {
+              setCategory(e);
+              setSelectedSubCategories([]);
+              handleInputChange("category", e); // <- Add this
+              handleInputChange("subcategories", []); // Reset subcategories too
+            }}
+          >
+            <SelectTrigger
+              id="blog-category"
+              className="blog-select-field ring-0 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="blog-select-content mt-2">
+              <ScrollArea className="max-h-60 overflow-auto">
+                {blogCategories.map((category, index) => (
+                  <SelectItem
+                    key={index}
+                    value={category.toLowerCase()}
+                    className="blog-select-item"
+                  >
+                    {category}
+                  </SelectItem>
+                ))}
+              </ScrollArea>
+            </SelectContent>
+          </Select>
 
-        {/* Sub-Categories (Only Show When Category is Selected) */}
-        {category && blogSubCategoriesList[category.toLowerCase()] && (
-          <div
-            className="relative max-h-[200px] mt-2 overflow-y-auto 
+          {/* Sub-Categories (Only Show When Category is Selected) */}
+          {category && blogSubCategoriesList[category.toLowerCase()] && (
+            <div
+              className="relative max-h-[200px] mt-2 overflow-y-auto 
         p-3 shadow-sm rounded-xl 
         bg-gradient-to-r from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-900 border-[2px]
         border-blue-500 dark:border-blue-900 transition-all"
-          >
-            <div className="flex flex-col md:flex-row items-center justify-between">
-              {/* Title & Selected Badge */}
-              <div className="flex items-center gap-2">
-                <label className="blog-text1">
-                  Sub-Categories (
-                  {
-                    new Set(blogSubCategoriesList[category.toLowerCase()] || [])
-                      .size
-                  }
-                  )
-                </label>
+            >
+              <div className="flex flex-col md:flex-row items-center justify-between">
+                {/* Title & Selected Badge */}
+                <div className="flex items-center gap-2">
+                  <label className="blog-text1">
+                    Sub-Categories (
+                    {
+                      new Set(
+                        blogSubCategoriesList[category.toLowerCase()] || []
+                      ).size
+                    }
+                    )
+                  </label>
 
-                {/* Show Selected Count Badge */}
-                {selectedCount > 0 && (
-                  <Badge className="border-0 bg-gradient-to-r from-green-400 to-green-600 text-white px-2 py-1 rounded-full text-xs dark:from-green-500 dark:to-green-700 ">
-                    Selected: {selectedCount}
-                  </Badge>
-                )}
+                  {/* Show Selected Count Badge */}
+                  {selectedCount > 0 && (
+                    <Badge className="border-0 bg-gradient-to-r from-green-400 to-green-600 text-white px-2 py-1 rounded-full text-xs dark:from-green-500 dark:to-green-700 ">
+                      Selected: {selectedCount}
+                    </Badge>
+                  )}
+                </div>
+                <div>
+                  {/* Clear Button */}
+                  {selectedCount > 0 && (
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setSelectedSubCategories([]);
+                        handleInputChange("subcategories", []); // <- Clear in localStorage too
+                      }}
+                      className="text-sm rounded-full text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-500 dark:border-gray-300"
+                      size="sm"
+                    >
+                      Clear Selection
+                    </Button>
+                  )}
+                </div>
               </div>
-              <div>
-                {/* Clear Button */}
-                {selectedCount > 0 && (
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setSelectedSubCategories([]);
-                      handleInputChange("subcategories", []); // <- Clear in localStorage too
-                    }}
-                    className="text-sm rounded-full text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-500 dark:border-gray-300"
-                    size="sm"
-                  >
-                    Clear Selection
-                  </Button>
-                )}
-              </div>
-            </div>
 
-            {/* Subcategories List */}
-            <div className="flex flex-wrap gap-2 mt-3">
-              {[
-                ...new Set(blogSubCategoriesList[category.toLowerCase()] || []),
-              ].map((subCategory) => {
-                const isSelected = Array.isArray(selectedSubCategories)
-                  ? selectedSubCategories.includes(subCategory)
-                  : selectedSubCategories?.split(", ").includes(subCategory);
+              {/* Subcategories List */}
+              <div className="flex flex-wrap gap-2 mt-3">
+                {[
+                  ...new Set(
+                    blogSubCategoriesList[category.toLowerCase()] || []
+                  ),
+                ].map((subCategory) => {
+                  const isSelected = Array.isArray(selectedSubCategories)
+                    ? selectedSubCategories.includes(subCategory)
+                    : selectedSubCategories?.split(", ").includes(subCategory);
 
-                return (
-                  <Badge
-                    key={subCategory}
-                    onClick={() => {
-                      setSelectedSubCategories((prev) => {
-                        let subCategoriesArray = Array.isArray(prev)
-                          ? [...prev]
-                          : prev
-                            ? prev.split(", ")
-                            : [];
+                  return (
+                    <Badge
+                      key={subCategory}
+                      onClick={() => {
+                        setSelectedSubCategories((prev) => {
+                          let subCategoriesArray = Array.isArray(prev)
+                            ? [...prev]
+                            : prev
+                              ? prev.split(", ")
+                              : [];
 
-                        if (isSelected) {
-                          subCategoriesArray = subCategoriesArray.filter(
-                            (c) => c !== subCategory
-                          );
-                        } else {
-                          subCategoriesArray.push(subCategory);
-                        }
+                          if (isSelected) {
+                            subCategoriesArray = subCategoriesArray.filter(
+                              (c) => c !== subCategory
+                            );
+                          } else {
+                            subCategoriesArray.push(subCategory);
+                          }
 
-                        handleInputChange("subcategories", subCategoriesArray); // pass array directly
-                        return subCategoriesArray;
-                      });
-                    }}
-                    className={`border-0 rounded-full text-sm cursor-pointer px-3 py-1 transition-all
+                          handleInputChange(
+                            "subcategories",
+                            subCategoriesArray
+                          ); // pass array directly
+                          return subCategoriesArray;
+                        });
+                      }}
+                      className={`border-0 rounded-full text-sm cursor-pointer px-3 py-1 transition-all
                   ${
                     isSelected
                       ? "bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800"
                       : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
                   }`}
-                  >
-                    {subCategory}
-                  </Badge>
-                );
-              })}
+                    >
+                      {subCategory}
+                    </Badge>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        )}
-      </div>
-
-      <div>
-        <label htmlFor="tag-input" className="text">
-          Tags
-        </label>
-
-        {/* Input container with badges inside */}
-        <div
-          className="mt-1 w-full relative flex items-start border rounded-3xl min-h-[42px] input-field focus-within:ring-blue-500 dark:focus-within:ring-offset-gray-800 dark:focus-within:ring-blue-400 focus-within:ring-[4px]"
-          onClick={() => document.getElementById("tag-input")?.focus()}
-        >
-          {/* Badges inside input field */}
-          <div className="flex flex-wrap gap-2 flex-grow p-2 pr-20">
-            {tags.map((t) => (
-              <Badge
-                key={t}
-                className="inline-flex items-center gap-1 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 px-2 py-1 rounded-3xl text-sm dark:bg-indigo-900 hover:dark:bg-indigo-700 dark:text-indigo-100 cursor-pointer"
-              >
-                {t}
-                <button
-                  type="button"
-                  onClick={() => removeTag(t)}
-                  className="text-indigo-500 hover:text-red-600 focus:outline-none dark:text-indigo-300 dark:hover:text-red-600"
-                >
-                  <X className="h-3 w-3" />
-                </button>
-              </Badge>
-            ))}
-
-            {/* Input field */}
-            <input
-              id="tag-input"
-              type="text"
-              value={tag}
-              onChange={(e) => setTag(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  addTag();
-                }
-              }}
-              placeholder={tags.length === 0 ? "Add a tag" : ""}
-              className="flex-grow bg-transparent border-none outline-none p-1 text-gray-700 dark:text-white min-w-[120px]"
-            />
-          </div>
-
-          {/* Right: Clear Button */}
-          {tags.length > 0 && (
-            <Button
-              onClick={() => setTags([])}
-              className="absolute right-3 top-1/2 -translate-y-1/2 del3"
-            >
-              Clear
-            </Button>
           )}
         </div>
-      </div>
 
-      <div className="mt-5 space-y-5">
-        <Label className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105">
-          Blog Editor
-        </Label>
         <div>
-          <MenuBar editor={editor} />
-          <EditorContent
-            editor={editor}
-            className="overflow-y-auto max-h-[500px]"
-          />
+          <label htmlFor="tag-input" className="text">
+            Tags
+          </label>
+
+          {/* Input container with badges inside */}
+          <div
+            className="mt-1 w-full relative flex items-start border rounded-3xl min-h-[42px] input-field focus-within:ring-blue-500 dark:focus-within:ring-offset-gray-800 dark:focus-within:ring-blue-400 focus-within:ring-[4px]"
+            onClick={() => document.getElementById("tag-input")?.focus()}
+          >
+            {/* Badges inside input field */}
+            <div className="flex flex-wrap gap-2 flex-grow p-2 pr-20">
+              {tags.map((t) => (
+                <Badge
+                  key={t}
+                  className="inline-flex items-center gap-1 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 px-2 py-1 rounded-3xl text-sm dark:bg-indigo-900 hover:dark:bg-indigo-700 dark:text-indigo-100 cursor-pointer"
+                >
+                  {t}
+                  <button
+                    type="button"
+                    onClick={() => removeTag(t)}
+                    className="text-indigo-500 hover:text-red-600 focus:outline-none dark:text-indigo-300 dark:hover:text-red-600"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </Badge>
+              ))}
+
+              {/* Input field */}
+              <input
+                id="tag-input"
+                type="text"
+                value={tag}
+                onChange={(e) => setTag(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    addTag();
+                  }
+                }}
+                placeholder={tags.length === 0 ? "Add a tag" : ""}
+                className="flex-grow bg-transparent border-none outline-none p-1 text-gray-700 dark:text-white min-w-[120px]"
+              />
+            </div>
+
+            {/* Right: Clear Button */}
+            {tags.length > 0 && (
+              <Button
+                onClick={() => setTags([])}
+                className="absolute right-3 top-1/2 -translate-y-1/2 del3"
+              >
+                Clear
+              </Button>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-5 space-y-5">
+          <Label className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105">
+            Blog Editor
+          </Label>
+          <div>
+            <MenuBar editor={editor} />
+            <EditorContent
+              editor={editor}
+              className="overflow-y-auto max-h-[500px]"
+            />
+          </div>
         </div>
       </div>
     </div>
