@@ -393,6 +393,31 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
                   />
                 )}
               </div>
+              {/* Mobile-only SnippetMetadata (right after BasicInfo) */}
+              <div className="block xl:hidden">
+                {initialData && (
+                  <SnippetMetadata
+                    initialData={
+                      metadata || {
+                        title: "",
+                        description: "",
+                        category: "",
+                        subcategory: [],
+                        tags: [],
+                        language: "",
+                      }
+                    }
+                    editing={editing}
+                    onComplete={handleMetadataComplete}
+                    onUpdateMetadata={(updatedMetadata) => {
+                      console.log(updatedMetadata);
+                      setMetadata(updatedMetadata);
+                    }}
+                    errors={errors}
+                    setErrors={setErrors}
+                  />
+                )}
+              </div>
               <div className="form-layout">
                 <FormBackgroundEffect />
                 <h1 className="text-3xl mb-4 font-extrabold text-blue-900 dark:text-blue-200">
@@ -446,7 +471,7 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
             </div>
 
             {/* Sidebar */}
-            <div className="xl:col-span-1">
+            <div className="xl:col-span-1 hidden xl:block">
               <div className="sticky top-24">
                 {initialData && (
                   <SnippetMetadata
