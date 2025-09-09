@@ -118,7 +118,7 @@ const SnippetMetadata = ({
       <FormBackgroundEffect />
       <div className="flex justify-between items-start mb-4">
         <h1 className="text-3xl font-extrabold text-blue-900 dark:text-blue-200">
-          Create New Code Snippet
+          Snippet Metadata
         </h1>
       </div>
       <div className="flex items-center gap-2">
@@ -126,46 +126,6 @@ const SnippetMetadata = ({
           <div className="space-y-6">
             <div className="w-full flex flex-col gap-6">
               <div className="space-y-4">
-                <div>
-                  <label htmlFor="title" className="text">
-                    Title
-                  </label>
-                  <span className="text-red-500">&nbsp;*</span>
-                  <Input
-                    type="text"
-                    id="title"
-                    name="title"
-                    value={data.title}
-                    onChange={handleChange}
-                    className={`mt-1 w-full px-4 py-2 ${
-                      errors.title
-                        ? "input-error-field focus-visible:ring-red-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-red-400 focus-visible:ring-[4px]"
-                        : "input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
-                    }`}
-                    placeholder="Enter tutorial title"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="description" className="text">
-                    Description
-                  </label>
-                  <span className="text-red-500">&nbsp;*</span>
-                  <Textarea
-                    id="description"
-                    name="description"
-                    value={data.description}
-                    onChange={handleChange}
-                    rows={4}
-                    className={`mt-1 w-full px-4 py-2 resize-none ${
-                      errors.description
-                        ? "input-error-field focus-visible:ring-red-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-red-400 focus-visible:ring-[4px]"
-                        : "input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
-                    }`}
-                    placeholder="Provide a brief description of your tutorial"
-                  ></Textarea>
-                </div>
-
                 <div>
                   <label htmlFor="language" className="text">
                     Language

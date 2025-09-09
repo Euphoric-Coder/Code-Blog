@@ -13,6 +13,7 @@ import {
   CheckCircle,
   ArrowLeft,
   Folder,
+  LayoutDashboard,
 } from "lucide-react";
 import {
   AlertDialog,
@@ -24,6 +25,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { useUser } from "@clerk/nextjs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -87,6 +93,16 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
   const [currentStep, setCurrentStep] = useState("metadata");
   const [pendingTutorial, setPendingTutorial] = useState(false);
   const [clearPendingAlert, setClearPendingAlert] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkScreen = () => setIsMobile(window.innerWidth <= 640); // Tailwind "sm"
+    checkScreen();
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
+
+  const limit = isMobile ? 11 : 30;
 
   // Load initial data from localStorage after mount
   useEffect(() => {
@@ -176,12 +192,13 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
       if (!metadata.title) newErrors.title = "Title is required";
       if (!metadata.description)
         newErrors.description = "Description is required";
-      if(!metadata.language) newErrors.language = "Language is required";
+      if (!metadata.language) newErrors.language = "Language is required";
       if (!metadata.category) newErrors.category = "Category is required";
       if (metadata.subcategory.length === 0)
         newErrors.subcategory = "Subcategory is required";
 
-      if(!snippet.code || !snippet.content) toast.error("Code and Content cannot be empty!");
+      if (!snippet.code || !snippet.content)
+        toast.error("Code and Content cannot be empty!");
 
       console.log(newErrors.category);
       console.log(newErrors.subcategory);
@@ -273,36 +290,43 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
     <div>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         {/* Dedicated Navigation Bar */}
-        <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
-          <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-gradient-to-r from-blue-50 via-white to-teal-50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 border-b border-blue-200/50 dark:border-gray-700 sticky top-0 z-50 backdrop-blur-sm">
+          <div className="mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16 lg:h-20">
               {/* Left Side - Navigation */}
               <div className="flex items-center space-x-2 sm:space-x-4">
                 <button
                   onClick={handleBack}
-                  className="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors p-2 sm:p-0"
+                  className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors p-2 sm:p-0 font-medium"
                 >
                   <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" />
                   <span className="hidden sm:inline">Back</span>
-                </button>
-
-                <div className="hidden sm:block h-6 w-px bg-gray-300 dark:bg-gray-600"></div>
-
-                <button
-                  onClick={handleBackToDashboard}
-                  className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors text-sm sm:text-base"
-                >
-                  <span className="hidden sm:inline">Back to Dashboard</span>
-                  <span className="sm:hidden">Dashboard</span>
                 </button>
               </div>
 
               {/* Center - Title */}
               <div className="flex-1 text-center px-2 sm:px-4">
-                <h1 className="text-sm sm:text-base lg:text-lg font-semibold text-gray-900 dark:text-white truncate">
+                <h1 className="text-sm sm:text-base lg:text-lg font-bold bg-gradient-to-r from-blue-700 via-teal-600 to-blue-700 bg-clip-text text-transparent truncate">
                   <span className="hidden md:inline">Creating Snippet: </span>
                   <span className="md:hidden">Snippet: </span>
-                  {metadata.title}
+                  <HoverCard>
+                    {metadata.title.length > limit ? (
+                      <>
+                        <HoverCardTrigger asChild>
+                          <span className="cursor-pointer">
+                            {metadata.title.slice(0, limit)}...
+                          </span>
+                        </HoverCardTrigger>
+                        <HoverCardContent className="max-w-xs break-words whitespace-normal p-2">
+                          {metadata.title}
+                        </HoverCardContent>
+                      </>
+                    ) : (
+                      <span>
+                        {metadata.title === "" ? "Untitled" : metadata.title}
+                      </span>
+                    )}
+                  </HoverCard>
                 </h1>
               </div>
 
@@ -311,7 +335,7 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
                 {/* Mobile-only save button */}
                 <button
                   onClick={addSnippet}
-                  className="sm:hidden p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                  className="sm:hidden p-2 bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white rounded-lg transition-all duration-200 shadow-lg hover:shadow-blue-500/25"
                   title="Save Snippet"
                 >
                   <Save className="h-4 w-4" />
@@ -320,16 +344,17 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
                 {/* Tablet and Desktop buttons */}
                 <button
                   onClick={handleBackToDashboard}
-                  className="hidden md:inline-flex px-3 lg:px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm lg:text-base"
+                  className="hidden sm:inline-flex px-3 lg:px-4 py-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 border border-blue-300 dark:border-gray-600 rounded-3xl hover:bg-blue-50 dark:hover:bg-gray-700 transition-all duration-200 text-sm lg:text-base font-medium"
                 >
-                  <span className="lg:inline hidden">Back to Metadata</span>
-                  <span className="lg:hidden">Metadata</span>
+                  <LayoutDashboard className="mr-2" />
+                  <span className="lg:inline hidden">Back to Dashboard</span>
+                  <span className="lg:hidden">Dashboard</span>
                 </button>
                 <button
                   onClick={addSnippet}
-                  className="hidden sm:inline-flex items-center px-3 lg:px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors text-sm lg:text-base"
+                  className="hidden sm:inline-flex items-center px-3 lg:px-4 py-2 bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white font-semibold rounded-3xl transition-all duration-200 shadow-lg hover:shadow-blue-500/25 text-sm lg:text-base"
                 >
-                  <Save className="h-4 w-4 mr-1 lg:mr-2" />
+                  <Save className="mr-1 lg:mr-2" />
                   <span className="hidden lg:inline">Save Snippet</span>
                   <span className="lg:hidden">Save</span>
                 </button>
