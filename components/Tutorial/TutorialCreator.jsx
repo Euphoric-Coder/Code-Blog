@@ -549,55 +549,54 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
   };
 
   const editTutorial = async () => {
-    // for Demo Purpose
-    console.log({
-      title: tutorial.title,
-      coverImage: tutorial.coverImage?.url || tutorial.coverImage,
-      imageId: tutorial.imageId,
-      description: tutorial.description,
-      category: tutorial.category,
-      subCategories: tutorial.subcategory,
-      tags: tutorial.tags,
-      content: sections,
-      author: user?.fullName ?? "Anonymous",
-      date: getISTDate(),
-      createdBy: user?.primaryEmailAddress?.emailAddress,
-    });
-    clearData();
-    // try {
-    //   // Updates the tutorial in the DB
-    //   const result = await db
-    //     .update(Tutorials)
-    //     .set({
-    //       title: tutorial.title,
-    //       coverImage: tutorial.coverImage?.url || tutorial.coverImage,
-    //       imageId: tutorial.imageId,
-    //       description: tutorial.description,
-    //       category: tutorial.category,
-    //       subCategories: tutorial.subcategory,
-    //       tags: tutorial.tags,
-    //       content: sections,
-    //       author: user?.fullName ?? "Anonymous",
-    //       date: getISTDate(),
-    //       createdBy: user?.primaryEmailAddress?.emailAddress,
-    //     })
-    //     .where(eq(Tutorials.id, editData.tutorial.id))
-    //     .returning({ insertedId: Tutorials.id });
+    // console.log({
+    //   title: tutorial.title,
+    //   coverImage: tutorial.coverImage?.url || tutorial.coverImage,
+    //   imageId: tutorial.imageId,
+    //   description: tutorial.description,
+    //   category: tutorial.category,
+    //   subCategories: tutorial.subcategory,
+    //   tags: tutorial.tags,
+    //   content: sections,
+    //   author: user?.fullName ?? "Anonymous",
+    //   date: getISTDate(),
+    //   createdBy: user?.primaryEmailAddress?.emailAddress,
+    // });
+    try {
+      // Updates the tutorial in the DB
+      const result = await db
+        .update(Tutorials)
+        .set({
+          title: tutorial.title,
+          coverImage: tutorial.coverImage?.url || tutorial.coverImage,
+          imageId: tutorial.imageId,
+          description: tutorial.description,
+          category: tutorial.category,
+          subCategories: tutorial.subcategory,
+          tags: tutorial.tags,
+          content: sections,
+          author: user?.fullName ?? "Anonymous",
+          date: getISTDate(),
+          createdBy: user?.primaryEmailAddress?.emailAddress,
+        })
+        .where(eq(Tutorials.id, editData.tutorial.id))
+        .returning({ insertedId: Tutorials.id });
 
-    //   console.log(result);
+      console.log(result);
 
-    //   if (result) {
-    //     toast.success("Tutorial Updated successfully!");
+      if (result) {
+        toast.success("Tutorial Updated successfully!");
 
-    //     // Redirects to the Tutorial Page
-    //     setTimeout(() => {
-    //       clearData();
-    //       redirect(`/tutorial`);
-    //     }, 4000);
-    //   }
-    // } catch (error) {
-    //   toast.error("Some Error occurred!", error);
-    // }
+        // Redirects to the Tutorial Page
+        setTimeout(() => {
+          clearData();
+          redirect(`/tutorial`);
+        }, 4000);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Some Error occurred!", error);
+    }
   };
 
   const handleBack = () => {
