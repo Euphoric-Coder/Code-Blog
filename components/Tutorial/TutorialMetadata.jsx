@@ -145,7 +145,7 @@ const TutorialMetadata = ({
       </div>
       <div className="flex flex-col md:flex-row justify-center md:justify-between items-center mb-4">
         <h1 className="text-3xl font-extrabold text-blue-900 dark:text-blue-200">
-          Create New Tutorial
+          {editing ? "Edit" : "Create New"} Tutorial
         </h1>
         {editing && (
           <div>

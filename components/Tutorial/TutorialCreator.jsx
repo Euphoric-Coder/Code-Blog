@@ -591,7 +591,7 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
   };
 
   const handleBack = () => {
-    window.history.back();
+    router.push("/tutorial");
   };
 
   const handleBackToDashboard = () => {
@@ -618,7 +618,9 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
             {/* Center - Title */}
             <div className="flex-1 text-center px-2 sm:px-4">
               <h1 className="text-sm sm:text-base lg:text-lg font-bold bg-gradient-to-r from-blue-700 via-teal-600 to-blue-700 bg-clip-text text-transparent truncate">
-                <span className="hidden md:inline">Creating Tutorial: </span>
+                <span className="hidden md:inline">
+                  {editing ? "Edit" : "Creating"} Tutorial:{" "}
+                </span>
                 <span className="md:hidden">Tutorial: </span>
                 <HoverCard>
                   {tutorial?.title.length > limit ? (
@@ -687,6 +689,8 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
           </div>
         </div>
       </div>
+
+      {/* Pending Tutorial Alert */}
       <div className="min-h-screen w-full bg-gradient-to-tr from-[#f6fbff] to-[#ffffff] dark:from-[#0b1625] dark:to-[#112030] transition-colors duration-500 flex flex-col items-center justify-center px-4 py-4">
         {editing && (
           <AlertDialog
@@ -828,7 +832,7 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
             </div>
             <div className="mb-8 flex flex-col lg:flex-row space-y-4 lg:space-y-0 justify-between items-center">
               <h1 className="text-3xl font-extrabold text-blue-900 dark:text-blue-200">
-                Creating: {tutorial.title}
+                {editing ? "Editing" : "Creating"}: {tutorial.title}
               </h1>
               <div className="flex gap-5">
                 <Button
