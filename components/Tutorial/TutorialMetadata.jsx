@@ -43,7 +43,7 @@ const TutorialMetadata = ({
   const [tag, setTag] = useState("");
 
   useEffect(() => {
-    if (editing) return;
+    // if (editing) return;
     if (onUpdateMetadata) {
       console.log("Updating metadata:", data);
       onUpdateMetadata(data);

@@ -43,6 +43,7 @@ import {
   HoverCardTrigger,
 } from "../ui/hover-card";
 import { ModeToggle } from "../theme-btn";
+import { eq } from "drizzle-orm";
 
 const initialSectionId = uuidv4();
 const initialSubsectionId = uuidv4();
@@ -166,7 +167,6 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
         return 30;
     }
   })();
-
 
   // ✅ Load initial data from localStorage after mount
   useEffect(() => {
@@ -446,7 +446,7 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
   };
 
   const clearData = () => {
-    localStorage.removeItem(LOCAL_STORAGE_KEY); // Clear localStorage
+    if (!editing) localStorage.removeItem(LOCAL_STORAGE_KEY); // Clear localStorage
     setPendingTutorial(false); // Reset pending state
     const initialSectionId = uuidv4();
     const initialSubsectionId = uuidv4();
@@ -552,7 +552,7 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
     // for Demo Purpose
     console.log({
       title: tutorial.title,
-      coverImage: tutorial.coverImage,
+      coverImage: tutorial.coverImage?.url || tutorial.coverImage,
       imageId: tutorial.imageId,
       description: tutorial.description,
       category: tutorial.category,
@@ -563,6 +563,41 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
       date: getISTDate(),
       createdBy: user?.primaryEmailAddress?.emailAddress,
     });
+    clearData();
+    // try {
+    //   // Updates the tutorial in the DB
+    //   const result = await db
+    //     .update(Tutorials)
+    //     .set({
+    //       title: tutorial.title,
+    //       coverImage: tutorial.coverImage?.url || tutorial.coverImage,
+    //       imageId: tutorial.imageId,
+    //       description: tutorial.description,
+    //       category: tutorial.category,
+    //       subCategories: tutorial.subcategory,
+    //       tags: tutorial.tags,
+    //       content: sections,
+    //       author: user?.fullName ?? "Anonymous",
+    //       date: getISTDate(),
+    //       createdBy: user?.primaryEmailAddress?.emailAddress,
+    //     })
+    //     .where(eq(Tutorials.id, editData.tutorial.id))
+    //     .returning({ insertedId: Tutorials.id });
+
+    //   console.log(result);
+
+    //   if (result) {
+    //     toast.success("Tutorial Updated successfully!");
+
+    //     // Redirects to the Tutorial Page
+    //     setTimeout(() => {
+    //       clearData();
+    //       redirect(`/tutorial`);
+    //     }, 4000);
+    //   }
+    // } catch (error) {
+    //   toast.error("Some Error occurred!", error);
+    // }
   };
 
   const handleBack = () => {
@@ -764,6 +799,7 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
             )}
           </div>
         )}
+
         {currentStep === "metadata" ? (
           <div className="w-full max-w-6xl mt-10">
             {tutorial && (
@@ -781,9 +817,10 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
                 }
                 editing={editing}
                 onComplete={handleMetadataComplete}
-                onUpdateMetadata={(updatedMetadata) =>
-                  setTutorial(updatedMetadata)
-                } // Sync metadata updates
+                onUpdateMetadata={(updatedMetadata) => {
+                  setTutorial(updatedMetadata);
+                  console.log(updatedMetadata);
+                }} // Sync metadata updates
                 setEditBlogCoverImageId={setEditBlogCoverImageId}
               />
             )}
