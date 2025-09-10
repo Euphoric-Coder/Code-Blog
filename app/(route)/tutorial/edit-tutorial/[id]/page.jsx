@@ -24,7 +24,6 @@ const Page = () => {
       .where(eq(Tutorials.id, id));
 
     const tutorial = result[0];
-    console.log(tutorial);
     // Convert it to the shape TutorialCreator expects
     const editData = {
       tutorial: {

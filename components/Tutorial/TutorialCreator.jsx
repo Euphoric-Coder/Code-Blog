@@ -36,7 +36,7 @@ import { toast } from "sonner";
 import { db } from "@/lib/dbConfig";
 import { Tutorials } from "@/lib/schema";
 import { getISTDate } from "@/lib/utils";
-import { redirect, useRouter } from "next/navigation";
+import { redirect, useParams, useRouter } from "next/navigation";
 import {
   HoverCard,
   HoverCardContent,
@@ -111,6 +111,8 @@ const isDefaultLike = (data) => {
 };
 
 const TutorialCreator = ({ editData = null, editing = false }) => {
+  const params = useParams();
+  const id = params?.id;
   const router = useRouter();
   const { user } = useUser();
   const LOCAL_STORAGE_KEY = useMemo(() => {
@@ -549,19 +551,6 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
   };
 
   const editTutorial = async () => {
-    // console.log({
-    //   title: tutorial.title,
-    //   coverImage: tutorial.coverImage?.url || tutorial.coverImage,
-    //   imageId: tutorial.imageId,
-    //   description: tutorial.description,
-    //   category: tutorial.category,
-    //   subCategories: tutorial.subcategory,
-    //   tags: tutorial.tags,
-    //   content: sections,
-    //   author: user?.fullName ?? "Anonymous",
-    //   date: getISTDate(),
-    //   createdBy: user?.primaryEmailAddress?.emailAddress,
-    // });
     try {
       // Updates the tutorial in the DB
       const result = await db
@@ -579,10 +568,8 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
           date: getISTDate(),
           createdBy: user?.primaryEmailAddress?.emailAddress,
         })
-        .where(eq(Tutorials.id, editData.tutorial.id))
+        .where(eq(Tutorials.id, id))
         .returning({ insertedId: Tutorials.id });
-
-      console.log(result);
 
       if (result) {
         toast.success("Tutorial Updated successfully!");
@@ -590,7 +577,7 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
         // Redirects to the Tutorial Page
         setTimeout(() => {
           clearData();
-          redirect(`/tutorial`);
+          redirect(`/tutorialpost/${id}`);
         }, 4000);
       }
     } catch (error) {
