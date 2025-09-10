@@ -489,50 +489,54 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
   };
 
   const saveTutorial = async () => {
-    console.log({
-      title: tutorial.title,
-      coverImage: tutorial.coverImage?.url || tutorial.coverImage,
-      imageId: tutorial.imageId,
-      description: tutorial.description,
-      category: tutorial.category,
-      subCategories: tutorial.subcategory,
-      tags: tutorial.tags,
-      content: sections,
-      author: user?.fullName ?? "Anonymous",
-      date: getISTDate(),
-      createdBy: user?.primaryEmailAddress?.emailAddress,
-    });
-    // try {
-    //   // Inserts the tutorial into the DB
-    //   const result = await db
-    //     .insert(Tutorials)
-    //     .values({
-    //       title: tutorial.title,
-    //       coverImage: tutorial.coverImage?.url || tutorial.coverImage,
-    //       imageId: tutorial.imageId,
-    //       description: tutorial.description,
-    //       category: tutorial.category,
-    //       subCategories: tutorial.subcategory,
-    //       tags: tutorial.tags,
-    //       content: sections,
-    //       author: user?.fullName ?? "Anonymous",
-    //       date: getISTDate(),
-    //       createdBy: user?.primaryEmailAddress?.emailAddress,
-    //     })
-    //     .returning({ insertedId: Tutorials.id });
+    // console.log({
+    //   title: tutorial.title,
+    //   coverImage: tutorial.coverImage?.url || tutorial.coverImage,
+    //   imageId: tutorial.imageId,
+    //   description: tutorial.description,
+    //   category: tutorial.category,
+    //   subCategories: tutorial.subcategory,
+    //   tags: tutorial.tags,
+    //   content: sections,
+    //   author: user?.fullName ?? "Anonymous",
+    //   date: getISTDate(),
+    //   createdBy: user?.primaryEmailAddress?.emailAddress,
+    // });
+    try {
+      // Inserts the tutorial into the DB
+      const result = await db
+        .insert(Tutorials)
+        .values({
+          title: tutorial.title,
+          coverImage: tutorial.coverImage?.url || tutorial.coverImage,
+          imageId: tutorial.imageId,
+          description: tutorial.description,
+          category: tutorial.category,
+          subCategories: tutorial.subcategory,
+          tags: tutorial.tags,
+          content: sections,
+          author: user?.fullName ?? "Anonymous",
+          date: getISTDate(),
+          createdBy: user?.primaryEmailAddress?.emailAddress,
+        })
+        .returning({ insertedId: Tutorials.id });
 
-    //   if (result) {
-    //     toast.success("Tutorial saved successfully!");
+      console.log(result);
 
-    //     // Redirects to the Tutorial Page
-    //     setTimeout(() => {
-    //       redirect(`/tutorialpost/${result.insertedId}`);
-    //     }, 4000);
-    //     clearData();
-    //   }
-    // } catch (error) {
-    //   toast.error("Some Error occurred!", error);
-    // }
+      if (result) {
+        toast.success("Tutorial saved successfully!");
+        const loadId = toast.loading("Please wait... Redirecting you...!");
+
+        // Redirects to the Tutorial Page
+        setTimeout(() => {
+          toast.dismiss(loadId);
+          redirect(`/tutorialpost/${result[0].insertedId}`);
+        }, 4000);
+        // clearData();
+      }
+    } catch (error) {
+      toast.error("Some Error occurred!", error);
+    }
 
     // for Demo Purpose
     // console.log({
@@ -684,8 +688,11 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
         </div>
       </div>
       <div className="min-h-screen w-full bg-gradient-to-tr from-[#f6fbff] to-[#ffffff] dark:from-[#0b1625] dark:to-[#112030] transition-colors duration-500 flex flex-col items-center justify-center px-4 py-4">
-        {!editing && (
-          <AlertDialog open={clearPendingAlert}>
+        {editing && (
+          <AlertDialog
+            open={clearPendingAlert}
+            onOpenChange={setClearPendingAlert}
+          >
             <AlertDialogContent className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-br from-white via-blue-50 to-cyan-200 dark:from-gray-800 dark:via-gray-900 dark:to-blue-800 p-8 rounded-3xl shadow-[0_0_40px_rgba(0,150,255,0.3)] dark:shadow-[0_0_40px_rgba(0,75,150,0.5)] w-[95%] max-w-lg">
               {/* Background Effects */}
               <div className="absolute inset-0 pointer-events-none">
@@ -700,8 +707,8 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
                 </AlertDialogTitle>
                 <AlertDialogDescription className="text-sm text-gray-600 dark:text-gray-300 mt-2">
                   This action cannot be undone. This will permanently delete
-                  your income <strong>&quot;{tutorial.title}&quot;</strong> and
-                  all of its associated data.
+                  your tutorial <strong>&quot;{tutorial?.title}&quot;</strong>{" "}
+                  and all of its associated data.
                 </AlertDialogDescription>
               </AlertDialogHeader>
 
@@ -715,7 +722,7 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
                 </AlertDialogCancel>
                 <AlertDialogAction
                   onClick={() => {
-                    clearData();
+                    toast.success("Tutorial deleted!");
                     setClearPendingAlert(false);
                   }}
                   className="w-full py-3 rounded-2xl bg-gradient-to-r from-red-500 via-red-600 to-red-700 text-white font-bold shadow-lg hover:shadow-[0_0_20px_rgba(255,100,100,0.5)] hover:scale-105 active:scale-95 transition-transform transform dark:bg-gradient-to-r dark:from-red-700 dark:via-red-800 dark:to-red-900 dark:shadow-[0_0_20px_rgba(200,50,50,0.5)] dark:hover:shadow-[0_0_30px_rgba(200,50,50,0.7)]"
@@ -808,6 +815,7 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
                   console.log(updatedMetadata);
                 }} // Sync metadata updates
                 setEditBlogCoverImageId={setEditBlogCoverImageId}
+                setClearPendingAlert={setClearPendingAlert}
               />
             )}
           </div>

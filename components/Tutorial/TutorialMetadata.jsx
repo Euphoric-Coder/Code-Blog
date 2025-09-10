@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Upload, X, ChevronRight, PlusCircle } from "lucide-react";
+import { Upload, X, ChevronRight, PlusCircle, Trash } from "lucide-react";
 import ImageUpload from "@/components/ImageUpload";
 import { Input } from "@/components/ui/input";
 import {
@@ -26,6 +26,7 @@ const TutorialMetadata = ({
   onUpdateMetadata,
   editing = false,
   setEditBlogCoverImageId,
+  setClearPendingAlert,
 }) => {
   // Initialize metadata from initialData
   useEffect(() => {
@@ -137,13 +138,28 @@ const TutorialMetadata = ({
   return (
     <div className="form-layout">
       <FormBackgroundEffect />
-      <div className="flex justify-between items-start mb-4">
-        <h1 className="text-3xl font-extrabold text-blue-900 dark:text-blue-200">
-          Create New Tutorial
-        </h1>
+      <div className="flex justify-end mb-4">
         <span className="inline-block px-4 py-1 text-xs font-medium rounded-full bg-blue-200 text-blue-900 dark:bg-blue-800 dark:text-blue-100">
           Page 1 of 2
         </span>
+      </div>
+      <div className="flex flex-col md:flex-row justify-center md:justify-between items-center mb-4">
+        <h1 className="text-3xl font-extrabold text-blue-900 dark:text-blue-200">
+          Create New Tutorial
+        </h1>
+        {editing && (
+          <div>
+            <Button
+              className="del1 [&_svg]:size-5 ml-4"
+              onClick={() => {
+                setClearPendingAlert(true);
+              }}
+            >
+              <Trash className="size-5" />
+              Delete Tutorial
+            </Button>
+          </div>
+        )}
       </div>
       <div className="flex items-center gap-2">
         <form onSubmit={handleSubmit} className="w-full">
