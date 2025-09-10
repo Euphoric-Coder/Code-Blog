@@ -13,6 +13,7 @@ import {
   CheckCircle,
   ArrowLeft,
   LayoutDashboard,
+  PenBox,
 } from "lucide-react";
 import {
   AlertDialog,
@@ -36,7 +37,11 @@ import { db } from "@/lib/dbConfig";
 import { Tutorials } from "@/lib/schema";
 import { getISTDate } from "@/lib/utils";
 import { redirect, useRouter } from "next/navigation";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "../ui/hover-card";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "../ui/hover-card";
 import { ModeToggle } from "../theme-btn";
 
 const initialSectionId = uuidv4();
@@ -123,15 +128,15 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
   const [clearPendingAlert, setClearPendingAlert] = useState(false);
   const [editBlogCoverImageId, setEditBlogCoverImageId] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
-  
-    useEffect(() => {
-      const checkScreen = () => setIsMobile(window.innerWidth <= 640); // Tailwind "sm"
-      checkScreen();
-      window.addEventListener("resize", checkScreen);
-      return () => window.removeEventListener("resize", checkScreen);
-    }, []);
-  
-    const limit = isMobile ? 11 : 30;
+
+  useEffect(() => {
+    const checkScreen = () => setIsMobile(window.innerWidth <= 640); // Tailwind "sm"
+    checkScreen();
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
+
+  const limit = isMobile ? 11 : 30;
 
   // ✅ Load initial data from localStorage after mount
   useEffect(() => {
@@ -452,37 +457,50 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
   };
 
   const saveTutorial = async () => {
-    try {
-      // Inserts the tutorial into the DB
-      const result = await db
-        .insert(Tutorials)
-        .values({
-          title: tutorial.title,
-          coverImage: tutorial.coverImage?.url || tutorial.coverImage,
-          imageId: tutorial.imageId,
-          description: tutorial.description,
-          category: tutorial.category,
-          subCategories: tutorial.subcategory,
-          tags: tutorial.tags,
-          content: sections,
-          author: user?.fullName ?? "Anonymous",
-          date: getISTDate(),
-          createdBy: user?.primaryEmailAddress?.emailAddress,
-        })
-        .returning({ insertedId: Tutorials.id });
+    console.log({
+      title: tutorial.title,
+      coverImage: tutorial.coverImage?.url || tutorial.coverImage,
+      imageId: tutorial.imageId,
+      description: tutorial.description,
+      category: tutorial.category,
+      subCategories: tutorial.subcategory,
+      tags: tutorial.tags,
+      content: sections,
+      author: user?.fullName ?? "Anonymous",
+      date: getISTDate(),
+      createdBy: user?.primaryEmailAddress?.emailAddress,
+    });
+    // try {
+    //   // Inserts the tutorial into the DB
+    //   const result = await db
+    //     .insert(Tutorials)
+    //     .values({
+    //       title: tutorial.title,
+    //       coverImage: tutorial.coverImage?.url || tutorial.coverImage,
+    //       imageId: tutorial.imageId,
+    //       description: tutorial.description,
+    //       category: tutorial.category,
+    //       subCategories: tutorial.subcategory,
+    //       tags: tutorial.tags,
+    //       content: sections,
+    //       author: user?.fullName ?? "Anonymous",
+    //       date: getISTDate(),
+    //       createdBy: user?.primaryEmailAddress?.emailAddress,
+    //     })
+    //     .returning({ insertedId: Tutorials.id });
 
-      if (result) {
-        toast.success("Tutorial saved successfully!");
+    //   if (result) {
+    //     toast.success("Tutorial saved successfully!");
 
-        // Redirects to the Tutorial Page
-        setTimeout(() => {
-          redirect(`/tutorialpost/${result.insertedId}`);
-        }, 4000);
-        clearData();
-      }
-    } catch (error) {
-      toast.error("Some Error occurred!", error);
-    }
+    //     // Redirects to the Tutorial Page
+    //     setTimeout(() => {
+    //       redirect(`/tutorialpost/${result.insertedId}`);
+    //     }, 4000);
+    //     clearData();
+    //   }
+    // } catch (error) {
+    //   toast.error("Some Error occurred!", error);
+    // }
 
     // for Demo Purpose
     // console.log({
@@ -548,19 +566,21 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
                 <span className="hidden md:inline">Creating Tutorial: </span>
                 <span className="md:hidden">Tutorial: </span>
                 <HoverCard>
-                  {tutorial.title.length > limit ? (
+                  {tutorial?.title.length > limit ? (
                     <>
                       <HoverCardTrigger asChild>
                         <span className="cursor-pointer">
-                          {tutorial.title.slice(0, limit)}...
+                          {tutorial?.title.slice(0, limit)}...
                         </span>
                       </HoverCardTrigger>
                       <HoverCardContent className="max-w-xs break-words whitespace-normal p-2">
-                        {tutorial.title}
+                        {tutorial?.title}
                       </HoverCardContent>
                     </>
                   ) : (
-                    <span>{tutorial.title === "" ? "Untitled" : tutorial.title}</span>
+                    <span>
+                      {tutorial?.title === "" ? "Untitled" : tutorial?.title}
+                    </span>
                   )}
                 </HoverCard>
               </h1>
@@ -581,25 +601,38 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
               {/* Mobile-only save button */}
               <button
                 // onClick={Add}
+                onClick={saveTutorial}
                 className="sm:hidden p-2 bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white rounded-3xl transition-all duration-200 shadow-lg hover:shadow-blue-500/25"
-                title="Save Snippet"
+                title={`${editing ? "Update" : "Create"} Snippet`}
               >
-                <Save />
+                {editing ? <PenBox /> : <Save />}
               </button>
 
               <button
-                // onClick={AddBlog}
+                onClick={() => {
+                  if (editing) {
+                    editTutorial();
+                  } else {
+                    saveTutorial();
+                  }
+                }}
                 className="hidden sm:inline-flex items-center px-3 lg:px-4 py-2 bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white font-semibold rounded-3xl transition-all duration-200 shadow-lg hover:shadow-blue-500/25 text-sm lg:text-base"
               >
-                <Save className="mr-1 lg:mr-2" />
-                <span className="hidden lg:inline">Save Snippet</span>
-                <span className="lg:hidden">Save</span>
+                {editing ? (
+                  <PenBox className="mr-1 lg:mr-2" />
+                ) : (
+                  <Save className="mr-1 lg:mr-2" />
+                )}
+                <span className="hidden lg:inline">{`${editing ? "Update" : "Create"} Snippet`}</span>
+                <span className="lg:hidden">
+                  {editing ? "Update" : "Create"}
+                </span>
               </button>
             </div>
           </div>
         </div>
       </div>
-      <div className="min-h-screen w-full bg-gradient-to-tr from-[#f6fbff] to-[#ffffff] dark:from-[#0b1625] dark:to-[#112030] transition-colors duration-500 flex flex-col items-center justify-center px-4 py-10">
+      <div className="min-h-screen w-full bg-gradient-to-tr from-[#f6fbff] to-[#ffffff] dark:from-[#0b1625] dark:to-[#112030] transition-colors duration-500 flex flex-col items-center justify-center px-4 py-4">
         {!editing && (
           <AlertDialog open={clearPendingAlert}>
             <AlertDialogContent className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-br from-white via-blue-50 to-cyan-200 dark:from-gray-800 dark:via-gray-900 dark:to-blue-800 p-8 rounded-3xl shadow-[0_0_40px_rgba(0,150,255,0.3)] dark:shadow-[0_0_40px_rgba(0,75,150,0.5)] w-[95%] max-w-lg">
@@ -726,7 +759,12 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
             )}
           </div>
         ) : (
-          <div className="w-full mt-10 bg-[#e8f4ff]/60 dark:bg-[#1e2e44]/60 backdrop-blur-xl border border-blue-200 dark:border-blue-800 rounded-3xl shadow-2xl p-8 md:p-12">
+          <div className="w-full bg-[#e8f4ff]/60 dark:bg-[#1e2e44]/60 backdrop-blur-xl border border-blue-200 dark:border-blue-800 rounded-3xl shadow-2xl p-8 md:p-12">
+            <div className="flex justify-end mb-4">
+              <span className="inline-block px-4 py-1 text-xs font-medium rounded-full bg-blue-200 text-blue-900 dark:bg-blue-800 dark:text-blue-100">
+                Page 2 of 2
+              </span>
+            </div>
             <div className="mb-8 flex flex-col lg:flex-row space-y-4 lg:space-y-0 justify-between items-center">
               <h1 className="text-3xl font-extrabold text-blue-900 dark:text-blue-200">
                 Creating: {tutorial.title}
@@ -736,25 +774,8 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
                   onClick={() => setCurrentStep("metadata")}
                   className="btn8 hover:bg-purple-500"
                 >
-                  Back to Metadata
+                  Back to Page 1
                 </Button>
-                {!editing ? (
-                  <Button
-                    onClick={saveTutorial}
-                    className="btn9 flex [&_svg]:size-6"
-                  >
-                    <Save className="text-white" />
-                    Save Tutorial
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={editTutorial}
-                    className="btn9 flex [&_svg]:size-6"
-                  >
-                    <Edit className="text-white" />
-                    Update Tutorial
-                  </Button>
-                )}
               </div>
             </div>
 

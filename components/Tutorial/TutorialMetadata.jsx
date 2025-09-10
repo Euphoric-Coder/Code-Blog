@@ -141,6 +141,9 @@ const TutorialMetadata = ({
         <h1 className="text-3xl font-extrabold text-blue-900 dark:text-blue-200">
           Create New Tutorial
         </h1>
+        <span className="inline-block px-4 py-1 text-xs font-medium rounded-full bg-blue-200 text-blue-900 dark:bg-blue-800 dark:text-blue-100">
+          Page 1 of 2
+        </span>
       </div>
       <div className="flex items-center gap-2">
         <form onSubmit={handleSubmit} className="w-full">
