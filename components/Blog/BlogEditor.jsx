@@ -717,16 +717,45 @@ export default function BlogEditor({
   // Generate a unique key for current blog's pending content
   const storageKey = `pendingBlogData-${user?.id}`;
 
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkScreen = () => setIsMobile(window.innerWidth <= 640); // Tailwind "sm"
-    checkScreen();
-    window.addEventListener("resize", checkScreen);
-    return () => window.removeEventListener("resize", checkScreen);
-  }, []);
-
-  const limit = isMobile ? 11 : 30;
+  const [screenSize, setScreenSize] = useState("");
+  
+    // Update state based on window width
+    useEffect(() => {
+      const checkScreen = () => {
+        const width = window.innerWidth;
+        if (width <= 640)
+          setScreenSize("sm"); // Mobile
+        else if (width <= 768)
+          setScreenSize("md"); // iPad Mini
+        else if (width <= 1024)
+          setScreenSize("lg"); // iPad Air/Pro
+        else if (width <= 1280)
+          setScreenSize("xl"); // Desktop
+        else setScreenSize("2xl"); // Large Desktop
+      };
+  
+      checkScreen(); // Run on mount
+      window.addEventListener("resize", checkScreen);
+      return () => window.removeEventListener("resize", checkScreen);
+    }, []);
+  
+    // Character limit based on screen size
+    const limit = (() => {
+      switch (screenSize) {
+        case "sm": // Mobile
+          return 7;
+        case "md": // iPad Mini
+          return 18;
+        case "lg": // iPad Air/Pro
+          return 24;
+        case "xl": // Normal desktop
+          return 30;
+        case "2xl": // Big desktop
+          return 40;
+        default:
+          return 30;
+      }
+    })();
 
   useEffect(() => {
     if (!editor) return;

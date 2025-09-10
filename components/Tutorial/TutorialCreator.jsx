@@ -155,7 +155,7 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
       case "sm": // Mobile
         return 7;
       case "md": // iPad Mini
-        return 11;
+        return 18;
       case "lg": // iPad Air/Pro
         return 24;
       case "xl": // Normal desktop
