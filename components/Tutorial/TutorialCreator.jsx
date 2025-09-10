@@ -127,16 +127,46 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
   const [pendingTutorial, setPendingTutorial] = useState(false);
   const [clearPendingAlert, setClearPendingAlert] = useState(false);
   const [editBlogCoverImageId, setEditBlogCoverImageId] = useState(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const [screenSize, setScreenSize] = useState("");
 
+  // Update state based on window width
   useEffect(() => {
-    const checkScreen = () => setIsMobile(window.innerWidth <= 640); // Tailwind "sm"
-    checkScreen();
+    const checkScreen = () => {
+      const width = window.innerWidth;
+      if (width <= 640)
+        setScreenSize("sm"); // Mobile
+      else if (width <= 768)
+        setScreenSize("md"); // iPad Mini
+      else if (width <= 1024)
+        setScreenSize("lg"); // iPad Air/Pro
+      else if (width <= 1280)
+        setScreenSize("xl"); // Desktop
+      else setScreenSize("2xl"); // Large Desktop
+    };
+
+    checkScreen(); // Run on mount
     window.addEventListener("resize", checkScreen);
     return () => window.removeEventListener("resize", checkScreen);
   }, []);
 
-  const limit = isMobile ? 11 : 30;
+  // Character limit based on screen size
+  const limit = (() => {
+    switch (screenSize) {
+      case "sm": // Mobile
+        return 7;
+      case "md": // iPad Mini
+        return 11;
+      case "lg": // iPad Air/Pro
+        return 24;
+      case "xl": // Normal desktop
+        return 30;
+      case "2xl": // Big desktop
+        return 40;
+      default:
+        return 30;
+    }
+  })();
+
 
   // ✅ Load initial data from localStorage after mount
   useEffect(() => {
