@@ -711,6 +711,8 @@ export default function BlogEditor({
 
   const [tags, setTags] = useState(editing ? initialTags : []);
   const [tag, setTag] = useState("");
+  const [errors, setErrors] = useState({ subcategories: "testing" });
+
   const { user } = useUser();
   const previousImagesRef = useRef([]);
 
@@ -718,44 +720,44 @@ export default function BlogEditor({
   const storageKey = `pendingBlogData-${user?.id}`;
 
   const [screenSize, setScreenSize] = useState("");
-  
-    // Update state based on window width
-    useEffect(() => {
-      const checkScreen = () => {
-        const width = window.innerWidth;
-        if (width <= 640)
-          setScreenSize("sm"); // Mobile
-        else if (width <= 768)
-          setScreenSize("md"); // iPad Mini
-        else if (width <= 1024)
-          setScreenSize("lg"); // iPad Air/Pro
-        else if (width <= 1280)
-          setScreenSize("xl"); // Desktop
-        else setScreenSize("2xl"); // Large Desktop
-      };
-  
-      checkScreen(); // Run on mount
-      window.addEventListener("resize", checkScreen);
-      return () => window.removeEventListener("resize", checkScreen);
-    }, []);
-  
-    // Character limit based on screen size
-    const limit = (() => {
-      switch (screenSize) {
-        case "sm": // Mobile
-          return 7;
-        case "md": // iPad Mini
-          return 18;
-        case "lg": // iPad Air/Pro
-          return 24;
-        case "xl": // Normal desktop
-          return 30;
-        case "2xl": // Big desktop
-          return 40;
-        default:
-          return 30;
-      }
-    })();
+
+  // Update state based on window width
+  useEffect(() => {
+    const checkScreen = () => {
+      const width = window.innerWidth;
+      if (width <= 640)
+        setScreenSize("sm"); // Mobile
+      else if (width <= 768)
+        setScreenSize("md"); // iPad Mini
+      else if (width <= 1024)
+        setScreenSize("lg"); // iPad Air/Pro
+      else if (width <= 1280)
+        setScreenSize("xl"); // Desktop
+      else setScreenSize("2xl"); // Large Desktop
+    };
+
+    checkScreen(); // Run on mount
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
+
+  // Character limit based on screen size
+  const limit = (() => {
+    switch (screenSize) {
+      case "sm": // Mobile
+        return 7;
+      case "md": // iPad Mini
+        return 18;
+      case "lg": // iPad Air/Pro
+        return 24;
+      case "xl": // Normal desktop
+        return 30;
+      case "2xl": // Big desktop
+        return 40;
+      default:
+        return 30;
+    }
+  })();
 
   useEffect(() => {
     if (!editor) return;
@@ -936,7 +938,7 @@ export default function BlogEditor({
       },
     });
 
-    // ✅ Add rule for converting HTML tables to Markdown
+    // Add rule for converting HTML tables to Markdown
     turndownService.addRule("table", {
       filter: "table",
       replacement: function (content, node) {
@@ -1323,7 +1325,7 @@ export default function BlogEditor({
       )}
 
       <div className="p-6">
-        <div className="mt-10 w-full bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-[#111827] dark:via-[#0f172a] dark:to-[#1e1b4b] rounded-2xl p-6 shadow-md mb-8 transition-all duration-300">
+        <div className="mt-10 w-full bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-[#111827] dark:via-[#0f172a] dark:to-[#1e1b4b] border-2 border-blue-400 dark:border-blue-500 rounded-2xl p-6 shadow-md mb-8 transition-all duration-300">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             {/* Title & subtitle */}
             <div>
@@ -1381,8 +1383,12 @@ export default function BlogEditor({
           <Input
             type="text"
             id="blog-title"
-            placeholder="Blog Title"
-            className="mt-3 mb-4 input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
+            className={`mt-4 w-full px-4 py-2 ${
+              errors.title
+                ? "input-error-field focus-visible:ring-red-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-red-400 focus-visible:ring-[4px]"
+                : "input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
+            }`}
+            placeholder="Enter blog title"
             value={title}
             onChange={(e) => {
               setTitle(e.target.value);
@@ -1400,8 +1406,12 @@ export default function BlogEditor({
           <Textarea
             type="text"
             id="blog-description"
+            className={`mt-4 w-full px-4 py-2 ${
+              errors.description
+                ? "input-error-field focus-visible:ring-red-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-red-400 focus-visible:ring-[4px]"
+                : "input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
+            }`}
             placeholder="Enter a brief description of your blog..."
-            className="mt-3 mb-4 input-field h-[90px] focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
             value={description}
             onChange={(e) => {
               setDescription(e.target.value);
@@ -1476,7 +1486,14 @@ export default function BlogEditor({
           >
             <SelectTrigger
               id="blog-category"
-              className="blog-select-field ring-0 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+              className={`
+                        mt-1 w-full rounded-lg px-3 py-2 border transition-colors
+                        ${
+                          errors.category
+                            ? "input-error-field focus-visible:ring-red-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-red-400 focus-visible:ring-[4px]"
+                            : "input-field focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-[3px]"
+                        }
+                      `}
             >
               <SelectValue />
             </SelectTrigger>
@@ -1498,15 +1515,18 @@ export default function BlogEditor({
           {/* Sub-Categories (Only Show When Category is Selected) */}
           {category && blogSubCategoriesList[category.toLowerCase()] && (
             <div
-              className="relative max-h-[200px] mt-2 overflow-y-auto 
-        p-3 shadow-sm rounded-xl 
-        bg-gradient-to-r from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-900 border-[2px]
-        border-blue-500 dark:border-blue-900 transition-all"
+              className={`relative max-h-[200px] mt-2 overflow-y-auto p-3 shadow-sm rounded-xl 
+              ${
+                errors.subcategories
+                  ? "bg-gradient-to-r from-red-50 to-red-100 dark:from-red-900 dark:to-red-950 border-[2px] border-red-500 dark:border-red-700 transition-all"
+                  // ? "input-error-field focus-visible:ring-red-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-red-400 focus-visible:ring-[4px]"
+                  : "bg-gradient-to-r from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-900 border-[2px] border-blue-500 dark:border-blue-900 transition-all"
+              }`}
             >
               <div className="flex flex-col md:flex-row items-center justify-between">
                 {/* Title & Selected Badge */}
                 <div className="flex items-center gap-2">
-                  <label className="blog-text1">
+                  <label className={`${errors.subcategories ? 'text-red-600 dark:text-red-400' : 'blog-text1'} font-semibold`}>
                     Sub-Categories (
                     {
                       new Set(
