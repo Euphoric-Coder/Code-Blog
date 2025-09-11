@@ -27,6 +27,8 @@ const TutorialMetadata = ({
   editing = false,
   setEditBlogCoverImageId,
   setClearPendingAlert,
+  errors,
+  setErrors,
 }) => {
   // Initialize metadata from initialData
   useEffect(() => {
@@ -40,7 +42,6 @@ const TutorialMetadata = ({
   const [uploadData, setUploadData] = useState(null);
   const [fileId, setFileId] = useState(null);
   const [editCoverImage, setEditCoverImage] = useState(editing ? true : false);
-  const [errors, setErrors] = useState({});
   const [tag, setTag] = useState("");
 
   useEffect(() => {

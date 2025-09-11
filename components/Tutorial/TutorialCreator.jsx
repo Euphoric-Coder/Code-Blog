@@ -130,6 +130,7 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
   const [pendingTutorial, setPendingTutorial] = useState(false);
   const [clearPendingAlert, setClearPendingAlert] = useState(false);
   const [editBlogCoverImageId, setEditBlogCoverImageId] = useState(null);
+  const [errors, setErrors] = useState({});
   const [screenSize, setScreenSize] = useState("");
 
   // Update state based on window width
@@ -489,20 +490,84 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
   };
 
   const saveTutorial = async () => {
-    // console.log({
-    //   title: tutorial.title,
-    //   coverImage: tutorial.coverImage?.url || tutorial.coverImage,
-    //   imageId: tutorial.imageId,
-    //   description: tutorial.description,
-    //   category: tutorial.category,
-    //   subCategories: tutorial.subcategory,
-    //   tags: tutorial.tags,
-    //   content: sections,
-    //   author: user?.fullName ?? "Anonymous",
-    //   date: getISTDate(),
-    //   createdBy: user?.primaryEmailAddress?.emailAddress,
-    // });
     try {
+      const newErrors = {};
+
+      console.log(sections);
+      console.log("sections length: ");
+      console.log(sections.length);
+
+      if (!tutorial.title) newErrors.title = "Title is required";
+      if (!tutorial.description)
+        newErrors.description = "Description is required";
+      if (!tutorial.category) newErrors.category = "Category is required";
+      if (tutorial.subcategory.length === 0)
+        newErrors.subcategory = "Subcategory is required";
+
+      // Check sections array matches default pattern
+      const defaultSection = sections?.[0];
+      const sectionsAreDefault =
+        Array.isArray(sections) &&
+        sections.length === 1 &&
+        defaultSection?.title === "Introduction" &&
+        defaultSection?.subsections?.length === 1 &&
+        defaultSection?.subsections?.[0]?.title === "Welcome" &&
+        defaultSection?.subsections?.[0]?.content === "";
+
+      console.log(sectionsAreDefault);
+      if (sectionsAreDefault)
+        toast.error("Change the default tutorial content before creating!");
+
+      setErrors(newErrors);
+      console.log(Object.keys(newErrors).length);
+
+      // ✅ Validate sections and subsections thoroughly
+      let errorsFound = false;
+
+      if (!Array.isArray(sections) || sections.length === 0) {
+        toast.error("At least one section is required!");
+        errorsFound = true;
+      } else {
+        // Check section titles
+        sections.forEach((section, sectionIndex) => {
+          if (!section.title || section.title.trim().length === 0) {
+            toast.error(`Section ${sectionIndex + 1} title is empty!`);
+            errorsFound = true;
+          }
+        });
+
+        // Check subsection titles
+        sections.forEach((section, sectionIndex) => {
+          section.subsections.forEach((sub, subIndex) => {
+            if (!sub.title || sub.title.trim().length === 0) {
+              toast.error(
+                `Section ${sectionIndex + 1} → Subsection ${subIndex + 1} title is empty!`
+              );
+              errorsFound = true;
+            }
+          });
+        });
+
+        // Check subsection content
+        sections.forEach((section, sectionIndex) => {
+          section.subsections.forEach((sub, subIndex) => {
+            if (!sub.content || sub.content.trim().length === 0) {
+              toast.error(
+                `Section ${sectionIndex + 1} → Subsection ${subIndex + 1} content is empty!`
+              );
+              errorsFound = true;
+            }
+          });
+        });
+      }
+
+      if (
+        Object.keys(newErrors).length > 0 ||
+        sectionsAreDefault ||
+        errorsFound
+      )
+        return; // Stop submission
+
       // Inserts the tutorial into the DB
       const result = await db
         .insert(Tutorials)
@@ -535,27 +600,44 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
         // clearData();
       }
     } catch (error) {
+      console.log(error);
       toast.error("Some Error occurred!", error);
     }
-
-    // for Demo Purpose
-    // console.log({
-    //   title: tutorial.title,
-    //   coverImage: tutorial.coverImage,
-    //   imageId: tutorial.imageId,
-    //   description: tutorial.description,
-    //   category: tutorial.category,
-    //   subCategories: tutorial.subcategory,
-    //   tags: tutorial.tags,
-    //   content: sections,
-    //   author: user?.fullName ?? "Anonymous",
-    //   date: getISTDate(),
-    //   createdBy: user?.primaryEmailAddress?.emailAddress,
-    // });
   };
 
   const editTutorial = async () => {
     try {
+      const newErrors = {};
+
+      console.log(sections);
+      console.log("sections length: ");
+      console.log(sections.length);
+
+      if (!tutorial.title) newErrors.title = "Title is required";
+      if (!tutorial.description)
+        newErrors.description = "Description is required";
+      if (!tutorial.category) newErrors.category = "Category is required";
+      if (tutorial.subcategory.length === 0)
+        newErrors.subcategory = "Subcategory is required";
+
+      // Check sections array matches default pattern
+      const defaultSection = sections?.[0];
+      const sectionsAreDefault =
+        Array.isArray(sections) &&
+        sections.length === 1 &&
+        defaultSection?.title === "Introduction" &&
+        defaultSection?.subsections?.length === 1 &&
+        defaultSection?.subsections?.[0]?.title === "Welcome" &&
+        defaultSection?.subsections?.[0]?.content === "";
+
+      if (sectionsAreDefault)
+        toast.error("Please add relevant sections and subsections");
+
+      setErrors(newErrors);
+      console.log(Object.keys(newErrors).length);
+
+      if (Object.keys(newErrors).length > 0 || sectionsAreDefault) return; // Stop submission
+
       // Updates the tutorial in the DB
       const result = await db
         .update(Tutorials)
@@ -820,6 +902,8 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
                 }} // Sync metadata updates
                 setEditBlogCoverImageId={setEditBlogCoverImageId}
                 setClearPendingAlert={setClearPendingAlert}
+                errors={errors}
+                setErrors={setErrors}
               />
             )}
           </div>
