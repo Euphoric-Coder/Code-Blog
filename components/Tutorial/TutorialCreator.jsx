@@ -489,84 +489,91 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
     console.log("Tutorial data fully reset.");
   };
 
-  const saveTutorial = async () => {
-    try {
-      const newErrors = {};
+  // Function to check if content is actually empty
+  const isContentEmpty = (content) => {
+    if (!content) return true; // null or undefined or ""
+    const cleaned = content
+      .replace(/<p><br><\/p>/gi, "") // remove <p><br></p>
+      .replace(/<p><\/p>/gi, "") // remove <p></p>
+      .replace(/&nbsp;/gi, "") // remove non-breaking spaces
+      .replace(/\s+/g, ""); // remove all whitespace
+    return cleaned.length === 0;
+  };
 
-      console.log(sections);
-      console.log("sections length: ");
-      console.log(sections.length);
+  const validateTutorial = (tutorial, sections, setErrors) => {
+    const newErrors = {};
 
-      if (!tutorial.title) newErrors.title = "Title is required";
-      if (!tutorial.description)
-        newErrors.description = "Description is required";
-      if (!tutorial.category) newErrors.category = "Category is required";
-      if (tutorial.subcategory.length === 0)
-        newErrors.subcategory = "Subcategory is required";
+    // --- Tutorial-level checks ---
+    if (!tutorial.title) newErrors.title = "Title is required";
+    if (!tutorial.description)
+      newErrors.description = "Description is required";
+    if (!tutorial.category) newErrors.category = "Category is required";
+    if (tutorial.subcategory.length === 0)
+      newErrors.subcategory = "Subcategory is required";
 
-      // Check sections array matches default pattern
-      const defaultSection = sections?.[0];
-      const sectionsAreDefault =
-        Array.isArray(sections) &&
-        sections.length === 1 &&
-        defaultSection?.title === "Introduction" &&
-        defaultSection?.subsections?.length === 1 &&
-        defaultSection?.subsections?.[0]?.title === "Welcome" &&
-        defaultSection?.subsections?.[0]?.content === "";
+    setErrors(newErrors);
 
-      console.log(sectionsAreDefault);
-      if (sectionsAreDefault)
-        toast.error("Change the default tutorial content before creating!");
+    // --- Default Section Check ---
+    const defaultSection = sections?.[0];
+    const sectionsAreDefault =
+      Array.isArray(sections) &&
+      sections.length === 1 &&
+      defaultSection?.title === "Introduction" &&
+      defaultSection?.subsections?.length === 1 &&
+      defaultSection?.subsections?.[0]?.title === "Welcome" &&
+      isContentEmpty(defaultSection?.subsections?.[0]?.content);
 
-      setErrors(newErrors);
-      console.log(Object.keys(newErrors).length);
+    if (sectionsAreDefault) {
+      toast.error("Change the default tutorial content before creating!");
+    }
 
-      // ✅ Validate sections and subsections thoroughly
-      let errorsFound = false;
+    // --- Sections & Subsections Validation ---
+    let sectionErrorsFound = false;
 
-      if (!Array.isArray(sections) || sections.length === 0) {
-        toast.error("At least one section is required!");
-        errorsFound = true;
-      } else {
-        // Check section titles
-        sections.forEach((section, sectionIndex) => {
-          if (!section.title || section.title.trim().length === 0) {
-            toast.error(`Section ${sectionIndex + 1} title is empty!`);
-            errorsFound = true;
+    if (!Array.isArray(sections) || sections.length === 0) {
+      toast.error("At least one section is required!");
+      sectionErrorsFound = true;
+    } else {
+      // Section titles
+      sections.forEach((section, sectionIndex) => {
+        if (!section.title || section.title.trim().length === 0) {
+          toast.error(`Section ${sectionIndex + 1} title is empty!`);
+          sectionErrorsFound = true;
+        }
+      });
+
+      // Subsection titles & content
+      sections.forEach((section, sectionIndex) => {
+        section.subsections.forEach((sub, subIndex) => {
+          if (!sub.title || sub.title.trim().length === 0) {
+            toast.error(
+              `Section ${sectionIndex + 1} → Subsection ${subIndex + 1} title is empty!`
+            );
+            sectionErrorsFound = true;
+          }
+          if (isContentEmpty(sub.content)) {
+            toast.error(
+              `Section ${sectionIndex + 1} → Subsection ${subIndex + 1} content is empty!`
+            );
+            sectionErrorsFound = true;
           }
         });
+      });
+    }
 
-        // Check subsection titles
-        sections.forEach((section, sectionIndex) => {
-          section.subsections.forEach((sub, subIndex) => {
-            if (!sub.title || sub.title.trim().length === 0) {
-              toast.error(
-                `Section ${sectionIndex + 1} → Subsection ${subIndex + 1} title is empty!`
-              );
-              errorsFound = true;
-            }
-          });
-        });
+    return (
+      Object.keys(newErrors).length === 0 &&
+      !sectionsAreDefault &&
+      !sectionErrorsFound
+    );
+  };
 
-        // Check subsection content
-        sections.forEach((section, sectionIndex) => {
-          section.subsections.forEach((sub, subIndex) => {
-            if (!sub.content || sub.content.trim().length === 0) {
-              toast.error(
-                `Section ${sectionIndex + 1} → Subsection ${subIndex + 1} content is empty!`
-              );
-              errorsFound = true;
-            }
-          });
-        });
-      }
+  const saveTutorial = async () => {
+    try {
+      const isValid = validateTutorial(tutorial, sections, setErrors);
 
-      if (
-        Object.keys(newErrors).length > 0 ||
-        sectionsAreDefault ||
-        errorsFound
-      )
-        return; // Stop submission
+      console.log(isValid);
+      if (!isValid) return;
 
       // Inserts the tutorial into the DB
       const result = await db
