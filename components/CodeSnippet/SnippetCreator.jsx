@@ -96,44 +96,44 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
   const [pendingTutorial, setPendingTutorial] = useState(false);
   const [clearPendingAlert, setClearPendingAlert] = useState(false);
   const [screenSize, setScreenSize] = useState("");
-  
-    // Update state based on window width
-    useEffect(() => {
-      const checkScreen = () => {
-        const width = window.innerWidth;
-        if (width <= 640)
-          setScreenSize("sm"); // Mobile
-        else if (width <= 768)
-          setScreenSize("md"); // iPad Mini
-        else if (width <= 1024)
-          setScreenSize("lg"); // iPad Air/Pro
-        else if (width <= 1280)
-          setScreenSize("xl"); // Desktop
-        else setScreenSize("2xl"); // Large Desktop
-      };
-  
-      checkScreen(); // Run on mount
-      window.addEventListener("resize", checkScreen);
-      return () => window.removeEventListener("resize", checkScreen);
-    }, []);
-  
-    // Character limit based on screen size
-    const limit = (() => {
-      switch (screenSize) {
-        case "sm": // Mobile
-          return 7;
-        case "md": // iPad Mini
-          return 18;
-        case "lg": // iPad Air/Pro
-          return 24;
-        case "xl": // Normal desktop
-          return 30;
-        case "2xl": // Big desktop
-          return 40;
-        default:
-          return 30;
-      }
-    })();
+
+  // Update state based on window width
+  useEffect(() => {
+    const checkScreen = () => {
+      const width = window.innerWidth;
+      if (width <= 640)
+        setScreenSize("sm"); // Mobile
+      else if (width <= 768)
+        setScreenSize("md"); // iPad Mini
+      else if (width <= 1024)
+        setScreenSize("lg"); // iPad Air/Pro
+      else if (width <= 1280)
+        setScreenSize("xl"); // Desktop
+      else setScreenSize("2xl"); // Large Desktop
+    };
+
+    checkScreen(); // Run on mount
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
+
+  // Character limit based on screen size
+  const limit = (() => {
+    switch (screenSize) {
+      case "sm": // Mobile
+        return 7;
+      case "md": // iPad Mini
+        return 18;
+      case "lg": // iPad Air/Pro
+        return 24;
+      case "xl": // Normal desktop
+        return 30;
+      case "2xl": // Big desktop
+        return 40;
+      default:
+        return 30;
+    }
+  })();
 
   // Load initial data from localStorage after mount
   useEffect(() => {
@@ -325,11 +325,13 @@ const SnippetCreator = ({ editData = null, editing = false }) => {
               {/* Left Side - Navigation */}
               <div className="flex items-center space-x-2 sm:space-x-4">
                 <button
-                  onClick={handleBack}
-                  className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors p-2 sm:p-0 font-medium"
+                  onClick={() => router.push("/snippets")}
+                  className="flex items-center px-3 sm:px-6 py-2 sm:py-3 text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 bg-white/80 dark:bg-slate-800/80 hover:bg-blue-50 dark:hover:bg-slate-700/80 rounded-lg sm:rounded-full transition-all duration-300 border border-slate-200/60 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500 shadow-lg hover:shadow-xl transform hover:-translate-y-1 backdrop-blur-sm cursor-pointer"
                 >
-                  <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" />
-                  <span className="hidden sm:inline">Back</span>
+                  <ArrowLeft className="h-5 w-5 xl:mr-2" />
+                  <span className="font-semibold text-sm hidden xl:inline">
+                    Back
+                  </span>
                 </button>
               </div>
 

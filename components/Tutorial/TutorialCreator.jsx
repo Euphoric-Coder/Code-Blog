@@ -570,9 +570,8 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
 
   const saveTutorial = async () => {
     try {
+      // Validates the tutorial & Section data
       const isValid = validateTutorial(tutorial, sections, setErrors);
-
-      console.log(isValid);
       if (!isValid) return;
 
       // Inserts the tutorial into the DB
@@ -597,14 +596,17 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
 
       if (result) {
         toast.success("Tutorial saved successfully!");
-        const loadId = toast.loading("Please wait... Redirecting you...!");
+        let loadId;
+        setTimeout(() => {
+          loadId = toast.loading("Please wait... Redirecting you...!");
+        }, 2000);
 
         // Redirects to the Tutorial Page
         setTimeout(() => {
+          // clearData();
           toast.dismiss(loadId);
           redirect(`/tutorialpost/${result[0].insertedId}`);
         }, 4000);
-        // clearData();
       }
     } catch (error) {
       console.log(error);
@@ -614,36 +616,9 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
 
   const editTutorial = async () => {
     try {
-      const newErrors = {};
-
-      console.log(sections);
-      console.log("sections length: ");
-      console.log(sections.length);
-
-      if (!tutorial.title) newErrors.title = "Title is required";
-      if (!tutorial.description)
-        newErrors.description = "Description is required";
-      if (!tutorial.category) newErrors.category = "Category is required";
-      if (tutorial.subcategory.length === 0)
-        newErrors.subcategory = "Subcategory is required";
-
-      // Check sections array matches default pattern
-      const defaultSection = sections?.[0];
-      const sectionsAreDefault =
-        Array.isArray(sections) &&
-        sections.length === 1 &&
-        defaultSection?.title === "Introduction" &&
-        defaultSection?.subsections?.length === 1 &&
-        defaultSection?.subsections?.[0]?.title === "Welcome" &&
-        defaultSection?.subsections?.[0]?.content === "";
-
-      if (sectionsAreDefault)
-        toast.error("Please add relevant sections and subsections");
-
-      setErrors(newErrors);
-      console.log(Object.keys(newErrors).length);
-
-      if (Object.keys(newErrors).length > 0 || sectionsAreDefault) return; // Stop submission
+      // Validates the tutorial & Section data
+      const isValid = validateTutorial(tutorial, sections, setErrors);
+      if (!isValid) return;
 
       // Updates the tutorial in the DB
       const result = await db
@@ -666,10 +641,15 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
 
       if (result) {
         toast.success("Tutorial Updated successfully!");
+        let loadId;
+        setTimeout(() => {
+          loadId = toast.loading("Please wait... Redirecting you...!");
+        }, 2000);
 
         // Redirects to the Tutorial Page
         setTimeout(() => {
           clearData();
+          toast.dismiss(loadId);
           redirect(`/tutorialpost/${id}`);
         }, 4000);
       }
@@ -696,11 +676,13 @@ const TutorialCreator = ({ editData = null, editing = false }) => {
             {/* Left Side - Navigation */}
             <div className="flex items-center space-x-2 sm:space-x-4">
               <button
-                onClick={handleBack}
-                className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors p-2 sm:p-0 font-medium"
+                onClick={() => router.push("/tutorial")}
+                className="flex items-center px-3 sm:px-6 py-2 sm:py-3 text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 bg-white/80 dark:bg-slate-800/80 hover:bg-blue-50 dark:hover:bg-slate-700/80 rounded-lg sm:rounded-full transition-all duration-300 border border-slate-200/60 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500 shadow-lg hover:shadow-xl transform hover:-translate-y-1 backdrop-blur-sm cursor-pointer"
               >
-                <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" />
-                <span className="hidden sm:inline">Back</span>
+                <ArrowLeft className="h-5 w-5 xl:mr-2" />
+                <span className="font-semibold text-sm hidden xl:inline">
+                  Back
+                </span>
               </button>
             </div>
 

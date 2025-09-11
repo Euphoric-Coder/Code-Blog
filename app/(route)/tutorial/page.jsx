@@ -20,6 +20,7 @@ import FormBackgroundEffect from "@/components/Effect/FormBackgroundEffect";
 import { Skeleton } from "@/components/ui/skeleton";
 import CardSkeleton from "@/components/Miscellaneous/CardSkeleton";
 import { useUser } from "@clerk/nextjs";
+import { toast } from "sonner";
 
 const Page = () => {
   const { isLoaded } = useUser();
@@ -115,7 +116,10 @@ const Page = () => {
                 <DialogTrigger asChild>
                   <button
                     className="flex gap-1 px-6 py-3 bg-gray-200 text-gray-800 font-medium rounded-full shadow-lg hover:scale-105 hover:bg-gray-300 dark:bg-gray-900 dark:text-gray-100 dark:hover:bg-gray-700 transition-transform duration-300 ease-out"
-                    onClick={() => setIsEditDialogOpen(true)}
+                    onClick={() => {
+                      refreshData();
+                      setIsEditDialogOpen(true);
+                    }}
                   >
                     <PenBox />
                     Edit Tutorials
