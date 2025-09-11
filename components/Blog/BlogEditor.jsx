@@ -711,7 +711,7 @@ export default function BlogEditor({
 
   const [tags, setTags] = useState(editing ? initialTags : []);
   const [tag, setTag] = useState("");
-  const [errors, setErrors] = useState({ subcategories: "testing" });
+  const [errors, setErrors] = useState({});
 
   const { user } = useUser();
   const previousImagesRef = useRef([]);
@@ -906,11 +906,6 @@ export default function BlogEditor({
   };
 
   const AddBlog = async () => {
-    if (!title || content === "") {
-      toast.error("Please enter both a title & content");
-      return;
-    }
-
     const slug = title
       .toLowerCase()
       .trim()
@@ -980,6 +975,21 @@ export default function BlogEditor({
       date: new Date().toISOString(),
       createdBy: user?.primaryEmailAddress.emailAddress,
     });
+
+    const newErrors = {};
+
+    // --- Tutorial-level checks ---
+    if (!title) newErrors.title = "Title is required";
+    if (!description) newErrors.description = "Description is required";
+    if (!category) newErrors.category = "Category is required";
+    if (selectedCount === 0)
+      newErrors.subcategories = "Subcategory is required";
+
+    console.log(selectedCount);
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) return; // Stop submission
 
     const addBlog = await db
       .insert(Blogs)
@@ -1108,6 +1118,7 @@ export default function BlogEditor({
   };
 
   const handleInputChange = (field, value) => {
+    if (editing) return;
     const updatedBlogData = {
       title: field === "title" ? value : title,
       description: field === "description" ? value : description,
@@ -1353,23 +1364,6 @@ export default function BlogEditor({
                 <Trash2 />
                 Clear
               </button>
-              {editing ? (
-                <Button
-                  onClick={EditBlog}
-                  className="px-5 py-2 flex items-center gap-2 text-sm font-bold text-white bg-gradient-to-r from-blue-500 via-cyan-500 to-purple-600 dark:from-blue-600 dark:via-purple-700 dark:to-pink-600 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform"
-                >
-                  <PenBox />
-                  Edit Blog
-                </Button>
-              ) : (
-                <Button
-                  onClick={AddBlog}
-                  className="px-5 py-2 flex items-center gap-2 text-sm font-bold text-white bg-gradient-to-r from-blue-500 via-cyan-500 to-purple-600 dark:from-blue-600 dark:via-purple-700 dark:to-pink-600 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform"
-                >
-                  <Send />
-                  Submit Blog
-                </Button>
-              )}
             </div>
           </div>
         </div>
@@ -1383,7 +1377,7 @@ export default function BlogEditor({
           <Input
             type="text"
             id="blog-title"
-            className={`mt-4 w-full px-4 py-2 ${
+            className={`my-4 w-full px-4 py-2 ${
               errors.title
                 ? "input-error-field focus-visible:ring-red-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-red-400 focus-visible:ring-[4px]"
                 : "input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
@@ -1392,6 +1386,7 @@ export default function BlogEditor({
             value={title}
             onChange={(e) => {
               setTitle(e.target.value);
+              setErrors((prev) => ({ ...prev, title: "" }));
               handleInputChange("title", e.target.value);
             }}
           />
@@ -1406,7 +1401,7 @@ export default function BlogEditor({
           <Textarea
             type="text"
             id="blog-description"
-            className={`mt-4 w-full px-4 py-2 ${
+            className={`my-4 w-full px-4 py-2 ${
               errors.description
                 ? "input-error-field focus-visible:ring-red-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-red-400 focus-visible:ring-[4px]"
                 : "input-field focus-visible:ring-blue-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-blue-400 focus-visible:ring-[4px]"
@@ -1415,6 +1410,7 @@ export default function BlogEditor({
             value={description}
             onChange={(e) => {
               setDescription(e.target.value);
+              setErrors((prev) => ({ ...prev, description: "" }));
               handleInputChange("description", e.target.value);
             }}
           />
@@ -1481,21 +1477,17 @@ export default function BlogEditor({
               setCategory(e);
               setSelectedSubCategories([]);
               handleInputChange("category", e); // <- Add this
+              setErrors((prev) => ({ ...prev, category: "" }));
               handleInputChange("subcategories", []); // Reset subcategories too
             }}
           >
             <SelectTrigger
               id="blog-category"
               className={`
-                        mt-1 w-full rounded-lg px-3 py-2 border transition-colors
-                        ${
-                          errors.category
-                            ? "input-error-field focus-visible:ring-red-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-red-400 focus-visible:ring-[4px]"
-                            : "input-field focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-[3px]"
-                        }
+                        mt-1 w-full rounded-lg px-3 py-2 border transition-colors input-field focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-[3px]
                       `}
             >
-              <SelectValue />
+              <SelectValue placeholder="Select a category" />
             </SelectTrigger>
             <SelectContent className="blog-select-content mt-2">
               <ScrollArea className="max-h-60 overflow-auto">
@@ -1519,14 +1511,15 @@ export default function BlogEditor({
               ${
                 errors.subcategories
                   ? "bg-gradient-to-r from-red-50 to-red-100 dark:from-red-900 dark:to-red-950 border-[2px] border-red-500 dark:border-red-700 transition-all"
-                  // ? "input-error-field focus-visible:ring-red-500 dark:focus-visible:ring-offset-gray-800 dark:focus-visible:ring-red-400 focus-visible:ring-[4px]"
                   : "bg-gradient-to-r from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-900 border-[2px] border-blue-500 dark:border-blue-900 transition-all"
               }`}
             >
               <div className="flex flex-col md:flex-row items-center justify-between">
                 {/* Title & Selected Badge */}
                 <div className="flex items-center gap-2">
-                  <label className={`${errors.subcategories ? 'text-red-600 dark:text-red-400' : 'blog-text1'} font-semibold`}>
+                  <label
+                    className={`${errors.subcategories ? "text-red-600 dark:text-red-400" : "blog-text1"} font-semibold`}
+                  >
                     Sub-Categories (
                     {
                       new Set(
@@ -1597,6 +1590,7 @@ export default function BlogEditor({
                           ); // pass array directly
                           return subCategoriesArray;
                         });
+                        setErrors((prev) => ({ ...prev, subcategories: "" }));
                       }}
                       className={`border-0 rounded-full text-sm cursor-pointer px-3 py-1 transition-all
                   ${
@@ -1615,13 +1609,16 @@ export default function BlogEditor({
         </div>
 
         <div>
-          <label htmlFor="tag-input" className="text">
-            Tags
-          </label>
+          <Label
+            htmlFor="tag-input"
+            className="text-lg font-semibold text-blue-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 px-3 py-1 rounded-full shadow-md transform -translate-y-12 -translate-x-1/5 transition-all duration-300 ease-in-out z-20 cursor-pointer hover:scale-105"
+          >
+            Blog Category
+          </Label>
 
           {/* Input container with badges inside */}
           <div
-            className="mt-1 w-full relative flex items-start border rounded-3xl min-h-[42px] input-field focus-within:ring-blue-500 dark:focus-within:ring-offset-gray-800 dark:focus-within:ring-blue-400 focus-within:ring-[4px]"
+            className="mt-4 w-full relative flex items-start border rounded-3xl min-h-[42px] input-field focus-within:ring-blue-500 dark:focus-within:ring-offset-gray-800 dark:focus-within:ring-blue-400 focus-within:ring-[4px]"
             onClick={() => document.getElementById("tag-input")?.focus()}
           >
             {/* Badges inside input field */}
