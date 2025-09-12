@@ -1416,7 +1416,7 @@ export default function BlogEditor({
           />
         </div>
 
-        {editCoverImage ? (
+        {editCoverImage && editBlogCoverImageURL && editBlogCoverImageURL !== "" ? (
           <div className="mb-6">
             <Label
               htmlFor="blog-cover-image"
